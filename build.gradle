@@ -132,7 +132,7 @@ if (!project.hasProperty("kafkaTruststoreJks")) {
 }
 
 if (!project.hasProperty("proyectName")) {
-    ext.proyectName = "rubik"
+    ext.proyectName = "pana"
 }
 if (!project.hasProperty("env")) {
     ext.env = "dev"
