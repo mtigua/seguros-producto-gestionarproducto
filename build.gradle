@@ -139,8 +139,8 @@ if (!project.hasProperty("env")) {
 }
 
 task buildDocker(type: Docker, dependsOn: build) {
-	baseImage = "frolvlad/alpine-oraclejre8:cleaned"
-	maintainer = "seguros.rfsc"
+	baseImage = "operacionesregistry.azurecr.io/base/alpine/frolvlad-oraclejre8:cleaned"
+	maintainer = "adrfsc.cl"
 	hostUrl = "https://operacionesregistry.azurecr.io"
 	push = dockerPushToRegistry.toBoolean()
 	dryRun = false
