@@ -248,10 +248,6 @@ public class ProductoDto {
 	
 	private Boolean  validaCm;
 	
-	//New fields
-	
-     // Desaparece este campo:  PLCO_TARIFA_PERIOD;
-	
 	private Boolean perAnual;
 	
 	private Boolean perSemestral;
@@ -263,8 +259,6 @@ public class ProductoDto {
 	private Boolean perMensual;
 	
 	private Boolean perCuotas;
-	
-	//Desaparece este campo : PLCO_PARENTESCOS;
 	
     private Boolean parenEsConyuge;
 	

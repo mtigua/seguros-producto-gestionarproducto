@@ -49,7 +49,8 @@ public class Producto  {
 	@Column(name = "docu_dig_poliza")
 	private Character docuDigPoliza;	
 	
-	private Integer isae_numero;
+	@Column(name = "isae_numero")
+	private Integer isaeNumero;
 	
 	@Column(name = "docu_fec_ter_vigencia")
 	private Date docuFecTerVigencia;
