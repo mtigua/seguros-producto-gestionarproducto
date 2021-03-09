@@ -40,7 +40,8 @@ public class Producto  {
 	@Column(length = 4, name = "domi_mone_cod")
 	private String domiMoneCod;
 	
-	private BigDecimal descuento_max;
+	@Column( name = "descuento_max")
+	private BigDecimal descuentoMax;
 	
 	@Column(length = 14, name = "docu_nro_poliza")
 	private String docuNroPoliza;	
@@ -48,7 +49,8 @@ public class Producto  {
 	@Column(name = "docu_dig_poliza")
 	private Character docuDigPoliza;	
 	
-	private Integer isae_numero;
+	@Column(name = "isae_numero")
+	private Integer isaeNumero;
 	
 	@Column(name = "docu_fec_ter_vigencia")
 	private Date docuFecTerVigencia;
@@ -119,7 +121,7 @@ public class Producto  {
 	@Column(name = "hijo_maxedad")
 	private Integer  hijoMaxedad;
 	
-	private Character  aprobacion;
+	private Boolean  aprobacion;
 	
 	@Column(name = "docu_fec_ini_vigencia")
 	private Date docuFecIniVigencia;
@@ -177,9 +179,6 @@ public class Producto  {
 	
 	@Column(name = "excluye_preferente")
 	private Boolean excluyePreferente;
-	
-	@Column(name = "ajuste_es")
-	private Integer  ajusteEs;
 	
 	@Column(name = "cod_t_corto")
 	private Integer codTCorto;
@@ -297,7 +296,7 @@ public class Producto  {
 	private String  monedaRetracto;
 	
 	@Column(name = "gen_vali_cm")
-	private Boolean  genCaliCm;
+	private Boolean  genValiCm;
 	
 	@Column(name = "codigo_pos")
 	private Integer  codigoPos;
