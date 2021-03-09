@@ -65,7 +65,7 @@ public class ProductoController {
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/")
-	public ResponseEntity<String> getProductos(
+	public ResponseEntity<List<ProductoDto>> getProductos(
 //			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
 //			String token
 			) throws ProductoException, UnauthorizedException{	
@@ -93,7 +93,7 @@ public class ProductoController {
 			throw ex;
 		}		
 
-		return ResponseEntity.ok(MSG_HTTP200);
+		return ResponseEntity.ok(list);
 	}	
 	
 
