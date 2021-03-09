@@ -233,7 +233,19 @@ public class ProductoDto {
 	
 	private Integer  wsEmisionCodigo;
 	
-	private Integer  tarifaNows;
+	private Integer  tarifaNows;	
+
+    private Boolean parenEsConyuge;
+	
+	private Boolean parenEsMadre;
+	
+	private Boolean parenEsOtro;
+	
+	private Boolean parenEsPadre;
+	
+	private Boolean parenElMismo;
+	
+	private Boolean parenEsHijo;	
 	
 	@Size(max=50)
 	private String  homologaCiaProd;
@@ -250,27 +262,15 @@ public class ProductoDto {
 	
 	private Boolean perAnual;
 	
-	private Boolean perSemestral;
+	private Boolean perSemestral;	
 	
-	private Boolean perTrimestral;
+    private Boolean perTrimestral;
 	
 	private Boolean perBimensual;
 	
 	private Boolean perMensual;
 	
-	private Boolean perCuotas;
-	
-    private Boolean parenEsConyuge;
-	
-	private Boolean parenEsMadre;
-	
-	private Boolean parenEsOtro;
-	
-	private Boolean parenEsPadre;
-	
-	private Boolean parenElMismo;
-	
-	private Boolean parenEsHijo;	
+	private Boolean perCuotas;	
 
 	@NotNull
 	private  TipoSeguroDto tipoSeguro;
