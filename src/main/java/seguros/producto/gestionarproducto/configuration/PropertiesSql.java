@@ -12,7 +12,8 @@ import lombok.Data;
 public class PropertiesSql {
 	
 	
-	private String BUSSINESS_RULES;
+	private String LISTAR_MONEDAS;
+;
 	
 		 
 }
