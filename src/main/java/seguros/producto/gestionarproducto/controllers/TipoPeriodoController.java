@@ -74,16 +74,16 @@ public class TipoPeriodoController {
 			   
 		}
 		catch(TipoPeriodoException e) {
-			e.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_periodo());
 			throw e;
 		}
 //		catch(UnauthorizedException e) {
-//			e.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+//			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_periodo());
 //			throw e;
 //		}
 		catch (Exception e) {
 			TipoPeriodoException ex = new TipoPeriodoException();
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_periodo());
 			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
 			ex.setDetail(e.getLocalizedMessage());
 			throw ex;

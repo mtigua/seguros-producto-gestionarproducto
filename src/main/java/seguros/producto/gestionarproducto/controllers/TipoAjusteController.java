@@ -75,16 +75,16 @@ public class TipoAjusteController {
 			   
 		}
 		catch(TipoAjusteException e) {
-			e.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_ajuste());
 			throw e;
 		}
 //		catch(UnauthorizedException e) {
-//			e.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+//			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_ajuste());
 //			throw e;
 //		}
 		catch (Exception e) {
 			TipoAjusteException ex = new TipoAjusteException();
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_ajuste());
 			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
 			ex.setDetail(e.getLocalizedMessage());
 			throw ex;

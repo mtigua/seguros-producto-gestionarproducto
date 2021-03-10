@@ -62,28 +62,28 @@ public class HomologacionIndentificadorController {
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/")
 	public ResponseEntity<List<HomologacionIdentificadorDto>> getHomologacionIdentificador(
-			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
-			String token
+//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
+//			String token
 			) throws HomologacionIdentificadorException, UnauthorizedException{	
 				
 		List<HomologacionIdentificadorDto> lista= null;
 		
 		try {
-			  String username=utils.getSamaccountname(token);		
+			  //String username=utils.getSamaccountname(token);		
 			  lista= homologacionIdentificadorService.findAll();
 			   
 		}
 		catch(HomologacionIdentificadorException e) {
-			e.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_homologacion_identificador());
 			throw e;
 		}
-		catch(UnauthorizedException e) {
-			e.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
-			throw e;
-		}
+//		catch(UnauthorizedException e) {
+//			e.setSubject(propertiesMsg.getLogger_error_executing_get_homologacion_identificador());
+//			throw e;
+//		}
 		catch (Exception e) {
 			HomologacionIdentificadorException ex = new HomologacionIdentificadorException();
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_homologacion_identificador());
 			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
 			ex.setDetail(e.getLocalizedMessage());
 			throw ex;

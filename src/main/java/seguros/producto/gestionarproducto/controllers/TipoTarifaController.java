@@ -75,16 +75,16 @@ public class TipoTarifaController {
 			   
 		}
 		catch(TipoTarifaException e) {
-			e.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_tarifa());
 			throw e;
 		}
 //		catch(UnauthorizedException e) {
-//			e.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+//			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_tarifa());
 //			throw e;
 //		}
 		catch (Exception e) {
 			TipoTarifaException ex = new TipoTarifaException();
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_tarifa());
 			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
 			ex.setDetail(e.getLocalizedMessage());
 			throw ex;

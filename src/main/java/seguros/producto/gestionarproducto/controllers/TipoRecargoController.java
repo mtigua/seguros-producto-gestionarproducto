@@ -74,16 +74,16 @@ public class TipoRecargoController {
 			   
 		}
 		catch(TipoRecargoException e) {
-			e.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_recargo());
 			throw e;
 		}
 //		catch(UnauthorizedException e) {
-//			e.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+//			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_recargo());
 //			throw e;
 //		}
 		catch (Exception e) {
 			TipoRecargoException ex = new TipoRecargoException();
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_recargo());
 			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
 			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
