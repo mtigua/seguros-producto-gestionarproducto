@@ -74,16 +74,16 @@ public class TarifaPorController {
 			   
 		}
 		catch(TarifaPorException e) {
-			e.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_tarifa_por());
 			throw e;
 		}
 //		catch(UnauthorizedException e) {
-//			e.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+//			e.setSubject(propertiesMsg.getLogger_error_executing_get_tarifa_por());
 //			throw e;
 //		}
 		catch (Exception e) {
 			TarifaPorException ex = new TarifaPorException();
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tarifa_por());
 			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
 			ex.setDetail(e.getLocalizedMessage());
 			throw ex;

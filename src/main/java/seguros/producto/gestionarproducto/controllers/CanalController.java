@@ -62,28 +62,28 @@ public class CanalController {
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/")
 	public ResponseEntity<List<CanalDto>> getCanal(
-			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
-			String token
+//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
+//			String token
 			) throws CanalException, UnauthorizedException{	
 				
 		List<CanalDto> lista= null;
 		
 		try {
-			  String username=utils.getSamaccountname(token);		
+			//  String username=utils.getSamaccountname(token);		
 			  lista= canalService.findAll();
 			   
 		}
 		catch(CanalException e) {
-			e.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_canal());
 			throw e;
 		}
-		catch(UnauthorizedException e) {
-			e.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
-			throw e;
-		}
+//		catch(UnauthorizedException e) {
+//			e.setSubject(propertiesMsg.getLogger_error_executing_get_canal());
+//			throw e;
+//		}
 		catch (Exception e) {
 			CanalException ex = new CanalException();
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_canal());
 			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
 			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
