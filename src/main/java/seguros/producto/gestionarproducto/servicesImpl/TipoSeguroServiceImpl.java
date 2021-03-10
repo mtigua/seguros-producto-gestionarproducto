@@ -4,6 +4,9 @@ package seguros.producto.gestionarproducto.servicesImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +24,7 @@ public class TipoSeguroServiceImpl implements TipoSeguroService {
 	private TipoSeguroRepository TipoSeguroRepository;
 	
 	
-
+	@Transactional
 	@Override
 	public List<TipoSeguroDto> findAll() throws TipoSeguroException {
 		List<TipoSeguroDto> list=new ArrayList<>();
