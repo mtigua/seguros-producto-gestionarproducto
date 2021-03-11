@@ -24,5 +24,8 @@ public class PropertiesMsg {
 	private String logger_error_executing_get_tipo_seguro;
 	private String logger_error_executing_get_tipo_tarifa;
 	private String logger_error_executing_get_moneda;
+	private String logger_error_executing_get_compania;
+	private String logger_error_executing_get_negocio_por_compania;
+	private String logger_error_executing_get_ramo_por_compania_negocio;
 		 
 }
