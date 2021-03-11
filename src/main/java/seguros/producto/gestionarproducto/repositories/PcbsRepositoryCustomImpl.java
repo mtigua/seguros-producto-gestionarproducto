@@ -61,103 +61,103 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<CompaniaDto> findAllCompania() throws PcbsException {
-		String procedureName = propertiesSql.getLISTAR_COMPANIAS();
-		List<CompaniaDto> list =  new ArrayList<>();
-		List<Object[]> record=null;
+		String procedureNameCompania = propertiesSql.getLISTAR_COMPANIAS();
+		List<CompaniaDto> listCompania =  new ArrayList<>();
+		List<Object[]> recordCompania=null;
 		 
 		try {
-			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);	      
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureNameCompania);	      
 			storedProcedureQuery.execute();
-			record = storedProcedureQuery.getResultList();
+			recordCompania = storedProcedureQuery.getResultList();
 		
-			if(record!=null) {
-				record.stream().forEach(p -> {
+			if(recordCompania!=null) {
+				recordCompania.stream().forEach(p -> {
 					CompaniaDto companiaDto =  new CompaniaDto();
 					companiaDto.setId(Long.valueOf((p[0]).toString()));
 					companiaDto.setNombre(p[1].toString());
-					list.add(companiaDto); 
+					listCompania.add(companiaDto); 
 				});
 			}
 		}
 		catch(Exception e) {
 			PcbsException exc = new PcbsException();
 			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-			exc.setDetail(procedureName + " : " + e.getMessage());
+			exc.setDetail(procedureNameCompania + " : " + e.getMessage());
 			exc.setConcreteException(e);
 			throw exc;
 		}
 
-		return list;
+		return listCompania;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<NegocioDto> findAllNegocioByCompania(Long idCompania) throws PcbsException {
-		String procedureName = propertiesSql.getLISTAR_NEGOCIOS_POR_COMPANIA();
-		List<NegocioDto> list =  new ArrayList<>();
-		List<Object[]> record=null;
+		String procedureNameNegocio = propertiesSql.getLISTAR_NEGOCIOS_POR_COMPANIA();
+		List<NegocioDto> listNegocio =  new ArrayList<>();
+		List<Object[]> recordNegocio=null;
 		 
 		try {
-			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureNameNegocio);
 			storedProcedureQuery.registerStoredProcedureParameter("idCompania", Long.class, ParameterMode.IN);
 			storedProcedureQuery.setParameter("idCompania",idCompania );
 			storedProcedureQuery.execute();
-			record = storedProcedureQuery.getResultList();
+			recordNegocio = storedProcedureQuery.getResultList();
 		
-			if(record!=null) {
-				record.stream().forEach(p -> {
+			if(recordNegocio!=null) {
+				recordNegocio.stream().forEach(p -> {
 					NegocioDto negocioDto =  new NegocioDto();
 					negocioDto.setId(Long.valueOf((p[0]).toString()));
 					negocioDto.setNombre(p[1].toString());
-					list.add(negocioDto); 
+					listNegocio.add(negocioDto); 
 				});
 			}
 		}
 		catch(Exception e) {
 			PcbsException exc = new PcbsException();
 			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-			exc.setDetail(procedureName + " : " + e.getMessage());
+			exc.setDetail(procedureNameNegocio + " : " + e.getMessage());
 			exc.setConcreteException(e);
 			throw exc;
 		}
 
-		return list;
+		return listNegocio;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<RamoDto> findAllRamoByCompaniaNegocio(Long idCompania, Long idNegocio) throws PcbsException {
-		String procedureName = propertiesSql.getLISTAR_RAMOS_POR_COMPANIA_NEGOCIO();
-		List<RamoDto> list =  new ArrayList<>();
-		List<Object[]> record=null;
+		String procedureNameRamo = propertiesSql.getLISTAR_RAMOS_POR_COMPANIA_NEGOCIO();
+		List<RamoDto> listRamo =  new ArrayList<>();
+		List<Object[]> recordRamo=null;
 		 
 		try {
-			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureNameRamo);
 			storedProcedureQuery.registerStoredProcedureParameter("idCompania", Long.class, ParameterMode.IN);
 			storedProcedureQuery.registerStoredProcedureParameter("idNegocio", Long.class, ParameterMode.IN);
 			storedProcedureQuery.setParameter("idCompania",idCompania );
 			storedProcedureQuery.setParameter("idNegocio",idNegocio );
 			storedProcedureQuery.execute();
-			record = storedProcedureQuery.getResultList();
+			recordRamo = storedProcedureQuery.getResultList();
 		
-			if(record!=null) {
-				record.stream().forEach(p -> {
+			if(recordRamo!=null) {
+				recordRamo.stream().forEach(p -> {
 					RamoDto ramoDto =  new RamoDto();
 					ramoDto.setId(Long.valueOf((p[0]).toString()));
 					ramoDto.setNombre(p[1].toString());
-					list.add(ramoDto); 
+					listRamo.add(ramoDto); 
 				});
 			}
 		}
 		catch(Exception e) {
 			PcbsException exc = new PcbsException();
 			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-			exc.setDetail(procedureName + " : " + e.getMessage());
+			exc.setDetail(procedureNameRamo + " : " + e.getMessage());
 			exc.setConcreteException(e);
 			throw exc;
 		}
 
-		return list;
+		return listRamo;
 	}
 
 

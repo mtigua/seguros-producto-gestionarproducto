@@ -32,7 +32,6 @@ import seguros.producto.gestionarproducto.dto.RamoDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
 import seguros.producto.gestionarproducto.exceptions.UnauthorizedException;
 import seguros.producto.gestionarproducto.services.PcbsService;
-import seguros.producto.gestionarproducto.servicesImpl.CanalException;
 import seguros.producto.gestionarproducto.servicesImpl.PcbsException;
 import seguros.producto.gestionarproducto.utils.Utils;
 
@@ -49,7 +48,7 @@ public class PCBSController {
 	private static final String MSG_HTTP400 = "Formato de petici\u00f3n erroneo";
 	private static final String MSG_HTTP401 = "No autorizado";
 	private static final String MSG_HTTP500 = "Error interno del sistema";
-	private static final String SWAGGER_GET_Canal = "Listar canales";
+	private static final String SWAGGER_GET_Moneda = "Listar monedas";
 	private static final String SWAGGER_GET_Compania = "Listar companias";
 	private static final String SWAGGER_GET_Negocio_Por_Compania = "Listar negocios dado el id de la compania";
 	private static final String SWAGGER_GET_Ramo_Por_Compania_Negocio = "Listar ramos dado el id de la compania y del negocio";
@@ -65,7 +64,7 @@ public class PCBSController {
 	private Utils utils;
 	
 	
-	@ApiOperation(value = SWAGGER_GET_Canal, notes = SWAGGER_GET_Canal)
+	@ApiOperation(value = SWAGGER_GET_Moneda, notes = SWAGGER_GET_Moneda)
 	@ApiResponses({ 
 		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
 		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
@@ -77,7 +76,7 @@ public class PCBSController {
 	public ResponseEntity<List<MonedaDto>> getCanal(
 //			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
 //			String token
-			) throws CanalException, UnauthorizedException{	
+			) throws PcbsException, UnauthorizedException{	
 				
 		List<MonedaDto> lista= null;
 		
@@ -86,7 +85,7 @@ public class PCBSController {
 			  lista= pcbsService.findAllMonedas();
 			   
 		}
-		catch(CanalException e) {
+		catch(PcbsException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_moneda());
 			throw e;
 		}
@@ -95,7 +94,7 @@ public class PCBSController {
 //			throw e;
 //		}
 		catch (Exception e) {
-			CanalException ex = new CanalException();
+			PcbsException ex = new PcbsException();
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_moneda());
 			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
 			ex.setDetail(e.getLocalizedMessage());
