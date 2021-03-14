@@ -27,5 +27,7 @@ public class PropertiesMsg {
 	private String logger_error_executing_get_compania;
 	private String logger_error_executing_get_negocio_por_compania;
 	private String logger_error_executing_get_ramo_por_compania_negocio;
+	private String logger_error_executing_get_tipo_traspaso;
+	private String logger_error_executing_get_modo_traspaso;
 		 
 }
