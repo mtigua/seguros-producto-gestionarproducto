@@ -3,12 +3,9 @@ package seguros.producto.gestionarproducto.servicesImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import seguros.producto.gestionarproducto.dto.CompaniaDto;
 import seguros.producto.gestionarproducto.dto.MonedaDto;
 import seguros.producto.gestionarproducto.dto.NegocioDto;
@@ -85,7 +82,7 @@ public class PcbsServiceImpl implements PcbsService {
 		}
 		return list;
 	}
-	
+
 	
 
 	

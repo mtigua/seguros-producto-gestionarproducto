@@ -16,4 +16,5 @@ public interface PCBSRepositoryCustom {
 	public List<NegocioDto> findAllNegocioByCompania(Long idCompania) throws PcbsException;
 	public List<RamoDto> findAllRamoByCompaniaNegocio(Long idCompania,Long idNegocio) throws PcbsException;
 	
+	
 }

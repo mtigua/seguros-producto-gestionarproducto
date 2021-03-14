@@ -14,5 +14,4 @@ public interface PcbsService {
 	public List<CompaniaDto> findAllCompanias() throws PcbsException;
 	public List<NegocioDto> findAllNegociosByCompania(Long idCompania) throws PcbsException;
 	public List<RamoDto> findAllRamosByCompaniaNegocio(Long idCompania,Long idNegocio) throws PcbsException;
-	
 }
