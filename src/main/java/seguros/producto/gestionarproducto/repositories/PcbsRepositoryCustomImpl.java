@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import seguros.producto.gestionarproducto.configuration.PropertiesSql;
@@ -16,6 +18,8 @@ import seguros.producto.gestionarproducto.servicesImpl.PcbsException;
 
 @Repository
 public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
+	
+	private static final String VALUE_UNDEFINED="No se ha podido indentificar valor para el par\u00E1metro de salida: ";
 
 	@Autowired
 	private EntityManager entityManager;
@@ -47,10 +51,7 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 				}
 			}
 			catch(Exception e) {
-				PcbsException exc = new PcbsException();
-				exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-				exc.setDetail(procedureName + " : " + e.getMessage());
-				exc.setConcreteException(e);
+				PcbsException exc = new PcbsException(e);
 				throw exc;
 			}
 
@@ -80,10 +81,7 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 			}
 		}
 		catch(Exception e) {
-			PcbsException exc = new PcbsException();
-			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-			exc.setDetail(procedureNameCompania + " : " + e.getMessage());
-			exc.setConcreteException(e);
+			PcbsException exc = new PcbsException(e);
 			throw exc;
 		}
 
@@ -114,10 +112,7 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 			}
 		}
 		catch(Exception e) {
-			PcbsException exc = new PcbsException();
-			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-			exc.setDetail(procedureNameNegocio + " : " + e.getMessage());
-			exc.setConcreteException(e);
+			PcbsException exc = new PcbsException(e);
 			throw exc;
 		}
 
@@ -150,14 +145,50 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 			}
 		}
 		catch(Exception e) {
-			PcbsException exc = new PcbsException();
-			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-			exc.setDetail(procedureNameRamo + " : " + e.getMessage());
-			exc.setConcreteException(e);
+			PcbsException exc = new PcbsException(e);
 			throw exc;
 		}
 
 		return listRamo;
+	}
+
+	
+	@Override
+	@Transactional
+	public Integer findNumPoliza(String numPoliza) throws PcbsException {
+		String procedureBuscaPoliza = propertiesSql.getBUSCAR_POLIZA();
+		Integer existe=null;
+		 
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureBuscaPoliza);
+			storedProcedureQuery.registerStoredProcedureParameter("numPoliza", String.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("existe", Integer.class, ParameterMode.OUT);
+			
+			storedProcedureQuery.setParameter("numPoliza",numPoliza );
+			storedProcedureQuery.execute();
+		
+			Object result= storedProcedureQuery.getOutputParameterValue("existe");
+			  if(result!=null) {
+				  existe= (int) storedProcedureQuery.getOutputParameterValue("existe");
+			  }
+			  else {
+				    PcbsException exc = new PcbsException();
+					exc.setErrorMessage(VALUE_UNDEFINED + "existe");	        	
+					exc.setDetail(VALUE_UNDEFINED + "existe");
+					exc.setConcreteException(exc);
+					throw exc;
+			  }		
+		
+		}
+		catch(PcbsException e){
+			throw e;
+		}
+		catch(Exception e) {
+			PcbsException exc = new PcbsException(e);
+			throw exc;
+		}
+
+		return existe;
 	}
 
 	

@@ -10,4 +10,11 @@ public class ConceptoException extends CommonException{
 
 	private static final long serialVersionUID = 1L;
 
+	public ConceptoException(Exception e) {
+		super(e);
+	}
+	
+	public ConceptoException() {
+		super();
+	}
 }

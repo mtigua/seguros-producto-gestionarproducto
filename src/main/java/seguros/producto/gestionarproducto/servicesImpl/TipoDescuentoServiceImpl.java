@@ -38,11 +38,8 @@ public class TipoDescuentoServiceImpl implements TipoDescuentoService {
 			}).collect(Collectors.toList());;
 		}
 		catch(Exception e) {
-			TipoDescuentoException exc = new TipoDescuentoException();
-			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-		    exc.setDetail( e.getLocalizedMessage());
-			exc.setConcreteException(e);
-			throw e;
+			TipoDescuentoException exc = new TipoDescuentoException(e);
+			throw exc;
 		}
 		return list;
 		

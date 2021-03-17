@@ -10,4 +10,11 @@ public class TipoPeriodoException extends CommonException{
 
 	private static final long serialVersionUID = 1L;
 	
+	public TipoPeriodoException(Exception e) {
+		super(e);
+	}
+	
+	public TipoPeriodoException() {
+		super();
+	}
 }

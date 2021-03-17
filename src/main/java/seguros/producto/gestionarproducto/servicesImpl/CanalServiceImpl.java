@@ -39,11 +39,8 @@ public class CanalServiceImpl implements CanalService {
 			}).collect(Collectors.toList());;
 		}
 		catch(Exception e) {
-			CanalException exc = new CanalException();
-			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-		    exc.setDetail( e.getLocalizedMessage());
-			exc.setConcreteException(e);
-			throw e;
+			CanalException exc = new CanalException(e);
+			throw exc;
 		}
 		return list;
 		

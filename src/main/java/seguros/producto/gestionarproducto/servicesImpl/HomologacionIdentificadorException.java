@@ -11,4 +11,11 @@ public class HomologacionIdentificadorException extends CommonException{
 	private static final long serialVersionUID = 1L;
 	
 
+	public HomologacionIdentificadorException(Exception e) {
+		super(e);
+	}
+	
+	public HomologacionIdentificadorException() {
+		super();
+	}
 }

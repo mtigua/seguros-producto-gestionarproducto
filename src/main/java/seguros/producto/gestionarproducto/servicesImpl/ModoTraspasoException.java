@@ -10,4 +10,11 @@ public class ModoTraspasoException extends CommonException{
 
 	private static final long serialVersionUID = 1L;
 	
+	public ModoTraspasoException(Exception e) {
+		super(e);
+	}
+	
+	public ModoTraspasoException() {
+		super();
+	}
 }

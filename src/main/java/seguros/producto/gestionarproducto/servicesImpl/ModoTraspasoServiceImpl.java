@@ -37,11 +37,8 @@ public class ModoTraspasoServiceImpl implements ModoTraspasoService {
 			}).collect(Collectors.toList());;
 		}
 		catch(Exception e) {
-			ModoTraspasoException exc = new ModoTraspasoException();
-			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-		    exc.setDetail( e.getLocalizedMessage());
-			exc.setConcreteException(e);
-			throw e;
+			ModoTraspasoException exc = new ModoTraspasoException(e);
+			throw exc;
 		}
 		return list;
 		

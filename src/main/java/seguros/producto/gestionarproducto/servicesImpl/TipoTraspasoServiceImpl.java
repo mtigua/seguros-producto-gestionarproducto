@@ -36,11 +36,8 @@ public class TipoTraspasoServiceImpl implements TipoTraspasoService {
 			}).collect(Collectors.toList());;
 		}
 		catch(Exception e) {
-			TipoTraspasoException exc = new TipoTraspasoException();
-			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-		    exc.setDetail( e.getLocalizedMessage());
-			exc.setConcreteException(e);
-			throw e;
+			TipoTraspasoException exc = new TipoTraspasoException(e);
+			throw exc;
 		}
 		return list;
 		

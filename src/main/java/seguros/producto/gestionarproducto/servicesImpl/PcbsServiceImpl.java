@@ -83,6 +83,20 @@ public class PcbsServiceImpl implements PcbsService {
 		return list;
 	}
 
+	@Transactional
+	@Override
+	public Integer findNumPoliza(String numPoliza) throws PcbsException {
+        Integer existe = null;
+		
+		try {
+			existe= pcbsRepositoryCustom.findNumPoliza(numPoliza);
+		}
+		catch(PcbsException e) {
+			throw e;
+		}
+		return existe;
+	}
+
 	
 
 	
