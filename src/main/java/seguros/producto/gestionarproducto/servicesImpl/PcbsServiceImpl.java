@@ -10,9 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import seguros.producto.gestionarproducto.dto.CompaniaDto;
+import seguros.producto.gestionarproducto.dto.EquivalenciaSeguroDto;
+import seguros.producto.gestionarproducto.dto.GrupoDto;
+import seguros.producto.gestionarproducto.dto.GrupoMatrizDto;
+import seguros.producto.gestionarproducto.dto.GrupoMejorOfertaDto;
 import seguros.producto.gestionarproducto.dto.MonedaDto;
 import seguros.producto.gestionarproducto.dto.NegocioDto;
+import seguros.producto.gestionarproducto.dto.ProdDto;
 import seguros.producto.gestionarproducto.dto.RamoDto;
+import seguros.producto.gestionarproducto.dto.SubtipoDto;
 import seguros.producto.gestionarproducto.repositories.PCBSRepositoryCustom;
 import seguros.producto.gestionarproducto.services.PcbsService;
 
@@ -28,7 +34,7 @@ public class PcbsServiceImpl implements PcbsService {
 
 	@Override
 	@Transactional
-	public List<MonedaDto> findAllMonedas() throws PcbsException {
+	public List<MonedaDto> findAllMoneda() throws PcbsException {
 		List<MonedaDto> list=new ArrayList<>();
 		
 		try {
@@ -44,7 +50,7 @@ public class PcbsServiceImpl implements PcbsService {
 
 	@Override
 	@Transactional
-	public List<CompaniaDto> findAllCompanias() throws PcbsException {
+	public List<CompaniaDto> findAllCompania() throws PcbsException {
 		List<CompaniaDto> list=new ArrayList<>();
 		
 		try {
@@ -59,7 +65,7 @@ public class PcbsServiceImpl implements PcbsService {
 
 	@Override
 	@Transactional
-	public List<NegocioDto> findAllNegociosByCompania(Long idCompania) throws PcbsException {
+	public List<NegocioDto> findAllNegocioByCompania(Long idCompania) throws PcbsException {
 		List<NegocioDto> list=new ArrayList<>();
 		
 		try {
@@ -74,11 +80,96 @@ public class PcbsServiceImpl implements PcbsService {
 
 	@Override
 	@Transactional
-	public List<RamoDto> findAllRamosByCompaniaNegocio(Long idCompania, Long idNegocio) throws PcbsException {
+	public List<RamoDto> findAllRamoByCompaniaNegocio(Long idCompania, Long idNegocio) throws PcbsException {
 		List<RamoDto> list=new ArrayList<>();
 		
 		try {
 			list= pcbsRepositoryCustom.findAllRamoByCompaniaNegocio(idCompania, idNegocio);
+		}
+		catch(PcbsException e) {
+			throw e;
+		}
+		return list;
+	}
+
+
+	@Override
+	public List<SubtipoDto> findAllSubtipoByCompaniaRamo(Long idCompania,Long idRamo) throws PcbsException {
+		List<SubtipoDto> list=new ArrayList<>();
+		
+		try {
+			list= pcbsRepositoryCustom.findAllSubtipoByCompaniaRamo(idCompania,idRamo);
+		}
+		catch(PcbsException e) {
+			throw e;
+		}
+		return list;
+	}
+
+
+	@Override
+	public List<ProdDto> findAllProductoBySubtipo(String codigoSubTipo) throws PcbsException {
+		List<ProdDto> list=new ArrayList<>();
+		
+		try {
+			list= pcbsRepositoryCustom.findAllProductoBySubtipo(codigoSubTipo);
+		}
+		catch(PcbsException e) {
+			throw e;
+		}
+		return list;
+	}
+
+
+	@Override
+	public List<GrupoMatrizDto> findAllGrupoMatriz(String codigoSubTipo,String codigoProducto) throws PcbsException {
+		List<GrupoMatrizDto> list=new ArrayList<>();
+		
+		try {
+			list= pcbsRepositoryCustom.findAllGrupoMatriz(codigoSubTipo,codigoProducto);
+		}
+		catch(PcbsException e) {
+			throw e;
+		}
+		return list;
+	}
+
+
+	@Override
+	public List<GrupoDto> findAllGrupo() throws PcbsException {
+		List<GrupoDto> list=new ArrayList<>();
+		
+		try {
+			list= pcbsRepositoryCustom.findAllGrupo();
+		}
+		catch(PcbsException e) {
+			throw e;
+		}
+		return list;
+	}
+
+
+	@Override
+	public List<EquivalenciaSeguroDto> findAllEquivalenciaSeguro(Long idCompania, Long idNegocio, Long idRamo)
+			throws PcbsException {
+		List<EquivalenciaSeguroDto> list=new ArrayList<>();
+		
+		try {
+			list= pcbsRepositoryCustom.findAllEquivalenciaSeguro(idCompania, idNegocio, idRamo);
+		}
+		catch(PcbsException e) {
+			throw e;
+		}
+		return list;
+	}
+
+
+	@Override
+	public List<GrupoMejorOfertaDto> findAllGrupoMejorOferta() throws PcbsException {
+		List<GrupoMejorOfertaDto> list=new ArrayList<>();
+		
+		try {
+			list= pcbsRepositoryCustom.findAllGrupoMejorOferta();
 		}
 		catch(PcbsException e) {
 			throw e;

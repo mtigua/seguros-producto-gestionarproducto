@@ -27,5 +27,11 @@ public class PropertiesMsg {
 	private String logger_error_executing_get_compania;
 	private String logger_error_executing_get_negocio_por_compania;
 	private String logger_error_executing_get_ramo_por_compania_negocio;
+	private String logger_error_executing_get_subtipo_por_compania_ramo;
+	private String logger_error_executing_get_producto_por_subtipo;
+	private String logger_error_executing_get_grupo_matriz;
+	private String logger_error_executing_get_grupo;
+	private String logger_error_executing_get_equivalencia_seguro;
+	private String logger_error_executing_get_grupo_mejor_oferta;
 		 
 }
