@@ -11,9 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import seguros.producto.gestionarproducto.configuration.PropertiesSql;
 import seguros.producto.gestionarproducto.dto.CompaniaDto;
+import seguros.producto.gestionarproducto.dto.EquivalenciaSeguroDto;
+import seguros.producto.gestionarproducto.dto.GrupoDto;
+import seguros.producto.gestionarproducto.dto.GrupoMatrizDto;
+import seguros.producto.gestionarproducto.dto.GrupoMejorOfertaDto;
 import seguros.producto.gestionarproducto.dto.MonedaDto;
 import seguros.producto.gestionarproducto.dto.NegocioDto;
+import seguros.producto.gestionarproducto.dto.ProdDto;
 import seguros.producto.gestionarproducto.dto.RamoDto;
+import seguros.producto.gestionarproducto.dto.SubtipoDto;
 import seguros.producto.gestionarproducto.servicesImpl.PcbsException;
 
 @Repository
@@ -150,6 +156,216 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 		}
 
 		return listRamo;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<SubtipoDto> findAllSubtipoByCompaniaRamo(Long idCompania,Long idRamo) throws PcbsException {
+		String procedureNameSubtipo = propertiesSql.getLISTAR_SUBTIPOS_POR_COMPANIA_RAMO();
+		List<SubtipoDto> listSubtipo =  new ArrayList<>();
+		List<Object[]> recordSubtipo=null;
+		 
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureNameSubtipo);
+			storedProcedureQuery.registerStoredProcedureParameter("idCompania", Long.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("idRamo", Long.class, ParameterMode.IN);
+			storedProcedureQuery.setParameter("idCompania",idCompania);
+			storedProcedureQuery.setParameter("idRamo",idRamo);
+			
+			storedProcedureQuery.execute();
+			recordSubtipo = storedProcedureQuery.getResultList();
+		
+			if(recordSubtipo!=null) {
+				recordSubtipo.stream().forEach(p -> {
+					SubtipoDto subtipoDto =  new SubtipoDto();
+					subtipoDto.setId((p[0]).toString());
+					subtipoDto.setNombre(p[1].toString());
+					listSubtipo.add(subtipoDto); 
+				});
+			}
+		}
+		catch(Exception e) {
+			PcbsException exc = new PcbsException();
+			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
+			exc.setDetail(procedureNameSubtipo + " : " + e.getMessage());
+			exc.setConcreteException(e);
+			throw exc;
+		}
+
+		return listSubtipo;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<ProdDto> findAllProductoBySubtipo(String codigoSubTipo) throws PcbsException {
+		String procedureNameProducto = propertiesSql.getLISTAR_PRODUCTOS_POR_SUBTIPO();
+		List<ProdDto> listProducto =  new ArrayList<>();
+		List<Object[]> recordProducto=null;
+		 
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureNameProducto);
+			storedProcedureQuery.registerStoredProcedureParameter("codigoSubTipo", String.class, ParameterMode.IN);
+			storedProcedureQuery.setParameter("codigoSubTipo",codigoSubTipo);
+			storedProcedureQuery.execute();
+			recordProducto = storedProcedureQuery.getResultList();
+		
+			if(recordProducto!=null) {
+				recordProducto.stream().forEach(p -> {
+					ProdDto prodDto =  new ProdDto();
+					prodDto.setId((p[0]).toString());
+					prodDto.setNombre(p[1].toString());
+					listProducto.add(prodDto); 
+				});
+			}
+		}
+		catch(Exception e) {
+			PcbsException exc = new PcbsException();
+			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
+			exc.setDetail(procedureNameProducto + " : " + e.getMessage());
+			exc.setConcreteException(e);
+			throw exc;
+		}
+
+		return listProducto;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<GrupoMatrizDto> findAllGrupoMatriz(String codigoSubTipo,String codigoProducto) throws PcbsException {
+		String procedureNameGrupoMatriz = propertiesSql.getLISTAR_GRUPOS_MATRIZ();
+		List<GrupoMatrizDto> listGrupoMatriz =  new ArrayList<>();
+		List<Object[]> recordGrupoMatriz=null;
+		 
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureNameGrupoMatriz);	
+			storedProcedureQuery.registerStoredProcedureParameter("codigoSubTipo", String.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("codigoProducto", String.class, ParameterMode.IN);
+			storedProcedureQuery.setParameter("codigoSubTipo",codigoSubTipo);
+			storedProcedureQuery.setParameter("codigoProducto",codigoProducto);
+			
+			storedProcedureQuery.execute();
+			recordGrupoMatriz = storedProcedureQuery.getResultList();
+		
+			if(recordGrupoMatriz!=null) {
+				recordGrupoMatriz.stream().forEach(p -> {
+					GrupoMatrizDto grupoMatrizDto =  new GrupoMatrizDto();
+					grupoMatrizDto.setId(Long.valueOf((p[0]).toString()));
+					grupoMatrizDto.setNombre(p[1].toString());
+					listGrupoMatriz.add(grupoMatrizDto); 
+				});
+			}
+		}
+		catch(Exception e) {
+			PcbsException exc = new PcbsException();
+			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
+			exc.setDetail(procedureNameGrupoMatriz + " : " + e.getMessage());
+			exc.setConcreteException(e);
+			throw exc;
+		}
+
+		return listGrupoMatriz;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<GrupoDto> findAllGrupo() throws PcbsException {
+		String procedureNameGrupo = propertiesSql.getLISTAR_GRUPOS();
+		List<GrupoDto> listGrupo =  new ArrayList<>();
+		List<Object[]> recordGrupo=null;
+		 
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureNameGrupo);	      
+			storedProcedureQuery.execute();
+			recordGrupo = storedProcedureQuery.getResultList();
+		
+			if(recordGrupo!=null) {
+				recordGrupo.stream().forEach(p -> {
+					GrupoDto grupoDto =  new GrupoDto();
+					grupoDto.setId(Long.valueOf((p[0]).toString()));
+					grupoDto.setNombre(p[1].toString());
+					listGrupo.add(grupoDto); 
+				});
+			}
+		}
+		catch(Exception e) {
+			PcbsException exc = new PcbsException();
+			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
+			exc.setDetail(procedureNameGrupo + " : " + e.getMessage());
+			exc.setConcreteException(e);
+			throw exc;
+		}
+
+		return listGrupo;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<EquivalenciaSeguroDto> findAllEquivalenciaSeguro(Long idCompania, Long idNegocio,Long idRamo) throws PcbsException {
+		String procedureNameEquivalenciaSeguro = propertiesSql.getLISTAR_EQUIVALENCIAS_SEGUROS();
+		List<EquivalenciaSeguroDto> listEquivalenciaSeguro =  new ArrayList<>();
+		List<Object[]> recordEquivalenciaSeguro=null;
+		 
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureNameEquivalenciaSeguro);
+			storedProcedureQuery.registerStoredProcedureParameter("idCompania", Long.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("idNegocio", Long.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("idRamo", Long.class, ParameterMode.IN);
+			storedProcedureQuery.setParameter("idCompania",idCompania );
+			storedProcedureQuery.setParameter("idNegocio",idNegocio );
+			storedProcedureQuery.setParameter("idRamo",idRamo );
+			storedProcedureQuery.execute();
+			recordEquivalenciaSeguro = storedProcedureQuery.getResultList();
+		
+			if(recordEquivalenciaSeguro!=null) {
+				recordEquivalenciaSeguro.stream().forEach(p -> {
+					EquivalenciaSeguroDto equivalenciaSeguroDto =  new EquivalenciaSeguroDto();
+					equivalenciaSeguroDto.setId(Long.valueOf((p[0]).toString()));
+					equivalenciaSeguroDto.setNombre(p[1].toString());
+					listEquivalenciaSeguro.add(equivalenciaSeguroDto); 
+				});
+			}
+		}
+		catch(Exception e) {
+			PcbsException exc = new PcbsException();
+			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
+			exc.setDetail(procedureNameEquivalenciaSeguro + " : " + e.getMessage());
+			exc.setConcreteException(e);
+			throw exc;
+		}
+
+		return listEquivalenciaSeguro;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<GrupoMejorOfertaDto> findAllGrupoMejorOferta() throws PcbsException {
+		String procedureNameGrupoMejorOferta = propertiesSql.getLISTAR_GRUPOS_MEJOR_OFERTA();
+		List<GrupoMejorOfertaDto> listGrupoMejorOferta =  new ArrayList<>();
+		List<Object[]> recordGrupoMejorOferta=null;
+		 
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureNameGrupoMejorOferta);	      
+			storedProcedureQuery.execute();
+			recordGrupoMejorOferta = storedProcedureQuery.getResultList();
+		
+			if(recordGrupoMejorOferta!=null) {
+				recordGrupoMejorOferta.stream().forEach(p -> {
+					GrupoMejorOfertaDto grupoMejorOfertaDto =  new GrupoMejorOfertaDto();
+					grupoMejorOfertaDto.setId(Long.valueOf((p[0]).toString()));
+					grupoMejorOfertaDto.setNombre(p[1].toString());
+					listGrupoMejorOferta.add(grupoMejorOfertaDto); 
+				});
+			}
+		}
+		catch(Exception e) {
+			PcbsException exc = new PcbsException();
+			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
+			exc.setDetail(procedureNameGrupoMejorOferta + " : " + e.getMessage());
+			exc.setConcreteException(e);
+			throw exc;
+		}
+
+		return listGrupoMejorOferta;
 	}
 
 	
