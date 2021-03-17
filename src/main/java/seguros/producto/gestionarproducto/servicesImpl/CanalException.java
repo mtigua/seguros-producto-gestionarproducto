@@ -10,4 +10,14 @@ public class CanalException extends CommonException{
 
 	private static final long serialVersionUID = 1L;
 	
+
+	public CanalException(Exception e) {
+		super(e);
+	}
+	
+	public CanalException() {
+		super();
+	}
+	
+	
 }

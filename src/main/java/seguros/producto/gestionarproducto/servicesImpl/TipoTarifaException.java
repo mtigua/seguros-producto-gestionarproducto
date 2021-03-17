@@ -11,4 +11,11 @@ public class TipoTarifaException extends CommonException{
 	private static final long serialVersionUID = 1L;
 	
 
+	public TipoTarifaException(Exception e) {
+		super(e);
+	}
+	
+	public TipoTarifaException() {
+		super();
+	}
 }

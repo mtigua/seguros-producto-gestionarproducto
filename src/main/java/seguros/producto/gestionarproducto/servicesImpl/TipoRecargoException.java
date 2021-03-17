@@ -11,4 +11,11 @@ public class TipoRecargoException extends CommonException{
 	private static final long serialVersionUID = 1L;
 	
 
+	public TipoRecargoException(Exception e) {
+		super(e);
+	}
+	
+	public TipoRecargoException() {
+		super();
+	}
 }

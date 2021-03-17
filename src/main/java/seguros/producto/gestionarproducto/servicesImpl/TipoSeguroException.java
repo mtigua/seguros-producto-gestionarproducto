@@ -9,4 +9,12 @@ import seguros.producto.gestionarproducto.exceptions.CommonException;
 public class TipoSeguroException extends CommonException{
 
 	private static final long serialVersionUID = 1L;
+	
+	public TipoSeguroException(Exception e) {
+		super(e);
+	}
+	
+	public TipoSeguroException() {
+		super();
+	}
 }

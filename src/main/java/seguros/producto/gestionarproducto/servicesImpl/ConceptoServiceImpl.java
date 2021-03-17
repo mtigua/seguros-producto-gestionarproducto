@@ -38,11 +38,8 @@ public class ConceptoServiceImpl implements ConceptoService {
 			}).collect(Collectors.toList());;
 		}
 		catch(Exception e) {
-			ConceptoException exc = new ConceptoException();
-			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-		    exc.setDetail( e.getLocalizedMessage());
-			exc.setConcreteException(e);
-			throw e;
+			ConceptoException exc = new ConceptoException(e);
+			throw exc;
 		}
 		return list;
 		

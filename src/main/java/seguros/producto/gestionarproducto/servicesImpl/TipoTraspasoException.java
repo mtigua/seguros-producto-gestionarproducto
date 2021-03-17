@@ -6,15 +6,17 @@ import seguros.producto.gestionarproducto.exceptions.CommonException;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
-public class ProductoException extends CommonException{
+public class TipoTraspasoException extends CommonException{
 
 	private static final long serialVersionUID = 1L;
 	
-	public ProductoException(Exception e) {
+
+
+	public TipoTraspasoException(Exception e) {
 		super(e);
 	}
 	
-	public ProductoException() {
+	public TipoTraspasoException() {
 		super();
 	}
 }

@@ -63,24 +63,15 @@ public class Producto  {
 	
 	@Column(name = "nro_max_cuotas")
 	private Integer nroMaxCuotas;
-	
-	@Column(name = "tipo_traspaso")
-	private Integer tipoTraspaso;
-	
+		
 	@Column(name = "pers_codigo_agen")
 	private Integer persCodigoAgen;
 	
 	@Column(name = "pers_codigo_ejec")
 	private Integer persCodigoEjec;
 	
-	@Column(name = "tipo_acreedor")
-	private Integer tipoAcreedor;
-	
 	@Column(name = "pers_codigo_acre")
 	private Integer persCodigoAcre;
-	
-	@Column(name = "tipo_facturar")
-	private Integer tipoFacturar;
 	
 	@Column(name = "pers_codigo_fact")
 	private Integer persCodigoFact;
@@ -407,5 +398,19 @@ public class Producto  {
 	
 	@Column(name = "id_grupo_mejor_oferta")
 	private int idGrupoMejorOferta;
+	
+	@ManyToOne
+	@JoinColumn(name = "id_tipo_traspaso")
+	private  TipoTraspaso tipoTraspaso;
+	
+	@ManyToOne
+	@JoinColumn(name = "id_tipo_acreedor")
+	private  ModoTraspaso tipoAcreedor;
+	
+	@ManyToOne
+	@JoinColumn(name = "id_tipo_facturar")
+	private  ModoTraspaso tipoFacturar;
+	
     
+	
 }

@@ -27,6 +27,7 @@ public interface PCBSRepositoryCustom {
 	public List<GrupoDto> findAllGrupo() throws PcbsException;
 	public List<EquivalenciaSeguroDto> findAllEquivalenciaSeguro(Long idCompania, Long idNegocio,Long idRamo) throws PcbsException;
 	public List<GrupoMejorOfertaDto> findAllGrupoMejorOferta() throws PcbsException;
+	public Integer findNumPoliza(String numPoliza) throws PcbsException;
 	
 	
 }

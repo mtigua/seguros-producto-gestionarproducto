@@ -3,12 +3,9 @@ package seguros.producto.gestionarproducto.servicesImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import seguros.producto.gestionarproducto.dto.CompaniaDto;
 import seguros.producto.gestionarproducto.dto.EquivalenciaSeguroDto;
 import seguros.producto.gestionarproducto.dto.GrupoDto;
@@ -94,6 +91,7 @@ public class PcbsServiceImpl implements PcbsService {
 
 
 	@Override
+	@Transactional
 	public List<SubtipoDto> findAllSubtipoByCompaniaRamo(Long idCompania,Long idRamo) throws PcbsException {
 		List<SubtipoDto> list=new ArrayList<>();
 		
@@ -108,6 +106,7 @@ public class PcbsServiceImpl implements PcbsService {
 
 
 	@Override
+	@Transactional
 	public List<ProdDto> findAllProductoBySubtipo(String codigoSubTipo) throws PcbsException {
 		List<ProdDto> list=new ArrayList<>();
 		
@@ -122,6 +121,7 @@ public class PcbsServiceImpl implements PcbsService {
 
 
 	@Override
+	@Transactional
 	public List<GrupoMatrizDto> findAllGrupoMatriz(String codigoSubTipo,String codigoProducto) throws PcbsException {
 		List<GrupoMatrizDto> list=new ArrayList<>();
 		
@@ -136,20 +136,22 @@ public class PcbsServiceImpl implements PcbsService {
 
 
 	@Override
+	@Transactional
 	public List<GrupoDto> findAllGrupo() throws PcbsException {
 		List<GrupoDto> list=new ArrayList<>();
 		
 		try {
 			list= pcbsRepositoryCustom.findAllGrupo();
-		}
+		}	
 		catch(PcbsException e) {
-			throw e;
+				throw e;
 		}
 		return list;
 	}
 
 
 	@Override
+	@Transactional
 	public List<EquivalenciaSeguroDto> findAllEquivalenciaSeguro(Long idCompania, Long idNegocio, Long idRamo)
 			throws PcbsException {
 		List<EquivalenciaSeguroDto> list=new ArrayList<>();
@@ -176,15 +178,20 @@ public class PcbsServiceImpl implements PcbsService {
 		}
 		return list;
 	}
-	
-	
 
-	
-
-	
-	
-	
-
+	@Transactional
+	@Override
+	public Integer findNumPoliza(String numPoliza) throws PcbsException {
+        Integer existe = null;
+		
+		try {
+			existe= pcbsRepositoryCustom.findNumPoliza(numPoliza);
+		}
+		catch(PcbsException e) {
+			throw e;
+		}
+		return existe;
+	}
 
 	
 }

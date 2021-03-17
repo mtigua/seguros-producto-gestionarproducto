@@ -10,4 +10,12 @@ public class TipoAjusteException extends CommonException{
 
 	private static final long serialVersionUID = 1L;
 	
+	public TipoAjusteException(Exception e) {
+		super(e);
+	}
+	
+	public TipoAjusteException() {
+		super();
+	}
+	
 }

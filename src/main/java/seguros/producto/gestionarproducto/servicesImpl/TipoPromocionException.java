@@ -11,4 +11,11 @@ public class TipoPromocionException extends CommonException{
 	private static final long serialVersionUID = 1L;
 	
 
+	public TipoPromocionException(Exception e) {
+		super(e);
+	}
+	
+	public TipoPromocionException() {
+		super();
+	}
 }

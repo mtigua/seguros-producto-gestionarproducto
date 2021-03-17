@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
-public class CommonException extends Exception{
+public class CommonException extends RuntimeException{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -13,5 +13,26 @@ public class CommonException extends Exception{
 	private String detail;
 	private Exception concreteException;
 	private String errorMessage;
+	
+	
+	public CommonException(Exception e) {
+		this.concreteException = e;
+		if(e.getCause()!=null) {
+			if(e.getCause().getCause() != null) {
+				this.detail = e.getCause().getCause().getLocalizedMessage();				
+				this.errorMessage=e.getClass().toString() + " " +e.getCause().getCause().getLocalizedMessage();				
+			}
+			else {
+				this.detail = e.getMessage();				
+				this.errorMessage=e.getClass().toString() + " " + e.getMessage();
+			}
+		}	
+	}
+
+	public CommonException() {
+		super();
+	}
+	
+	
 
 }

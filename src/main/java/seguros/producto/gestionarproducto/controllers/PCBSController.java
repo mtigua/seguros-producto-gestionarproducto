@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
@@ -214,6 +215,45 @@ public class PCBSController {
 		return ResponseEntity.ok(lista);
 	}
 	
+	@ApiOperation(value = SWAGGER_GET_Ramo_Por_Compania_Negocio, notes = SWAGGER_GET_Ramo_Por_Compania_Negocio)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/buscarPoliza")
+	public ResponseEntity<Integer> findNumPoliza(		
+			@RequestParam("poliza") @NotNull String numPoliza
+//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
+//			String token
+		) throws PcbsException, UnauthorizedException{	
+		
+		Integer existe= null;
+		
+		try {
+			existe= pcbsService.findNumPoliza(numPoliza);
+		}
+		catch(PcbsException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_find_numpoliza());
+			throw e;
+		}
+//		catch(UnauthorizedException e) {
+//		e.setSubject(propertiesMsg.getLogger_error_executing_find_numpoliza());
+//		throw e;
+//	}
+		catch (Exception e) {
+			PcbsException ex = new PcbsException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_find_numpoliza());
+			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
+			ex.setDetail(e.getLocalizedMessage());
+			throw ex;
+		}		
+		return ResponseEntity.ok(existe);
+	}	
+	
+
 
 	@ApiOperation(value = SWAGGER_GET_Subtipo_Por_Compania_Ramo, notes = SWAGGER_GET_Subtipo_Por_Compania_Ramo)
 	@ApiResponses({ 

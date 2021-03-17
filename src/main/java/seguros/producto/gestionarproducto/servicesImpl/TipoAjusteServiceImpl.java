@@ -38,11 +38,8 @@ public class TipoAjusteServiceImpl implements TipoAjusteService {
 			}).collect(Collectors.toList());;
 		}
 		catch(Exception e) {
-			TipoAjusteException exc = new TipoAjusteException();
-			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-		    exc.setDetail( e.getLocalizedMessage());
-			exc.setConcreteException(e);
-			throw e;
+			TipoAjusteException exc = new TipoAjusteException(e);
+			throw exc;
 		}
 		return list;
 		

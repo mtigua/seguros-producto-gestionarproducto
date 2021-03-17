@@ -33,5 +33,8 @@ public class PropertiesMsg {
 	private String logger_error_executing_get_grupo;
 	private String logger_error_executing_get_equivalencia_seguro;
 	private String logger_error_executing_get_grupo_mejor_oferta;
+	private String logger_error_executing_get_tipo_traspaso;
+	private String logger_error_executing_get_modo_traspaso;
+	private String logger_error_executing_find_numpoliza;
 		 
 }

@@ -38,11 +38,8 @@ public class TipoPeriodoServiceImpl implements TipoPeriodoService {
 			}).collect(Collectors.toList());;
 		}
 		catch(Exception e) {
-			TipoPeriodoException exc = new TipoPeriodoException();
-			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-		    exc.setDetail( e.getLocalizedMessage());
-			exc.setConcreteException(e);
-			throw e;
+			TipoPeriodoException exc = new TipoPeriodoException(e);
+			throw exc;
 		}
 		return list;
 		

@@ -38,11 +38,8 @@ public class TipoPromocionServiceImpl implements TipoPromocionService {
 			}).collect(Collectors.toList());;
 		}
 		catch(Exception e) {
-			TipoPromocionException exc = new TipoPromocionException();
-			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-		    exc.setDetail( e.getLocalizedMessage());
-			exc.setConcreteException(e);
-			throw e;
+			TipoPromocionException exc = new TipoPromocionException(e);
+			throw exc;
 		}
 		return list;
 		
