@@ -167,6 +167,7 @@ public class PcbsServiceImpl implements PcbsService {
 
 
 	@Override
+	@Transactional
 	public List<GrupoMejorOfertaDto> findAllGrupoMejorOferta() throws PcbsException {
 		List<GrupoMejorOfertaDto> list=new ArrayList<>();
 		

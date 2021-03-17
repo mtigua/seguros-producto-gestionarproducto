@@ -385,7 +385,7 @@ public class PCBSController {
 		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
-	@GetMapping("/compania/{idCompania}/negocio/{idNegocio}/ramo/idRamo/equivalenciaseguro")
+	@GetMapping("/compania/{idCompania}/negocio/{idNegocio}/ramo/{idRamo}/equivalenciaseguro")
 	public ResponseEntity<List<EquivalenciaSeguroDto>> getEquivalenciaPorCompaniaNegocioRamo(
 			@PathVariable("idCompania") @NotNull Long idCompania,
 			@PathVariable("idNegocio") @NotNull Long idNegocio,
