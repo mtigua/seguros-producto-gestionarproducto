@@ -10,4 +10,11 @@ public class TipoDescuentoException extends CommonException{
 
 	private static final long serialVersionUID = 1L;
 	
+	public TipoDescuentoException(Exception e) {
+		super(e);
+	}
+	
+	public TipoDescuentoException() {
+		super();
+	}
 }

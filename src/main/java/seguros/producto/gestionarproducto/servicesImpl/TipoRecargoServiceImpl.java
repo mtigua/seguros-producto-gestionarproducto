@@ -38,11 +38,8 @@ public class TipoRecargoServiceImpl implements TipoRecargoService {
 			}).collect(Collectors.toList());;
 		}
 		catch(Exception e) {
-			TipoRecargoException exc = new TipoRecargoException();
-			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-		    exc.setDetail( e.getLocalizedMessage());
-			exc.setConcreteException(e);
-			throw e;
+			TipoRecargoException exc = new TipoRecargoException(e);
+			throw exc;
 		}
 		return list;
 		

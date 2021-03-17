@@ -11,4 +11,12 @@ public class TipoTraspasoException extends CommonException{
 	private static final long serialVersionUID = 1L;
 	
 
+
+	public TipoTraspasoException(Exception e) {
+		super(e);
+	}
+	
+	public TipoTraspasoException() {
+		super();
+	}
 }

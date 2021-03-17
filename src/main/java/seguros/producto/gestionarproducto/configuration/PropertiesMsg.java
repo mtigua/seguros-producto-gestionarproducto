@@ -29,5 +29,6 @@ public class PropertiesMsg {
 	private String logger_error_executing_get_ramo_por_compania_negocio;
 	private String logger_error_executing_get_tipo_traspaso;
 	private String logger_error_executing_get_modo_traspaso;
+	private String logger_error_executing_find_numpoliza;
 		 
 }

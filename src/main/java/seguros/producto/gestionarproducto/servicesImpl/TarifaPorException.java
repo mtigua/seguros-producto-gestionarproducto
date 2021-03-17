@@ -10,4 +10,11 @@ public class TarifaPorException extends CommonException{
 
 	private static final long serialVersionUID = 1L;
 	
+	public TarifaPorException(Exception e) {
+		super(e);
+	}
+	
+	public TarifaPorException() {
+		super();
+	}
 }

@@ -38,11 +38,8 @@ public class TipoTarifaServiceImpl implements TipoTarifaService {
 			}).collect(Collectors.toList());;
 		}
 		catch(Exception e) {
-			TipoTarifaException exc = new TipoTarifaException();
-			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-		    exc.setDetail( e.getLocalizedMessage());
-			exc.setConcreteException(e);
-			throw e;
+			TipoTarifaException exc = new TipoTarifaException(e);
+			throw exc;
 		}
 		return list;
 		

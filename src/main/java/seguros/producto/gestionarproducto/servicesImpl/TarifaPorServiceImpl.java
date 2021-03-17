@@ -38,11 +38,8 @@ public class TarifaPorServiceImpl implements TarifaPorService {
 			}).collect(Collectors.toList());;
 		}
 		catch(Exception e) {
-			TarifaPorException exc = new TarifaPorException();
-			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-		    exc.setDetail( e.getLocalizedMessage());
-			exc.setConcreteException(e);
-			throw e;
+			TarifaPorException exc = new TarifaPorException(e);
+			throw exc;
 		}
 		return list;
 		

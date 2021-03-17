@@ -38,11 +38,8 @@ public class HomologacionIdentificadorServiceImpl implements HomologacionIdentif
 			}).collect(Collectors.toList());;
 		}
 		catch(Exception e) {
-			HomologacionIdentificadorException exc = new HomologacionIdentificadorException();
-			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-		    exc.setDetail( e.getLocalizedMessage());
-			exc.setConcreteException(e);
-			throw e;
+			HomologacionIdentificadorException exc = new HomologacionIdentificadorException(e);
+			throw exc;
 		}
 		return list;
 		

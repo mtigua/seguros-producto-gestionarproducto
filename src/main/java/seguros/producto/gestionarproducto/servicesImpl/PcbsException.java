@@ -10,4 +10,13 @@ public class PcbsException extends CommonException{
 
 	private static final long serialVersionUID = 1L;
 	
+	public PcbsException(Exception e) {
+		super(e);
+	}
+	
+	public PcbsException() {
+		super();
+	}
+	
+	
 }

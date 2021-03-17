@@ -38,11 +38,8 @@ public class TipoSeguroServiceImpl implements TipoSeguroService {
 			}).collect(Collectors.toList());;
 		}
 		catch(Exception e) {
-			TipoSeguroException exc = new TipoSeguroException();
-			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());	        	
-		    exc.setDetail( e.getLocalizedMessage());
-			exc.setConcreteException(e);
-			throw e;
+			TipoSeguroException exc = new TipoSeguroException(e);
+			throw exc;
 		}
 		return list;
 		
