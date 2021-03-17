@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
-public class CommonException extends Exception{
+public class CommonException extends RuntimeException{
 
 	private static final long serialVersionUID = 1L;
 	
