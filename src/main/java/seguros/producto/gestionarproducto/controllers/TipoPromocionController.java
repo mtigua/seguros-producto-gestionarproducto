@@ -82,10 +82,8 @@ public class TipoPromocionController {
 //			throw e;
 //		}
 		catch (Exception e) {
-			TipoPromocionException ex = new TipoPromocionException();
+			TipoPromocionException ex = new TipoPromocionException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_promocion());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 

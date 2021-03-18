@@ -93,10 +93,8 @@ public class PCBSController {
 //			throw e;
 //		}
 		catch (Exception e) {
-			PcbsException ex = new PcbsException();
+			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_moneda());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 
@@ -124,10 +122,8 @@ public class PCBSController {
 			throw e;
 		}
 		catch (Exception e) {
-			PcbsException ex = new PcbsException();
+			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_compania());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 		return ResponseEntity.ok(lista);
@@ -156,10 +152,8 @@ public class PCBSController {
 			throw e;
 		}
 		catch (Exception e) {
-			PcbsException ex = new PcbsException();
+			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_negocio_por_compania());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 		return ResponseEntity.ok(lista);
@@ -189,10 +183,8 @@ public class PCBSController {
 			throw e;
 		}
 		catch (Exception e) {
-			PcbsException ex = new PcbsException();
+			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_ramo_por_compania_negocio());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 		return ResponseEntity.ok(lista);
@@ -229,8 +221,6 @@ public class PCBSController {
 		catch (Exception e) {
 			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_find_numpoliza());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 		return ResponseEntity.ok(existe);
