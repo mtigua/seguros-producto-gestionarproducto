@@ -295,7 +295,7 @@ public class PCBSController {
 		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
-	@GetMapping("/producto/{codigoSubTipo}")
+	@GetMapping("/subtipo/{codigoSubTipo}/producto")
 	public ResponseEntity<List<ProdDto>> getProductoPorSubTipo(@PathVariable("codigoSubTipo") @NotBlank String codigoSubTipo) throws PcbsException, UnauthorizedException{	
 		List<ProdDto> lista= null;
 		
