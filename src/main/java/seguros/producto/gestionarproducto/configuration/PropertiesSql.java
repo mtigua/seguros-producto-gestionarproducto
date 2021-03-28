@@ -23,5 +23,6 @@ public class PropertiesSql {
 	private String LISTAR_EQUIVALENCIAS_SEGUROS;
 	private String LISTAR_GRUPOS_MEJOR_OFERTA;
 	private String BUSCAR_POLIZA;
-		 
+	private String BUSCAR_RUT;
+
 }
