@@ -36,7 +36,4 @@ public class ExceptionResponse {
 		this.requestedURI = requestedURI;
 	}
 
-	public void callerURL(final String requestedURI) {
-		this.requestedURI = requestedURI;
-	}
 }
