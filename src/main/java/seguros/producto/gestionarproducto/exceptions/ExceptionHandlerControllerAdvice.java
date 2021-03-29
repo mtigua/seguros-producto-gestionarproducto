@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import com.google.gson.JsonObject;
 
@@ -51,9 +52,23 @@ public class ExceptionHandlerControllerAdvice  extends ResponseEntityExceptionHa
 		error.setRequestedURI(request.getRequestURI());
 		logger.error(e.getDetail());
 		return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+	}	
+	
+	 @Override
+	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, HttpHeaders headers,
+			HttpStatus status, WebRequest request) {
+		 ExceptionResponse error = new ExceptionResponse();	
+			error.setErrorMessage(ex.getClass().toString() + " " + ex.getMessage());
+			JsonObject details = new JsonObject();
+			details.addProperty(FIELD_ERROR, ex.getMessage());	
+			details.addProperty(FIELD_SUBJECT, MSG_HTTP400);
+			error.setDetails(details);
+			error.setRequestedURI(((ServletWebRequest)request).getRequest().getRequestURI().toString());
+			logger.error(ex.getMessage());
+			return new ResponseEntity<Object>(error, headers, HttpStatus.NOT_FOUND);
 	}
 
-	 @Override
+	@Override
 	 protected ResponseEntity<Object> handleServletRequestBindingException(ServletRequestBindingException ex,HttpHeaders headers, HttpStatus status, WebRequest request) {
 		 ExceptionResponse error = new ExceptionResponse();
 			error.setErrorMessage(ex.getClass().toString() + " " + ex.getMessage());
