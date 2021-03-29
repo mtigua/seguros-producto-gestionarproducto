@@ -2,8 +2,9 @@ package seguros.producto.gestionarproducto.controllers;
 
 
 
-import static seguros.producto.gestionarproducto.utils.Constants.HEADER_AUTHORIZACION_KEY;
 import java.util.List;
+
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.slf4j.Logger;
@@ -13,10 +14,10 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -25,9 +26,15 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import seguros.producto.gestionarproducto.configuration.PropertiesMsg;
 import seguros.producto.gestionarproducto.dto.CompaniaDto;
+import seguros.producto.gestionarproducto.dto.EquivalenciaSeguroDto;
+import seguros.producto.gestionarproducto.dto.GrupoDto;
+import seguros.producto.gestionarproducto.dto.GrupoMatrizDto;
+import seguros.producto.gestionarproducto.dto.GrupoMejorOfertaDto;
 import seguros.producto.gestionarproducto.dto.MonedaDto;
 import seguros.producto.gestionarproducto.dto.NegocioDto;
+import seguros.producto.gestionarproducto.dto.ProdDto;
 import seguros.producto.gestionarproducto.dto.RamoDto;
+import seguros.producto.gestionarproducto.dto.SubtipoDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
 import seguros.producto.gestionarproducto.exceptions.UnauthorizedException;
 import seguros.producto.gestionarproducto.services.PcbsService;
@@ -52,6 +59,16 @@ public class PCBSController {
 	private static final String SWAGGER_GET_Negocio_Por_Compania = "Listar negocios dado el id de la compania";
 	private static final String SWAGGER_GET_Ramo_Por_Compania_Negocio = "Listar ramos dado el id de la compania y del negocio";
 	
+	private static final String SWAGGER_GET_Subtipo_Por_Compania_Ramo = "Listar subtipos dado la compania y el ramo";
+	private static final String SWAGGER_GET_Producto_Por_Subtipo = "Listar productos dado el subtipo";
+	private static final String SWAGGER_GET_Grupo_Matriz = "Listar grupos matriz";
+	private static final String SWAGGER_GET_Grupo = "Listar grupos";
+	private static final String SWAGGER_GET_Equivalencia_Seguros = "Listar equivalencias de seguros Bigsa dados la compania, el negocio y el ramo";
+	private static final String SWAGGER_GET_Grupo_Mejor_Oferta = "Listar grupos de mejor oferta";
+	
+	
+	
+	
 	
 	@Autowired
 	private PropertiesMsg propertiesMsg;	
@@ -72,7 +89,7 @@ public class PCBSController {
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/moneda")
-	public ResponseEntity<List<MonedaDto>> getCanal(
+	public ResponseEntity<List<MonedaDto>> getMoneda(
 //			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
 //			String token
 			) throws PcbsException, UnauthorizedException{	
@@ -81,7 +98,7 @@ public class PCBSController {
 		
 		try {
 			//  String username=utils.getSamaccountname(token);		
-			  lista= pcbsService.findAllMonedas();
+			  lista= pcbsService.findAllMoneda();
 			   
 		}
 		catch(PcbsException e) {
@@ -115,7 +132,7 @@ public class PCBSController {
 		List<CompaniaDto> lista= null;
 		
 		try {
-			  lista= pcbsService.findAllCompanias();
+			  lista= pcbsService.findAllCompania();
 		}
 		catch(PcbsException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_compania());
@@ -145,7 +162,7 @@ public class PCBSController {
 		List<NegocioDto> lista= null;
 		
 		try {
-			  lista= pcbsService.findAllNegociosByCompania(idCompania);
+			  lista= pcbsService.findAllNegocioByCompania(idCompania);
 		}
 		catch(PcbsException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_negocio_por_compania());
@@ -176,7 +193,7 @@ public class PCBSController {
 		List<RamoDto> lista= null;
 		
 		try {
-			  lista= pcbsService.findAllRamosByCompaniaNegocio(idCompania, idNegocio);
+			  lista= pcbsService.findAllRamoByCompaniaNegocio(idCompania, idNegocio);
 		}
 		catch(PcbsException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_ramo_por_compania_negocio());
@@ -188,7 +205,7 @@ public class PCBSController {
 			throw ex;
 		}		
 		return ResponseEntity.ok(lista);
-	}	
+	}
 	
 	@ApiOperation(value = SWAGGER_GET_Ramo_Por_Compania_Negocio, notes = SWAGGER_GET_Ramo_Por_Compania_Negocio)
 	@ApiResponses({ 
@@ -228,4 +245,188 @@ public class PCBSController {
 	
 
 
+	@ApiOperation(value = SWAGGER_GET_Subtipo_Por_Compania_Ramo, notes = SWAGGER_GET_Subtipo_Por_Compania_Ramo)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/compania/{idCompania}/ramo/{idRamo}/subtipo")
+	public ResponseEntity<List<SubtipoDto>> getSubtipoPorTipo(
+			@PathVariable("idCompania") @NotNull Long idCompania,
+			@PathVariable("idRamo") @NotNull Long idRamo				
+		) throws PcbsException, UnauthorizedException{	
+		List<SubtipoDto> lista= null;
+		
+		try {
+			  lista= pcbsService.findAllSubtipoByCompaniaRamo(idCompania,idRamo);
+		}
+		catch(PcbsException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_subtipo_por_compania_ramo());
+			throw e;
+		}
+		catch (Exception e) {
+			PcbsException ex = new PcbsException();
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_subtipo_por_compania_ramo());
+			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
+			ex.setDetail(e.getLocalizedMessage());
+			throw ex;
+		}		
+		return ResponseEntity.ok(lista);
+	}
+	
+	@ApiOperation(value = SWAGGER_GET_Producto_Por_Subtipo, notes = SWAGGER_GET_Producto_Por_Subtipo)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/subtipo/{codigoSubTipo}/producto")
+	public ResponseEntity<List<ProdDto>> getProductoPorSubTipo(@PathVariable("codigoSubTipo") @NotBlank String codigoSubTipo) throws PcbsException, UnauthorizedException{	
+		List<ProdDto> lista= null;
+		
+		try {
+			  lista= pcbsService.findAllProductoBySubtipo(codigoSubTipo);
+		}
+		catch(PcbsException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_producto_por_subtipo());
+			throw e;
+		}
+		catch (Exception e) {
+			PcbsException ex = new PcbsException();
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_producto_por_subtipo());
+			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
+			ex.setDetail(e.getLocalizedMessage());
+			throw ex;
+		}		
+		return ResponseEntity.ok(lista);
+	}
+	
+	@ApiOperation(value = SWAGGER_GET_Grupo_Matriz, notes = SWAGGER_GET_Grupo_Matriz)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/subtipo/{codigoSubTipo}/producto/{codigoProducto}/grupomatriz")
+	public ResponseEntity<List<GrupoMatrizDto>> getGrupoMatriz(
+			@PathVariable("codigoSubTipo") @NotBlank String codigoSubTipo,
+			@PathVariable("codigoProducto") @NotBlank String codigoProducto
+		) throws PcbsException, UnauthorizedException{	
+		List<GrupoMatrizDto> lista= null;
+		
+		try {
+			  lista= pcbsService.findAllGrupoMatriz(codigoSubTipo,codigoProducto);
+		}
+		catch(PcbsException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_grupo_matriz());
+			throw e;
+		}
+		catch (Exception e) {
+			PcbsException ex = new PcbsException();
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_grupo_matriz());
+			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
+			ex.setDetail(e.getLocalizedMessage());
+			throw ex;
+		}		
+		return ResponseEntity.ok(lista);
+	}
+	
+	@ApiOperation(value = SWAGGER_GET_Grupo, notes = SWAGGER_GET_Grupo)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/grupo")
+	public ResponseEntity<List<GrupoDto>> getGrupo() throws PcbsException, UnauthorizedException{	
+		List<GrupoDto> lista= null;
+		
+		try {
+			  lista= pcbsService.findAllGrupo();
+		}
+		catch(PcbsException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_grupo());
+			throw e;
+		}
+		catch (Exception e) {
+			PcbsException ex = new PcbsException();
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_grupo());
+			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
+			ex.setDetail(e.getLocalizedMessage());
+			throw ex;
+		}		
+		return ResponseEntity.ok(lista);
+	}
+	
+	@ApiOperation(value = SWAGGER_GET_Equivalencia_Seguros, notes = SWAGGER_GET_Equivalencia_Seguros)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/compania/{idCompania}/negocio/{idNegocio}/ramo/{idRamo}/equivalenciaseguro")
+	public ResponseEntity<List<EquivalenciaSeguroDto>> getEquivalenciaPorCompaniaNegocioRamo(
+			@PathVariable("idCompania") @NotNull Long idCompania,
+			@PathVariable("idNegocio") @NotNull Long idNegocio,
+			@PathVariable("idRamo") @NotNull Long idRamo
+		) throws PcbsException, UnauthorizedException{	
+		
+		List<EquivalenciaSeguroDto> lista= null;
+		
+		try {
+			  lista= pcbsService.findAllEquivalenciaSeguro(idCompania, idNegocio, idRamo);
+		}
+		catch(PcbsException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_equivalencia_seguro());
+			throw e;
+		}
+		catch (Exception e) {
+			PcbsException ex = new PcbsException();
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_equivalencia_seguro());
+			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
+			ex.setDetail(e.getLocalizedMessage());
+			throw ex;
+		}		
+		return ResponseEntity.ok(lista);
+	}
+
+	@ApiOperation(value = SWAGGER_GET_Grupo_Mejor_Oferta, notes = SWAGGER_GET_Grupo_Mejor_Oferta)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/grupomejoroferta")
+	public ResponseEntity<List<GrupoMejorOfertaDto>> getGrupoMejorOferta() throws PcbsException, UnauthorizedException{	
+		List<GrupoMejorOfertaDto> lista= null;
+		
+		try {
+			  lista= pcbsService.findAllGrupoMejorOferta();
+		}
+		catch(PcbsException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_grupo_mejor_oferta());
+			throw e;
+		}
+		catch (Exception e) {
+			PcbsException ex = new PcbsException();
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_grupo_mejor_oferta());
+			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
+			ex.setDetail(e.getLocalizedMessage());
+			throw ex;
+		}		
+		return ResponseEntity.ok(lista);
+	}
 }
