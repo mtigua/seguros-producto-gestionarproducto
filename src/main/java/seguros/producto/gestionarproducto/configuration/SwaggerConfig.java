@@ -13,30 +13,34 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
-@ConditionalOnExpression(value = "${useSwagger:false}")
+// @ConditionalOnExpression(value = "${useSwagger:false}")
 @EnableSwagger2
-public class SwaggerConfig extends WebMvcConfigurationSupport{
-       
-	   //@Value("${SWAGGER_BASEPATH}")  private String basePath;
-	
-		@Bean
-		public Docket apiDocket() {
-		    return new Docket(DocumentationType.SWAGGER_2)
-		    	//	.host(basePath)
-		            .select()
-		            .apis(RequestHandlerSelectors.basePackage("seguros.producto."))
-		            .paths(PathSelectors.any())
-		            .build();
-		}
-		
-		@Override
-		   public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		       registry.addResourceHandler("swagger-ui.html")
-		       .addResourceLocations("classpath:/META-INF/resources/");
+public class SwaggerConfig extends WebMvcConfigurationSupport {
 
-		       registry.addResourceHandler("/webjars/**")
-		       .addResourceLocations("classpath:/META-INF/resources/webjars/");
-		   }
-		
-		
+    //@Value("${SWAGGER_BASEPATH}")  private String basePath;
+
+
+    @Value("${SWAGGER_BASEPATH}")
+    private String basePath;
+
+    @Bean
+    public Docket apiDocket() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                //	.host(basePath)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("seguros.producto."))
+                .paths(PathSelectors.any())
+                .build();
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+
+
 }

@@ -407,7 +407,41 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 		return existe;
 	}
 
-	
+	@Override
+	@Transactional
+	public List<String> findNumRut(String numRut, String digito) throws PcbsException {
+		String procedureBuscaRut = propertiesSql.getBUSCAR_RUT();
+
+		List<String> listNombreRut =  new ArrayList<>();
+		List<Object[]> recordNombreRut=null;
+
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureBuscaRut);
+			storedProcedureQuery.registerStoredProcedureParameter("rut", Long.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("digito", String.class, ParameterMode.IN);
+
+			storedProcedureQuery.setParameter("rut",Long.parseLong(numRut) );
+			storedProcedureQuery.setParameter("digito",digito );
+			storedProcedureQuery.execute();
+			recordNombreRut = storedProcedureQuery.getResultList();
+
+
+			if(recordNombreRut!=null) {
+				recordNombreRut.stream().forEach(p -> {
+					listNombreRut.add((p[3]).toString());
+				});
+			}
+
+
+		} catch(Exception e) {
+			PcbsException exc = new PcbsException();
+			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
+			exc.setDetail(procedureBuscaRut + " : " + e.getMessage());
+			exc.setConcreteException(e);
+			throw exc;
+		}
+		return listNombreRut;
+	}
 
 	
 
