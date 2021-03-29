@@ -22,10 +22,7 @@ public class ExceptionAPIControllerAdvice {
 	private static final String FIELD_SUBJECT="subject";
 
 	@ExceptionHandler(NoHandlerFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ResponseEntity<ExceptionResponse> handleNoHandlerFound(NoHandlerFoundException e, WebRequest request) {
-		HashMap<String, String> response = new HashMap<>();
-
 		ExceptionResponse error = new ExceptionResponse();
 		error.setErrorMessage(e.getLocalizedMessage());
 		JsonObject details = new JsonObject();
