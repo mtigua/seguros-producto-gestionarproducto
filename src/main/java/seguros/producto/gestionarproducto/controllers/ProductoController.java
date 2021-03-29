@@ -86,10 +86,8 @@ public class ProductoController {
 //			throw e;
 //		}
 		catch (Exception e) {
-			ProductoException ex = new ProductoException();
+			ProductoException ex = new ProductoException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 

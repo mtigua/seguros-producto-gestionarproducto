@@ -82,10 +82,8 @@ public class TipoPeriodoController {
 //			throw e;
 //		}
 		catch (Exception e) {
-			TipoPeriodoException ex = new TipoPeriodoException();
+			TipoPeriodoException ex = new TipoPeriodoException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_periodo());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 
