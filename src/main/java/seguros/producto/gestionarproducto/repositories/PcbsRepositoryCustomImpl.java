@@ -407,6 +407,7 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 		return existe;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
 	public List<String> findNumRut(String numRut, String digito) throws PcbsException {
@@ -434,10 +435,7 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 
 
 		} catch(Exception e) {
-			PcbsException exc = new PcbsException();
-			exc.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			exc.setDetail(procedureBuscaRut + " : " + e.getMessage());
-			exc.setConcreteException(e);
+			PcbsException exc = new PcbsException(e);
 			throw exc;
 		}
 		return listNombreRut;

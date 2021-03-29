@@ -82,10 +82,8 @@ public class CanalController {
 //			throw e;
 //		}
 		catch (Exception e) {
-			CanalException ex = new CanalException();
+			CanalException ex = new CanalException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_canal());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 

@@ -83,10 +83,8 @@ public class TipoAjusteController {
 //			throw e;
 //		}
 		catch (Exception e) {
-			TipoAjusteException ex = new TipoAjusteException();
+			TipoAjusteException ex = new TipoAjusteException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_ajuste());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 

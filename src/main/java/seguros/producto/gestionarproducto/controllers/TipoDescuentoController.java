@@ -82,10 +82,8 @@ public class TipoDescuentoController {
 //			throw e;
 //		}
 		catch (Exception e) {
-			TipoDescuentoException ex = new TipoDescuentoException();
+			TipoDescuentoException ex = new TipoDescuentoException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_descuento());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 

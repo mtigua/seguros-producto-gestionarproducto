@@ -82,10 +82,8 @@ public class ConceptoController {
 //			throw e;
 //		}
 		catch (Exception e) {
-			ConceptoException ex = new ConceptoException();
+			ConceptoException ex = new ConceptoException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_concepto());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 

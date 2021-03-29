@@ -82,10 +82,8 @@ public class TipoTraspasoController {
 //			throw e;
 //		}
 		catch (Exception e) {
-			TipoTraspasoException ex = new TipoTraspasoException();
+			TipoTraspasoException ex = new TipoTraspasoException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_traspaso());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 

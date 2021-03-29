@@ -82,10 +82,8 @@ public class TarifaPorController {
 //			throw e;
 //		}
 		catch (Exception e) {
-			TarifaPorException ex = new TarifaPorException();
+			TarifaPorException ex = new TarifaPorException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tarifa_por());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 
