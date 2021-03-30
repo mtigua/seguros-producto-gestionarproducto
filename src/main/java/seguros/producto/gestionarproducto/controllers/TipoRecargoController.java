@@ -82,10 +82,8 @@ public class TipoRecargoController {
 //			throw e;
 //		}
 		catch (Exception e) {
-			TipoRecargoException ex = new TipoRecargoException();
+			TipoRecargoException ex = new TipoRecargoException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_recargo());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 

@@ -83,10 +83,8 @@ public class TipoTarifaController {
 //			throw e;
 //		}
 		catch (Exception e) {
-			TipoTarifaException ex = new TipoTarifaException();
+			TipoTarifaException ex = new TipoTarifaException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_tarifa());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 

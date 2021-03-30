@@ -82,10 +82,8 @@ public class TipoSeguroController {
 //			throw e;
 //		}
 		catch (Exception e) {
-			TipoSeguroException ex = new TipoSeguroException();
+			TipoSeguroException ex = new TipoSeguroException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_seguro());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 

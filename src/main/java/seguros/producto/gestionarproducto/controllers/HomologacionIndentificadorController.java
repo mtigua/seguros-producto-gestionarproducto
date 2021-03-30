@@ -82,11 +82,8 @@ public class HomologacionIndentificadorController {
 //			throw e;
 //		}
 		catch (Exception e) {
-			HomologacionIdentificadorException ex = new HomologacionIdentificadorException();
+			HomologacionIdentificadorException ex = new HomologacionIdentificadorException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_homologacion_identificador());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
-			throw ex;
 		}		
 
 		return ResponseEntity.ok(lista);
