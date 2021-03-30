@@ -82,10 +82,8 @@ public class ModoTraspasoController {
 //			throw e;
 //		}
 		catch (Exception e) {
-			ModoTraspasoException ex = new ModoTraspasoException();
+			ModoTraspasoException ex = new ModoTraspasoException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_modo_traspaso());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 

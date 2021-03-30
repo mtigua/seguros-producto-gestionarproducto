@@ -194,5 +194,19 @@ public class PcbsServiceImpl implements PcbsService {
 		return existe;
 	}
 
+	@Transactional
+	@Override
+	public List<String> findNumRut(String numRut, String digito) throws PcbsException {
+		List<String> nombres;
+
+		try {
+			nombres= pcbsRepositoryCustom.findNumRut(numRut, digito);
+		}
+		catch(PcbsException e) {
+			throw e;
+		}
+		return nombres;
+	}
+
 	
 }

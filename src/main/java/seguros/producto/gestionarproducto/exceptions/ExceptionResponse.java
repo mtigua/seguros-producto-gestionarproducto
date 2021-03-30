@@ -35,4 +35,5 @@ public class ExceptionResponse {
 	public void setRequestedURI(final String requestedURI) {
 		this.requestedURI = requestedURI;
 	}
+
 }

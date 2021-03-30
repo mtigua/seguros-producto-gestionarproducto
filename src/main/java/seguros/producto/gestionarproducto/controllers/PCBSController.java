@@ -65,6 +65,7 @@ public class PCBSController {
 	private static final String SWAGGER_GET_Grupo = "Listar grupos";
 	private static final String SWAGGER_GET_Equivalencia_Seguros = "Listar equivalencias de seguros Bigsa dados la compania, el negocio y el ramo";
 	private static final String SWAGGER_GET_Grupo_Mejor_Oferta = "Listar grupos de mejor oferta";
+	private static final String SWAGGER_GET_BUSCAR_POR_RUT = "Buscar por rut";
 	
 	
 	
@@ -110,10 +111,8 @@ public class PCBSController {
 //			throw e;
 //		}
 		catch (Exception e) {
-			PcbsException ex = new PcbsException();
+			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_moneda());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 
@@ -141,10 +140,8 @@ public class PCBSController {
 			throw e;
 		}
 		catch (Exception e) {
-			PcbsException ex = new PcbsException();
+			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_compania());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 		return ResponseEntity.ok(lista);
@@ -173,10 +170,8 @@ public class PCBSController {
 			throw e;
 		}
 		catch (Exception e) {
-			PcbsException ex = new PcbsException();
+			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_negocio_por_compania());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 		return ResponseEntity.ok(lista);
@@ -206,10 +201,8 @@ public class PCBSController {
 			throw e;
 		}
 		catch (Exception e) {
-			PcbsException ex = new PcbsException();
+			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_ramo_por_compania_negocio());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 		return ResponseEntity.ok(lista);
@@ -246,14 +239,47 @@ public class PCBSController {
 		catch (Exception e) {
 			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_find_numpoliza());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 		return ResponseEntity.ok(existe);
-	}	
-	
+	}
 
+	@ApiOperation(value = SWAGGER_GET_BUSCAR_POR_RUT, notes = SWAGGER_GET_BUSCAR_POR_RUT)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/buscarRut")
+	public ResponseEntity<List<String>> findBuscarRut(
+			@RequestParam("numRut") @NotNull String numRut,
+			@RequestParam("digito") @NotNull String digito
+//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true)
+//			String token
+	) throws PcbsException, UnauthorizedException{
+
+		List<String> nombres = null;
+
+		try {
+			nombres= pcbsService.findNumRut(numRut, digito);
+		}
+		catch(PcbsException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_find_numpoliza());
+			throw e;
+		}
+//		catch(UnauthorizedException e) {
+//		e.setSubject(propertiesMsg.getLogger_error_executing_find_numpoliza());
+//		throw e;
+//	}
+		catch (Exception e) {
+			PcbsException ex = new PcbsException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_find_numpoliza());
+			throw ex;
+		}
+		return ResponseEntity.ok(nombres);
+	}
 
 	@ApiOperation(value = SWAGGER_GET_Subtipo_Por_Compania_Ramo, notes = SWAGGER_GET_Subtipo_Por_Compania_Ramo)
 	@ApiResponses({ 
@@ -278,10 +304,8 @@ public class PCBSController {
 			throw e;
 		}
 		catch (Exception e) {
-			PcbsException ex = new PcbsException();
+			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_subtipo_por_compania_ramo());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 		return ResponseEntity.ok(lista);
@@ -339,10 +363,8 @@ public class PCBSController {
 			throw e;
 		}
 		catch (Exception e) {
-			PcbsException ex = new PcbsException();
+			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_grupo_matriz());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 		return ResponseEntity.ok(lista);
@@ -368,10 +390,8 @@ public class PCBSController {
 			throw e;
 		}
 		catch (Exception e) {
-			PcbsException ex = new PcbsException();
+			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_grupo());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 		return ResponseEntity.ok(lista);
@@ -402,10 +422,8 @@ public class PCBSController {
 			throw e;
 		}
 		catch (Exception e) {
-			PcbsException ex = new PcbsException();
+			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_equivalencia_seguro());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 		return ResponseEntity.ok(lista);
@@ -431,10 +449,8 @@ public class PCBSController {
 			throw e;
 		}
 		catch (Exception e) {
-			PcbsException ex = new PcbsException();
+			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_grupo_mejor_oferta());
-			ex.setErrorMessage(e.getClass().toString() + " " + e.getMessage());
-			ex.setDetail(e.getLocalizedMessage());
 			throw ex;
 		}		
 		return ResponseEntity.ok(lista);
