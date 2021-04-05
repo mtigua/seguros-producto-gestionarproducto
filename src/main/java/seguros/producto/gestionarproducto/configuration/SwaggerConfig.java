@@ -25,7 +25,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
     @Bean
     public Docket apiDocket() {
         return new Docket(DocumentationType.SWAGGER_2)
-                //	.host(basePath)
+                .host(basePath)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("seguros.producto."))
                 .paths(PathSelectors.any())
