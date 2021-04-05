@@ -28,6 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 			.and()
 			.headers()	        
 			.addHeaderWriter(new StaticHeadersWriter("Content-Security-Policy","default-src 'self'; script-src 'self' 'unsafe-eval' cdn.pendo.io; connect-src 'self' app.pendo.io; img-src 'self' data: cdn.pendo.io app.pendo.io; style-src 'self' 'unsafe-inline' app.pendo.io cdn.pendo.io"))
+			.addHeaderWriter(new StaticHeadersWriter("Access-Control-Allow-Credentials","true"))
 			.httpStrictTransportSecurity()
 			.includeSubDomains(true)
 			.maxAgeInSeconds(31536000);
