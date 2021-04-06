@@ -442,6 +442,39 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 	}
 
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public String findRutProductManager(String numRut) throws PcbsException {
+		String procedureBuscaRutProductManager = propertiesSql.getBUSCAR_RUT_SIN_DIGITO_PRODUCT_MANAGER();
+
+		String rut="";
+		List<Object[]> record=null;
+
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureBuscaRutProductManager);
+			storedProcedureQuery.registerStoredProcedureParameter("rut", String.class, ParameterMode.IN);
+
+			storedProcedureQuery.setParameter("rut",numRut);
+			storedProcedureQuery.execute();
+			record = storedProcedureQuery.getResultList();
+
+
+			if(record!=null) {
+				if(!record.isEmpty()) {
+					rut= String.valueOf(record.get(0));
+				}
+			}
+
+
+		} catch(Exception e) {
+			PcbsException exc = new PcbsException(e);
+			throw exc;
+		}
+		return rut;
+	}
+
+	
 
 	
 
