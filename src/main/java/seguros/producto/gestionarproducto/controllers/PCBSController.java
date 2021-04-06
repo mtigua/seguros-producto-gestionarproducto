@@ -458,4 +458,41 @@ public class PCBSController {
 		}		
 		return ResponseEntity.ok(lista);
 	}
+	
+	
+	@ApiOperation(value = SWAGGER_GET_Ramo_Por_Compania_Negocio, notes = SWAGGER_GET_Ramo_Por_Compania_Negocio)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/buscarRutProductManager")
+	public ResponseEntity<String> findRutProductManager(		
+			@RequestParam("rut") @NotNull String numRut
+//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
+//			String token
+		) throws PcbsException, UnauthorizedException{	
+		
+		String rut= "";
+		
+		try {
+			rut= pcbsService.findRutProductManager(numRut);
+		}
+		catch(PcbsException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_find_rut_product_manager());
+			throw e;
+		}
+//		catch(UnauthorizedException e) {
+//		e.setSubject(propertiesMsg.getLogger_error_executing_find_rut_product_manager());
+//		throw e;
+//	}
+		catch (Exception e) {
+			PcbsException ex = new PcbsException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_find_rut_product_manager());
+			throw ex;
+		}		
+		return ResponseEntity.ok(rut);
+	}
 }
