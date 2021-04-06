@@ -29,6 +29,7 @@ public interface PCBSRepositoryCustom {
 	public List<GrupoMejorOfertaDto> findAllGrupoMejorOferta() throws PcbsException;
 	public Integer findNumPoliza(String numPoliza) throws PcbsException;
 	List<String> findNumRut(String numRut, String digito) throws PcbsException;
+	public String findRutProductManager(String numRut) throws PcbsException;
 
 	
 }
