@@ -208,5 +208,19 @@ public class PcbsServiceImpl implements PcbsService {
 		return nombres;
 	}
 
+	@Transactional
+	@Override
+	public String findRutProductManager(String numRut) throws PcbsException {
+		 String rut = "";
+			
+			try {
+				rut= pcbsRepositoryCustom.findRutProductManager(numRut);
+			}
+			catch(PcbsException e) {
+				throw e;
+			}
+			return rut;
+	}
+
 	
 }
