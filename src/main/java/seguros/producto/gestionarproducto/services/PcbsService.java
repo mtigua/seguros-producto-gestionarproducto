@@ -29,4 +29,5 @@ public interface PcbsService {
 	public Integer findNumPoliza(String numPoliza) throws PcbsException;
 	public List<String> findNumRut(String numRut, String digito) throws PcbsException;
 	public String findRutProductManager(String numRut) throws PcbsException;
+	public Integer decryptPasswordProductManager(String rut,String password);
 }

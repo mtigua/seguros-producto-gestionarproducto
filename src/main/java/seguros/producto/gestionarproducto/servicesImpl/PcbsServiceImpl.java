@@ -223,4 +223,20 @@ public class PcbsServiceImpl implements PcbsService {
 	}
 
 	
+	@Transactional
+	@Override
+	public Integer decryptPasswordProductManager(String rut, String password) {
+		 Integer valid = 0;
+			
+			try {
+				valid= pcbsRepositoryCustom.decryptPasswordProductManager(rut,password);
+			}
+			catch(PcbsException e) {
+				throw e;
+			}
+			return valid;
+	}
+	
+
+	
 }

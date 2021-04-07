@@ -475,6 +475,47 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 	}
 
 	
+	@Override
+	@Transactional
+	public Integer decryptPasswordProductManager(String rut, String password) throws PcbsException {
+		String procedureBuscaPoliza = propertiesSql.getDESENCRIPTAR();
+		Integer existe=null;
+		 
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureBuscaPoliza);
+			storedProcedureQuery.registerStoredProcedureParameter("password", String.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("rut", String.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("valid", Integer.class, ParameterMode.OUT);
+			
+			storedProcedureQuery.setParameter("rut",rut );
+			storedProcedureQuery.setParameter("password",password );
+			storedProcedureQuery.execute();
+		
+			Object result= storedProcedureQuery.getOutputParameterValue("valid");
+			  if(result!=null) {
+				  existe= (int) storedProcedureQuery.getOutputParameterValue("valid");
+			  }
+			  else {
+				    PcbsException exc = new PcbsException();
+					exc.setErrorMessage(VALUE_UNDEFINED + "existe");	        	
+					exc.setDetail(VALUE_UNDEFINED + "existe");
+					exc.setConcreteException(exc);
+					throw exc;
+			  }		
+		
+		}
+		catch(PcbsException e){
+			throw e;
+		}
+		catch(Exception e) {
+			PcbsException exc = new PcbsException(e);
+			throw exc;
+		}
+
+		return existe;
+	}
+
+	
 
 	
 

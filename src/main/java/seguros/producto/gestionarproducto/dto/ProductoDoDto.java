@@ -4,8 +4,10 @@ package seguros.producto.gestionarproducto.dto;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-
+import org.springframework.beans.BeanUtils;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import seguros.producto.gestionarproducto.entities.ProductoDo;
 
 
 
@@ -55,7 +57,16 @@ public class ProductoDoDto  {
 	
 	private Boolean  doplNovalidaTitCerrada;
 	
-	private  DestinoVentaDto doplAQuienSeVende;
+	private  Long doplAQuienSeVende;
+	
+	@JsonIgnore 
+	public ProductoDo toEntity() {
+		ProductoDo productoDo = new ProductoDo();
+		BeanUtils.copyProperties(this, productoDo);
+		
+		return productoDo;
+		
+	}
 	
 	
 	

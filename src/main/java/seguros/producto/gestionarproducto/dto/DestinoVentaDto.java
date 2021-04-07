@@ -10,7 +10,7 @@ public class DestinoVentaDto  {
 	
 	private Long id;
 	
-	@NotBlank(message = "El campo nombre de canal es requerido")
+	@NotBlank(message = "El campo nombre de destino es requerido")
 	private String nombre;
 	
 	private String descripcion;	

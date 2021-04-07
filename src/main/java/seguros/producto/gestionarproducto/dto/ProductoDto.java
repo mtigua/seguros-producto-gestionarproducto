@@ -6,7 +6,11 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.beans.BeanUtils;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import seguros.producto.gestionarproducto.entities.Producto;
+import seguros.producto.gestionarproducto.entities.ProductoDo;
 
 @Data
 public class ProductoDto {
@@ -17,7 +21,7 @@ public class ProductoDto {
 	@NotNull(message =  "El campo idCiaNegocioRamo es requerido")
 	private Integer idCiaNegocioRamo;
 	
-	@Size(min=4, max=4)
+	@Size( max=4)
 	private String nemot;
 	
 	@Size(max=30)
@@ -45,17 +49,17 @@ public class ProductoDto {
 	
 	private Integer nroMaxCuotas;
 	
-	private Integer tipoTraspaso;
+	private Long tipoTraspaso;
 	
 	private Integer persCodigoAgen;
 	
 	private Integer persCodigoEjec;
 	
-	private Integer tipoAcreedor;
+	private Long tipoAcreedor;
 	
 	private Integer persCodigoAcre;
 	
-	private Integer tipoFacturar;
+	private Long tipoFacturar;
 	
 	private Integer persCodigoFact;
 	
@@ -113,7 +117,7 @@ public class ProductoDto {
 	
 	private Boolean  tienePromotor;
 	
-	private Integer  garantiaSatisfaccion;
+	private Boolean  garantiaSatisfaccion;
 	
 	private Integer  diasVigenGarantiaSatis;
 	
@@ -273,21 +277,21 @@ public class ProductoDto {
 	private Boolean perCuotas;	
 
 	@NotNull
-	private  TipoSeguroDto tipoSeguro;
+	private  Long tipoSeguro;
 	
-	private  TipoPromocionDto tipoPromocion;	
+	private  Long tipoPromocion;	
 
-	private  TipoRecargoDto tipoRecargo;
+	private  Long tipoRecargo;
 	
-	private  TipoAjusteDto tipoAjuste;
+	private  Long tipoAjuste;
 	
-	private  TipoDescuentoDto tipoDescuento;
+	private  Long tipoDescuento;
 	
-	private  TarifaPorDto tarifaPor;
+	private  Long tarifaPor;
 	
-	private  TipoTarifaDto tipoTarifa;
+	private  Long tipoTarifa;
 	
-	private  TipoPeriodoDto tipoPeriodo;
+	private  Long tipoPeriodo;
 	
 	private int idRamo;	
 	
@@ -296,5 +300,24 @@ public class ProductoDto {
 	private int idCompania;
 	
 	private int idGrupoMejorOferta;
+	
+	private ProductoDoDto productDo;
+	
+	
+	@JsonIgnore 
+	public Producto toEntity() {
+		Producto producto = new Producto();
+		BeanUtils.copyProperties(this, producto);
+		
+		if(this.productDo!=null) {
+			ProductoDo productDo= new ProductoDo();
+			BeanUtils.copyProperties(this.productDo.toEntity(), productDo);
+			producto.setProductDo(productDo);
+		}
+		
+		return producto;
+		
+	}
+	
 
 }
