@@ -4,6 +4,7 @@ package seguros.producto.gestionarproducto.entities;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -404,9 +405,14 @@ public class Producto  {
 	@JoinColumn(name = "id_tipo_facturar")
 	private  ModoTraspaso tipoFacturar;
 	
-	 @OneToOne
-	 @JoinColumn(name = "id_plan_de_cobertura_do")
-	 private ProductoDo address;
+	@OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+	@JoinColumn(name = "id_plan_de_cobertura_do")
+	private ProductoDo productDo;
     
+	 
+	
+		
+		
+		
 	
 }

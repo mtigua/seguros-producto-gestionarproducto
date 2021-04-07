@@ -69,6 +69,8 @@ public class PCBSController {
 	private static final String SWAGGER_GET_Equivalencia_Seguros = "Listar equivalencias de seguros Bigsa dados la compania, el negocio y el ramo";
 	private static final String SWAGGER_GET_Grupo_Mejor_Oferta = "Listar grupos de mejor oferta";
 	private static final String SWAGGER_GET_BUSCAR_POR_RUT = "Buscar por rut";
+	private static final String SWAGGER_GET_BUSCAR_PRODUCT_MANAGER_POR_RUT = "Buscar product manager por rut";
+	private static final String SWAGGER_DESENCRIPTAR_PALABRAPASE_PRODUCT_MANAGER = "Desencriptar y validar password de product manager dado rut y password";
 	
 	
 	
@@ -460,7 +462,7 @@ public class PCBSController {
 	}
 	
 	
-	@ApiOperation(value = SWAGGER_GET_Ramo_Por_Compania_Negocio, notes = SWAGGER_GET_Ramo_Por_Compania_Negocio)
+	@ApiOperation(value = SWAGGER_GET_BUSCAR_PRODUCT_MANAGER_POR_RUT, notes = SWAGGER_GET_BUSCAR_PRODUCT_MANAGER_POR_RUT)
 	@ApiResponses({ 
 		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
 		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
@@ -494,5 +496,42 @@ public class PCBSController {
 			throw ex;
 		}		
 		return ResponseEntity.ok(rut);
+	}
+	
+	@ApiOperation(value = SWAGGER_DESENCRIPTAR_PALABRAPASE_PRODUCT_MANAGER, notes = SWAGGER_DESENCRIPTAR_PALABRAPASE_PRODUCT_MANAGER)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/desencriptar")
+	public ResponseEntity<Integer> desencriptar(		
+			@RequestParam("rut") @NotNull String numRut,
+			@RequestParam("password") @NotNull String password
+//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
+//			String token
+		) throws PcbsException, UnauthorizedException{	
+		
+		Integer valid= 0;
+		
+		try {
+			valid= pcbsService.decryptPasswordProductManager(numRut,password);
+		}
+		catch(PcbsException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_decrypt_password_product_manager());
+			throw e;
+		}
+//		catch(UnauthorizedException e) {
+//		e.setSubject(propertiesMsg.getLogger_error_executing_decrypt_password_product_manager());
+//		throw e;
+//	}
+		catch (Exception e) {
+			PcbsException ex = new PcbsException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_decrypt_password_product_manager());
+			throw ex;
+		}		
+		return ResponseEntity.ok(valid);
 	}
 }
