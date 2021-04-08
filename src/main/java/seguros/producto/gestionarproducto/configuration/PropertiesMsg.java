@@ -38,5 +38,8 @@ public class PropertiesMsg {
 	private String logger_error_executing_find_numpoliza;
 	private String logger_error_executing_get_destino_venta;
 	private String logger_error_executing_find_rut_product_manager;
+	private String logger_error_executing_get_producto_do;
+	private String logger_error_executing_decrypt_password_product_manager;
+	private String logger_error_executing_save_producto;
 		 
 }

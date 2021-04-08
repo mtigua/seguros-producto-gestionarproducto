@@ -14,6 +14,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +49,7 @@ public class ProductoController {
 	private static final String MSG_HTTP401 = "No autorizado";
 	private static final String MSG_HTTP500 = "Error interno del sistema";
 	private static final String SWAGGER_GET_PRODUCT = "Listar productos";
+	private static final String SWAGGER_SAVE_PRODUCT = "Registrar producto";
 	
 	@Autowired
 	private PropertiesMsg propertiesMsg;	
@@ -96,6 +98,45 @@ public class ProductoController {
 
 		return ResponseEntity.ok(list);
 	}	
+	
+	@ApiOperation(value = SWAGGER_SAVE_PRODUCT, notes = SWAGGER_SAVE_PRODUCT)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@PostMapping("/")
+	public ResponseEntity<String> saveProducto(
+//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
+//			String token
+			@RequestBody(required = false) ProductoDto producto
+			) throws ProductoException, UnauthorizedException{	
+				
+		String result="";
+		
+		try {
+			 // String username=utils.getSamaccountname(token);		
+			result= productoService.save(producto);
+			   
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_save_producto());
+			throw e;
+		}
+//		catch(UnauthorizedException e) {
+//			e.setSubject(propertiesMsg.getLogger_error_executing_save_producto());
+//			throw e;
+//		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_save_producto());
+			throw ex;
+		}		
+
+		return ResponseEntity.ok(result);
+	}
 	
 
 

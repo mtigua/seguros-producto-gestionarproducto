@@ -1,7 +1,6 @@
 package seguros.producto.gestionarproducto.controllers;
 
 
-
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
@@ -44,10 +43,10 @@ import seguros.producto.gestionarproducto.servicesImpl.PcbsException;
 import seguros.producto.gestionarproducto.utils.Utils;
 
 @RestController
-@Api(value="PCBS Resource")
+@Api(value = "PCBS Resource")
 @RefreshScope
 @RequestMapping("/pcbs")
-@CrossOrigin(origins = "${domains.origin.allowed.gestionarproducto}", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PATCH,RequestMethod.OPTIONS,RequestMethod.PUT,RequestMethod.DELETE})
+@CrossOrigin(origins = "${domains.origin.allowed.gestionarproducto}", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.OPTIONS, RequestMethod.PUT, RequestMethod.DELETE})
 public class PCBSController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(PCBSController.class.getSimpleName());
@@ -69,7 +68,9 @@ public class PCBSController {
 	private static final String SWAGGER_GET_Equivalencia_Seguros = "Listar equivalencias de seguros Bigsa dados la compania, el negocio y el ramo";
 	private static final String SWAGGER_GET_Grupo_Mejor_Oferta = "Listar grupos de mejor oferta";
 	private static final String SWAGGER_GET_BUSCAR_POR_RUT = "Buscar por rut";
-	
+	private static final String SWAGGER_GET_BUSCAR_PRODUCT_MANAGER_POR_RUT = "Buscar product manager por rut";
+	private static final String SWAGGER_DESENCRIPTAR_PALABRAPASE_PRODUCT_MANAGER = "Desencriptar y validar password de product manager dado rut y password";
+
 	
 	
 	
@@ -210,40 +211,39 @@ public class PCBSController {
 		}		
 		return ResponseEntity.ok(lista);
 	}
-	
+
 	@ApiOperation(value = SWAGGER_GET_Ramo_Por_Compania_Negocio, notes = SWAGGER_GET_Ramo_Por_Compania_Negocio)
-	@ApiResponses({ 
-		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
-		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
-		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
-		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
 	})
-	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header")})
 	@GetMapping("/buscarPoliza")
-	public ResponseEntity<Integer> findNumPoliza(		
-			@RequestParam("poliza") @NotNull String numPoliza
-//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
-//			String token
-		) throws PcbsException, UnauthorizedException{	
-		
-		Integer existe= null;
-		
+	public ResponseEntity<Integer> findNumPoliza(
+			@RequestParam("poliza") @NotNull String numPoliza,
+			@RequestParam("digito") @NotNull String digito,
+
+			/*default parameter*/
+			@RequestParam("idCompania") @NotNull Long idCompania,
+			@RequestParam("idNegocio") @NotNull Long idNegocio,
+			@RequestParam("idRamo") @NotNull Long idRamo
+
+	) throws PcbsException {
+
+		Integer existe = null;
+
 		try {
-			existe= pcbsService.findNumPoliza(numPoliza);
-		}
-		catch(PcbsException e) {
+			existe = pcbsService.findNumPoliza(numPoliza, digito, idCompania, idNegocio, idRamo);
+		} catch (PcbsException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_find_numpoliza());
 			throw e;
-		}
-//		catch(UnauthorizedException e) {
-//		e.setSubject(propertiesMsg.getLogger_error_executing_find_numpoliza());
-//		throw e;
-//	}
-		catch (Exception e) {
+		} catch (Exception e) {
 			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_find_numpoliza());
 			throw ex;
-		}		
+		}
 		return ResponseEntity.ok(existe);
 	}
 
@@ -254,29 +254,21 @@ public class PCBSController {
 			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
 			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
 	})
-	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header")})
 	@GetMapping("/buscarRut")
 	public ResponseEntity<List<String>> findBuscarRut(
 			@RequestParam("numRut") @NotNull String numRut,
 			@RequestParam("digito") @NotNull String digito
-//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true)
-//			String token
-	) throws PcbsException, UnauthorizedException{
+	) throws PcbsException, UnauthorizedException {
 
 		List<String> nombres = null;
 
 		try {
-			nombres= pcbsService.findNumRut(numRut, digito);
-		}
-		catch(PcbsException e) {
+			nombres = pcbsService.findNumRut(numRut, digito);
+		} catch (PcbsException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_find_numpoliza());
 			throw e;
-		}
-//		catch(UnauthorizedException e) {
-//		e.setSubject(propertiesMsg.getLogger_error_executing_find_numpoliza());
-//		throw e;
-//	}
-		catch (Exception e) {
+		} catch (Exception e) {
 			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_find_numpoliza());
 			throw ex;
@@ -458,25 +450,25 @@ public class PCBSController {
 		}		
 		return ResponseEntity.ok(lista);
 	}
-	
-	
-	@ApiOperation(value = SWAGGER_GET_Ramo_Por_Compania_Negocio, notes = SWAGGER_GET_Ramo_Por_Compania_Negocio)
-	@ApiResponses({ 
+
+
+	@ApiOperation(value = SWAGGER_GET_BUSCAR_PRODUCT_MANAGER_POR_RUT, notes = SWAGGER_GET_BUSCAR_PRODUCT_MANAGER_POR_RUT)
+	@ApiResponses({
 		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
 		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
 		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
-		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/buscarRutProductManager")
-	public ResponseEntity<String> findRutProductManager(		
+	public ResponseEntity<String> findRutProductManager(
 			@RequestParam("rut") @NotNull String numRut
-//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
+//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true)
 //			String token
-		) throws PcbsException, UnauthorizedException{	
-		
+		) throws PcbsException, UnauthorizedException{
+
 		String rut= "";
-		
+
 		try {
 			rut= pcbsService.findRutProductManager(numRut);
 		}
@@ -492,7 +484,44 @@ public class PCBSController {
 			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_find_rut_product_manager());
 			throw ex;
-		}		
+		}
 		return ResponseEntity.ok(rut);
+	}
+
+	@ApiOperation(value = SWAGGER_DESENCRIPTAR_PALABRAPASE_PRODUCT_MANAGER, notes = SWAGGER_DESENCRIPTAR_PALABRAPASE_PRODUCT_MANAGER)
+	@ApiResponses({
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/desencriptar")
+	public ResponseEntity<Integer> desencriptar(
+			@RequestParam("rut") @NotNull String numRut,
+			@RequestParam("password") @NotNull String password
+//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true)
+//			String token
+		) throws PcbsException, UnauthorizedException{
+
+		Integer valid= 0;
+
+		try {
+			valid= pcbsService.decryptPasswordProductManager(numRut,password);
+		}
+		catch(PcbsException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_decrypt_password_product_manager());
+			throw e;
+		}
+//		catch(UnauthorizedException e) {
+//		e.setSubject(propertiesMsg.getLogger_error_executing_decrypt_password_product_manager());
+//		throw e;
+//	}
+		catch (Exception e) {
+			PcbsException ex = new PcbsException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_decrypt_password_product_manager());
+			throw ex;
+		}
+		return ResponseEntity.ok(valid);
 	}
 }
