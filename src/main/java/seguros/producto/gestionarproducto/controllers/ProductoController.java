@@ -3,9 +3,7 @@ package seguros.producto.gestionarproducto.controllers;
 
 
 import static seguros.producto.gestionarproducto.utils.Constants.HEADER_AUTHORIZACION_KEY;
-
 import java.util.List;
-
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -111,7 +109,7 @@ public class ProductoController {
 	public ResponseEntity<String> saveProducto(
 //			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
 //			String token
-			@RequestBody(required = false) ProductoDto producto
+			@RequestBody(required = false) @Valid ProductoDto producto
 			) throws ProductoException, UnauthorizedException{	
 				
 		String result="";
