@@ -13,7 +13,7 @@ import seguros.producto.gestionarproducto.servicesImpl.ProductoException;
 import seguros.producto.gestionarproducto.utils.Utils;
 
 @Repository
-public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
+public class ProductoDoRepositoryCustomImpl implements ProductoDoRepositoryCustom{
 
 	
 	private static final String MSG_NOT_RESULT= "No se ha retornado respuesta desde el proceso";
@@ -27,6 +27,8 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 	
 	@Autowired 
 	private Properties properties;
+	
+
 	
 
 

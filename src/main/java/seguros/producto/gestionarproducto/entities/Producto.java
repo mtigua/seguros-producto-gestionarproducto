@@ -4,6 +4,7 @@ package seguros.producto.gestionarproducto.entities;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.Max;
 
@@ -76,7 +78,6 @@ public class Producto  {
 	@Column(name = "pers_codigo_fact")
 	private Integer persCodigoFact;
 	
-	//@Digits(integer=2, fraction=3)
 	@DecimalMax("99.999")
 	@Column(precision = 5, scale = 3, name = "porc_interes")
 	private BigDecimal   porcInteres;
@@ -322,11 +323,7 @@ public class Producto  {
 	private Boolean  norenuncia;
 	
 	@Column(name = "valida_cm")
-	private Boolean  validaCm;
-	
-	//New fields
-	
-     // Desaparece este campo:  PLCO_TARIFA_PERIOD;
+	private Boolean  validaCm;	
 	
 	private Boolean perAnual;
 	
@@ -340,8 +337,6 @@ public class Producto  {
 	
 	private Boolean perCuotas;
 	
-	//Desaparece este campo : PLCO_PARENTESCOS;
-	
     private Boolean parenEsConyuge;
 	
 	private Boolean parenEsMadre;
@@ -352,8 +347,7 @@ public class Producto  {
 	
 	private Boolean parenElMismo;
 	
-	private Boolean parenEsHijo;
-	
+	private Boolean parenEsHijo;	
 
 	@ManyToOne
 	@JoinColumn(name = "id_tipo_seguro", nullable=false)
@@ -411,6 +405,14 @@ public class Producto  {
 	@JoinColumn(name = "id_tipo_facturar")
 	private  ModoTraspaso tipoFacturar;
 	
+	@OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+	@JoinColumn(name = "id_plan_de_cobertura_do")
+	private ProductoDo productDo;
     
+	 
+	
+		
+		
+		
 	
 }

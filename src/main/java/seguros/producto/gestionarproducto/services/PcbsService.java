@@ -28,4 +28,6 @@ public interface PcbsService {
 	public List<GrupoMejorOfertaDto> findAllGrupoMejorOferta() throws PcbsException;
 	public Integer findNumPoliza(String numPoliza, String digito, Long idCompania, Long idNegocio, Long idRamo) throws PcbsException;
 	public List<String> findNumRut(String numRut, String digito) throws PcbsException;
+	public String findRutProductManager(String numRut) throws PcbsException;
+	public Integer decryptPasswordProductManager(String rut,String password);
 }

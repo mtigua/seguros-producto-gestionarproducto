@@ -27,6 +27,10 @@ public class CommonException extends RuntimeException{
 				this.errorMessage=e.getClass().toString() + " " + e.getMessage();
 			}
 		}	
+		else {
+			this.detail = e.getMessage();				
+			this.errorMessage=e.getClass().toString() + " " +e.getLocalizedMessage();	
+		}
 	}
 
 	public CommonException() {

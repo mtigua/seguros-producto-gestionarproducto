@@ -454,6 +454,80 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 	}
 
 	
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public String findRutProductManager(String numRut) throws PcbsException {
+		String procedureBuscaRutProductManager = propertiesSql.getBUSCAR_RUT_SIN_DIGITO_PRODUCT_MANAGER();
+
+		String rut="";
+		List<Object[]> record=null;
+
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureBuscaRutProductManager);
+			storedProcedureQuery.registerStoredProcedureParameter("rut", String.class, ParameterMode.IN);
+
+			storedProcedureQuery.setParameter("rut",numRut);
+			storedProcedureQuery.execute();
+			record = storedProcedureQuery.getResultList();
+
+
+			if(record!=null) {
+				if(!record.isEmpty()) {
+					rut= String.valueOf(record.get(0));
+				}
+			}
+
+
+		} catch(Exception e) {
+			PcbsException exc = new PcbsException(e);
+			throw exc;
+		}
+		return rut;
+	}
+
+	
+	@Override
+	@Transactional
+	public Integer decryptPasswordProductManager(String rut, String password) throws PcbsException {
+		String procedureBuscaPoliza = propertiesSql.getDESENCRIPTAR();
+		Integer existe=null;
+		 
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureBuscaPoliza);
+			storedProcedureQuery.registerStoredProcedureParameter("password", String.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("rut", String.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("valid", Integer.class, ParameterMode.OUT);
+			
+			storedProcedureQuery.setParameter("rut",rut );
+			storedProcedureQuery.setParameter("password",password );
+			storedProcedureQuery.execute();
+		
+			Object result= storedProcedureQuery.getOutputParameterValue("valid");
+			  if(result!=null) {
+				  existe= (int) storedProcedureQuery.getOutputParameterValue("valid");
+			  }
+			  else {
+				    PcbsException exc = new PcbsException();
+					exc.setErrorMessage(VALUE_UNDEFINED + "existe");	        	
+					exc.setDetail(VALUE_UNDEFINED + "existe");
+					exc.setConcreteException(exc);
+					throw exc;
+			  }		
+		
+		}
+		catch(PcbsException e){
+			throw e;
+		}
+		catch(Exception e) {
+			PcbsException exc = new PcbsException(e);
+			throw exc;
+		}
+
+		return existe;
+	}
+
+	
 
 	
 

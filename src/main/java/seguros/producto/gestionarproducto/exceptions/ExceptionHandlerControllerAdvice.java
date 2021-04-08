@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -95,7 +96,19 @@ public class ExceptionHandlerControllerAdvice  extends ResponseEntityExceptionHa
 	    return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
 	  }
 
-
+	  @Override
+      protected ResponseEntity<Object> handleHttpMessageNotReadable(   HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		  ExceptionResponse error = new ExceptionResponse();
+		  error.setErrorMessage(ex.getClass().toString() + " " + ex.getMessage().toString());
+			JsonObject details = new JsonObject();
+			details.addProperty(FIELD_ERROR, ex.getMessage().toString());
+			details.addProperty(FIELD_SUBJECT, MSG_HTTP400);
+			error.setDetails(details);
+			error.setRequestedURI(((ServletWebRequest)request).getRequest().getRequestURI().toString());
+			logger.error(ex.getMessage().toString());
+	    return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
+      }
+	  
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ExceptionResponse> handleGenericExceptions(final Exception e, final HttpServletRequest request) {
 		ExceptionResponse error = new ExceptionResponse();
