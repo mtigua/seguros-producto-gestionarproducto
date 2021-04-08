@@ -182,11 +182,11 @@ public class PcbsServiceImpl implements PcbsService {
 
 	@Transactional
 	@Override
-	public Integer findNumPoliza(String numPoliza) throws PcbsException {
+	public Integer findNumPoliza(String numPoliza, String digito, Long idCompania, Long idNegocio, Long idRamo) throws PcbsException {
         Integer existe = null;
 		
 		try {
-			existe= pcbsRepositoryCustom.findNumPoliza(numPoliza);
+			existe= pcbsRepositoryCustom.findNumPoliza(numPoliza, digito, idCompania, idNegocio, idRamo);
 		}
 		catch(PcbsException e) {
 			throw e;

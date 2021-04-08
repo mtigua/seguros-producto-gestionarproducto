@@ -371,23 +371,34 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 	
 	@Override
 	@Transactional
-	public Integer findNumPoliza(String numPoliza) throws PcbsException {
+	public Integer findNumPoliza(String numPoliza, String digito, Long idCompania, Long idNegocio, Long idRamo) throws PcbsException {
 		String procedureBuscaPoliza = propertiesSql.getBUSCAR_POLIZA();
 		Integer existe=null;
 		 
 		try {
 			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureBuscaPoliza);
 			storedProcedureQuery.registerStoredProcedureParameter("numPoliza", String.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("numDigito", String.class, ParameterMode.IN);
+
+			storedProcedureQuery.registerStoredProcedureParameter("compania", Long.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("ramo", Long.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("negocio", Long.class, ParameterMode.IN);
+
 			storedProcedureQuery.registerStoredProcedureParameter("existe", Integer.class, ParameterMode.OUT);
 			
 			storedProcedureQuery.setParameter("numPoliza",numPoliza );
+			storedProcedureQuery.setParameter("numDigito", digito );
+
+			storedProcedureQuery.setParameter("compania", idCompania );
+			storedProcedureQuery.setParameter("ramo", idRamo );
+			storedProcedureQuery.setParameter("negocio", idNegocio );
 			storedProcedureQuery.execute();
 		
 			Object result= storedProcedureQuery.getOutputParameterValue("existe");
+
 			  if(result!=null) {
 				  existe= (int) storedProcedureQuery.getOutputParameterValue("existe");
-			  }
-			  else {
+			  } else {
 				    PcbsException exc = new PcbsException();
 					exc.setErrorMessage(VALUE_UNDEFINED + "existe");	        	
 					exc.setDetail(VALUE_UNDEFINED + "existe");
@@ -411,17 +422,18 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 	@Override
 	@Transactional
 	public List<String> findNumRut(String numRut, String digito) throws PcbsException {
-		String procedureBuscaRut = propertiesSql.getBUSCAR_RUT();
+		// String procedureBuscaRut = propertiesSql.getBUSCAR_RUT();
+		String procedureBuscaRut = "CPC.dbo.buscarRut";
 
 		List<String> listNombreRut =  new ArrayList<>();
 		List<Object[]> recordNombreRut=null;
 
 		try {
 			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureBuscaRut);
-			storedProcedureQuery.registerStoredProcedureParameter("rut", Long.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("rut", String.class, ParameterMode.IN);
 			storedProcedureQuery.registerStoredProcedureParameter("digito", String.class, ParameterMode.IN);
 
-			storedProcedureQuery.setParameter("rut",Long.parseLong(numRut) );
+			storedProcedureQuery.setParameter("rut", numRut );
 			storedProcedureQuery.setParameter("digito",digito );
 			storedProcedureQuery.execute();
 			recordNombreRut = storedProcedureQuery.getResultList();
