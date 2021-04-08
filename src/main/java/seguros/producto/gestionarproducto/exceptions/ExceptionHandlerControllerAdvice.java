@@ -8,6 +8,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -86,9 +88,14 @@ public class ExceptionHandlerControllerAdvice  extends ResponseEntityExceptionHa
 	  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 	      HttpHeaders headers, HttpStatus status, WebRequest request) {
 		  ExceptionResponse error = new ExceptionResponse();
-		  error.setErrorMessage(ex.getClass().toString() + " " + ex.getBindingResult().toString());
+		  
+		  JsonObject errors= new JsonObject();
+		  for(ObjectError item:  ex.getBindingResult().getFieldErrors()) {
+			  errors.addProperty(((FieldError) item).getField(), item.getDefaultMessage());;
+		  }
+		    error.setErrorMessage(ex.getClass().toString() + " " + errors.toString());
 			JsonObject details = new JsonObject();
-			details.addProperty(FIELD_ERROR, ex.getBindingResult().toString());
+			details.addProperty(FIELD_ERROR, errors.toString());
 			details.addProperty(FIELD_SUBJECT, MSG_HTTP400);
 			error.setDetails(details);
 			error.setRequestedURI(((ServletWebRequest)request).getRequest().getRequestURI().toString());

@@ -33,13 +33,13 @@ public class Producto  {
 	@Column(length = 4)
 	private String nemot;
 	
-	@Column(length = 30)
+	@Column(nullable = false, length = 30)
 	private String descrip;
 	
 	@Column(name = "equivalencia_seguros")
 	private Integer equivalenciaSeguros;
 	
-	@Column(length = 4, name = "domi_mone_cod")
+	@Column(nullable = false,length = 4, name = "domi_mone_cod")
 	private String domiMoneCod;
 	
 	@Column( name = "descuento_max")
@@ -57,13 +57,13 @@ public class Producto  {
 	@Column(name = "docu_fec_ter_vigencia")
 	private Date docuFecTerVigencia;
 	
-	@Column(name = "dias_vig_cotizacion")
+	@Column(nullable = false, name = "dias_vig_cotizacion")
 	private Integer diasVigCotizacion;
 	
-	@Column(name = "dias_venc_cuota")
+	@Column(nullable = false,name = "dias_venc_cuota")
 	private Integer diasVencCuota;
 	
-	@Column(name = "nro_max_cuotas")
+	@Column(nullable = false,name = "nro_max_cuotas")
 	private Integer nroMaxCuotas;
 		
 	@Column(name = "pers_codigo_agen")
@@ -91,7 +91,7 @@ public class Producto  {
 	@Column(scale = 2, name = "capital_maximo")
 	private BigDecimal  capitalMaximo;
 	
-	@Column(name = "descripcion_plan")
+	@Column(nullable = false, name = "descripcion_plan")
 	private String  descripcionPlan;
 	
 	@Column(name = "requiere_familiar")
@@ -381,13 +381,13 @@ public class Producto  {
 	@JoinColumn(name = "id_tarifa_es")
 	private  TipoPeriodo tipoPeriodo;
 	
-	@Column(name = "id_ramo")
+	@Column(nullable = false,name = "id_ramo")
 	private int idRamo;	
 	
-	@Column(name = "id_negocio")
+	@Column(nullable = false,name = "id_negocio")
 	private int idNegocio;
 	
-	@Column(name = "id_compania")
+	@Column(nullable = false,name = "id_compania")
 	private int idCompania;
 	
 	@Column(name = "id_grupo_mejor_oferta")

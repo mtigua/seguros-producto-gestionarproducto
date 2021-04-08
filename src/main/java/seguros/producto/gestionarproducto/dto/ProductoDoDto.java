@@ -4,6 +4,9 @@ package seguros.producto.gestionarproducto.dto;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.BeanUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -17,6 +20,7 @@ public class ProductoDoDto  {
 
 	private Long id;
 	
+	@NotNull(message = "El rut del product manageres requerido")
 	private Integer doResponsable;
 	
 	private Boolean doplMasivo;
