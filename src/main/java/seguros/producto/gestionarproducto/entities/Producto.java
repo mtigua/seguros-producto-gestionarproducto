@@ -405,7 +405,7 @@ public class Producto  {
 	@JoinColumn(name = "id_tipo_facturar")
 	private  ModoTraspaso tipoFacturar;
 	
-	@OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+	@OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval = true)
 	@JoinColumn(name = "id_plan_de_cobertura_do")
 	private ProductoDo productDo;
     
