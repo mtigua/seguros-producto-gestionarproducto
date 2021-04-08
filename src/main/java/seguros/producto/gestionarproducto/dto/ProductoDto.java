@@ -3,6 +3,7 @@ package seguros.producto.gestionarproducto.dto;
 import java.math.BigDecimal;
 import java.sql.Date;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Range;
@@ -24,12 +25,14 @@ public class ProductoDto {
 	@Size( max=4)
 	private String nemot;
 	
+	@NotBlank(message =  "El campo nombre es requerido")
 	@Size(max=30)
 	private String descrip;
 	
 	private Integer equivalenciaSeguros;
 	
 	@Size(max=4)
+	@NotBlank(message = "El campo moneda es requerido")
 	private String domiMoneCod;
 	
 	private BigDecimal descuentoMax;
@@ -43,10 +46,13 @@ public class ProductoDto {
 	
 	private Date docuFecTerVigencia;
 	
+	@NotNull(message =  "El campo dias de vigencia cotizacion es requerido")
 	private Integer diasVigCotizacion;
 	
+	@NotNull(message =  "El campo maximo dias vencimiento 1a cuota es requerido")
 	private Integer diasVencCuota;
 	
+	@NotNull(message =  "El campo maximo numero de cuotas es requerido")
 	private Integer nroMaxCuotas;
 	
 	private Long tipoTraspaso;
@@ -76,6 +82,7 @@ public class ProductoDto {
 //	@Column(scale = 2, name = "capital_maximo")
 	private BigDecimal  capitalMaximo;
 	
+	@NotNull(message =  "El campo descripcion plan es requerido")
 	private String  descripcionPlan;
 	
 	private Boolean  requiereFamiliar;	
@@ -276,7 +283,7 @@ public class ProductoDto {
 	
 	private Boolean perCuotas;	
 
-	@NotNull
+	@NotNull(message =  "El campo tipo de seguro es requerido")
 	private  Long tipoSeguro;
 	
 	private  Long tipoPromocion;	
@@ -293,10 +300,13 @@ public class ProductoDto {
 	
 	private  Long tipoPeriodo;
 	
+	@NotNull(message =  "El campo ramo es requerido")
 	private int idRamo;	
 	
+	@NotNull(message =  "El campo negocio es requerido")
 	private int idNegocio;
 	
+	@NotNull(message =  "El campo compania es requerido")
 	private int idCompania;
 	
 	private int idGrupoMejorOferta;
