@@ -162,11 +162,11 @@ public class ProductoController {
 //			String token
 			    @RequestParam(defaultValue = "0") int page,
 	            @RequestParam(defaultValue = "10") int size,
-	            @RequestParam Integer idCompania,
-	            @RequestParam Integer idNegocio,
-	            @RequestParam Integer idRamo,
-	            @RequestParam String nemotecnico,
-	            @RequestParam String descripcion
+	            @RequestParam(required = false) Integer idCompania,
+	            @RequestParam(required = false) Integer idNegocio,
+	            @RequestParam(required = false) Integer idRamo,
+	            @RequestParam(required = false) String nemotecnico,
+	            @RequestParam(required = false) String descripcion
 	            
 			) throws ProductoException, UnauthorizedException{	
 				
