@@ -527,6 +527,41 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 		return existe;
 	}
 
+	@Override
+	public String generateNemotecnico() throws PcbsException {
+		String generateNemotecnico = propertiesSql.getGENERATE_NEMOTECNICO();
+		String newNemotecnico=null;
+		 
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(generateNemotecnico);
+			storedProcedureQuery.registerStoredProcedureParameter("result", String.class, ParameterMode.OUT);
+			
+			storedProcedureQuery.execute();
+		
+			Object result= storedProcedureQuery.getOutputParameterValue("result");
+			  if(result!=null) {
+				  newNemotecnico=  String.valueOf(storedProcedureQuery.getOutputParameterValue("result"));
+			  }
+			  else {
+				    PcbsException exc = new PcbsException();
+					exc.setErrorMessage(VALUE_UNDEFINED + "existe");	        	
+					exc.setDetail(VALUE_UNDEFINED + "existe");
+					exc.setConcreteException(exc);
+					throw exc;
+			  }		
+		
+		}
+		catch(PcbsException e){
+			throw e;
+		}
+		catch(Exception e) {
+			PcbsException exc = new PcbsException(e);
+			throw exc;
+		}
+
+		return newNemotecnico;
+	}
+
 	
 
 	
