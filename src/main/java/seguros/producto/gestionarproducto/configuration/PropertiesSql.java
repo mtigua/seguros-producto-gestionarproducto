@@ -27,5 +27,6 @@ public class PropertiesSql {
 	private String BUSCAR_RUT_SIN_DIGITO_PRODUCT_MANAGER;
 	private String DESENCRIPTAR;
 	private String GENERATE_NEMOTECNICO;
+	private String LISTAR_PRODUCTOS_PAGINADO;
 
 }
