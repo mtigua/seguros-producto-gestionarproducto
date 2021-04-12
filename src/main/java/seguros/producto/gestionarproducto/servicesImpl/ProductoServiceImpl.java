@@ -7,9 +7,13 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import seguros.producto.gestionarproducto.dto.PageProductoDto;
 import seguros.producto.gestionarproducto.dto.ProductoDoDto;
 import seguros.producto.gestionarproducto.dto.ProductoDto;
+import seguros.producto.gestionarproducto.dto.ProductoPageDto;
 import seguros.producto.gestionarproducto.entities.DestinoVenta;
 import seguros.producto.gestionarproducto.entities.ModoTraspaso;
 import seguros.producto.gestionarproducto.entities.Producto;
@@ -24,6 +28,7 @@ import seguros.producto.gestionarproducto.entities.TipoSeguro;
 import seguros.producto.gestionarproducto.entities.TipoTarifa;
 import seguros.producto.gestionarproducto.entities.TipoTraspaso;
 import seguros.producto.gestionarproducto.repositories.ModoTraspasoRepository;
+import seguros.producto.gestionarproducto.repositories.PCBSRepositoryCustom;
 import seguros.producto.gestionarproducto.repositories.ProductoRepository;
 import seguros.producto.gestionarproducto.repositories.TarifaPorRepository;
 import seguros.producto.gestionarproducto.repositories.TipoAjusteRepository;
@@ -79,6 +84,8 @@ public class ProductoServiceImpl implements ProductoService {
 	@Autowired
 	private DestinoVentaRepository destinoVentaRepository;
 	
+	@Autowired
+	private PCBSRepositoryCustom pcbsRepository;
 	
 	
 	@Transactional
@@ -119,11 +126,12 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public String save(ProductoDto producto) throws ProductoException {
+	public String save(ProductoDto producto) throws ProductoException,PcbsException {
         String result="";
 		
 		try {
 			Producto productoEntity = producto.toEntity();
+			String newNemotecnico = pcbsRepository.generateNemotecnico();
 			
 			if(producto.getTipoSeguro()!=null) {
 				TipoSeguro tipoSeguro = tipoSeguroRepository.getOne(producto.getTipoSeguro());
@@ -176,16 +184,49 @@ public class ProductoServiceImpl implements ProductoService {
 			productoDo.setDoplAQuienSeVende(destinoVenta);			
 						
 			productoEntity.setProductDo(productoDo);
+			productoEntity.setNemot(newNemotecnico);
 			
 			productoRepository.save(productoEntity);
 			
-			result= "Exitoso";
+			result= newNemotecnico;
+		}
+		catch(PcbsException e) {
+			throw e;
 		}
 		catch(Exception e) {
 			ProductoException exc = new ProductoException(e);
 			throw exc;
 		}
 		return result;
+	}
+
+	
+	@Transactional
+	@Override
+	public PageProductoDto findAllPaginated(Pageable pageable) throws ProductoException {
+		PageProductoDto pageDto= null;
+		try {
+
+		    List<ProductoPageDto> listPDto= new ArrayList<>();
+		
+			Page<Producto> page= productoRepository.findAll(pageable);	  
+			
+		
+		for(Producto p: page.getContent()) {
+			ProductoPageDto pDto= new ProductoPageDto();			
+			 BeanUtils.copyProperties(p, pDto);	
+			// pDto.setTipoSeguro(p.getTipoSeguro().getId());
+			 listPDto.add(pDto);			 
+		}
+		
+		pageDto = new PageProductoDto(page,listPDto);
+		
+		}
+		catch(Exception e) {
+			ProductoException exc = new ProductoException(e);
+			throw exc;
+		}
+		return pageDto;
 	}
 	
 	
