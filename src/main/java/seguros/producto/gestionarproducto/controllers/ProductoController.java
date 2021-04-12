@@ -30,6 +30,7 @@ import io.swagger.annotations.ApiResponses;
 import seguros.producto.gestionarproducto.configuration.PropertiesMsg;
 import seguros.producto.gestionarproducto.dto.PageProductoDto;
 import seguros.producto.gestionarproducto.dto.ProductoDto;
+import seguros.producto.gestionarproducto.dto.ProductoPageDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
 import seguros.producto.gestionarproducto.exceptions.UnauthorizedException;
 import seguros.producto.gestionarproducto.services.ProductoService;
@@ -156,25 +157,25 @@ public class ProductoController {
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/findAllPaginated")
-	public ResponseEntity<PageProductoDto> getProductosPaginated(
+	public ResponseEntity<List<ProductoPageDto>> getProductosPaginated(
 //			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
 //			String token
 			    @RequestParam(defaultValue = "0") int page,
 	            @RequestParam(defaultValue = "10") int size,
-	            @RequestParam(defaultValue = "id") String order,
-	            @RequestParam(defaultValue = "true") boolean asc
+	            @RequestParam Integer idCompania,
+	            @RequestParam Integer idNegocio,
+	            @RequestParam Integer idRamo,
+	            @RequestParam String nemotecnico,
+	            @RequestParam String descripcion
+	            
 			) throws ProductoException, UnauthorizedException{	
 				
-		PageProductoDto list=null;
+		List<ProductoPageDto> list=null;
 		
 		try {
 			 // String username=utils.getSamaccountname(token);	
-			 if(!asc) {
-		       	list = productoService.findAllPaginated(PageRequest.of(page, size, Sort.by(order).descending()));
-			 }
-			 else {
-				 	list = productoService.findAllPaginated(PageRequest.of(page, size, Sort.by(order)));
-			 }
+		       	list = productoService.findAllPaginated(page,size,idCompania,idNegocio,idRamo,nemotecnico,descripcion);
+			 
 			   
 		}
 		catch(ProductoException e) {

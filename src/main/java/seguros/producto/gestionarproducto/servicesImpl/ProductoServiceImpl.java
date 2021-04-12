@@ -200,35 +200,23 @@ public class ProductoServiceImpl implements ProductoService {
 		return result;
 	}
 
-	
 	@Transactional
 	@Override
-	public PageProductoDto findAllPaginated(Pageable pageable) throws ProductoException {
-		PageProductoDto pageDto= null;
+	public List<ProductoPageDto> findAllPaginated(int page, int size, Integer idCompania, Integer idNegocio,
+			Integer idRamo, String nemotecnico, String descripcion) throws ProductoException, PcbsException {
+	
+		List<ProductoPageDto> lista= null;
+		
 		try {
-
-		    List<ProductoPageDto> listPDto= new ArrayList<>();
-		
-			Page<Producto> page= productoRepository.findAll(pageable);	  
-			
-		
-		for(Producto p: page.getContent()) {
-			ProductoPageDto pDto= new ProductoPageDto();			
-			 BeanUtils.copyProperties(p, pDto);	
-			// pDto.setTipoSeguro(p.getTipoSeguro().getId());
-			 listPDto.add(pDto);			 
-		}
-		
-		pageDto = new PageProductoDto(page,listPDto);
-		
+			lista= productoRepository.findAllPaginated(page, size, idCompania, idNegocio, idRamo, nemotecnico, descripcion);
 		}
 		catch(Exception e) {
 			ProductoException exc = new ProductoException(e);
 			throw exc;
 		}
-		return pageDto;
+		return lista;
 	}
-	
+
 	
 
 	
