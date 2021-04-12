@@ -31,6 +31,6 @@ public interface PCBSRepositoryCustom {
 	List<String> findNumRut(String numRut, String digito) throws PcbsException;
 	public String findRutProductManager(String numRut) throws PcbsException;
 	public Integer decryptPasswordProductManager(String rut, String password) throws PcbsException;
-
+	public String generateNemotecnico() throws PcbsException;
 	
 }
