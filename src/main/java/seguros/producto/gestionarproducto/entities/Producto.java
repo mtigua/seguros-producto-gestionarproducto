@@ -408,6 +408,9 @@ public class Producto  {
 	@OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE},orphanRemoval = true)
 	@JoinColumn(name = "id_plan_de_cobertura_do")
 	private ProductoDo productDo;
+	
+	@Column(nullable = false,name = "palabra_pase_product_manager")
+	private String palabaraPaseProductManager;	
     
 	 
 	
