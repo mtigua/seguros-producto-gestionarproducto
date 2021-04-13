@@ -202,19 +202,19 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public List<ProductoPageDto> findAllPaginated(int page, int size, Integer idCompania, Integer idNegocio,
+	public PageProductoDto findAllPaginated(int page, int size, Integer idCompania, Integer idNegocio,
 			Integer idRamo, String nemotecnico, String descripcion) throws ProductoException, PcbsException {
 	
-		List<ProductoPageDto> lista= null;
+		PageProductoDto pageProductoDto= null;
 		
 		try {
-			lista= productoRepository.findAllPaginated(page, size, idCompania, idNegocio, idRamo, nemotecnico, descripcion);
+			pageProductoDto= productoRepository.findAllPaginated(page, size, idCompania, idNegocio, idRamo, nemotecnico, descripcion);
 		}
 		catch(Exception e) {
 			ProductoException exc = new ProductoException(e);
 			throw exc;
 		}
-		return lista;
+		return pageProductoDto;
 	}
 
 	

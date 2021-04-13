@@ -157,24 +157,24 @@ public class ProductoController {
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/findAllPaginated")
-	public ResponseEntity<List<ProductoPageDto>> getProductosPaginated(
+	public ResponseEntity<PageProductoDto> getProductosPaginated(
 //			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
 //			String token
 			    @RequestParam(defaultValue = "0") int page,
 	            @RequestParam(defaultValue = "10") int size,
-	            @RequestParam Integer idCompania,
-	            @RequestParam Integer idNegocio,
-	            @RequestParam Integer idRamo,
-	            @RequestParam String nemotecnico,
-	            @RequestParam String descripcion
+	            @RequestParam(required = false) Integer idCompania,
+	            @RequestParam(required = false) Integer idNegocio,
+	            @RequestParam(required = false) Integer idRamo,
+	            @RequestParam(required = false) String nemotecnico,
+	            @RequestParam(required = false) String descripcion
 	            
 			) throws ProductoException, UnauthorizedException{	
 				
-		List<ProductoPageDto> list=null;
+		PageProductoDto pageProductoDto= null;
 		
 		try {
 			 // String username=utils.getSamaccountname(token);	
-		       	list = productoService.findAllPaginated(page,size,idCompania,idNegocio,idRamo,nemotecnico,descripcion);
+			pageProductoDto = productoService.findAllPaginated(page,size,idCompania,idNegocio,idRamo,nemotecnico,descripcion);
 			 
 			   
 		}
@@ -192,7 +192,7 @@ public class ProductoController {
 			throw ex;
 		}		
 
-		return ResponseEntity.ok(list);
+		return ResponseEntity.ok(pageProductoDto);
 	}	
 	
 
