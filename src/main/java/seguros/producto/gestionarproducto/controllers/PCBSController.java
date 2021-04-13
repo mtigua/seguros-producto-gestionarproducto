@@ -26,16 +26,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import seguros.producto.gestionarproducto.configuration.PropertiesMsg;
-import seguros.producto.gestionarproducto.dto.CompaniaDto;
-import seguros.producto.gestionarproducto.dto.EquivalenciaSeguroDto;
-import seguros.producto.gestionarproducto.dto.GrupoDto;
-import seguros.producto.gestionarproducto.dto.GrupoMatrizDto;
-import seguros.producto.gestionarproducto.dto.GrupoMejorOfertaDto;
-import seguros.producto.gestionarproducto.dto.MonedaDto;
-import seguros.producto.gestionarproducto.dto.NegocioDto;
-import seguros.producto.gestionarproducto.dto.ProdDto;
-import seguros.producto.gestionarproducto.dto.RamoDto;
-import seguros.producto.gestionarproducto.dto.SubtipoDto;
+import seguros.producto.gestionarproducto.dto.*;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
 import seguros.producto.gestionarproducto.exceptions.UnauthorizedException;
 import seguros.producto.gestionarproducto.services.PcbsService;
@@ -68,6 +59,9 @@ public class PCBSController {
 	private static final String SWAGGER_GET_Equivalencia_Seguros = "Listar equivalencias de seguros Bigsa dados la compania, el negocio y el ramo";
 	private static final String SWAGGER_GET_Grupo_Mejor_Oferta = "Listar grupos de mejor oferta";
 	private static final String SWAGGER_GET_BUSCAR_POR_RUT = "Buscar por rut";
+	private static final String SWAGGER_GET_LISTAR_ASOCIADO = "Listar asociado";
+	private static final String SWAGGER_GET_LISTAR_ASOCIADO_EMISION = "Listar asociado emision";
+	private static final String SWAGGER_GET_LISTAR_CATALOGO_CUOTAS = "Listar catalogo cuotas";
 	private static final String SWAGGER_GET_BUSCAR_PRODUCT_MANAGER_POR_RUT = "Buscar product manager por rut";
 	private static final String SWAGGER_DESENCRIPTAR_PALABRAPASE_PRODUCT_MANAGER = "Desencriptar y validar password de product manager dado rut y password";
 
@@ -266,14 +260,122 @@ public class PCBSController {
 		try {
 			nombres = pcbsService.findNumRut(numRut, digito);
 		} catch (PcbsException e) {
-			e.setSubject(propertiesMsg.getLogger_error_executing_find_numpoliza());
+			e.setSubject(propertiesMsg.getLogger_error_executing_find_rut());
 			throw e;
 		} catch (Exception e) {
 			PcbsException ex = new PcbsException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_find_numpoliza());
+			ex.setSubject(propertiesMsg.getLogger_error_executing_find_rut());
 			throw ex;
 		}
 		return ResponseEntity.ok(nombres);
+	}
+
+	@ApiOperation(value = SWAGGER_GET_LISTAR_ASOCIADO, notes = SWAGGER_GET_LISTAR_ASOCIADO)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header")})
+	@GetMapping("/listarWsAsociado")
+	public ResponseEntity<List<AsociadoDto>> getWsAsociado(
+	) throws PcbsException, UnauthorizedException {
+
+		List<AsociadoDto> asociados = null;
+
+		try {
+			asociados = pcbsService.getAsociados();
+		} catch (PcbsException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_find_asociado());
+			throw e;
+		} catch (Exception e) {
+			PcbsException ex = new PcbsException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_find_asociado());
+			throw ex;
+		}
+		return ResponseEntity.ok(asociados);
+	}
+
+	@ApiOperation(value = SWAGGER_GET_LISTAR_ASOCIADO_EMISION, notes = SWAGGER_GET_LISTAR_ASOCIADO_EMISION)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header")})
+	@GetMapping("/listarWsAsociadoEmision")
+	public ResponseEntity<List<AsociadoDto>> getWsAsociadoEmision(
+	) throws PcbsException, UnauthorizedException {
+
+		List<AsociadoDto> asociados = null;
+
+		try {
+			asociados = pcbsService.getAsociadosEmision();
+		} catch (PcbsException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_find_asociado());
+			throw e;
+		} catch (Exception e) {
+			PcbsException ex = new PcbsException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_find_asociado());
+			throw ex;
+		}
+		return ResponseEntity.ok(asociados);
+	}
+
+	@ApiOperation(value = SWAGGER_GET_LISTAR_CATALOGO_CUOTAS, notes = SWAGGER_GET_LISTAR_CATALOGO_CUOTAS)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header")})
+	@GetMapping("/listarCantidadCuotas")
+	public ResponseEntity<List<CatalogoCantidadCuotasDto>> getCantidadCuotas(
+	) throws PcbsException, UnauthorizedException {
+
+		List<CatalogoCantidadCuotasDto> cantidadCuotasDtos = null;
+
+		try {
+			cantidadCuotasDtos = pcbsService.getCatalogoCantidadCuotas();
+		} catch (PcbsException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_find_catalogo_cuotas());
+			throw e;
+		} catch (Exception e) {
+			PcbsException ex = new PcbsException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_find_catalogo_cuotas());
+			throw ex;
+		}
+		return ResponseEntity.ok(cantidadCuotasDtos);
+	}
+
+	@ApiOperation(value = SWAGGER_GET_LISTAR_CATALOGO_CUOTAS, notes = SWAGGER_GET_LISTAR_CATALOGO_CUOTAS)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header")})
+	@GetMapping("/listarCantidadCuotasWebPay")
+	public ResponseEntity<List<CatalogoCantidadCuotasDto>> getCantidadCuotasWebPay(
+	) throws PcbsException, UnauthorizedException {
+
+		List<CatalogoCantidadCuotasDto> cantidadCuotasDtos = null;
+
+		try {
+			cantidadCuotasDtos = pcbsService.getCatalogoCantidadCuotasWebPay();
+		} catch (PcbsException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_find_catalogo_cuotas());
+			throw e;
+		} catch (Exception e) {
+			PcbsException ex = new PcbsException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_find_catalogo_cuotas());
+			throw ex;
+		}
+		return ResponseEntity.ok(cantidadCuotasDtos);
 	}
 
 	@ApiOperation(value = SWAGGER_GET_Subtipo_Por_Compania_Ramo, notes = SWAGGER_GET_Subtipo_Por_Compania_Ramo)

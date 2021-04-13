@@ -3,28 +3,20 @@ package seguros.producto.gestionarproducto.servicesImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import seguros.producto.gestionarproducto.dto.CompaniaDto;
-import seguros.producto.gestionarproducto.dto.EquivalenciaSeguroDto;
-import seguros.producto.gestionarproducto.dto.GrupoDto;
-import seguros.producto.gestionarproducto.dto.GrupoMatrizDto;
-import seguros.producto.gestionarproducto.dto.GrupoMejorOfertaDto;
-import seguros.producto.gestionarproducto.dto.MonedaDto;
-import seguros.producto.gestionarproducto.dto.NegocioDto;
-import seguros.producto.gestionarproducto.dto.ProdDto;
-import seguros.producto.gestionarproducto.dto.RamoDto;
-import seguros.producto.gestionarproducto.dto.SubtipoDto;
+import seguros.producto.gestionarproducto.dto.*;
 import seguros.producto.gestionarproducto.repositories.PCBSRepositoryCustom;
 import seguros.producto.gestionarproducto.services.PcbsService;
 
 
 @Service
 public class PcbsServiceImpl implements PcbsService {
-	
 
-	
+
+
 	@Autowired
 	private PCBSRepositoryCustom pcbsRepositoryCustom;	
 	
@@ -206,6 +198,57 @@ public class PcbsServiceImpl implements PcbsService {
 			throw e;
 		}
 		return nombres;
+	}
+
+	@Transactional
+	@Override
+	public List<AsociadoDto> getAsociados() throws PcbsException {
+		List<AsociadoDto> asociados;
+
+		try {
+			asociados = pcbsRepositoryCustom.getAsociado();
+		} catch(PcbsException e) {
+			throw e;
+		}
+		return asociados;
+	}
+
+	@Transactional
+	@Override
+	public List<AsociadoDto> getAsociadosEmision() throws PcbsException {
+		List<AsociadoDto> asociados;
+
+		try {
+			asociados = pcbsRepositoryCustom.getAsociado();
+		} catch(PcbsException e) {
+			throw e;
+		}
+		return asociados;
+	}
+
+	@Transactional
+	@Override
+	public List<CatalogoCantidadCuotasDto> getCatalogoCantidadCuotas() throws PcbsException {
+		List<CatalogoCantidadCuotasDto> list = new ArrayList<>();
+		try {
+			list = pcbsRepositoryCustom.getCatalogoCuotas();
+		} catch(PcbsException e) {
+			throw e;
+		}
+		return list;
+	}
+
+
+	@Transactional
+	@Override
+	public List<CatalogoCantidadCuotasDto> getCatalogoCantidadCuotasWebPay() throws PcbsException {
+		List<CatalogoCantidadCuotasDto> list;
+		try {
+			list = pcbsRepositoryCustom.getCatalogoCuotasPayWeb();
+		} catch(PcbsException e) {
+			throw e;
+		}
+		return list;
 	}
 
 	@Transactional

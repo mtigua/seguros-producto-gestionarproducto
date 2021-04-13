@@ -5,21 +5,14 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import seguros.producto.gestionarproducto.configuration.PropertiesSql;
-import seguros.producto.gestionarproducto.dto.CompaniaDto;
-import seguros.producto.gestionarproducto.dto.EquivalenciaSeguroDto;
-import seguros.producto.gestionarproducto.dto.GrupoDto;
-import seguros.producto.gestionarproducto.dto.GrupoMatrizDto;
-import seguros.producto.gestionarproducto.dto.GrupoMejorOfertaDto;
-import seguros.producto.gestionarproducto.dto.MonedaDto;
-import seguros.producto.gestionarproducto.dto.NegocioDto;
-import seguros.producto.gestionarproducto.dto.ProdDto;
-import seguros.producto.gestionarproducto.dto.RamoDto;
-import seguros.producto.gestionarproducto.dto.SubtipoDto;
+import seguros.producto.gestionarproducto.dto.*;
+import seguros.producto.gestionarproducto.entities.CatalogoCantidadAjuste;
 import seguros.producto.gestionarproducto.servicesImpl.PcbsException;
 
 @Repository
@@ -422,8 +415,8 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 	@Override
 	@Transactional
 	public List<String> findNumRut(String numRut, String digito) throws PcbsException {
-		// String procedureBuscaRut = propertiesSql.getBUSCAR_RUT();
-		String procedureBuscaRut = "CPC.dbo.buscarRut";
+		String procedureBuscaRut = propertiesSql.getBUSCAR_RUT();
+		// String procedureBuscaRut = "CPC.dbo.buscarRut";
 
 		List<String> listNombreRut =  new ArrayList<>();
 		List<Object[]> recordNombreRut=null;
@@ -453,6 +446,96 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 		return listNombreRut;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<AsociadoDto> getAsociado() throws PcbsException {
+		String listarAsociado = propertiesSql.getLISTAR_ASOCIADO();
+
+		List<AsociadoDto> asociados =  new ArrayList<>();
+		List<Object[]> record = null;
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(listarAsociado);
+			storedProcedureQuery.execute();
+			record = storedProcedureQuery.getResultList();
+
+			if(record!=null) {
+				record.stream().forEach(p -> {
+					AsociadoDto asociadoDto = new AsociadoDto();
+					asociadoDto.setCode(p[0].toString());
+					asociadoDto.setDescription(p[1].toString());
+					asociados.add(asociadoDto);
+				});
+			}
+		} catch(Exception e) {
+			PcbsException exc = new PcbsException(e);
+			throw exc;
+		}
+		return asociados;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<AsociadoDto> getAsociadoEmision() throws PcbsException {
+		String listarAsociado = propertiesSql.getLISTAR_ASOCIADO_EMISION();
+		// String procedureBuscaRut = "CPC.dbo.buscarRut";
+
+		List<AsociadoDto> asociados =  new ArrayList<>();
+		List<Object[]> record = null;
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(listarAsociado);
+			storedProcedureQuery.execute();
+			record = storedProcedureQuery.getResultList();
+
+			if(record!=null) {
+				record.stream().forEach(p -> {
+					AsociadoDto asociadoDto = new AsociadoDto();
+					asociadoDto.setCode(p[0].toString());
+					asociadoDto.setDescription(p[1].toString());
+					asociados.add(asociadoDto);
+				});
+			}
+		} catch(Exception e) {
+			PcbsException exc = new PcbsException(e);
+			throw exc;
+		}
+		return asociados;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<CatalogoCantidadCuotasDto> getCatalogoCuotas() throws PcbsException {
+		List<CatalogoCantidadCuotasDto> catalogoCantidadCuotasDtos = new ArrayList<>();
+		try {
+			String sqlQuery = "SELECT new seguros.producto.gestionarproducto.dto.CatalogoCantidadCuotasDto(c.id, c.name) FROM catalogo_cantidad_cuotas c";
+			TypedQuery<CatalogoCantidadCuotasDto> typedQuery = entityManager.createQuery(
+					sqlQuery, CatalogoCantidadCuotasDto.class);
+			catalogoCantidadCuotasDtos = typedQuery.getResultList();
+		} catch(Exception e) {
+			PcbsException exc = new PcbsException(e);
+			throw exc;
+		}
+		return catalogoCantidadCuotasDtos;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<CatalogoCantidadCuotasDto> getCatalogoCuotasPayWeb() throws PcbsException {
+		List<CatalogoCantidadCuotasDto> catalogoCantidadCuotasDtos = new ArrayList<>();
+		try {
+			String sqlQuery = "SELECT new seguros.producto.gestionarproducto.dto.CatalogoCantidadCuotasDto(c.id, c.name) FROM catalogo_cantidad_cuotas_webpay c";
+			TypedQuery<CatalogoCantidadCuotasDto> typedQuery = entityManager.createQuery(
+					sqlQuery, CatalogoCantidadCuotasDto.class);
+			catalogoCantidadCuotasDtos = typedQuery.getResultList();
+		} catch(Exception e) {
+			PcbsException exc = new PcbsException(e);
+			throw exc;
+		}
+		return catalogoCantidadCuotasDtos;
+	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
