@@ -66,43 +66,6 @@ public class ProductoController {
 	private Utils utils;
 	
 	
-	@ApiOperation(value = SWAGGER_GET_PRODUCT, notes = SWAGGER_GET_PRODUCT)
-	@ApiResponses({ 
-		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
-		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
-		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
-		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
-	})
-	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
-	@GetMapping("/")
-	public ResponseEntity<List<ProductoDto>> getProductos(
-//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
-//			String token
-			) throws ProductoException, UnauthorizedException{	
-				
-		List<ProductoDto> list=null;
-		
-		try {
-			 // String username=utils.getSamaccountname(token);		
-			 list= productoService.findAll();
-			   
-		}
-		catch(ProductoException e) {
-			e.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
-			throw e;
-		}
-//		catch(UnauthorizedException e) {
-//			e.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
-//			throw e;
-//		}
-		catch (Exception e) {
-			ProductoException ex = new ProductoException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
-			throw ex;
-		}		
-
-		return ResponseEntity.ok(list);
-	}	
 	
 	@ApiOperation(value = SWAGGER_SAVE_PRODUCT, notes = SWAGGER_SAVE_PRODUCT)
 	@ApiResponses({ 
