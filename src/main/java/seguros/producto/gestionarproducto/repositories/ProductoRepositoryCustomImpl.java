@@ -5,20 +5,17 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
-import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import seguros.producto.gestionarproducto.configuration.Properties;
 import seguros.producto.gestionarproducto.configuration.PropertiesSql;
 import seguros.producto.gestionarproducto.dto.CompaniaDto;
-import seguros.producto.gestionarproducto.dto.MonedaDto;
 import seguros.producto.gestionarproducto.dto.NegocioDto;
+import seguros.producto.gestionarproducto.dto.PageProductoDto;
 import seguros.producto.gestionarproducto.dto.ProductoPageDto;
 import seguros.producto.gestionarproducto.dto.RamoDto;
 import seguros.producto.gestionarproducto.dto.TipoSeguroDto;
 import seguros.producto.gestionarproducto.servicesImpl.PcbsException;
 import seguros.producto.gestionarproducto.servicesImpl.ProductoException;
-import seguros.producto.gestionarproducto.utils.Utils;
 
 @Repository
 public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
@@ -38,14 +35,16 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ProductoPageDto> findAllPaginated(int page, int size, Integer idCompania, Integer idNegocio,
+	public PageProductoDto findAllPaginated(int page, int size, Integer idCompania, Integer idNegocio,
 			Integer idRamo, String nemotecnico, String descripcion) throws ProductoException {	
 		
 		String procedureName = propertiesSql.getLISTAR_PRODUCTOS_PAGINADO();
 		List<ProductoPageDto> lista= new ArrayList<>();
 		List<Object[]> record=null;
-		 
-		try {
+		Integer totalElements=null;
+		PageProductoDto pageProductoDto= new PageProductoDto();
+		
+		 try {
 			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);	
 			storedProcedureQuery.registerStoredProcedureParameter("page", Integer.class, ParameterMode.IN);
 			storedProcedureQuery.registerStoredProcedureParameter("size", Integer.class, ParameterMode.IN);
@@ -54,7 +53,7 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 			storedProcedureQuery.registerStoredProcedureParameter("id_ramo", Integer.class, ParameterMode.IN);
 			storedProcedureQuery.registerStoredProcedureParameter("nemo", String.class, ParameterMode.IN);
 			storedProcedureQuery.registerStoredProcedureParameter("descrp", String.class, ParameterMode.IN);
-			
+			storedProcedureQuery.registerStoredProcedureParameter("total", Integer.class, ParameterMode.OUT);		
 			
 			
 			storedProcedureQuery.setParameter("page",page );
@@ -67,7 +66,12 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 			
 			storedProcedureQuery.execute();
 			record = storedProcedureQuery.getResultList();
-		
+			
+			Object result= storedProcedureQuery.getOutputParameterValue("total");
+			if(result!=null) {
+				totalElements= (int) storedProcedureQuery.getOutputParameterValue("total");
+			}		
+			
 			if(record!=null) {
 				if(!record.isEmpty()) {
 					record.stream().forEach(p -> {
@@ -101,13 +105,16 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 					});
 				}
 			}
+			
+			pageProductoDto.setTotalElements(totalElements);
+			pageProductoDto.setProductos(lista);
 		}
 		catch(Exception e) {
 			PcbsException exc = new PcbsException(e);
 			throw exc;
 		}
 
-		return lista;
+		return pageProductoDto;
 	}
 	
 
