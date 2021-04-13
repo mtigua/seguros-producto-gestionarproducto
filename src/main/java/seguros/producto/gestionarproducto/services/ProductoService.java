@@ -12,4 +12,6 @@ public interface ProductoService {
 	public List<ProductoDto> findAll() throws ProductoException;
 	public String save(ProductoDto producto) throws ProductoException;
 	public 	PageProductoDto findAllPaginated( int page, int size, Integer idCompania, Integer idNegocio, Integer idRamo, String nemotecnico, String descripcion) throws ProductoException,PcbsException;
+    public String encrypt(String palabrasePase) throws ProductoException;
+    public String decrypt(String palabrasePase) throws ProductoException;
 }
