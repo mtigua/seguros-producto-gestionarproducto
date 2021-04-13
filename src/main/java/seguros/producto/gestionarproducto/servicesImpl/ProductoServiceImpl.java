@@ -7,13 +7,12 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import seguros.producto.gestionarproducto.configuration.Properties;
 import seguros.producto.gestionarproducto.dto.PageProductoDto;
 import seguros.producto.gestionarproducto.dto.ProductoDoDto;
 import seguros.producto.gestionarproducto.dto.ProductoDto;
-import seguros.producto.gestionarproducto.dto.ProductoPageDto;
 import seguros.producto.gestionarproducto.entities.DestinoVenta;
 import seguros.producto.gestionarproducto.entities.ModoTraspaso;
 import seguros.producto.gestionarproducto.entities.Producto;
@@ -87,6 +86,11 @@ public class ProductoServiceImpl implements ProductoService {
 	@Autowired
 	private PCBSRepositoryCustom pcbsRepository;
 	
+	@Autowired
+	private RestTemplate restTemplate;
+	
+	@Autowired
+	private Properties properties;
 	
 	@Transactional
 	@Override
@@ -186,6 +190,9 @@ public class ProductoServiceImpl implements ProductoService {
 			productoEntity.setProductDo(productoDo);
 			productoEntity.setNemot(newNemotecnico);
 			
+			String palabraPase= encrypt(productoEntity.getPalabaraPaseProductManager());
+			productoEntity.setPalabaraPaseProductManager(palabraPase);
+			
 			productoRepository.save(productoEntity);
 			
 			result= newNemotecnico;
@@ -215,6 +222,38 @@ public class ProductoServiceImpl implements ProductoService {
 			throw exc;
 		}
 		return pageProductoDto;
+	}
+
+	@Override
+	public String encrypt(String palabrasePase) throws ProductoException {
+		String result = null;
+		String urlEncript= properties.getUrl_encrypt();
+		
+		try {
+			  result = restTemplate.postForObject(urlEncript, palabrasePase, String.class);
+			
+		}
+		catch(Exception e) {
+				ProductoException exc = new ProductoException(e);
+				throw exc;
+		}
+		return result;
+	}
+
+	@Override
+	public String decrypt(String palabrasePase) throws ProductoException {
+		String result = null;
+		String urlDecrypt= properties.getUrl_decrypt();
+		
+		try {
+			 result = restTemplate.postForObject(urlDecrypt, palabrasePase, String.class);
+			
+		}
+		catch(Exception e) {
+				ProductoException exc = new ProductoException(e);
+				throw exc;
+		}
+		return result;
 	}
 
 	
