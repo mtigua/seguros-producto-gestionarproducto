@@ -313,6 +313,9 @@ public class ProductoDto {
 	
 	private ProductoDoDto productDo;
 	
+	@NotBlank(message =  "La contrasena del product manager es requerido")
+	private String palabaraPaseProductManager;
+	
 	
 	@JsonIgnore 
 	public Producto toEntity() {
