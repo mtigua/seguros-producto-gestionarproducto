@@ -26,6 +26,6 @@ public interface PCBSRepositoryCustom {
 	List<CatalogoCantidadCuotasDto> getCatalogoCuotasPayWeb() throws PcbsException;
 	public String findRutProductManager(String numRut) throws PcbsException;
 	public Integer decryptPasswordProductManager(String rut, String password) throws PcbsException;
-
+	public String generateNemotecnico() throws PcbsException;
 	
 }

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,6 +30,7 @@ public class ExceptionHandlerControllerAdvice  extends ResponseEntityExceptionHa
 	private static final String FIELD_SUBJECT="subject";
 	private static final String MSG_HTTP500 = "Error interno del sistema";
 	private static final String MSG_HTTP400 = "Formato de petici\u00F3n err\u00F3neo";
+	private static final String MSG_METHOD_NOT_SUPPORTED = "M\u00F3todo no soportado";
 
 	@ExceptionHandler(CommonException.class)
 	public ResponseEntity<ExceptionResponse> handleException(final CommonException e,
@@ -116,6 +118,22 @@ public class ExceptionHandlerControllerAdvice  extends ResponseEntityExceptionHa
 	    return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
       }
 	  
+	  
+	  
+	@Override
+	protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		  ExceptionResponse error = new ExceptionResponse();
+		  error.setErrorMessage(ex.getClass().toString() + " " + ex.getMessage().toString());
+			JsonObject details = new JsonObject();
+			details.addProperty(FIELD_ERROR, ex.getMessage().toString());
+			details.addProperty(FIELD_SUBJECT, MSG_METHOD_NOT_SUPPORTED);
+			error.setDetails(details);
+			error.setRequestedURI(((ServletWebRequest)request).getRequest().getRequestURI().toString());
+			logger.error(ex.getMessage().toString());
+	    return new ResponseEntity<Object>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ExceptionResponse> handleGenericExceptions(final Exception e, final HttpServletRequest request) {
 		ExceptionResponse error = new ExceptionResponse();

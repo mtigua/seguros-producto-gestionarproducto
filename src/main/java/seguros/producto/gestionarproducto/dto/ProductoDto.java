@@ -82,7 +82,7 @@ public class ProductoDto {
 //	@Column(scale = 2, name = "capital_maximo")
 	private BigDecimal  capitalMaximo;
 	
-	@NotNull(message =  "El campo descripcion plan es requerido")
+	@NotBlank(message =  "El campo descripcion plan es requerido")
 	private String  descripcionPlan;
 	
 	private Boolean  requiereFamiliar;	
@@ -301,13 +301,13 @@ public class ProductoDto {
 	private  Long tipoPeriodo;
 	
 	@NotNull(message =  "El campo ramo es requerido")
-	private int idRamo;	
+	private Integer idRamo;	
 	
 	@NotNull(message =  "El campo negocio es requerido")
-	private int idNegocio;
+	private Integer idNegocio;
 	
 	@NotNull(message =  "El campo compania es requerido")
-	private int idCompania;
+	private Integer idCompania;
 	
 	private int idGrupoMejorOferta;
 	
