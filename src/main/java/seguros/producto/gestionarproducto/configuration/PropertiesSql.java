@@ -28,5 +28,7 @@ public class PropertiesSql {
 	private String DESENCRIPTAR;
 	private String GENERATE_NEMOTECNICO;
 	private String LISTAR_PRODUCTOS_PAGINADO;
+	private String LISTAR_ASOCIADO;
+	private String LISTAR_ASOCIADO_EMISION;
 
 }

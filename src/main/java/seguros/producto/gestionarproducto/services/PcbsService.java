@@ -2,16 +2,7 @@ package seguros.producto.gestionarproducto.services;
 
 import java.util.List;
 
-import seguros.producto.gestionarproducto.dto.CompaniaDto;
-import seguros.producto.gestionarproducto.dto.EquivalenciaSeguroDto;
-import seguros.producto.gestionarproducto.dto.GrupoDto;
-import seguros.producto.gestionarproducto.dto.GrupoMatrizDto;
-import seguros.producto.gestionarproducto.dto.GrupoMejorOfertaDto;
-import seguros.producto.gestionarproducto.dto.MonedaDto;
-import seguros.producto.gestionarproducto.dto.NegocioDto;
-import seguros.producto.gestionarproducto.dto.ProdDto;
-import seguros.producto.gestionarproducto.dto.RamoDto;
-import seguros.producto.gestionarproducto.dto.SubtipoDto;
+import seguros.producto.gestionarproducto.dto.*;
 import seguros.producto.gestionarproducto.servicesImpl.PcbsException;
 
 public interface PcbsService {
@@ -28,6 +19,10 @@ public interface PcbsService {
 	public List<GrupoMejorOfertaDto> findAllGrupoMejorOferta() throws PcbsException;
 	public Integer findNumPoliza(String numPoliza, String digito, Long idCompania, Long idNegocio, Long idRamo) throws PcbsException;
 	public List<String> findNumRut(String numRut, String digito) throws PcbsException;
+	public List<AsociadoDto> getAsociados() throws PcbsException;
+	public List<AsociadoDto> getAsociadosEmision() throws PcbsException;
+	public List<CatalogoCantidadCuotasDto> getCatalogoCantidadCuotas() throws PcbsException;
+	public List<CatalogoCantidadCuotasDto> getCatalogoCantidadCuotasWebPay() throws PcbsException;
 	public String findRutProductManager(String numRut) throws PcbsException;
 	public Integer decryptPasswordProductManager(String rut,String password);
 }

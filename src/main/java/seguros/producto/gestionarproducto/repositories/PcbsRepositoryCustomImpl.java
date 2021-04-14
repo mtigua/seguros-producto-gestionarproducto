@@ -5,27 +5,27 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import seguros.producto.gestionarproducto.configuration.PropertiesSql;
-import seguros.producto.gestionarproducto.dto.CompaniaDto;
-import seguros.producto.gestionarproducto.dto.EquivalenciaSeguroDto;
-import seguros.producto.gestionarproducto.dto.GrupoDto;
-import seguros.producto.gestionarproducto.dto.GrupoMatrizDto;
-import seguros.producto.gestionarproducto.dto.GrupoMejorOfertaDto;
-import seguros.producto.gestionarproducto.dto.MonedaDto;
-import seguros.producto.gestionarproducto.dto.NegocioDto;
-import seguros.producto.gestionarproducto.dto.ProdDto;
-import seguros.producto.gestionarproducto.dto.RamoDto;
-import seguros.producto.gestionarproducto.dto.SubtipoDto;
+import seguros.producto.gestionarproducto.dto.*;
 import seguros.producto.gestionarproducto.servicesImpl.PcbsException;
 
 @Repository
 public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 	
 	private static final String VALUE_UNDEFINED="No se ha podido indentificar valor para el par\u00E1metro de salida: ";
+	static final String COMPANY = "idCompania";
+	static final String BUSINESS = "idNegocio";
+	static final String RAMO = "idRamo";
+	static final String CODIGOSUBTIPO = "codigoSubTipo";
+	static final String CODIGOPRODUCTO = "codigoProducto";
+	static final String EXISTE = "existe";
+	static final String VALID = "valid";
+	static final String RESULT = "result";
 
 	@Autowired
 	private EntityManager entityManager;
@@ -57,8 +57,7 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 				}
 			}
 			catch(Exception e) {
-				PcbsException exc = new PcbsException(e);
-				throw exc;
+				throw new PcbsException(e);
 			}
 
 			return list;
@@ -87,8 +86,7 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 			}
 		}
 		catch(Exception e) {
-			PcbsException exc = new PcbsException(e);
-			throw exc;
+			throw new PcbsException(e);
 		}
 
 		return listCompania;
@@ -103,8 +101,8 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 		 
 		try {
 			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureNameNegocio);
-			storedProcedureQuery.registerStoredProcedureParameter("idCompania", Long.class, ParameterMode.IN);
-			storedProcedureQuery.setParameter("idCompania",idCompania );
+			storedProcedureQuery.registerStoredProcedureParameter(COMPANY, Long.class, ParameterMode.IN);
+			storedProcedureQuery.setParameter(COMPANY,idCompania );
 			storedProcedureQuery.execute();
 			recordNegocio = storedProcedureQuery.getResultList();
 		
@@ -118,8 +116,7 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 			}
 		}
 		catch(Exception e) {
-			PcbsException exc = new PcbsException(e);
-			throw exc;
+			throw new PcbsException(e);
 		}
 
 		return listNegocio;
@@ -134,10 +131,10 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 		 
 		try {
 			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureNameRamo);
-			storedProcedureQuery.registerStoredProcedureParameter("idCompania", Long.class, ParameterMode.IN);
-			storedProcedureQuery.registerStoredProcedureParameter("idNegocio", Long.class, ParameterMode.IN);
-			storedProcedureQuery.setParameter("idCompania",idCompania );
-			storedProcedureQuery.setParameter("idNegocio",idNegocio );
+			storedProcedureQuery.registerStoredProcedureParameter(COMPANY, Long.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter(BUSINESS, Long.class, ParameterMode.IN);
+			storedProcedureQuery.setParameter(COMPANY,idCompania );
+			storedProcedureQuery.setParameter(BUSINESS,idNegocio );
 			storedProcedureQuery.execute();
 			recordRamo = storedProcedureQuery.getResultList();
 		
@@ -151,8 +148,7 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 			}
 		}
 		catch(Exception e) {
-			PcbsException exc = new PcbsException(e);
-			throw exc;
+			throw new PcbsException(e);
 		}
 
 		return listRamo;
@@ -167,10 +163,10 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 		 
 		try {
 			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureNameSubtipo);
-			storedProcedureQuery.registerStoredProcedureParameter("idCompania", Long.class, ParameterMode.IN);
-			storedProcedureQuery.registerStoredProcedureParameter("idRamo", Long.class, ParameterMode.IN);
-			storedProcedureQuery.setParameter("idCompania",idCompania);
-			storedProcedureQuery.setParameter("idRamo",idRamo);
+			storedProcedureQuery.registerStoredProcedureParameter(COMPANY, Long.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter(RAMO, Long.class, ParameterMode.IN);
+			storedProcedureQuery.setParameter(COMPANY,idCompania);
+			storedProcedureQuery.setParameter(RAMO,idRamo);
 			
 			storedProcedureQuery.execute();
 			recordSubtipo = storedProcedureQuery.getResultList();
@@ -204,8 +200,8 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 		 
 		try {
 			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureNameProducto);
-			storedProcedureQuery.registerStoredProcedureParameter("codigoSubTipo", String.class, ParameterMode.IN);
-			storedProcedureQuery.setParameter("codigoSubTipo",codigoSubTipo);
+			storedProcedureQuery.registerStoredProcedureParameter(CODIGOSUBTIPO, String.class, ParameterMode.IN);
+			storedProcedureQuery.setParameter(CODIGOSUBTIPO,codigoSubTipo);
 			storedProcedureQuery.execute();
 			recordProducto = storedProcedureQuery.getResultList();
 		
@@ -238,10 +234,10 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 		 
 		try {
 			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureNameGrupoMatriz);	
-			storedProcedureQuery.registerStoredProcedureParameter("codigoSubTipo", String.class, ParameterMode.IN);
-			storedProcedureQuery.registerStoredProcedureParameter("codigoProducto", String.class, ParameterMode.IN);
-			storedProcedureQuery.setParameter("codigoSubTipo",codigoSubTipo);
-			storedProcedureQuery.setParameter("codigoProducto",codigoProducto);
+			storedProcedureQuery.registerStoredProcedureParameter(CODIGOSUBTIPO, String.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter(CODIGOPRODUCTO, String.class, ParameterMode.IN);
+			storedProcedureQuery.setParameter(CODIGOSUBTIPO,codigoSubTipo);
+			storedProcedureQuery.setParameter(CODIGOPRODUCTO,codigoProducto);
 			
 			storedProcedureQuery.execute();
 			recordGrupoMatriz = storedProcedureQuery.getResultList();
@@ -307,12 +303,12 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 		 
 		try {
 			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureNameEquivalenciaSeguro);
-			storedProcedureQuery.registerStoredProcedureParameter("idCompania", Long.class, ParameterMode.IN);
-			storedProcedureQuery.registerStoredProcedureParameter("idNegocio", Long.class, ParameterMode.IN);
-			storedProcedureQuery.registerStoredProcedureParameter("idRamo", Long.class, ParameterMode.IN);
-			storedProcedureQuery.setParameter("idCompania",idCompania );
-			storedProcedureQuery.setParameter("idNegocio",idNegocio );
-			storedProcedureQuery.setParameter("idRamo",idRamo );
+			storedProcedureQuery.registerStoredProcedureParameter(COMPANY, Long.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter(BUSINESS, Long.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter(RAMO, Long.class, ParameterMode.IN);
+			storedProcedureQuery.setParameter(COMPANY,idCompania );
+			storedProcedureQuery.setParameter(BUSINESS,idNegocio );
+			storedProcedureQuery.setParameter(RAMO,idRamo );
 			storedProcedureQuery.execute();
 			recordEquivalenciaSeguro = storedProcedureQuery.getResultList();
 		
@@ -384,7 +380,7 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 			storedProcedureQuery.registerStoredProcedureParameter("ramo", Long.class, ParameterMode.IN);
 			storedProcedureQuery.registerStoredProcedureParameter("negocio", Long.class, ParameterMode.IN);
 
-			storedProcedureQuery.registerStoredProcedureParameter("existe", Integer.class, ParameterMode.OUT);
+			storedProcedureQuery.registerStoredProcedureParameter(EXISTE, Integer.class, ParameterMode.OUT);
 			
 			storedProcedureQuery.setParameter("numPoliza",numPoliza );
 			storedProcedureQuery.setParameter("numDigito", digito );
@@ -394,14 +390,14 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 			storedProcedureQuery.setParameter("negocio", idNegocio );
 			storedProcedureQuery.execute();
 		
-			Object object= storedProcedureQuery.getOutputParameterValue("existe");
+			Object object= storedProcedureQuery.getOutputParameterValue(EXISTE);
 
 			  if(object!=null) {
-				  existe= (int) storedProcedureQuery.getOutputParameterValue("existe");
+				  existe= (int) storedProcedureQuery.getOutputParameterValue(EXISTE);
 			  } else {
 				    PcbsException exc = new PcbsException();
-					exc.setErrorMessage(VALUE_UNDEFINED + "existe");	        	
-					exc.setDetail(VALUE_UNDEFINED + "existe");
+					exc.setErrorMessage(VALUE_UNDEFINED + EXISTE);
+					exc.setDetail(VALUE_UNDEFINED + EXISTE);
 					exc.setConcreteException(exc);
 					throw exc;
 			  }		
@@ -411,8 +407,7 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 			throw e;
 		}
 		catch(Exception e) {
-			PcbsException exc = new PcbsException(e);
-			throw exc;
+			throw new PcbsException(e);
 		}
 
 		return existe;
@@ -422,7 +417,7 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 	@Override
 	@Transactional
 	public List<String> findNumRut(String numRut, String digito) throws PcbsException {
-		 String procedureBuscaRut = propertiesSql.getBUSCAR_RUT();
+		String procedureBuscaRut = propertiesSql.getBUSCAR_RUT();
 
 		List<String> listNombreRut =  new ArrayList<>();
 		List<Object[]> recordNombreRut=null;
@@ -446,13 +441,97 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 
 
 		} catch(Exception e) {
-			PcbsException exc = new PcbsException(e);
-			throw exc;
+			throw new PcbsException(e);
 		}
 		return listNombreRut;
 	}
 
-	
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<AsociadoDto> getAsociado() throws PcbsException {
+		String listarAsociado = propertiesSql.getLISTAR_ASOCIADO();
+
+		List<AsociadoDto> asociados =  new ArrayList<>();
+		List<Object[]> record = null;
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(listarAsociado);
+			storedProcedureQuery.execute();
+			record = storedProcedureQuery.getResultList();
+
+			if(record!=null) {
+				record.stream().forEach(p -> {
+					AsociadoDto asociadoDto = new AsociadoDto();
+					asociadoDto.setCode(p[0].toString());
+					asociadoDto.setDescription(p[1].toString());
+					asociados.add(asociadoDto);
+				});
+			}
+		} catch(Exception e) {
+			throw new PcbsException(e);
+		}
+		return asociados;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<AsociadoDto> getAsociadoEmision() throws PcbsException {
+		String listarAsociado = propertiesSql.getLISTAR_ASOCIADO_EMISION();
+
+		List<AsociadoDto> asociados =  new ArrayList<>();
+		List<Object[]> record = null;
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(listarAsociado);
+			storedProcedureQuery.execute();
+			record = storedProcedureQuery.getResultList();
+
+			if(record!=null) {
+				record.stream().forEach(p -> {
+					AsociadoDto asociadoDto = new AsociadoDto();
+					asociadoDto.setCode(p[0].toString());
+					asociadoDto.setDescription(p[1].toString());
+					asociados.add(asociadoDto);
+				});
+			}
+		} catch(Exception e) {
+			throw new PcbsException(e);
+		}
+		return asociados;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<CatalogoCantidadCuotasDto> getCatalogoCuotas() throws PcbsException {
+		List<CatalogoCantidadCuotasDto> catalogoCantidadCuotasDtos = new ArrayList<>();
+		try {
+			String sqlQuery = "SELECT new seguros.producto.gestionarproducto.dto.CatalogoCantidadCuotasDto(c.id, c.name) FROM catalogo_cantidad_cuotas c";
+			TypedQuery<CatalogoCantidadCuotasDto> typedQuery = entityManager.createQuery(
+					sqlQuery, CatalogoCantidadCuotasDto.class);
+			catalogoCantidadCuotasDtos = typedQuery.getResultList();
+		} catch(Exception e) {
+			throw new PcbsException(e);
+		}
+		return catalogoCantidadCuotasDtos;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<CatalogoCantidadCuotasDto> getCatalogoCuotasPayWeb() throws PcbsException {
+		List<CatalogoCantidadCuotasDto> catalogoCantidadCuotasDtos = new ArrayList<>();
+		try {
+			String sqlQuery = "SELECT new seguros.producto.gestionarproducto.dto.CatalogoCantidadCuotasDto(c.id, c.name) FROM catalogo_cantidad_cuotas_webpay c";
+			TypedQuery<CatalogoCantidadCuotasDto> typedQuery = entityManager.createQuery(
+					sqlQuery, CatalogoCantidadCuotasDto.class);
+			catalogoCantidadCuotasDtos = typedQuery.getResultList();
+		} catch(Exception e) {
+			throw new PcbsException(e);
+		}
+		return catalogoCantidadCuotasDtos;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
@@ -471,16 +550,13 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 			record = storedProcedureQuery.getResultList();
 
 
-			if(record!=null) {
-				if(!record.isEmpty()) {
-					rut= String.valueOf(record.get(0));
-				}
+			if (record != null && !record.isEmpty()) {
+				rut = String.valueOf(record.get(0));
 			}
 
 
 		} catch(Exception e) {
-			PcbsException exc = new PcbsException(e);
-			throw exc;
+			throw new PcbsException(e);
 		}
 		return rut;
 	}
@@ -496,20 +572,20 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureBuscaPoliza);
 			storedProcedureQuery.registerStoredProcedureParameter("password", String.class, ParameterMode.IN);
 			storedProcedureQuery.registerStoredProcedureParameter("rut", String.class, ParameterMode.IN);
-			storedProcedureQuery.registerStoredProcedureParameter("valid", Integer.class, ParameterMode.OUT);
+			storedProcedureQuery.registerStoredProcedureParameter(VALID, Integer.class, ParameterMode.OUT);
 			
 			storedProcedureQuery.setParameter("rut",rut );
 			storedProcedureQuery.setParameter("password",password );
 			storedProcedureQuery.execute();
 		
-			Object result= storedProcedureQuery.getOutputParameterValue("valid");
+			Object result= storedProcedureQuery.getOutputParameterValue(VALID);
 			  if(result!=null) {
-				  existe= (int) storedProcedureQuery.getOutputParameterValue("valid");
+				  existe= (int) storedProcedureQuery.getOutputParameterValue(VALID);
 			  }
 			  else {
 				    PcbsException exc = new PcbsException();
-					exc.setErrorMessage(VALUE_UNDEFINED + "existe");	        	
-					exc.setDetail(VALUE_UNDEFINED + "existe");
+					exc.setErrorMessage(VALUE_UNDEFINED + EXISTE);
+					exc.setDetail(VALUE_UNDEFINED + EXISTE);
 					exc.setConcreteException(exc);
 					throw exc;
 			  }		
@@ -519,8 +595,7 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 			throw e;
 		}
 		catch(Exception e) {
-			PcbsException exc = new PcbsException(e);
-			throw exc;
+			throw new PcbsException(e);
 		}
 
 		return existe;
@@ -533,18 +608,18 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 		 
 		try {
 			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(generateNemotecnico);
-			storedProcedureQuery.registerStoredProcedureParameter("result", String.class, ParameterMode.OUT);
+			storedProcedureQuery.registerStoredProcedureParameter(RESULT, String.class, ParameterMode.OUT);
 			
 			storedProcedureQuery.execute();
 		
-			Object result= storedProcedureQuery.getOutputParameterValue("result");
+			Object result= storedProcedureQuery.getOutputParameterValue(RESULT);
 			  if(result!=null) {
-				  newNemotecnico=  String.valueOf(storedProcedureQuery.getOutputParameterValue("result"));
+				  newNemotecnico=  String.valueOf(storedProcedureQuery.getOutputParameterValue(RESULT));
 			  }
 			  else {
 				    PcbsException exc = new PcbsException();
-					exc.setErrorMessage(VALUE_UNDEFINED + "existe");	        	
-					exc.setDetail(VALUE_UNDEFINED + "existe");
+					exc.setErrorMessage(VALUE_UNDEFINED + EXISTE);
+					exc.setDetail(VALUE_UNDEFINED + EXISTE);
 					exc.setConcreteException(exc);
 					throw exc;
 			  }		
@@ -554,8 +629,7 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 			throw e;
 		}
 		catch(Exception e) {
-			PcbsException exc = new PcbsException(e);
-			throw exc;
+			throw new PcbsException(e);
 		}
 
 		return newNemotecnico;
