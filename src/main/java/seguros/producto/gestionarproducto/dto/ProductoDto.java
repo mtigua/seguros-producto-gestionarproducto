@@ -214,7 +214,7 @@ public class ProductoDto {
 	
 	private Integer  mesesCastigo;
 	
-	private Integer  controlInspeccion;
+	private Boolean  controlInspeccion;
 	
 	private Integer  dpsTodos;
 	
