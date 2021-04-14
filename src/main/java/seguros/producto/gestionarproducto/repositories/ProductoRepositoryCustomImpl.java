@@ -14,16 +14,15 @@ import seguros.producto.gestionarproducto.dto.PageProductoDto;
 import seguros.producto.gestionarproducto.dto.ProductoPageDto;
 import seguros.producto.gestionarproducto.dto.RamoDto;
 import seguros.producto.gestionarproducto.dto.TipoSeguroDto;
-import seguros.producto.gestionarproducto.servicesImpl.PcbsException;
 import seguros.producto.gestionarproducto.servicesImpl.ProductoException;
 
 @Repository
 public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 
 	
-	private static final String MSG_NOT_RESULT= "No se ha retornado respuesta desde el proceso";
-	private static final String PROCESS_NOT_FOUND="Proceso no identificado";
 	
+	private static final String VALUE_UNDEFINED="No se ha podido indentificar valor para el par\u00E1metro de salida: ";
+
 	@Autowired
 	private EntityManager entityManager;
 	
@@ -70,7 +69,14 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 			Object result= storedProcedureQuery.getOutputParameterValue("total");
 			if(result!=null) {
 				totalElements= (int) storedProcedureQuery.getOutputParameterValue("total");
-			}		
+			}
+		  else {
+			    ProductoException exc = new ProductoException();
+				exc.setErrorMessage(VALUE_UNDEFINED + "existe");	        	
+				exc.setDetail(VALUE_UNDEFINED + "existe");
+				exc.setConcreteException(exc);
+				throw exc;
+		  }	
 			
 			if(record!=null) {
 				if(!record.isEmpty()) {
@@ -109,8 +115,11 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 			pageProductoDto.setTotalElements(totalElements);
 			pageProductoDto.setProductos(lista);
 		}
+		catch(ProductoException e){
+				throw e;
+		}
 		catch(Exception e) {
-			PcbsException exc = new PcbsException(e);
+			ProductoException exc = new ProductoException(e);
 			throw exc;
 		}
 
