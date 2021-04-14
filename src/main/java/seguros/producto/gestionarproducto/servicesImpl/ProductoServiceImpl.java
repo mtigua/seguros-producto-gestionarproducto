@@ -138,83 +138,89 @@ public class ProductoServiceImpl implements ProductoService {
 			Producto productoEntity = producto.toEntity();
 			String newNemotecnico = pcbsRepository.generateNemotecnico();
 			
-			if(producto.getTipoSeguro()!=null && VALUE_UNDEFINED.equals(producto.getTipoSeguro()) ) {
+			if(producto.getTipoSeguro()!=null && !VALUE_UNDEFINED.equals(producto.getTipoSeguro()) ) {
 				TipoSeguro tipoSeguro = tipoSeguroRepository.getOne(producto.getTipoSeguro());
 				if(tipoSeguro.getId()!=null) {
 				   productoEntity.setTipoSeguro(tipoSeguro);
 				}
 				
 			}
-			if(producto.getTipoPromocion()!=null && VALUE_UNDEFINED.equals(producto.getTipoPromocion()) ) {
+			if(producto.getTipoPromocion()!=null && !VALUE_UNDEFINED.equals(producto.getTipoPromocion()) ) {
 				TipoPromocion tipoPromocion = tipoPromocionRepository.getOne(producto.getTipoPromocion());
 				if(tipoPromocion.getId()!=null) {
 					productoEntity.setTipoPromocion(tipoPromocion);
 				}
 			}
-			if(producto.getTipoRecargo()!=null && VALUE_UNDEFINED.equals(producto.getTipoRecargo()) ) {
+			if(producto.getTipoRecargo()!=null && !VALUE_UNDEFINED.equals(producto.getTipoRecargo()) ) {
 				TipoRecargo tipoRecargo = tipoRecargoRepository.getOne(producto.getTipoRecargo());
 				if(tipoRecargo.getId()!=null) {
 				  productoEntity.setTipoRecargo(tipoRecargo);
 				}
 			}
-			if(producto.getTipoAjuste()!=null && VALUE_UNDEFINED.equals(producto.getTipoAjuste()) ) {
+			if(producto.getTipoAjuste()!=null && !VALUE_UNDEFINED.equals(producto.getTipoAjuste()) ) {
 				TipoAjuste tipoAjuste = tipoAjusteRepository.getOne(producto.getTipoAjuste());
 				if(tipoAjuste.getId()!=null) {
 			     	productoEntity.setTipoAjuste(tipoAjuste);
 				}
 			}
-			if(producto.getTipoDescuento()!=null && VALUE_UNDEFINED.equals(producto.getTipoDescuento()) ) {
+			if(producto.getTipoDescuento()!=null && !VALUE_UNDEFINED.equals(producto.getTipoDescuento()) ) {
 				TipoDescuento tipoDescuento = tipoDescuentoRepository.getOne(producto.getTipoDescuento());
 				if(tipoDescuento.getId()!=null) {
 					productoEntity.setTipoDescuento(tipoDescuento);
 				}
 			}
-			if(producto.getTarifaPor()!=null && VALUE_UNDEFINED.equals(producto.getTarifaPor())) {
+			if(producto.getTarifaPor()!=null && !VALUE_UNDEFINED.equals(producto.getTarifaPor())) {
 				TarifaPor tarifaPor = tarifaPorRepository.getOne(producto.getTarifaPor());
 				if(tarifaPor.getId()!=null) {
 					productoEntity.setTarifaPor(tarifaPor);
 				}			
 			}
-			if(producto.getTipoTarifa()!=null && VALUE_UNDEFINED.equals(producto.getTipoTarifa()) ) {
+			if(producto.getTipoTarifa()!=null && !VALUE_UNDEFINED.equals(producto.getTipoTarifa()) ) {
 				TipoTarifa tipoTarifa = tipoTarifaRepository.getOne(producto.getTipoTarifa());
 				if(tipoTarifa.getId()!=null) {
 				  productoEntity.setTipoTarifa(tipoTarifa);
 				}
 			}
-			if(producto.getTipoPeriodo()!=null && VALUE_UNDEFINED.equals(producto.getTipoPeriodo()) ) {
+			if(producto.getTipoPeriodo()!=null && !VALUE_UNDEFINED.equals(producto.getTipoPeriodo()) ) {
 				TipoPeriodo tipoPeriodo = tipoPeriodoRepository.getOne(producto.getTipoPeriodo());
 				if(tipoPeriodo.getId() != null) {
 				  productoEntity.setTipoPeriodo(tipoPeriodo);
 				}
 			}
-			if(producto.getTipoTraspaso()!=null && VALUE_UNDEFINED.equals(producto.getTipoTraspaso()) ) {
+			if(producto.getTipoTraspaso()!=null && !VALUE_UNDEFINED.equals(producto.getTipoTraspaso()) ) {
 				TipoTraspaso tipoTraspaso = tipoTraspasoRepository.getOne(producto.getTipoTraspaso());
 				if(tipoTraspaso.getId()!=null) {
 				  productoEntity.setTipoTraspaso(tipoTraspaso);
 				}
 			}
-			if(producto.getTipoAcreedor()!=null && VALUE_UNDEFINED.equals(producto.getTipoAcreedor())) {
+			if(producto.getTipoAcreedor()!=null && !VALUE_UNDEFINED.equals(producto.getTipoAcreedor())) {
 				ModoTraspaso tipoAcreedor = modoTraspasoRepository.getOne(producto.getTipoAcreedor());
 				if(tipoAcreedor.getId()!=null) {
 					productoEntity.setTipoAcreedor(tipoAcreedor);
 				}
 			}
-			if(producto.getTipoFacturar()!=null && VALUE_UNDEFINED.equals(producto.getTipoFacturar())) {
+			if(producto.getTipoFacturar()!=null && !VALUE_UNDEFINED.equals(producto.getTipoFacturar())) {
 				ModoTraspaso tipoFacturar = modoTraspasoRepository.getOne(producto.getTipoFacturar());
 				if(tipoFacturar.getId()!=null) {
 				  productoEntity.setTipoFacturar(tipoFacturar);
 				}
 			}
 			
-			ProductoDo productoDo = producto.getProductDo().toEntity();
+			if( producto.getProductDo()!=null ) {
+				ProductoDo productoDo = producto.getProductDo().toEntity();
+				if(producto.getProductDo().getDoplAQuienSeVende()!=null && !VALUE_UNDEFINED.equals(producto.getProductDo().getDoplAQuienSeVende()) ) {
+					DestinoVenta destinoVenta = destinoVentaRepository.getOne(producto.getProductDo().getDoplAQuienSeVende());
+					
+					if(destinoVenta.getId()!=null) {
+						productoDo.setDoplAQuienSeVende(destinoVenta);	
+					}				
+					productoEntity.setProductDo(productoDo);
+				}				
+				
+			}
 			
-			DestinoVenta destinoVenta = destinoVentaRepository.getOne(producto.getProductDo().getDoplAQuienSeVende());
+				
 			
-			if(destinoVenta.getId()!=null) {
-				productoDo.setDoplAQuienSeVende(destinoVenta);	
-			}				
-						
-			productoEntity.setProductDo(productoDo);
 			productoEntity.setNemot(newNemotecnico);
 			
 			String palabraPase= encrypt(productoEntity.getPalabaraPaseProductManager());
