@@ -219,7 +219,7 @@ public class PcbsServiceImpl implements PcbsService {
 		List<AsociadoDto> asociados;
 
 		try {
-			asociados = pcbsRepositoryCustom.getAsociado();
+			asociados = pcbsRepositoryCustom.getAsociadoEmision();
 		} catch(PcbsException e) {
 			throw e;
 		}
