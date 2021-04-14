@@ -394,9 +394,9 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 			storedProcedureQuery.setParameter("negocio", idNegocio );
 			storedProcedureQuery.execute();
 		
-			Object result= storedProcedureQuery.getOutputParameterValue("existe");
+			Object object= storedProcedureQuery.getOutputParameterValue("existe");
 
-			  if(result!=null) {
+			  if(object!=null) {
 				  existe= (int) storedProcedureQuery.getOutputParameterValue("existe");
 			  } else {
 				    PcbsException exc = new PcbsException();
@@ -422,8 +422,7 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 	@Override
 	@Transactional
 	public List<String> findNumRut(String numRut, String digito) throws PcbsException {
-		// String procedureBuscaRut = propertiesSql.getBUSCAR_RUT();
-		String procedureBuscaRut = "CPC.dbo.buscarRut";
+		 String procedureBuscaRut = propertiesSql.getBUSCAR_RUT();
 
 		List<String> listNombreRut =  new ArrayList<>();
 		List<Object[]> recordNombreRut=null;
