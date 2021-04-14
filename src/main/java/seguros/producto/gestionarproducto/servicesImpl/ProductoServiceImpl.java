@@ -46,6 +46,7 @@ import seguros.producto.gestionarproducto.repositories.DestinoVentaRepository;
 public class ProductoServiceImpl implements ProductoService {
 	
 
+	private static final Long VALUE_UNDEFINED=-1L;
 	
 	@Autowired
 	private ProductoRepository productoRepository;
@@ -137,47 +138,48 @@ public class ProductoServiceImpl implements ProductoService {
 			Producto productoEntity = producto.toEntity();
 			String newNemotecnico = pcbsRepository.generateNemotecnico();
 			
-			if(producto.getTipoSeguro()!=null) {
+			if(producto.getTipoSeguro()!=null && producto.getTipoSeguro()!=VALUE_UNDEFINED ) {
 				TipoSeguro tipoSeguro = tipoSeguroRepository.getOne(producto.getTipoSeguro());
 				productoEntity.setTipoSeguro(tipoSeguro);
+				
 			}
-			if(producto.getTipoPromocion()!=null) {
+			if(producto.getTipoPromocion()!=null && producto.getTipoPromocion()!=VALUE_UNDEFINED ) {
 				TipoPromocion tipoPromocion = tipoPromocionRepository.getOne(producto.getTipoPromocion());
 				productoEntity.setTipoPromocion(tipoPromocion);
 			}
-			if(producto.getTipoRecargo()!=null) {
+			if(producto.getTipoRecargo()!=null && producto.getTipoRecargo()!=VALUE_UNDEFINED ) {
 				TipoRecargo tipoRecargo = tipoRecargoRepository.getOne(producto.getTipoRecargo());
 				productoEntity.setTipoRecargo(tipoRecargo);
 			}
-			if(producto.getTipoAjuste()!=null) {
+			if(producto.getTipoAjuste()!=null && producto.getTipoAjuste()!=VALUE_UNDEFINED ) {
 				TipoAjuste tipoAjuste = tipoAjusteRepository.getOne(producto.getTipoAjuste());
 				productoEntity.setTipoAjuste(tipoAjuste);
 			}
-			if(producto.getTipoDescuento()!=null) {
+			if(producto.getTipoDescuento()!=null && producto.getTipoDescuento()!=VALUE_UNDEFINED ) {
 				TipoDescuento tipoDescuento = tipoDescuentoRepository.getOne(producto.getTipoDescuento());
 				productoEntity.setTipoDescuento(tipoDescuento);
 			}
-			if(producto.getTarifaPor()!=null) {
+			if(producto.getTarifaPor()!=null && producto.getTarifaPor()!=VALUE_UNDEFINED ) {
 				TarifaPor tarifaPor = tarifaPorRepository.getOne(producto.getTarifaPor());
 				productoEntity.setTarifaPor(tarifaPor);
 			}
-			if(producto.getTipoTarifa()!=null) {
+			if(producto.getTipoTarifa()!=null && producto.getTipoTarifa()!=VALUE_UNDEFINED ) {
 				TipoTarifa tipoTarifa = tipoTarifaRepository.getOne(producto.getTipoTarifa());
 				productoEntity.setTipoTarifa(tipoTarifa);
 			}
-			if(producto.getTipoPeriodo()!=null) {
+			if(producto.getTipoPeriodo()!=null && producto.getTipoPeriodo()!=VALUE_UNDEFINED ) {
 				TipoPeriodo tipoPeriodo = tipoPeriodoRepository.getOne(producto.getTipoPeriodo());
 				productoEntity.setTipoPeriodo(tipoPeriodo);
 			}
-			if(producto.getTipoTraspaso()!=null) {
+			if(producto.getTipoTraspaso()!=null && producto.getTipoTraspaso()!=VALUE_UNDEFINED ) {
 				TipoTraspaso tipoTraspaso = tipoTraspasoRepository.getOne(producto.getTipoTraspaso());
 				productoEntity.setTipoTraspaso(tipoTraspaso);
 			}
-			if(producto.getTipoAcreedor()!=null) {
+			if(producto.getTipoAcreedor()!=null && producto.getTipoAcreedor()!=VALUE_UNDEFINED ) {
 				ModoTraspaso tipoAcreedor = modoTraspasoRepository.getOne(producto.getTipoAcreedor());
 				productoEntity.setTipoAcreedor(tipoAcreedor);
 			}
-			if(producto.getTipoFacturar()!=null) {
+			if(producto.getTipoFacturar()!=null && producto.getTipoFacturar()!=VALUE_UNDEFINED ) {
 				ModoTraspaso tipoFacturar = modoTraspasoRepository.getOne(producto.getTipoFacturar());
 				productoEntity.setTipoFacturar(tipoFacturar);
 			}
