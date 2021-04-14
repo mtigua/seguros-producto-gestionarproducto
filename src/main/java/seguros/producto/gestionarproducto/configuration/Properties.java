@@ -61,5 +61,13 @@ public class Properties {
 	
 	private String secret;
 	
+	private Long READ_TIMEOUT;
+	
+	private Long CONNECTION_TIMEOUT;
+	
+	private String url_encrypt;
+	
+	private String url_decrypt;
+	
 		 
 }
