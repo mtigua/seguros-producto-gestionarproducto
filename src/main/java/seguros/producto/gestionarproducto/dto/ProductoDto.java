@@ -319,16 +319,16 @@ public class ProductoDto {
 	
 	@JsonIgnore 
 	public Producto toEntity() {
-		Producto producto = new Producto();
-		BeanUtils.copyProperties(this, producto);
+		Producto p = new Producto();
+		BeanUtils.copyProperties(this, p);
 		
 		if(this.productDo!=null) {
-			ProductoDo productDo= new ProductoDo();
-			BeanUtils.copyProperties(this.productDo.toEntity(), productDo);
-			producto.setProductDo(productDo);
+			ProductoDo pDto= new ProductoDo();
+			BeanUtils.copyProperties(this.productDo.toEntity(), pDto);
+			p.setProductDo(pDto);
 		}
-		
-		return producto;
+
+		return p;
 		
 	}
 	
