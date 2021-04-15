@@ -268,7 +268,7 @@ public class Producto  {
 	private Integer  mesesCastigo;
 	
 	@Column(name = "control_inspeccion")
-	private Integer  controlInspeccion;
+	private Boolean  controlInspeccion;
 	
 	@Column(name = "dps_todos")
 	private Integer  dpsTodos;
