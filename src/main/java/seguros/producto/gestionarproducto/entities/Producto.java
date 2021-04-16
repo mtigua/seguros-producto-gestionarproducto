@@ -4,6 +4,8 @@ package seguros.producto.gestionarproducto.entities;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDateTime;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +18,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.Max;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import lombok.Data;
 
@@ -414,6 +419,13 @@ public class Producto  {
 	@Column(nullable = false,name = "palabra_pase_product_manager")
 	private String palabaraPaseProductManager;	
     
+	@Column(name = "fecha_creacion", updatable=false)
+	@CreationTimestamp
+	private LocalDateTime fechaCreacion;
+	
+	@Column(name = "fecha_modificacion")
+    @UpdateTimestamp
+    private LocalDateTime fechaModificacion;
 	 
 	
 		
