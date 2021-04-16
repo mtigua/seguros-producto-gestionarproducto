@@ -10,10 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import seguros.producto.gestionarproducto.configuration.Properties;
+import seguros.producto.gestionarproducto.dto.ActionType;
 import seguros.producto.gestionarproducto.dto.PageProductoDto;
 import seguros.producto.gestionarproducto.dto.ProductoDoDto;
 import seguros.producto.gestionarproducto.dto.ProductoDto;
+import seguros.producto.gestionarproducto.dto.State;
+import seguros.producto.gestionarproducto.entities.Canal;
 import seguros.producto.gestionarproducto.entities.DestinoVenta;
+import seguros.producto.gestionarproducto.entities.EstadoIntegracion;
 import seguros.producto.gestionarproducto.entities.ModoTraspaso;
 import seguros.producto.gestionarproducto.entities.Producto;
 import seguros.producto.gestionarproducto.entities.ProductoDo;
@@ -38,7 +42,9 @@ import seguros.producto.gestionarproducto.repositories.TipoRecargoRepository;
 import seguros.producto.gestionarproducto.repositories.TipoSeguroRepository;
 import seguros.producto.gestionarproducto.repositories.TipoTarifaRepository;
 import seguros.producto.gestionarproducto.repositories.TipoTraspasoRepository;
+import seguros.producto.gestionarproducto.services.EstadoIntegracionService;
 import seguros.producto.gestionarproducto.services.ProductoService;
+import seguros.producto.gestionarproducto.repositories.CanalRepository;
 import seguros.producto.gestionarproducto.repositories.DestinoVentaRepository;
 
 
@@ -86,6 +92,12 @@ public class ProductoServiceImpl implements ProductoService {
 	
 	@Autowired
 	private PCBSRepositoryCustom pcbsRepository;
+	
+	@Autowired
+	private EstadoIntegracionService estadoIntegracionService;
+	
+	@Autowired
+	private CanalRepository canalRepository;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -217,16 +229,31 @@ public class ProductoServiceImpl implements ProductoService {
 					productoEntity.setProductDo(productoDo);
 				}				
 				
-			}
-			
+			}			
 				
 			
 			productoEntity.setNemot(newNemotecnico);
 			
 			String palabraPase= encrypt(productoEntity.getPalabaraPaseProductManager());
-			productoEntity.setPalabaraPaseProductManager(palabraPase);
+			productoEntity.setPalabaraPaseProductManager(palabraPase);		
+			
 			
 			productoRepository.save(productoEntity);
+			
+			EstadoIntegracion estadoIntegracion = new EstadoIntegracion();
+			
+			//TODO implementar guardado de canal para todos
+			Canal canal= canalRepository.getOne(4L);
+			
+			if(canal.getId()!=null) {
+				estadoIntegracion.setCanal(canal);
+			}
+			estadoIntegracion.setIdProducto(productoEntity.getId());
+			estadoIntegracion.setState(State.Pendiente);
+			estadoIntegracion.setTipoAccion(ActionType.Crear);
+			
+			
+			estadoIntegracionService.save(estadoIntegracion);
 			
 			result= newNemotecnico;
 		}
