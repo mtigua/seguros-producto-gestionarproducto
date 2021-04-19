@@ -3,7 +3,6 @@ package seguros.producto.gestionarproducto.servicesImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -188,8 +187,8 @@ public class PcbsServiceImpl implements PcbsService {
 
 	@Transactional
 	@Override
-	public List<String> findNumRut(String numRut, String digito) throws PcbsException {
-		List<String> nombres;
+	public List<RutDto> findNumRut(String numRut, String digito) throws PcbsException {
+		List<RutDto> nombres;
 
 		try {
 			nombres= pcbsRepositoryCustom.findNumRut(numRut, digito);
@@ -198,6 +197,19 @@ public class PcbsServiceImpl implements PcbsService {
 			throw e;
 		}
 		return nombres;
+	}
+
+	@Transactional
+	@Override
+	public List<PlanCoberturaDto> listPlan(Long numRamo) throws PcbsException {
+		List<PlanCoberturaDto> plans;
+
+		try {
+			plans= pcbsRepositoryCustom.listPlan(numRamo);
+		} catch(PcbsException e) {
+			throw e;
+		}
+		return plans;
 	}
 
 	@Transactional

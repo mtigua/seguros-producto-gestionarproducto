@@ -44,5 +44,6 @@ public class PropertiesMsg {
 	private String logger_error_executing_get_producto_do;
 	private String logger_error_executing_decrypt_password_product_manager;
 	private String logger_error_executing_save_producto;
-		 
+	private String logger_error_executing_list_plan_cobertura;
+
 }

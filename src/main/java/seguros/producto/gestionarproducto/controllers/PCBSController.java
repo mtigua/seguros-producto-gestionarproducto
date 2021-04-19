@@ -6,8 +6,6 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
@@ -39,10 +37,7 @@ import seguros.producto.gestionarproducto.utils.Utils;
 @RequestMapping("/pcbs")
 @CrossOrigin(origins = "${domains.origin.allowed.gestionarproducto}", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.OPTIONS, RequestMethod.PUT, RequestMethod.DELETE})
 public class PCBSController {
-	
-	private static final Logger logger = LoggerFactory.getLogger(PCBSController.class.getSimpleName());
 
-	
 	private static final String MSG_HTTP200 = "Operaci\u00f3n exitosa";
 	private static final String MSG_HTTP400 = "Formato de petici\u00f3n erroneo";
 	private static final String MSG_HTTP401 = "No autorizado";
@@ -89,14 +84,12 @@ public class PCBSController {
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/moneda")
 	public ResponseEntity<List<MonedaDto>> getMoneda(
-//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
-//			String token
-			) throws PcbsException, UnauthorizedException{	
+
+			) throws PcbsException {
 				
 		List<MonedaDto> lista= null;
 		
 		try {
-			//  String username=utils.getSamaccountname(token);		
 			  lista= pcbsService.findAllMoneda();
 			   
 		}
@@ -104,10 +97,7 @@ public class PCBSController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_moneda());
 			throw e;
 		}
-//		catch(UnauthorizedException e) {
-//			e.setSubject(propertiesMsg.getLogger_error_executing_get_moneda());
-//			throw e;
-//		}
+
 		catch (Exception e) {
 			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_moneda());
@@ -127,7 +117,7 @@ public class PCBSController {
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/compania")
-	public ResponseEntity<List<CompaniaDto>> getCompania() throws PcbsException, UnauthorizedException{	
+	public ResponseEntity<List<CompaniaDto>> getCompania() throws PcbsException {
 		List<CompaniaDto> lista= null;
 		
 		try {
@@ -156,7 +146,7 @@ public class PCBSController {
 	@GetMapping("/compania/{idCompania}/negocio")
 	public ResponseEntity<List<NegocioDto>> getNegocioPorIdCompania(
 			@PathVariable("idCompania") @NotNull Long idCompania	
-		) throws PcbsException, UnauthorizedException{	
+		) throws PcbsException {
 		
 		List<NegocioDto> lista= null;
 		
@@ -187,7 +177,7 @@ public class PCBSController {
 	public ResponseEntity<List<RamoDto>> getNegocioPorIdCompaniaIdNegocio(
 			@PathVariable("idCompania") @NotNull Long idCompania,
 			@PathVariable("idNegocio") @NotNull Long idNegocio	
-		) throws PcbsException, UnauthorizedException{	
+		) throws PcbsException {
 		
 		List<RamoDto> lista= null;
 		
@@ -250,12 +240,12 @@ public class PCBSController {
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header")})
 	@GetMapping("/buscarRut")
-	public ResponseEntity<List<String>> findBuscarRut(
+	public ResponseEntity<List<RutDto>> findBuscarRut(
 			@RequestParam("numRut") @NotNull String numRut,
 			@RequestParam("digito") @NotNull String digito
-	) throws PcbsException, UnauthorizedException {
+	) throws PcbsException  {
 
-		List<String> nombres = null;
+		List<RutDto> nombres = null;
 
 		try {
 			nombres = pcbsService.findNumRut(numRut, digito);
@@ -270,6 +260,34 @@ public class PCBSController {
 		return ResponseEntity.ok(nombres);
 	}
 
+	@ApiOperation(value = SWAGGER_GET_BUSCAR_POR_RUT, notes = SWAGGER_GET_BUSCAR_POR_RUT)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header")})
+	@GetMapping("/listarPlanCobertura")
+	public ResponseEntity<List<PlanCoberturaDto>> listPlanCobertura(
+			@RequestParam("numRamo") @NotNull Long numRamo
+	) throws PcbsException {
+
+		List<PlanCoberturaDto> planCoberturaDtos = null;
+
+		try {
+			planCoberturaDtos = pcbsService.listPlan(numRamo);
+		} catch (PcbsException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_list_plan_cobertura());
+			throw e;
+		} catch (Exception e) {
+			PcbsException ex = new PcbsException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_list_plan_cobertura());
+			throw ex;
+		}
+		return ResponseEntity.ok(planCoberturaDtos);
+	}
+
 	@ApiOperation(value = SWAGGER_GET_LISTAR_ASOCIADO, notes = SWAGGER_GET_LISTAR_ASOCIADO)
 	@ApiResponses({
 			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
@@ -280,7 +298,7 @@ public class PCBSController {
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header")})
 	@GetMapping("/listarWsAsociado")
 	public ResponseEntity<List<AsociadoDto>> getWsAsociado(
-	) throws PcbsException, UnauthorizedException {
+	) throws PcbsException {
 
 		List<AsociadoDto> asociados = null;
 
@@ -307,7 +325,7 @@ public class PCBSController {
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header")})
 	@GetMapping("/listarWsAsociadoEmision")
 	public ResponseEntity<List<AsociadoDto>> getWsAsociadoEmision(
-	) throws PcbsException, UnauthorizedException {
+	) throws PcbsException {
 
 		List<AsociadoDto> asociados = null;
 
@@ -334,7 +352,7 @@ public class PCBSController {
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header")})
 	@GetMapping("/listarCantidadCuotas")
 	public ResponseEntity<List<CatalogoCantidadCuotasDto>> getCantidadCuotas(
-	) throws PcbsException, UnauthorizedException {
+	) throws PcbsException {
 
 		List<CatalogoCantidadCuotasDto> cantidadCuotasDtos = null;
 
@@ -361,7 +379,7 @@ public class PCBSController {
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header")})
 	@GetMapping("/listarCantidadCuotasWebPay")
 	public ResponseEntity<List<CatalogoCantidadCuotasDto>> getCantidadCuotasWebPay(
-	) throws PcbsException, UnauthorizedException {
+	) throws PcbsException {
 
 		List<CatalogoCantidadCuotasDto> cantidadCuotasDtos = null;
 
@@ -390,7 +408,7 @@ public class PCBSController {
 	public ResponseEntity<List<SubtipoDto>> getSubtipoPorTipo(
 			@PathVariable("idCompania") @NotNull Long idCompania,
 			@PathVariable("idRamo") @NotNull Long idRamo				
-		) throws PcbsException, UnauthorizedException{	
+		) throws PcbsException {
 		List<SubtipoDto> lista= null;
 		
 		try {
@@ -449,7 +467,7 @@ public class PCBSController {
 	public ResponseEntity<List<GrupoMatrizDto>> getGrupoMatriz(
 			@PathVariable("codigoSubTipo") @NotBlank String codigoSubTipo,
 			@PathVariable("codigoProducto") @NotBlank String codigoProducto
-		) throws PcbsException, UnauthorizedException{	
+		) throws PcbsException {
 		List<GrupoMatrizDto> lista= null;
 		
 		try {
@@ -476,7 +494,7 @@ public class PCBSController {
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/grupo")
-	public ResponseEntity<List<GrupoDto>> getGrupo() throws PcbsException, UnauthorizedException{	
+	public ResponseEntity<List<GrupoDto>> getGrupo() throws PcbsException {
 		List<GrupoDto> lista= null;
 		
 		try {
@@ -507,7 +525,7 @@ public class PCBSController {
 			@PathVariable("idCompania") @NotNull Long idCompania,
 			@PathVariable("idNegocio") @NotNull Long idNegocio,
 			@PathVariable("idRamo") @NotNull Long idRamo
-		) throws PcbsException, UnauthorizedException{	
+		) throws PcbsException {
 		
 		List<EquivalenciaSeguroDto> lista= null;
 		
@@ -535,7 +553,7 @@ public class PCBSController {
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/grupomejoroferta")
-	public ResponseEntity<List<GrupoMejorOfertaDto>> getGrupoMejorOferta() throws PcbsException, UnauthorizedException{	
+	public ResponseEntity<List<GrupoMejorOfertaDto>> getGrupoMejorOferta() throws PcbsException {
 		List<GrupoMejorOfertaDto> lista= null;
 		
 		try {
@@ -567,7 +585,7 @@ public class PCBSController {
 			@RequestParam("rut") @NotNull String numRut
 //			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true)
 //			String token
-		) throws PcbsException, UnauthorizedException{
+		) throws PcbsException {
 
 		String rut= "";
 
@@ -578,10 +596,7 @@ public class PCBSController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_find_rut_product_manager());
 			throw e;
 		}
-//		catch(UnauthorizedException e) {
-//		e.setSubject(propertiesMsg.getLogger_error_executing_find_rut_product_manager());
-//		throw e;
-//	}
+
 		catch (Exception e) {
 			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_find_rut_product_manager());
@@ -602,9 +617,7 @@ public class PCBSController {
 	public ResponseEntity<Integer> desencriptar(
 			@RequestParam("rut") @NotNull String numRut,
 			@RequestParam("password") @NotNull String password
-//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true)
-//			String token
-		) throws PcbsException, UnauthorizedException{
+		) throws PcbsException {
 
 		Integer valid= 0;
 
@@ -615,10 +628,7 @@ public class PCBSController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_decrypt_password_product_manager());
 			throw e;
 		}
-//		catch(UnauthorizedException e) {
-//		e.setSubject(propertiesMsg.getLogger_error_executing_decrypt_password_product_manager());
-//		throw e;
-//	}
+
 		catch (Exception e) {
 			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_decrypt_password_product_manager());
