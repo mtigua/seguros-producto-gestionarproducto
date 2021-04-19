@@ -150,7 +150,7 @@ public class Producto  {
 	private Boolean  tienePromotor;
 	
 	@Column(name = "garantia_satisfaccion")
-	private Integer  garantiaSatisfaccion;
+	private Boolean  garantiaSatisfaccion;
 	
 	@Column(name = "dias_vigen_garantia_satis")
 	private Integer  diasVigenGarantiaSatis;
