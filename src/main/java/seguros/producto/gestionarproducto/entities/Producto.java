@@ -166,8 +166,8 @@ public class Producto  {
 	
 	private Integer  inspeccion;
 	
-	@Column(name = "plan_pos")
-	private Integer  planPos;
+	@Column(name = "venta_pos")
+	private Boolean  ventaPos;
 	
 	@Column(name = "tipo_scoring")
 	private Boolean  tipoScoring;
@@ -320,11 +320,11 @@ public class Producto  {
 	@Column(length = 50, name = "homologa_cia_prod")
 	private String  homologaCiaProd;
 	
-	@Column(length = 50, name = "homologa_cia_plan")
-	private String  homologaCiaPlan;
+	@Column(length = 50, name = "id_plan")
+	private String  idPlan;
 	
-	@Column(length = 50, name = "homologa_cia_ded")
-	private String  homologaCiaDed;
+	@Column(length = 50, name = "id_ded")
+	private String  idDed;
 	
 	private Boolean  norenuncia;
 	
