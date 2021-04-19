@@ -416,10 +416,10 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
-	public List<String> findNumRut(String numRut, String digito) throws PcbsException {
+	public List<RutDto> findNumRut(String numRut, String digito) throws PcbsException {
 		String procedureBuscaRut = propertiesSql.getBUSCAR_RUT();
 
-		List<String> listNombreRut =  new ArrayList<>();
+		List<RutDto> listNombreRut =  new ArrayList<>();
 		List<Object[]> recordNombreRut=null;
 
 		try {
@@ -432,10 +432,12 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 			storedProcedureQuery.execute();
 			recordNombreRut = storedProcedureQuery.getResultList();
 
-
 			if(recordNombreRut!=null) {
 				recordNombreRut.stream().forEach(p -> {
-					listNombreRut.add((p[3]).toString());
+					RutDto rut = new RutDto();
+					rut.setNombre(p[3].toString());
+					rut.setDigito(p[2].toString());
+					listNombreRut.add(rut);
 				});
 			}
 
@@ -444,6 +446,37 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 			throw new PcbsException(e);
 		}
 		return listNombreRut;
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	@Transactional
+	public List<PlanCoberturaDto> listPlan(Long numRamo) throws PcbsException {
+		String procedurePlan = propertiesSql.getLISTAR_PLAN_COBERTURA();
+
+		List<PlanCoberturaDto> listPlan =  new ArrayList<>();
+		List<Object[]> recordPlans=null;
+
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedurePlan);
+			storedProcedureQuery.registerStoredProcedureParameter("ramo", Long.class, ParameterMode.IN);
+			storedProcedureQuery.setParameter("ramo", numRamo );
+			storedProcedureQuery.execute();
+			recordPlans = storedProcedureQuery.getResultList();
+
+			if(recordPlans!=null) {
+				recordPlans.stream().forEach(p -> {
+					PlanCoberturaDto plan = new PlanCoberturaDto();
+					plan.setMnemonic((p[0]).toString());
+					String stringToConvert = String.valueOf(p[1]);
+					plan.setCorrelative(Long.parseLong(stringToConvert));
+					plan.setDescription((p[2]).toString());
+					listPlan.add(plan);
+				});
+			}
+		} catch(Exception e) {
+			throw new PcbsException(e);
+		}
+		return listPlan;
 	}
 
 	@SuppressWarnings("unchecked")

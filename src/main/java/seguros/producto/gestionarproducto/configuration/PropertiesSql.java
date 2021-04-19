@@ -30,5 +30,6 @@ public class PropertiesSql {
 	private String LISTAR_PRODUCTOS_PAGINADO;
 	private String LISTAR_ASOCIADO;
 	private String LISTAR_ASOCIADO_EMISION;
+	private String LISTAR_PLAN_COBERTURA;
 
 }

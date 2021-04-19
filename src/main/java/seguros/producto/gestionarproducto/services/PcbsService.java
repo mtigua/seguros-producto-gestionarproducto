@@ -18,7 +18,8 @@ public interface PcbsService {
 	public List<EquivalenciaSeguroDto> findAllEquivalenciaSeguro(Long idCompania, Long idNegocio,Long idRamo) throws PcbsException;
 	public List<GrupoMejorOfertaDto> findAllGrupoMejorOferta() throws PcbsException;
 	public Integer findNumPoliza(String numPoliza, String digito, Long idCompania, Long idNegocio, Long idRamo) throws PcbsException;
-	public List<String> findNumRut(String numRut, String digito) throws PcbsException;
+	public List<RutDto> findNumRut(String numRut, String digito) throws PcbsException;
+	public List<PlanCoberturaDto> listPlan(Long numRamo) throws PcbsException;
 	public List<AsociadoDto> getAsociados() throws PcbsException;
 	public List<AsociadoDto> getAsociadosEmision() throws PcbsException;
 	public List<CatalogoCantidadCuotasDto> getCatalogoCantidadCuotas() throws PcbsException;

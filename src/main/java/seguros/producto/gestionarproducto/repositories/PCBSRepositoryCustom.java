@@ -16,7 +16,8 @@ public interface PCBSRepositoryCustom {
 	public List<GrupoDto> findAllGrupo() throws PcbsException;
 	public List<EquivalenciaSeguroDto> findAllEquivalenciaSeguro(Long idCompania, Long idNegocio,Long idRamo) throws PcbsException;
 	public List<RamoDto> findAllRamoByCompaniaNegocio(Long idCompania,Long idNegocio) throws PcbsException;
-	List<String> findNumRut(String numRut, String digito) throws PcbsException;
+	List<RutDto> findNumRut(String numRut, String digito) throws PcbsException;
+	List<PlanCoberturaDto> listPlan(Long numRut) throws PcbsException;
 	List<AsociadoDto> getAsociado() throws PcbsException;
 	List<AsociadoDto> getAsociadoEmision() throws PcbsException;
 	List<CatalogoCantidadCuotasDto> getCatalogoCuotas() throws PcbsException;
