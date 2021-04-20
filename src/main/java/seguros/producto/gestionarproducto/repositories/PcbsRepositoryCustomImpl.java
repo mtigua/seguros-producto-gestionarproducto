@@ -81,6 +81,7 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 					CompaniaDto companiaDto =  new CompaniaDto();
 					companiaDto.setId(Long.valueOf((p[0]).toString()));
 					companiaDto.setNombre(p[1].toString());
+					companiaDto.setTipo(p[2].toString());
 					listCompania.add(companiaDto); 
 				});
 			}
@@ -143,6 +144,7 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 					RamoDto ramoDto =  new RamoDto();
 					ramoDto.setId(Long.valueOf((p[0]).toString()));
 					ramoDto.setNombre(p[1].toString());
+					ramoDto.setTipo(p[2].toString());
 					listRamo.add(ramoDto); 
 				});
 			}

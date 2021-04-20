@@ -14,5 +14,6 @@ public class RamoDto  {
 		@NotBlank(message = "El campo nombre del ramo es requerido")
 		private String nombre;
 
+		private String tipo;
     
 }
