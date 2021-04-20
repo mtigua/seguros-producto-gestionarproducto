@@ -377,7 +377,6 @@ public class ProductoServiceImpl implements ProductoService {
 			estadoIntegracion.setState(State.Pendiente);
 			estadoIntegracion.setTipoAccion(ActionType.Crear);
 			
-			
 			estadoIntegracionService.save(estadoIntegracion);
 			
 			result= newNemotecnico;
