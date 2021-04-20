@@ -55,7 +55,7 @@ public class Producto  {
 	private String docuNroPoliza;	
 	
 	@Column(name = "docu_dig_poliza")
-	private Character docuDigPoliza;	
+	private String docuDigPoliza;
 	
 	@Column(name = "isae_numero")
 	private Integer isaeNumero;
@@ -80,9 +80,39 @@ public class Producto  {
 	
 	@Column(name = "pers_codigo_acre")
 	private Integer persCodigoAcre;
+
+	@Column(name = "conyuge")
+	private Boolean conyuge;
+
+	@Column(name = "otro")
+	private Boolean otro;
+
+	@Column(name = "padre")
+	private Boolean padre;
+
+	@Column(name = "madre")
+	private Boolean madre;
+
+	@Column(name = "hijo")
+	private Boolean hijo;
+
+	@Column(name = "el_mismo")
+	private Boolean elMismo;
+
+	@Column(name = "asegurado_cumulo")
+	private Boolean aseguradoCumulo;
+
+	@Column(name = "declaracion_principal")
+	private Boolean declaracionPrincipal;
+
+	@Column(name = "monto_aporte_cumulo")
+	private Long montoAporteCumulo;
 	
 	@Column(name = "pers_codigo_fact")
-	private Integer persCodigoFact;
+	private String persCodigoFact;
+
+	@Column(name = "pers_codigo_factA")
+	private String persCodigoFactA;
 	
 	@DecimalMax("99.999")
 	@Column(precision = 5, scale = 3, name = "porc_interes")
@@ -118,6 +148,12 @@ public class Producto  {
 	
 	@Column(name = "hijo_maxedad")
 	private Integer  hijoMaxedad;
+
+	@Column(name = "hijo_minedad")
+	private Integer  hijoMinedad;
+
+	@Column(name = "grupo_familiar")
+	private Boolean  grupoFamiliar;
 	
 	private Boolean  aprobacion;
 	
@@ -125,7 +161,7 @@ public class Producto  {
 	private Date docuFecIniVigencia;
 	
 	@Column(name = "requiere_beneficiarios")
-	private Integer  requiereBeneficiarios;
+	private Boolean  requiereBeneficiarios;
 	
 	@Column(name = "antiguedad_vehiculo")
 	private Integer  antiguedadVehiculo;
@@ -274,6 +310,9 @@ public class Producto  {
 	
 	@Column(name = "control_inspeccion")
 	private Boolean  controlInspeccion;
+
+	@Column(name = "declaracion_asegurado")
+	private Boolean  declaracionAsegurado;
 	
 	@Column(name = "dps_todos")
 	private Integer  dpsTodos;
@@ -283,15 +322,60 @@ public class Producto  {
 	
 	@Column(name = "retracto")
 	private Boolean  retracto;
+
+	@Column(name = "despliega_pregunta")
+	private Boolean  despliegaPregunta;
+
+	@Column(name = "valorizacion_plan")
+	private Boolean  valorizacionPlan;
+
+	@Column(name = "tarifa_interna_no_responde")
+	private Boolean  tarifaInternaNoResponde;
+
+	@Column(name = "usar_emision_poliza")
+	private Boolean  usarEmisionPoliza;
 	
 	@Column(name = "dias_retracto")
 	private Integer  diasRetracto;
+
+	@Column(name = "indique_codigo_emision")
+	private Integer  indiqueCodigoEmision;
+
+	@Column(name = "indique_codigo")
+	private Integer  indiqueCodigo;
+
+	@Column(name = "maxima_cantidad_asegurado")
+	private Integer  maximaCantidadAsegurado;
+
+	@Column(name = "cuota_web_pay")
+	private Integer  cuotaWebPay;
+
+	@Column(name = "vehiculo_hasta")
+	private Integer  vehiculoHasta;
+
+	@Column(name = "plan_cambio_auto")
+	private Integer  planCambioAuto;
+
+	@Column(name = "cantidad_cuotas")
+	private Integer  cantidadCuotas;
 	
 	@Column(precision =4 , scale=4, name = "valor_retracto")
 	private BigDecimal  valorRetracto;
 	
 	@Column(length = 5, name = "moneda_retracto")
 	private String  monedaRetracto;
+
+	@Column(length = 100, name = "antiguedad")
+	private String  antiguedad;
+
+	@Column(length = 200, name = "plantilla_html_declaracion1")
+	private String  plantillaHtmlDeclaracion1;
+
+	@Column(length = 200, name = "plantilla_html_declaracion2")
+	private String  plantillaHtmlDeclaracion2;
+
+	@Column(length = 200, name = "mensaje_popup")
+	private String  mensajePopup;
 	
 	@Column(name = "gen_vali_cm")
 	private Boolean  genValiCm;
@@ -406,7 +490,7 @@ public class Producto  {
 	@ManyToOne
 	@JoinColumn(name = "id_tipo_acreedor")
 	private  ModoTraspaso tipoAcreedor;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_tipo_facturar")
 	private  ModoTraspaso tipoFacturar;
