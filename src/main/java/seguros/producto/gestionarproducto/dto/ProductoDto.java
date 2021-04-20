@@ -184,7 +184,7 @@ public class ProductoDto {
 	
 	private Integer  inspeccion;
 	
-	private Integer  planPos;
+	private Boolean  ventaPos;
 	
 	private Boolean  tipoScoring;
 	
@@ -303,10 +303,10 @@ public class ProductoDto {
 	private String  homologaCiaProd;
 	
 	@Size(max=50)
-	private String  homologaCiaPlan;
+	private String  idPlan;
 	
 	@Size(max=50)
-	private String  homologaCiaDed;
+	private String  idDed;
 	
 	private Boolean  norenuncia;
 	
