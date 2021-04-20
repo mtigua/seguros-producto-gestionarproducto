@@ -111,8 +111,14 @@ public class Producto  {
 	@Column(name = "pers_codigo_fact")
 	private String persCodigoFact;
 
-	@Column(name = "pers_codigo_factA")
+	@Column(name = "pers_codigo_fact_a")
 	private String persCodigoFactA;
+
+	@Column(name = "pers_digito_fact")
+	private String persDigitoFact;
+
+	@Column(name = "pers_digito_fact_a")
+	private String persDigitoFactA;
 	
 	@DecimalMax("99.999")
 	@Column(precision = 5, scale = 3, name = "porc_interes")
