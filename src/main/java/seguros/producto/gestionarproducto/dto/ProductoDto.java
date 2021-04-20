@@ -36,11 +36,10 @@ public class ProductoDto {
 	private String domiMoneCod;
 	
 	private BigDecimal descuentoMax;
+
+	private Long docuNroPoliza;
 	
-	@Size(max=14)
-	private String docuNroPoliza;	
-	
-	private Character docuDigPoliza;	
+	private Character docuDigPoliza;
 	
 	private Integer isae_numero;
 	
@@ -67,8 +66,56 @@ public class ProductoDto {
 	
 	private Long tipoFacturar;
 	
-	private Integer persCodigoFact;
-	
+	private String persCodigoFact;
+
+	private String persDigitoFact;
+
+	private Integer persCodigoFactA;
+
+	private String persDigitoFactA;
+
+	// vida / vehiculo
+
+	private Integer edadMaximaHijo;
+
+	private Integer edadMinimaHijo;
+
+	private Boolean grupoFamiliar;
+
+	private Boolean recalculaTramoEdad;
+
+	private Boolean conyuge;
+
+	private Boolean otro;
+	private Boolean padre;
+	private Boolean madre;
+	private Boolean hijo;
+	private Boolean elMismo;
+	private Boolean aseguradoCumulo;
+	private Long montoAporteCumulo;
+	private Integer mesesCastigo;
+	private Boolean declaracionPrincipal;
+	private Boolean declaracionAsegurado;
+	private String mensajePopup;
+	private Integer maximaCantidadAsegurado;
+	private String plantillaHtmlDeclaracion1;
+	private String plantillaHtmlDeclaracion2;
+	private Integer vehiculoHasta;
+	private String antiguedad;
+	private Boolean despliegaPregunta;
+	private Boolean controlInspeccion;
+	private Integer cantidadCuotas;
+	private Integer planCambioAuto;
+	private Integer cuotaWebPay;
+	private Boolean valorizacionPlan;
+	private Boolean usarEmisionPoliza;
+	private Integer indiqueCodigo;
+	private Integer indiqueCodigoEmision;
+	private Boolean tarifaInternaNoResponde;
+
+
+
+
 	//@Digits(integer=2, fraction=3)
 //	@DecimalMax("99.999")
 //	@Column(precision = 5, scale = 3, name = "porc_interes")
@@ -104,7 +151,7 @@ public class ProductoDto {
 	
 	private Date docuFecIniVigencia;
 	
-	private Integer  requiereBeneficiarios;
+	private Boolean  requiereBeneficiarios;
 	
 	private Integer  antiguedadVehiculo;
 	
@@ -127,12 +174,10 @@ public class ProductoDto {
 	private Boolean  garantiaSatisfaccion;
 	
 	private Integer  diasVigenGarantiaSatis;
-	
-	@Size(max=14)
-	private String  nroPolizaMinimo;
-	
-	@Size(max=14)
-	private String  nroPolizaMaximo;
+
+	private Long  nroPolizaMinimo;
+
+	private Long  nroPolizaMaximo;
 	
 	@Size(max=14)
 	private String  nroPolizaSiguiente;
@@ -211,10 +256,6 @@ public class ProductoDto {
 	private Boolean  permVtaEjec;
 	
 	private Integer  mesesPermanencia;
-	
-	private Integer  mesesCastigo;
-	
-	private Boolean  controlInspeccion;
 	
 	private Integer  dpsTodos;
 	
@@ -315,6 +356,8 @@ public class ProductoDto {
 	
 	@NotBlank(message =  "La contrasena del product manager es requerido")
 	private String palabaraPaseProductManager;
+
+
 	
 	
 	@JsonIgnore 
