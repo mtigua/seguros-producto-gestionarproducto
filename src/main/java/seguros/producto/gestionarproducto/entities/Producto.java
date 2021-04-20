@@ -108,16 +108,16 @@ public class Producto  {
 	@Column(name = "monto_aporte_cumulo")
 	private Long montoAporteCumulo;
 	
-	@Column(name = "pers_codigo_fact")
+	@Column(name = "pers_codigo_fact_individual")
 	private String persCodigoFact;
 
-	@Column(name = "pers_codigo_fact_a")
+	@Column(name = "pers_codigo_fact")
 	private String persCodigoFactA;
 
-	@Column(name = "pers_digito_fact")
+	@Column(name = "pers_digito_acre_individual")
 	private String persDigitoFact;
 
-	@Column(name = "pers_digito_fact_a")
+	@Column(name = "pers_digito_acre")
 	private String persDigitoFactA;
 	
 	@DecimalMax("99.999")
