@@ -153,7 +153,7 @@ public class Producto  {
 	private String  producto;
 	
 	@Column(name = "hijo_maxedad")
-	private Integer  hijoMaxedad;
+	private Integer  hijoMaxEdad;
 
 	@Column(name = "edad_minimo_ingreso")
 	private Integer  edadMinimaIngreso;
