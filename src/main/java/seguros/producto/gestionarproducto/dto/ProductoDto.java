@@ -94,8 +94,8 @@ public class ProductoDto {
 	private String plantillaHtmlDeclaracion2;
 	private Integer vehiculoHasta;
 	private Boolean controlInspeccion;
-	private Integer indiqueCodigo;
-	private Integer indiqueCodigoEmision;
+	private Integer indiqueCodigoWs;
+	private Integer indiqueCodigoEmisionWs;
 
 
 
@@ -257,13 +257,11 @@ public class ProductoDto {
 
 	private Integer ggmCod;
 
-	private Integer  usaWs;
+	private Boolean  usaWs;
 
 	private Integer  wsCodigo;
 
-	private Boolean  usaEmision;
-
-	private Integer  wsEmisionCodigo;
+	private Boolean  usaWsEmision;
 
 	private Boolean  tarifaNows;
 

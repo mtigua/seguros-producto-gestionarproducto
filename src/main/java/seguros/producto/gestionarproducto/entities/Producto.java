@@ -324,11 +324,11 @@ public class Producto  {
 	@Column(name = "dias_retracto")
 	private Integer  diasRetracto;
 
-	@Column(name = "indique_codigo_emision")
-	private Integer  indiqueCodigoEmision;
+	@Column(name = "indique_codigo_emision_ws")
+	private Integer  indiqueCodigoEmisionWs;
 
-	@Column(name = "indique_codigo")
-	private Integer  indiqueCodigo;
+	@Column(name = "indique_codigo_ws")
+	private Integer  indiqueCodigoWs;
 
 	@Column(name = "vehiculo_hasta")
 	private Integer  vehiculoHasta;
@@ -358,17 +358,14 @@ public class Producto  {
 	private Integer ggmCod;
 	
 	@Column(name = "usa_ws")
-	private Integer  usaWs;
+	private Boolean  usaWs;
 	
 	@Column(name = "ws_codigo")
 	private Integer  wsCodigo;
 	
-	@Column(name = "usa_emision")
-	private Boolean  usaEmision;
-	
-	@Column(name = "ws_emision_codigo")
-	private Integer  wsEmisionCodigo;
-	
+	@Column(name = "usa_ws_emision")
+	private Boolean  usaWsEmision;
+
 	@Column(name = "tarifa_nows")
 	private Boolean  tarifaNows;
 	
