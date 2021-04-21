@@ -203,7 +203,7 @@ public class Producto  {
 	@Column(length = 14, name = "nro_poliza_siguiente")
 	private String  nroPolizaSiguiente;
 	
-	private Integer  inspeccion;
+	private Boolean  inspeccion;
 	
 	@Column(name = "venta_pos")
 	private Boolean  ventaPos;

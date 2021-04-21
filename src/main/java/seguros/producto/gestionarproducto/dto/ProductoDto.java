@@ -167,7 +167,7 @@ public class ProductoDto {
 	@Size(max=14)
 	private String  nroPolizaSiguiente;
 	
-	private Integer  inspeccion;
+	private Boolean  inspeccion;
 	
 	private Boolean  ventaPos;
 	
