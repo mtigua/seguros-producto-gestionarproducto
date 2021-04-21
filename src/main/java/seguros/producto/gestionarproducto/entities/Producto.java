@@ -155,8 +155,8 @@ public class Producto  {
 	@Column(name = "hijo_maxedad")
 	private Integer  hijoMaxedad;
 
-	@Column(name = "hijo_minedad")
-	private Integer  hijoMinedad;
+	@Column(name = "edad_minimo_ingreso")
+	private Integer  edadMinimaIngreso;
 	
 	private Boolean  aprobacion;
 	
