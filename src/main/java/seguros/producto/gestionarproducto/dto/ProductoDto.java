@@ -184,7 +184,7 @@ public class ProductoDto {
 	
 	private String  docRenuncia;
 	
-	private Integer  recalculaEdad;
+	private Boolean  recalculaEdad;
 	
 	private BigDecimal  cumuloAporte;
 	
