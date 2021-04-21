@@ -55,7 +55,7 @@ public class Producto  {
 	private String docuNroPoliza;	
 	
 	@Column(name = "docu_dig_poliza")
-	private String docuDigPoliza;
+	private Character docuDigPoliza;
 	
 	@Column(name = "isae_numero")
 	private Integer isaeNumero;
@@ -105,20 +105,20 @@ public class Producto  {
 	@Column(name = "declaracion_principal")
 	private Boolean declaracionPrincipal;
 
-	@Column(name = "monto_aporte_cumulo")
-	private Long montoAporteCumulo;
+	@Column(name = "cumulo_aporte")
+	private Long cumuloAporte;
 	
 	@Column(name = "pers_codigo_fact_individual")
 	private String persCodigoFact;
 
-	@Column(name = "pers_codigo_fact")
-	private String persCodigoFactA;
-
 	@Column(name = "pers_digito_acre_individual")
 	private String persDigitoFact;
 
+	@Column(name = "pers_codigo_fact")
+	private String persCodigoFactSingle;
+
 	@Column(name = "pers_digito_acre")
-	private String persDigitoFactA;
+	private String persDigitoFactSingle;
 	
 	@DecimalMax("99.999")
 	@Column(precision = 5, scale = 3, name = "porc_interes")
@@ -157,9 +157,6 @@ public class Producto  {
 
 	@Column(name = "hijo_minedad")
 	private Integer  hijoMinedad;
-
-	@Column(name = "grupo_familiar")
-	private Boolean  grupoFamiliar;
 	
 	private Boolean  aprobacion;
 	
@@ -231,9 +228,6 @@ public class Producto  {
 	@Column(name = "recalcula_edad")
 	private Integer  recalculaEdad;
 	
-	@Column(name = "cumulo_aporte")
-	private BigDecimal  cumuloAporte;
-	
 	@Column(name = "cumulo_unico")
 	private Integer  cumuloUnico;
 	
@@ -270,8 +264,6 @@ public class Producto  {
 	@Column(name = "registra_vitrineo")
 	private Boolean  registraVitrineo;
 	
-	private Integer  dps;
-	
 	@Column(name = "permite_bloqueados")
 	private Boolean  permiteBloqueados;
 	
@@ -292,6 +284,9 @@ public class Producto  {
 	
 	@Column(name = "ofrece_mejor_alt")
 	private Boolean  ofreceMejorAlt;
+
+	@Column(name = "usa_wb")
+	private Boolean  usaWb;
 	
 	private Boolean  upgrade;
 	
@@ -318,28 +313,13 @@ public class Producto  {
 	private Boolean  controlInspeccion;
 
 	@Column(name = "declaracion_asegurado")
-	private Boolean  declaracionAsegurado;
-	
-	@Column(name = "dps_todos")
-	private Integer  dpsTodos;
+	private Boolean  declaracionAseguradoTodos;
 	
 	@Column(name = "max_cant_asegurados")
 	private Integer  maxCantAsegurados;
 	
 	@Column(name = "retracto")
 	private Boolean  retracto;
-
-	@Column(name = "despliega_pregunta")
-	private Boolean  despliegaPregunta;
-
-	@Column(name = "valorizacion_plan")
-	private Boolean  valorizacionPlan;
-
-	@Column(name = "tarifa_interna_no_responde")
-	private Boolean  tarifaInternaNoResponde;
-
-	@Column(name = "usar_emision_poliza")
-	private Boolean  usarEmisionPoliza;
 	
 	@Column(name = "dias_retracto")
 	private Integer  diasRetracto;
@@ -350,20 +330,8 @@ public class Producto  {
 	@Column(name = "indique_codigo")
 	private Integer  indiqueCodigo;
 
-	@Column(name = "maxima_cantidad_asegurado")
-	private Integer  maximaCantidadAsegurado;
-
-	@Column(name = "cuota_web_pay")
-	private Integer  cuotaWebPay;
-
 	@Column(name = "vehiculo_hasta")
 	private Integer  vehiculoHasta;
-
-	@Column(name = "plan_cambio_auto")
-	private Integer  planCambioAuto;
-
-	@Column(name = "cantidad_cuotas")
-	private Integer  cantidadCuotas;
 	
 	@Column(precision =4 , scale=4, name = "valor_retracto")
 	private BigDecimal  valorRetracto;
@@ -371,17 +339,14 @@ public class Producto  {
 	@Column(length = 5, name = "moneda_retracto")
 	private String  monedaRetracto;
 
-	@Column(length = 100, name = "antiguedad")
-	private String  antiguedad;
-
 	@Column(length = 200, name = "plantilla_html_declaracion1")
 	private String  plantillaHtmlDeclaracion1;
 
 	@Column(length = 200, name = "plantilla_html_declaracion2")
 	private String  plantillaHtmlDeclaracion2;
 
-	@Column(length = 200, name = "mensaje_popup")
-	private String  mensajePopup;
+	@Column(length = 200, name = "plan_dps_textos")
+	private String  planDpsTextos;
 	
 	@Column(name = "gen_vali_cm")
 	private Boolean  genValiCm;
@@ -405,7 +370,7 @@ public class Producto  {
 	private Integer  wsEmisionCodigo;
 	
 	@Column(name = "tarifa_nows")
-	private Integer  tarifaNows;
+	private Boolean  tarifaNows;
 	
 	@Column(length = 50, name = "homologa_cia_prod")
 	private String  homologaCiaProd;
