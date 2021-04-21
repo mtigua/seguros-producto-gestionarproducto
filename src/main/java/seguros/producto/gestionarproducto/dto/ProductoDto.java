@@ -72,6 +72,7 @@ public class ProductoDto {
 
 	private String persDigitoFactSingle;
 
+	// no seteable
 	private String persCodigoFactIndividual;
 
 	// vida / vehiculo
