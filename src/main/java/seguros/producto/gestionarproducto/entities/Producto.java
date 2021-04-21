@@ -226,7 +226,7 @@ public class Producto  {
 	private String  docRenuncia;
 	
 	@Column(name = "recalcula_edad")
-	private Integer  recalculaEdad;
+	private Boolean  recalculaEdad;
 	
 	@Column(name = "cumulo_unico")
 	private Integer  cumuloUnico;
