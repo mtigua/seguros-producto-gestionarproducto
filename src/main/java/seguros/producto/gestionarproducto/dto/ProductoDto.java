@@ -226,8 +226,6 @@ public class ProductoDto {
 
 	private Boolean  upgrade;
 
-	private Boolean  usaWb;
-
 	private Boolean  permVta0;
 
 	private Boolean  renCorInme;
@@ -258,8 +256,6 @@ public class ProductoDto {
 	private Integer ggmCod;
 
 	private Boolean  usaWs;
-
-	private Integer  wsCodigo;
 
 	private Boolean  usaWsEmision;
 

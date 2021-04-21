@@ -284,9 +284,6 @@ public class Producto  {
 	
 	@Column(name = "ofrece_mejor_alt")
 	private Boolean  ofreceMejorAlt;
-
-	@Column(name = "usa_wb")
-	private Boolean  usaWb;
 	
 	private Boolean  upgrade;
 	
@@ -359,9 +356,6 @@ public class Producto  {
 	
 	@Column(name = "usa_ws")
 	private Boolean  usaWs;
-	
-	@Column(name = "ws_codigo")
-	private Integer  wsCodigo;
 	
 	@Column(name = "usa_ws_emision")
 	private Boolean  usaWsEmision;
