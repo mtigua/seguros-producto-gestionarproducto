@@ -397,18 +397,6 @@ public class Producto  {
 	private Boolean perMensual;
 	
 	private Boolean perCuotas;
-	
-    private Boolean parenEsConyuge;
-	
-	private Boolean parenEsMadre;
-	
-	private Boolean parenEsOtro;
-	
-	private Boolean parenEsPadre;
-	
-	private Boolean parenElMismo;
-	
-	private Boolean parenEsHijo;	
 
 	@ManyToOne
 	@JoinColumn(name = "id_tipo_seguro", nullable=false)
