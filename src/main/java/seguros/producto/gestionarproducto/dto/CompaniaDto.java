@@ -13,6 +13,8 @@ public class CompaniaDto  {
 		
 		@NotBlank(message = "El campo nombre de la compania es requerido")
 		private String nombre;
+		
+		private String tipo;
 
     
 }

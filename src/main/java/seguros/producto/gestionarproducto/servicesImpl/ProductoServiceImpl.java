@@ -3,6 +3,7 @@ package seguros.producto.gestionarproducto.servicesImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
@@ -30,6 +31,7 @@ import seguros.producto.gestionarproducto.entities.TipoRecargo;
 import seguros.producto.gestionarproducto.entities.TipoSeguro;
 import seguros.producto.gestionarproducto.entities.TipoTarifa;
 import seguros.producto.gestionarproducto.entities.TipoTraspaso;
+import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
 import seguros.producto.gestionarproducto.repositories.ModoTraspasoRepository;
 import seguros.producto.gestionarproducto.repositories.PCBSRepositoryCustom;
 import seguros.producto.gestionarproducto.repositories.ProductoRepository;
@@ -53,6 +55,7 @@ public class ProductoServiceImpl implements ProductoService {
 	
 
 	private static final Long VALUE_UNDEFINED=-1L;
+	private static final String MSG_NOT_FOUND = "El recurso solicitado no existe";
 	
 	@Autowired
 	private ProductoRepository productoRepository;
@@ -301,6 +304,38 @@ public class ProductoServiceImpl implements ProductoService {
 		try {
 			 result = restTemplate.postForObject(urlDecrypt, palabrasePase, String.class);
 			
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+		return result;
+	}
+
+	@Override
+	public String getPassProductManagerByIdProducto(Long idProducto) throws ProductoException,ResourceNotFoundException {
+		String result = null;
+		String urlDecript= properties.getUrl_decrypt();
+		
+		try {
+			Optional<Producto> producto= productoRepository.findById(idProducto);
+			if(producto.isPresent()) {
+				Producto productoEntitiy = producto.get();
+				String palabraPase = productoEntitiy.getPalabaraPaseProductManager();
+
+				result = restTemplate.postForObject(urlDecript, palabraPase, String.class);
+			}
+			else {
+				ResourceNotFoundException e = new ResourceNotFoundException();
+				e.setConcreteException(e);
+				e.setErrorMessage(MSG_NOT_FOUND);
+				e.setDetail(MSG_NOT_FOUND);
+				throw e;
+			}
+			   
+			
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
 		}
 		catch(Exception e) {
 			throw new ProductoException(e);

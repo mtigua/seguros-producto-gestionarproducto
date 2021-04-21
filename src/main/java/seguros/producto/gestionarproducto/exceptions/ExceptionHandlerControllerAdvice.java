@@ -72,6 +72,21 @@ public class ExceptionHandlerControllerAdvice  extends ResponseEntityExceptionHa
 			logger.error(ex.getMessage());
 			return new ResponseEntity<Object>(error, headers, HttpStatus.NOT_FOUND);
 	}
+	 
+
+		@ExceptionHandler(ResourceNotFoundException.class)
+		public ResponseEntity<ExceptionResponse> handleNotFoundException(final ResourceNotFoundException e, final HttpServletRequest request) {
+			ExceptionResponse error = new ExceptionResponse();
+			error.setErrorMessage(e.getErrorMessage());
+			JsonObject details = new JsonObject();
+			details.addProperty(FIELD_ERROR, e.getDetail());
+			details.addProperty(FIELD_SUBJECT, e.getSubject());
+			error.setDetails(details);
+			error.setRequestedURI(request.getRequestURI());
+			logger.error(e.getDetail());
+			return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+		}	
+		
 
 	@Override
 	 protected ResponseEntity<Object> handleServletRequestBindingException(ServletRequestBindingException ex,HttpHeaders headers, HttpStatus status, WebRequest request) {
