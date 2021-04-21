@@ -167,7 +167,7 @@ public class Producto  {
 	private Boolean  requiereBeneficiarios;
 	
 	@Column(name = "antiguedad_vehiculo")
-	private Integer  antiguedadVehiculo;
+	private String  antiguedadVehiculo;
 	
 	private Boolean  multitarifa;
 	
