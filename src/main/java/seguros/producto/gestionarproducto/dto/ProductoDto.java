@@ -138,7 +138,7 @@ public class ProductoDto {
 	
 	private Boolean  requiereBeneficiarios;
 	
-	private Integer  antiguedadVehiculo;
+	private String  antiguedadVehiculo;
 	
 	private Boolean  multitarifa;
 	
