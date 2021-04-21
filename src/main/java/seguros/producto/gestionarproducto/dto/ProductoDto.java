@@ -264,7 +264,7 @@ public class ProductoDto {
 	
 	private Integer  wsCodigo;
 	
-	private Integer  usaEmision;
+	private Boolean  usaEmision;
 	
 	private Integer  wsEmisionCodigo;
 	

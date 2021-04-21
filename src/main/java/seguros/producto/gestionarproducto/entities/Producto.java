@@ -364,7 +364,7 @@ public class Producto  {
 	private Integer  wsCodigo;
 	
 	@Column(name = "usa_emision")
-	private Integer  usaEmision;
+	private Boolean  usaEmision;
 	
 	@Column(name = "ws_emision_codigo")
 	private Integer  wsEmisionCodigo;
