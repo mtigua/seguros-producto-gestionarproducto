@@ -77,7 +77,7 @@ public class ProductoDto {
 	// vida / vehiculo
 
 	private Integer hijoMaxEdad;
-	private Integer hijoMinEdad;
+	private Integer edadMinimaIngreso;
 	private Boolean conyuge;
 	private Boolean otro;
 	private Boolean padre;
