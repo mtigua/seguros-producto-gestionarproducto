@@ -37,7 +37,7 @@ public class ProductoDto {
 	
 	private BigDecimal descuentoMax;
 
-	private Long docuNroPoliza;
+	private String docuNroPoliza;
 	
 	private Character docuDigPoliza;
 	
@@ -63,55 +63,40 @@ public class ProductoDto {
 	private Long tipoAcreedor;
 	
 	private Integer persCodigoAcre;
-	
-	private Long tipoFacturar;
-	
-	private String persCodigoFact;
 
 	private String persDigitoFact;
+	
+	private Long tipoFacturar;
 
-	private Integer persCodigoFactA;
+	private Integer persCodigoFactSingle;
 
-	private String persDigitoFactA;
+	private String persDigitoFactSingle;
+
+	private String persCodigoFactIndividual;
 
 	// vida / vehiculo
 
-	private Integer edadMaximaHijo;
-
-	private Integer edadMinimaHijo;
-
-	private Boolean grupoFamiliar;
-
-	private Boolean recalculaTramoEdad;
+	private Integer hijoMaxEdad;
+	private Integer hijoMinEdad;
 
 	private Boolean conyuge;
-
 	private Boolean otro;
 	private Boolean padre;
 	private Boolean madre;
 	private Boolean hijo;
 	private Boolean elMismo;
 	private Boolean aseguradoCumulo;
-	private Long montoAporteCumulo;
+
 	private Integer mesesCastigo;
 	private Boolean declaracionPrincipal;
-	private Boolean declaracionAsegurado;
-	private String mensajePopup;
-	private Integer maximaCantidadAsegurado;
+	private Boolean declaracionAseguradoTodos;
+	private String planDpsTextos;
 	private String plantillaHtmlDeclaracion1;
 	private String plantillaHtmlDeclaracion2;
 	private Integer vehiculoHasta;
-	private String antiguedad;
-	private Boolean despliegaPregunta;
 	private Boolean controlInspeccion;
-	private Integer cantidadCuotas;
-	private Integer planCambioAuto;
-	private Integer cuotaWebPay;
-	private Boolean valorizacionPlan;
-	private Boolean usarEmisionPoliza;
 	private Integer indiqueCodigo;
 	private Integer indiqueCodigoEmision;
-	private Boolean tarifaInternaNoResponde;
 
 
 
@@ -175,9 +160,9 @@ public class ProductoDto {
 	
 	private Integer  diasVigenGarantiaSatis;
 
-	private Long  nroPolizaMinimo;
+	private String  nroPolizaMinimo;
 
-	private Long  nroPolizaMaximo;
+	private String  nroPolizaMaximo;
 	
 	@Size(max=14)
 	private String  nroPolizaSiguiente;
@@ -228,8 +213,6 @@ public class ProductoDto {
 	
 	private Boolean  registraVitrineo;
 	
-	private Integer  dps;
-	
 	private Boolean  permiteBloqueados;
 	
 	private Boolean  igualaTarifa;
@@ -245,6 +228,8 @@ public class ProductoDto {
 	private Boolean  ofreceMejorAlt;
 	
 	private Boolean  upgrade;
+
+	private Boolean  usaWb;
 	
 	private Boolean  permVta0;
 	
@@ -256,8 +241,6 @@ public class ProductoDto {
 	private Boolean  permVtaEjec;
 	
 	private Integer  mesesPermanencia;
-	
-	private Integer  dpsTodos;
 	
 	private Integer  maxCantAsegurados;
 	
@@ -285,7 +268,7 @@ public class ProductoDto {
 	
 	private Integer  wsEmisionCodigo;
 	
-	private Integer  tarifaNows;	
+	private Boolean  tarifaNows;
 
     private Boolean parenEsConyuge;
 	

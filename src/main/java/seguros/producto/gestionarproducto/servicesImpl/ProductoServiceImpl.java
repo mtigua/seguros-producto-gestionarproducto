@@ -155,18 +155,6 @@ public class ProductoServiceImpl implements ProductoService {
 				   productoEntity.setTipoSeguro(tipoSeguro);
 				}
 			}
-			if(producto.getDocuNroPoliza()!=null && !VALUE_UNDEFINED.equals(producto.getDocuNroPoliza()) ) {
-				productoEntity.setDocuDigPoliza(producto.getDocuNroPoliza().toString());
-			}
-			if(producto.getDocuDigPoliza() != null) {
-				productoEntity.setDocuDigPoliza(producto.getDocuDigPoliza().toString());
-			}
-			if(producto.getNroPolizaMinimo()!=null && !VALUE_UNDEFINED.equals(producto.getNroPolizaMinimo()) ) {
-				productoEntity.setNroPolizaMinimo(producto.getNroPolizaMinimo().toString());
-			}
-			if(producto.getNroPolizaMaximo()!=null && !VALUE_UNDEFINED.equals(producto.getNroPolizaMaximo()) ) {
-				productoEntity.setNroPolizaMaximo(producto.getNroPolizaMaximo().toString());
-			}
 			if(producto.getTipoAcreedor()!=null && !VALUE_UNDEFINED.equals(producto.getTipoAcreedor())) {
 				ModoTraspaso tipoAcreedor = modoTraspasoRepository.getOne(producto.getTipoAcreedor());
 				if(tipoAcreedor.getId()!=null) {
@@ -179,121 +167,6 @@ public class ProductoServiceImpl implements ProductoService {
 					productoEntity.setTipoFacturar(tipoFacturar);
 				}
 			}
-			if(producto.getDocuFecTerVigencia() != null) {
-				productoEntity.setDocuFecTerVigencia(producto.getDocuFecTerVigencia());
-			}
-			if(producto.getPersCodigoFact() != null) {
-				productoEntity.setPersCodigoFact(producto.getPersCodigoFact());
-			}
-			if(producto.getPersDigitoFact() != null) {
-				productoEntity.setPersCodigoFact(producto.getPersDigitoFact());
-			}
-			if(producto.getPersDigitoFactA() != null) {
-				productoEntity.setPersCodigoFactA(producto.getPersDigitoFactA());
-			}
-
-			// vehiculo
-			if(producto.getEdadMaximaHijo() != null) {
-				productoEntity.setHijoMaxedad(producto.getEdadMaximaHijo());
-			}
-			if(producto.getEdadMinima() != null) {
-				productoEntity.setHijoMinedad(producto.getEdadMinima());
-			}
-			if(producto.getGrupoFamiliar() != null) {
-				productoEntity.setGrupoFamiliar(producto.getGrupoFamiliar());
-			}
-			if(producto.getRequiereBeneficiarios() != null) {
-				productoEntity.setRequiereBeneficiarios(producto.getRequiereBeneficiarios());
-			}
-			if(producto.getRecalculaEdad() != null) {
-				productoEntity.setRecalculaEdad(producto.getRecalculaEdad());
-			}
-			if(producto.getConyuge() != null) {
-				productoEntity.setConyuge(producto.getConyuge());
-			}
-			if(producto.getOtro() != null) {
-				productoEntity.setOtro(producto.getOtro());
-			}
-			if(producto.getPadre() != null) {
-				productoEntity.setPadre(producto.getPadre());
-			}
-			if(producto.getMadre() != null) {
-				productoEntity.setMadre(producto.getMadre());
-			}
-			if(producto.getHijo() != null) {
-				productoEntity.setHijo(producto.getHijo());
-			}
-			if(producto.getElMismo() != null) {
-				productoEntity.setElMismo(producto.getElMismo());
-			}
-			if(producto.getAseguradoCumulo() != null) {
-				productoEntity.setAseguradoCumulo(producto.getAseguradoCumulo());
-			}
-			if(producto.getMontoAporteCumulo()!=null && !VALUE_UNDEFINED.equals(producto.getMontoAporteCumulo()) ) {
-				productoEntity.setMontoAporteCumulo(producto.getMontoAporteCumulo());
-			}
-			if(producto.getMesesPermanencia() != null) {
-				productoEntity.setMesesPermanencia(producto.getMesesPermanencia());
-			}
-			if(producto.getMesesCastigo() != null) {
-				productoEntity.setMesesCastigo(producto.getMesesCastigo());
-			}
-			if(producto.getDeclaracionPrincipal() != null) {
-				productoEntity.setDeclaracionPrincipal(producto.getDeclaracionPrincipal());
-			}
-			if(producto.getDeclaracionAsegurado() != null) {
-				productoEntity.setDeclaracionAsegurado(producto.getDeclaracionAsegurado());
-			}
-			if(producto.getMensajePopup() != null) {
-				productoEntity.setMensajePopup(producto.getMensajePopup());
-			}
-			if(producto.getMaximaCantidadAsegurado() != null) {
-				productoEntity.setMaximaCantidadAsegurado(producto.getMaximaCantidadAsegurado());
-			}
-			if(producto.getPlantillaHtmlDeclaracion1() != null) {
-				productoEntity.setPlantillaHtmlDeclaracion1(producto.getPlantillaHtmlDeclaracion1());
-			}
-			if(producto.getPlantillaHtmlDeclaracion2() != null) {
-				productoEntity.setPlantillaHtmlDeclaracion2(producto.getPlantillaHtmlDeclaracion2());
-			}
-			if(producto.getVehiculoHasta() != null) {
-				productoEntity.setVehiculoHasta(producto.getVehiculoHasta());
-			}
-			if(producto.getAntiguedad() != null) {
-				productoEntity.setAntiguedad(producto.getAntiguedad());
-			}
-			if(producto.getDespliegaPregunta() != null) {
-				productoEntity.setDespliegaPregunta(producto.getDespliegaPregunta());
-			}
-			if(producto.getControlInspeccion() != null) {
-				productoEntity.setControlInspeccion(producto.getControlInspeccion());
-			}
-			if(producto.getCantidadCuotas() != null) {
-				productoEntity.setCantidadCuotas(producto.getCantidadCuotas());
-			}
-			if(producto.getPlanCambioAuto() != null) {
-				productoEntity.setPlanCambioAuto(producto.getPlanCambioAuto());
-			}
-			if(producto.getCuotaWebPay() != null) {
-				productoEntity.setCuotaWebPay(producto.getCuotaWebPay());
-			}
-			if(producto.getValorizacionPlan() != null) {
-				productoEntity.setValorizacionPlan(producto.getValorizacionPlan());
-			}
-			if(producto.getUsarEmisionPoliza() != null) {
-				productoEntity.setUsarEmisionPoliza(producto.getUsarEmisionPoliza());
-			}
-			if(producto.getIndiqueCodigo() != null) {
-				productoEntity.setIndiqueCodigo(producto.getIndiqueCodigo());
-			}
-			if(producto.getIndiqueCodigoEmision() != null) {
-				productoEntity.setIndiqueCodigoEmision(producto.getIndiqueCodigoEmision());
-			}
-			if(producto.getTarifaInternaNoResponde() != null) {
-				productoEntity.setTarifaInternaNoResponde(producto.getTarifaInternaNoResponde());
-			}
-
-
 			if(producto.getTipoPromocion()!=null && !VALUE_UNDEFINED.equals(producto.getTipoPromocion()) ) {
 				TipoPromocion tipoPromocion = tipoPromocionRepository.getOne(producto.getTipoPromocion());
 				if(tipoPromocion.getId()!=null) {
@@ -352,8 +225,7 @@ public class ProductoServiceImpl implements ProductoService {
 						productoDo.setDoplAQuienSeVende(destinoVenta);	
 					}				
 					productoEntity.setProductDo(productoDo);
-				}				
-				
+				}
 			}			
 				
 			
