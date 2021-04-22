@@ -330,7 +330,7 @@ public class Producto  {
 	@Column(name = "vehiculo_hasta")
 	private Integer  vehiculoHasta;
 	
-	@Column(precision =4 , scale=4, name = "valor_retracto")
+	@Column(precision =8 , scale=4, name = "valor_retracto")
 	private BigDecimal  valorRetracto;
 	
 	@Column(length = 5, name = "moneda_retracto")
