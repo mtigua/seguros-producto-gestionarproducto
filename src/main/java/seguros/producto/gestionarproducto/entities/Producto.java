@@ -77,9 +77,6 @@ public class Producto  {
 	
 	@Column(name = "pers_codigo_ejec")
 	private Integer persCodigoEjec;
-	
-	@Column(name = "pers_codigo_acre")
-	private Integer persCodigoAcre;
 
 	@Column(name = "conyuge")
 	private Boolean conyuge;
