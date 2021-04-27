@@ -168,7 +168,7 @@ public class ProductoDto {
 
 	private Boolean  tipoScoring;
 
-//	@Column(precision = 8,scale = 4, name="prima_minima_anual")
+	//	@Column(precision = 8,scale = 4, name="prima_minima_anual")
 	private BigDecimal  primaMinimaAnual;
 
 	private Boolean excluyePreferente;
