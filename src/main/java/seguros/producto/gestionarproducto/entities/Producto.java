@@ -127,7 +127,7 @@ public class Producto  {
 	@Column(precision = 5, scale = 3, name = "porc_interes")
 	private BigDecimal   porcInteres;
 	
-	@Column(name = "prima_minima")
+	@Column( precision = 8, scale = 4,name = "prima_minima")
 	private BigDecimal  primaMinima;
 	
 	@Column(scale = 2, name = "capital_minimo")
@@ -333,7 +333,7 @@ public class Producto  {
 	@Column(name = "vehiculo_hasta")
 	private Integer  vehiculoHasta;
 	
-	@Column(precision =4 , scale=4, name = "valor_retracto")
+	@Column(precision =8 , scale=4, name = "valor_retracto")
 	private BigDecimal  valorRetracto;
 	
 	@Column(length = 5, name = "moneda_retracto")
