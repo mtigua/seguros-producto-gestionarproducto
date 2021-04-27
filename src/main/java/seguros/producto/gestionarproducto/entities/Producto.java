@@ -103,7 +103,7 @@ public class Producto  {
 	private Boolean declaracionPrincipal;
 
 	@Column(name = "cumulo_aporte")
-	private Long cumuloAporte;
+	private BigDecimal cumuloAporte;
 
 	// acreedores
 	@Column(name = "pers_digito_acre")
