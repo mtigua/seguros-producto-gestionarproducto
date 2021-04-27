@@ -64,16 +64,14 @@ public class ProductoDto {
 
 	private Integer persCodigoAcre;
 
-	private String persDigitoFact;
+	private String persDigitoAcre;
 
-	private Long tipoFacturar;
-
-	private Integer persCodigoFactSingle;
+	private String persCodigoFactSingle;
 
 	private String persDigitoFactSingle;
 
-	// no seteable
-	private String persCodigoFactIndividual;
+	private Long tipoFacturar;
+
 
 	// vida / vehiculo
 
