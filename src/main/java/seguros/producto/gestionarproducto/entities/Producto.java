@@ -77,9 +77,6 @@ public class Producto  {
 	
 	@Column(name = "pers_codigo_ejec")
 	private Integer persCodigoEjec;
-	
-	@Column(name = "pers_codigo_acre")
-	private Integer persCodigoAcre;
 
 	@Column(name = "conyuge")
 	private Boolean conyuge;
@@ -107,18 +104,21 @@ public class Producto  {
 
 	@Column(name = "cumulo_aporte")
 	private Long cumuloAporte;
-	
-	@Column(name = "pers_codigo_fact_individual")
-	private String persCodigoFact;
 
-	@Column(name = "pers_digito_acre_individual")
-	private String persDigitoFact;
+	// acreedores
+	@Column(name = "pers_digito_acre")
+	private String persDigitoAcre;
 
+	@Column(name = "pers_codigo_acre")
+	private String persCodigoAcre;
+
+	// facturas
 	@Column(name = "pers_codigo_fact")
 	private String persCodigoFactSingle;
 
-	@Column(name = "pers_digito_acre")
+	@Column(name = "pers_digito_fact")
 	private String persDigitoFactSingle;
+
 	
 	@DecimalMax("99.999")
 	@Column(precision = 5, scale = 3, name = "porc_interes")
