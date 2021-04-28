@@ -62,7 +62,7 @@ public class ProductoDto {
 
 	private Long tipoAcreedor;
 
-	private Integer persCodigoAcre;
+	private String persCodigoAcre;
 
 	private String persDigitoAcre;
 
