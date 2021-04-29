@@ -65,8 +65,8 @@ public class TarifaPorController {
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/")
 	public ResponseEntity<List<TarifaPorDto>> getTarifaPor(
-//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
-//			String token
+			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
+			String token
 			) throws TarifaPorException, UnauthorizedException{	
 				
 		List<TarifaPorDto> lista= null;

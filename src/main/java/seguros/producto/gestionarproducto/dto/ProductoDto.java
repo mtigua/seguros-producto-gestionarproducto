@@ -260,7 +260,7 @@ public class ProductoDto {
 	private Boolean  tarifaNows;
 
 	@Size(max=50)
-	private String  homologaCiaProd;
+	private String idProducto;
 
 	@Size(max=50)
 	private String  idPlan;

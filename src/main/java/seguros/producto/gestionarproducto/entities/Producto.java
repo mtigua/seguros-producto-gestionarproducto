@@ -363,8 +363,8 @@ public class Producto  {
 	@Column(name = "tarifa_nows")
 	private Boolean  tarifaNows;
 	
-	@Column(length = 50, name = "homologa_cia_prod")
-	private String  homologaCiaProd;
+	@Column(length = 50, name = "id_producto")
+	private String idProducto;
 	
 	@Column(length = 50, name = "id_plan")
 	private String  idPlan;
