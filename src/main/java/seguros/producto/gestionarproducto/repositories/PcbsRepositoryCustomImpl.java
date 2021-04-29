@@ -385,7 +385,7 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 			storedProcedureQuery.registerStoredProcedureParameter(EXISTE, Integer.class, ParameterMode.OUT);
 			
 			storedProcedureQuery.setParameter("numPoliza",numPoliza );
-			storedProcedureQuery.setParameter("numDigito", digito );
+			storedProcedureQuery.setParameter("numDigito", digito.equals("null") ? "" : digito);
 
 			storedProcedureQuery.setParameter("compania", idCompania );
 			storedProcedureQuery.setParameter("ramo", idRamo );
