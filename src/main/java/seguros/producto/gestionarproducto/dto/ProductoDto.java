@@ -39,7 +39,7 @@ public class ProductoDto {
 
 	private String docuNroPoliza;
 
-	private Character docuDigPoliza;
+	private String docuDigPoliza;
 
 	private Integer isae_numero;
 
