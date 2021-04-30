@@ -54,8 +54,8 @@ public class Producto  {
 	@Column(length = 14, name = "docu_nro_poliza")
 	private String docuNroPoliza;	
 	
-	@Column(name = "docu_dig_poliza")
-	private Character docuDigPoliza;
+	@Column(length = 2, name = "docu_dig_poliza")
+	private String docuDigPoliza;
 	
 	@Column(name = "isae_numero")
 	private Integer isaeNumero;
