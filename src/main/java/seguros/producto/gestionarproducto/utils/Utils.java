@@ -3,15 +3,18 @@ package seguros.producto.gestionarproducto.utils;
 import static seguros.producto.gestionarproducto.utils.Constants.DISPLAY_NAME;
 import static seguros.producto.gestionarproducto.utils.Constants.TOKEN_BEARER_PREFIX;
 import static seguros.producto.gestionarproducto.utils.Constants.USERNAME;
-
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.List;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.TimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -78,6 +81,33 @@ public class Utils {
 	        return  builder.create();	       
 	}
 	
+	public static String convertObjectToJson(Object object) throws JsonProcessingException {
+	    if (object == null) {
+	        return null;
+	    }
+	    ObjectMapper mapper = new ObjectMapper();
+	    return mapper.writeValueAsString(object);
+	}
+	
+	
+	public static  boolean matcher(String[] whiteList,String url) {
+		List<String> lista = Arrays.asList(whiteList);
+		boolean match=false;
+		int i=0;
+		
+		while(!match && i<lista.size() ) {			
+			
+			 if(url.contains(lista.get(i))) {
+				 match=true;
+			 }
+			 else {
+				 i++;
+			 }
+		}
+		
+	
+		return match;
+	}
 
 	
 }

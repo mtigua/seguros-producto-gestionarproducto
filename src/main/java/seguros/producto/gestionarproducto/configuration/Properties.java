@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.Data;
 
-@Component
+@Component("generalProps")
 @Data
 @ConfigurationProperties(prefix="general")
 public class Properties {
@@ -68,6 +68,12 @@ public class Properties {
 	private String url_encrypt;
 	
 	private String url_decrypt;
+	
+	private String ROLE_FUNCIONAL;
+	
+	private String ROLE_APROBADOR;
+	
+	private String ROLE_CONTINUIDAD_OPERATIVA;
 	
 		 
 }

@@ -3,12 +3,17 @@ package seguros.producto.gestionarproducto.controllers;
 
 
 import static seguros.producto.gestionarproducto.utils.Constants.HEADER_AUTHORIZACION_KEY;
+
+import java.util.Collection;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -34,6 +39,7 @@ import seguros.producto.gestionarproducto.utils.Utils;
 @RefreshScope
 @RequestMapping("/canal")
 @CrossOrigin(origins = "${domains.origin.allowed.gestionarproducto}", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PATCH,RequestMethod.OPTIONS,RequestMethod.PUT,RequestMethod.DELETE})
+@PreAuthorize("hasRole( @generalProps.getROLE_FUNCIONAL() ) OR  hasRole( @generalProps.getROLE_APROBADOR() ) OR hasRole( @generalProps.getROLE_CONTINUIDAD_OPERATIVA() ) ") 
 public class CanalController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CanalController.class.getSimpleName());
@@ -67,10 +73,10 @@ public class CanalController {
 	public ResponseEntity<List<CanalDto>> getCanal(
 //			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
 //			String token
+			SecurityContextHolder auth
 			) throws CanalException, UnauthorizedException{	
-				
+	  //  Collection<?extends GrantedAuthority> granted = auth.getContext().getAuthentication().getAuthorities();
 		List<CanalDto> lista= null;
-		
 		try {
 			//  String username=utils.getSamaccountname(token);		
 			  lista= canalService.findAll();
@@ -80,10 +86,6 @@ public class CanalController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_canal());
 			throw e;
 		}
-//		catch(UnauthorizedException e) {
-//			e.setSubject(propertiesMsg.getLogger_error_executing_get_canal());
-//			throw e;
-//		}
 		catch (Exception e) {
 			CanalException ex = new CanalException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_canal());

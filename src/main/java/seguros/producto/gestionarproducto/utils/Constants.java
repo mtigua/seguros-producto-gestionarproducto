@@ -12,5 +12,6 @@ public class Constants {
 	public static final String USERNAME = "username";
 	public static final String SUPER_SECRET_KEY = "server";
 	public static final long TOKEN_EXPIRATION_TIME = 864_000_000; // 10 day
+	public static final String PAYLOAD_ROLES="roles";
 
 }
