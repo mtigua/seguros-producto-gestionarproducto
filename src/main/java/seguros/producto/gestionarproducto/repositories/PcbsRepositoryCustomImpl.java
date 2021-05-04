@@ -415,6 +415,41 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 		return existe;
 	}
 
+	@Override
+	@Transactional
+	public Integer findCodigoPos(String numCodigoPos ) throws PcbsException {
+		String procedureBuscaPoliza = propertiesSql.getVALIDAR_BUSCAR_CODIGOPOS();
+		Integer existe=null;
+
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureBuscaPoliza);
+			storedProcedureQuery.registerStoredProcedureParameter("codigoPos", String.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter(EXISTE, Integer.class, ParameterMode.OUT);
+
+			storedProcedureQuery.setParameter("codigoPos",numCodigoPos );
+			storedProcedureQuery.execute();
+
+			Object object= storedProcedureQuery.getOutputParameterValue(EXISTE);
+
+			if(object!=null) {
+				existe= (int) storedProcedureQuery.getOutputParameterValue(EXISTE);
+			} else {
+				PcbsException exc = new PcbsException();
+				exc.setErrorMessage(VALUE_UNDEFINED + EXISTE);
+				exc.setDetail(VALUE_UNDEFINED + EXISTE);
+				exc.setConcreteException(exc);
+				throw exc;
+			}
+
+		} catch(PcbsException e) {
+			throw e;
+		} catch(Exception e) {
+			throw new PcbsException(e);
+		}
+
+		return existe;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional
