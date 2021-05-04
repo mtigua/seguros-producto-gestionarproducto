@@ -131,14 +131,8 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 		List<Object[]> recordRamo=null;
 		 
 		try {
-			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureNameRamo);
-			storedProcedureQuery.registerStoredProcedureParameter(COMPANY, Long.class, ParameterMode.IN);
-			storedProcedureQuery.registerStoredProcedureParameter(BUSINESS, Long.class, ParameterMode.IN);
-			storedProcedureQuery.setParameter(COMPANY,idCompania );
-			storedProcedureQuery.setParameter(BUSINESS,idNegocio );
-			storedProcedureQuery.execute();
-			recordRamo = storedProcedureQuery.getResultList();
-		
+			recordRamo = getStoreProcedureCompanyBusiness(idCompania, idNegocio, procedureNameRamo, BUSINESS);
+
 			if(recordRamo!=null) {
 				recordRamo.stream().forEach(p -> {
 					RamoDto ramoDto =  new RamoDto();
@@ -156,6 +150,18 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 		return listRamo;
 	}
 
+	private List<Object[]> getStoreProcedureCompanyBusiness(Long idCompania, Long idNegocioOrRamo, String procedureNameRamo, String businessOrRamo) {
+		List<Object[]> recordRamo;
+		StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureNameRamo);
+		storedProcedureQuery.registerStoredProcedureParameter(COMPANY, Long.class, ParameterMode.IN);
+		storedProcedureQuery.registerStoredProcedureParameter(businessOrRamo, Long.class, ParameterMode.IN);
+		storedProcedureQuery.setParameter(COMPANY,idCompania );
+		storedProcedureQuery.setParameter(businessOrRamo,idNegocioOrRamo );
+		storedProcedureQuery.execute();
+		recordRamo = storedProcedureQuery.getResultList();
+		return recordRamo;
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<SubtipoDto> findAllSubtipoByCompaniaRamo(Long idCompania,Long idRamo) throws PcbsException {
@@ -164,15 +170,8 @@ public class PcbsRepositoryCustomImpl implements PCBSRepositoryCustom{
 		List<Object[]> recordSubtipo=null;
 		 
 		try {
-			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureNameSubtipo);
-			storedProcedureQuery.registerStoredProcedureParameter(COMPANY, Long.class, ParameterMode.IN);
-			storedProcedureQuery.registerStoredProcedureParameter(RAMO, Long.class, ParameterMode.IN);
-			storedProcedureQuery.setParameter(COMPANY,idCompania);
-			storedProcedureQuery.setParameter(RAMO,idRamo);
-			
-			storedProcedureQuery.execute();
-			recordSubtipo = storedProcedureQuery.getResultList();
-		
+			recordSubtipo = getStoreProcedureCompanyBusiness(idCompania, idRamo, procedureNameSubtipo, RAMO);
+
 			if(recordSubtipo!=null) {
 				recordSubtipo.stream().forEach(p -> {
 					SubtipoDto subtipoDto =  new SubtipoDto();

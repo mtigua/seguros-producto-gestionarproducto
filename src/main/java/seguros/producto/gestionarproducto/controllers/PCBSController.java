@@ -26,7 +26,6 @@ import io.swagger.annotations.ApiResponses;
 import seguros.producto.gestionarproducto.configuration.PropertiesMsg;
 import seguros.producto.gestionarproducto.dto.*;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
-import seguros.producto.gestionarproducto.exceptions.UnauthorizedException;
 import seguros.producto.gestionarproducto.services.PcbsService;
 import seguros.producto.gestionarproducto.servicesImpl.PcbsException;
 import seguros.producto.gestionarproducto.utils.Utils;
@@ -465,7 +464,7 @@ public class PCBSController {
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/subtipo/{codigoSubTipo}/producto")
-	public ResponseEntity<List<ProdDto>> getProductoPorSubTipo(@PathVariable("codigoSubTipo") @NotBlank String codigoSubTipo) throws PcbsException, UnauthorizedException{	
+	public ResponseEntity<List<ProdDto>> getProductoPorSubTipo(@PathVariable("codigoSubTipo") @NotBlank String codigoSubTipo) throws PcbsException{
 		List<ProdDto> lista= null;
 		
 		try {
