@@ -26,7 +26,6 @@ import io.swagger.annotations.ApiResponses;
 import seguros.producto.gestionarproducto.configuration.PropertiesMsg;
 import seguros.producto.gestionarproducto.dto.*;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
-import seguros.producto.gestionarproducto.exceptions.UnauthorizedException;
 import seguros.producto.gestionarproducto.services.PcbsService;
 import seguros.producto.gestionarproducto.servicesImpl.PcbsException;
 import seguros.producto.gestionarproducto.utils.Utils;
@@ -46,7 +45,8 @@ public class PCBSController {
 	private static final String SWAGGER_GET_Compania = "Listar companias";
 	private static final String SWAGGER_GET_Negocio_Por_Compania = "Listar negocios dado el id de la compania";
 	private static final String SWAGGER_GET_Ramo_Por_Compania_Negocio = "Listar ramos dado el id de la compania y del negocio";
-	
+	private static final String SWAGGER_GET_VALIDAR_CODIGO_POS = "Valida si existe el codigo pos";
+
 	private static final String SWAGGER_GET_Subtipo_Por_Compania_Ramo = "Listar subtipos dado la compania y el ramo";
 	private static final String SWAGGER_GET_Producto_Por_Subtipo = "Listar productos dado el subtipo";
 	private static final String SWAGGER_GET_Grupo_Matriz = "Listar grupos matriz";
@@ -226,6 +226,35 @@ public class PCBSController {
 		} catch (Exception e) {
 			PcbsException ex = new PcbsException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_find_numpoliza());
+			throw ex;
+		}
+		return ResponseEntity.ok(existe);
+	}
+
+	@ApiOperation(value = SWAGGER_GET_VALIDAR_CODIGO_POS, notes = SWAGGER_GET_VALIDAR_CODIGO_POS)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token", required = true, dataType = "string", paramType = "header")})
+	@GetMapping("/validarCodigoPos")
+	public ResponseEntity<Integer> findCodigoPos(
+			@RequestParam("codigoPos") @NotNull String codigoPos
+
+	) throws PcbsException {
+
+		Integer existe = null;
+
+		try {
+			existe = pcbsService.findCodigoPos(codigoPos);
+		} catch (PcbsException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_find_codigopos());
+			throw e;
+		} catch (Exception e) {
+			PcbsException ex = new PcbsException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_find_codigopos());
 			throw ex;
 		}
 		return ResponseEntity.ok(existe);
@@ -435,7 +464,7 @@ public class PCBSController {
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/subtipo/{codigoSubTipo}/producto")
-	public ResponseEntity<List<ProdDto>> getProductoPorSubTipo(@PathVariable("codigoSubTipo") @NotBlank String codigoSubTipo) throws PcbsException, UnauthorizedException{	
+	public ResponseEntity<List<ProdDto>> getProductoPorSubTipo(@PathVariable("codigoSubTipo") @NotBlank String codigoSubTipo) throws PcbsException{
 		List<ProdDto> lista= null;
 		
 		try {

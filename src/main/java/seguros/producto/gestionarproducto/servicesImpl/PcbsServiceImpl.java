@@ -187,6 +187,18 @@ public class PcbsServiceImpl implements PcbsService {
 
 	@Transactional
 	@Override
+	public Integer findCodigoPos(String codigoPos) throws PcbsException {
+		Integer existe = null;
+		try {
+			existe= pcbsRepositoryCustom.findCodigoPos(codigoPos);
+		} catch(PcbsException e) {
+			throw e;
+		}
+		return existe;
+	}
+
+	@Transactional
+	@Override
 	public List<RutDto> findNumRut(String numRut, String digito) throws PcbsException {
 		List<RutDto> nombres;
 

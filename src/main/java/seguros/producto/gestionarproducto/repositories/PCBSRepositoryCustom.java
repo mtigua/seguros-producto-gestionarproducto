@@ -26,6 +26,7 @@ public interface PCBSRepositoryCustom {
 	public List<GrupoMejorOfertaDto> findAllGrupoMejorOferta() throws PcbsException;
 	public Integer decryptPasswordProductManager(String rut, String password) throws PcbsException;
 	public List<CompaniaDto> findAllCompania() throws PcbsException;
+	public Integer findCodigoPos(String codigoPos) throws PcbsException;
 	public List<GrupoMatrizDto> findAllGrupoMatriz(String codigoSubTipo,String codigoProducto) throws PcbsException;
 	public Integer findNumPoliza(String numPoliza, String digito, Long idCompania, Long idNegocio, Long idRamo) throws PcbsException;
 }
