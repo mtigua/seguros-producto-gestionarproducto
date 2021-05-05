@@ -16,7 +16,7 @@ plugins {
 	// Sonar
 	id "org.sonarqube" version "2.7.1"
 	// OWASP
-	id 'org.owasp.dependencycheck' version "2.1.1"
+	id "org.owasp.dependencycheck" version "6.1.5"
 	// Necesario para dependencia maven
 	id "io.spring.dependency-management" version "1.0.3.RELEASE"
 	
@@ -109,6 +109,11 @@ sonarqube {
 		property 'sonar.projectName', 'seguros-producto-gestionarproducto'
 		property 'sonar.scm.disabled', 'true'
 		property 'sonar.login', 'ef27af73bbad6d1246ebe63a2eec0f48057c4a41'
+		
+		property "sonar.dependencyCheck.xmlReportPath", "${buildDir}/reports/dependency-check-report.xml"
+        property "sonar.dependencyCheck.htmlReportPath", "${buildDir}/reports/dependency-check-report.html"
+        property "sonar.dependencyCheck.jsonReportPath", "${buildDir}/reports/dependency-check-report.json"
+        properties["sonar.sources"] += "build.gradle"
     }
 }
 
