@@ -55,7 +55,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 	 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-		PrintWriter writer = response.getWriter();
+		
 		
 		try {
 			
@@ -64,6 +64,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 				if (claims.get(PAYLOAD_ROLES) != null) {
 					setUpSpringAuthentication(claims);
 				} else {
+					PrintWriter writer = response.getWriter();
 					SecurityContextHolder.clearContext();
 					response.setStatus(HttpStatus.UNAUTHORIZED.value());
 					response.setCharacterEncoding(CHARACTER_ENCODING);
@@ -76,8 +77,10 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 					errorResponse.setDetails(details);
 		            writer.write(Utils.convertObjectToJson(errorResponse));
 		            writer.flush();
+		            writer.close();
 				}
-			} else {				
+			} else {		
+				  PrintWriter writer = response.getWriter();
 					SecurityContextHolder.clearContext();
 					response.setStatus(HttpStatus.UNAUTHORIZED.value());
 					response.setCharacterEncoding(CHARACTER_ENCODING);
@@ -90,9 +93,11 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 					errorResponse.setDetails(details);
 		            writer.write(Utils.convertObjectToJson(errorResponse));
 		            writer.flush();
+		            writer.close();
 			}
 			chain.doFilter(request, response);
 		} catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e) {
+			PrintWriter writer = response.getWriter();
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			response.setStatus(HttpStatus.UNAUTHORIZED.value());
 			response.setCharacterEncoding(CHARACTER_ENCODING);
@@ -105,11 +110,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 			errorResponse.setDetails(details);			
             writer.write(Utils.convertObjectToJson(errorResponse));
             writer.flush();
-          
-		}
-		finally {
-			   
-	            writer.close();
+            writer.close();          
 		}
 	}	
 
