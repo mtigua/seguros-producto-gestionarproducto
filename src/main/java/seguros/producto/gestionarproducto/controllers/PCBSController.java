@@ -612,6 +612,9 @@ public class PCBSController {
 			@RequestParam("rut") @NotNull String numRut
 		) throws PcbsException {
 
+		System.out.println("Ariel "+numRut);
+		
+		
 		String rut= "";
 
 		try {
