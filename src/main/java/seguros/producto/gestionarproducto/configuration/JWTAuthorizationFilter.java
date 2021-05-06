@@ -33,9 +33,9 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 
 
 
-	private static final String MSG_NOTFOUND_HEADER_AUTHORIZATION = "No se encontró header Authorization";
+	private static final String MSG_NOTFOUND_HEADER_AUTHORIZATION = "No se encontr\u00F3 header Authorization";
 	private static final String MSG_UNAUTHORIZED = "No autorizado";
-	private static final String MSG_INVALID_TOKEN = "El token no es válido";
+	private static final String MSG_INVALID_TOKEN = "El token no es v\u00E1lido";
 	private static final String FIELD_ERROR="error";
 	private static final String MSG_ROLES_NOT_PRESENT =  "No se pudo indentificar los roles";
 	private static final String FIELD_SUBJECT="subject";
