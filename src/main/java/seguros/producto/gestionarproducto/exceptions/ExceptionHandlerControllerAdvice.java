@@ -30,7 +30,7 @@ public class ExceptionHandlerControllerAdvice  extends ResponseEntityExceptionHa
 	private static final String FIELD_SUBJECT="subject";
 	private static final String MSG_HTTP500 = "Error interno del sistema";
 	private static final String MSG_HTTP400 = "Formato de petici\u00F3n err\u00F3neo";
-	private static final String MSG_METHOD_NOT_SUPPORTED = "M\u00F3todo no soportado";
+	private static final String MSG_METHOD_NOT_SUPPORTED = "M\u00E9todo no soportado";
 	private static final String MSG_HTTP403 = "No tiene permiso para acceder a este recurso";
 
 	@ExceptionHandler(CommonException.class)
