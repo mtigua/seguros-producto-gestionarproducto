@@ -9,16 +9,6 @@ import seguros.producto.gestionarproducto.configuration.PropertiesSql;
 @Repository
 public class EstadoIntegracionRepositoryCustomImpl implements EstadoIntegracionRepositoryCustom{
 
-	@Autowired
-	private EntityManager entityManager;
-	
-	@Autowired 
-	private PropertiesSql propertiesSql;	
-	
-	@Autowired 
-	private Properties properties;
-	
-
 	
 
 

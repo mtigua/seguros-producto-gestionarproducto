@@ -2,17 +2,13 @@ package seguros.producto.gestionarproducto.controllers;
 
 
 
-import static seguros.producto.gestionarproducto.utils.Constants.HEADER_AUTHORIZACION_KEY;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +24,6 @@ import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
 import seguros.producto.gestionarproducto.exceptions.UnauthorizedException;
 import seguros.producto.gestionarproducto.services.TipoRecargoService;
 import seguros.producto.gestionarproducto.servicesImpl.TipoRecargoException;
-import seguros.producto.gestionarproducto.utils.Utils;
 
 @RestController
 @Api(value="TipoRecargo Resource")
@@ -38,7 +33,6 @@ import seguros.producto.gestionarproducto.utils.Utils;
 @PreAuthorize("hasRole( @generalProps.getROLE_FUNCIONAL() ) OR  hasRole( @generalProps.getROLE_APROBADOR() ) OR hasRole( @generalProps.getROLE_CONTINUIDAD_OPERATIVA() ) ") 
 public class TipoRecargoController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(TipoRecargoController.class.getSimpleName());
 
 	
 	private static final String MSG_HTTP200 = "Operaci\u00f3n exitosa";
@@ -53,8 +47,6 @@ public class TipoRecargoController {
 	@Autowired
 	private TipoRecargoService tipoRecargoService;
 	
-	@Autowired
-	private Utils utils;
 	
 	
 	@ApiOperation(value = SWAGGER_GET_TipoRecargo, notes = SWAGGER_GET_TipoRecargo)
@@ -66,15 +58,11 @@ public class TipoRecargoController {
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/")
-	public ResponseEntity<List<TipoRecargoDto>> getTipoRecargo(
-//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
-//			String token
-			) throws TipoRecargoException, UnauthorizedException{	
+	public ResponseEntity<List<TipoRecargoDto>> getTipoRecargo(	) throws TipoRecargoException, UnauthorizedException{	
 				
 		List<TipoRecargoDto> lista= null;
 		
 		try {
-			//  String username=utils.getSamaccountname(token);		
 			  lista= tipoRecargoService.findAll();
 			   
 		}
@@ -82,10 +70,6 @@ public class TipoRecargoController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_recargo());
 			throw e;
 		}
-//		catch(UnauthorizedException e) {
-//			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_recargo());
-//			throw e;
-//		}
 		catch (Exception e) {
 			TipoRecargoException ex = new TipoRecargoException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_recargo());

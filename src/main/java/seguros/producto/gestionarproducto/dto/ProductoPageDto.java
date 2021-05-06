@@ -1,5 +1,7 @@
 package seguros.producto.gestionarproducto.dto;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -20,6 +22,6 @@ public class ProductoPageDto {
 	
 	private RamoDto ramo;	
 	
-	
+	private List<CanalDto> canales;
 
 }

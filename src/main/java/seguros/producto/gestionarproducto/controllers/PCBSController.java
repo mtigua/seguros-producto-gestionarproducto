@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -30,7 +29,6 @@ import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
 import seguros.producto.gestionarproducto.exceptions.UnauthorizedException;
 import seguros.producto.gestionarproducto.services.PcbsService;
 import seguros.producto.gestionarproducto.servicesImpl.PcbsException;
-import seguros.producto.gestionarproducto.utils.Utils;
 
 @RestController
 @Api(value = "PCBS Resource")
@@ -72,8 +70,6 @@ public class PCBSController {
 	@Autowired
 	private PcbsService pcbsService;
 	
-	@Autowired
-	private Utils utils;
 	
 	
 	@ApiOperation(value = SWAGGER_GET_Moneda, notes = SWAGGER_GET_Moneda)
@@ -585,8 +581,6 @@ public class PCBSController {
 	@GetMapping("/buscarRutProductManager")
 	public ResponseEntity<String> findRutProductManager(
 			@RequestParam("rut") @NotNull String numRut
-//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true)
-//			String token
 		) throws PcbsException {
 
 		String rut= "";

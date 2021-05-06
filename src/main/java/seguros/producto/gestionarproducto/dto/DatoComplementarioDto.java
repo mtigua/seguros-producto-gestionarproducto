@@ -1,13 +1,11 @@
 package seguros.producto.gestionarproducto.dto;
 
 
-import java.util.List;
-
 import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class CanalDto  {
+public class DatoComplementarioDto  {
 	
 	
 	private Long id;
@@ -17,6 +15,10 @@ public class CanalDto  {
 	
 	private String descripcion;	
 	
-	private List<DatoComplementarioDto> datosComplentarios;
+	@NotBlank(message = "El campo url es requerido")
+	private String url;
+	
+	@NotBlank(message = "El campo expresion es requerido")
+	private String expression;
     
 }
