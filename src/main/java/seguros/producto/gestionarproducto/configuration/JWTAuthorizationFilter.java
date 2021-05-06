@@ -74,6 +74,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 					PrintWriter writer = response.getWriter();
 		            writer.write(Utils.convertObjectToJson(errorResponse));
 		            writer.flush();
+		            writer.close();
 		            return;
 				}
 			} else {				
@@ -90,6 +91,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 					PrintWriter writer = response.getWriter();
 		            writer.write(Utils.convertObjectToJson(errorResponse));
 		            writer.flush();
+		            writer.close();
 		            return;
 			}
 			chain.doFilter(request, response);
@@ -107,6 +109,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 			PrintWriter writer = response.getWriter();
             writer.write(Utils.convertObjectToJson(errorResponse));
             writer.flush();
+            writer.close();
             return;
 		}
 	}	
