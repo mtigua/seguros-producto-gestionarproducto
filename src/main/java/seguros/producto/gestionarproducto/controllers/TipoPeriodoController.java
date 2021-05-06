@@ -21,7 +21,6 @@ import io.swagger.annotations.ApiResponses;
 import seguros.producto.gestionarproducto.configuration.PropertiesMsg;
 import seguros.producto.gestionarproducto.dto.TipoPeriodoDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
-import seguros.producto.gestionarproducto.exceptions.UnauthorizedException;
 import seguros.producto.gestionarproducto.services.TipoPeriodoService;
 import seguros.producto.gestionarproducto.servicesImpl.TipoPeriodoException;
 
@@ -61,7 +60,7 @@ public class TipoPeriodoController {
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/")
-	public ResponseEntity<List<TipoPeriodoDto>> getTipoPeriodo(	) throws TipoPeriodoException, UnauthorizedException{	
+	public ResponseEntity<List<TipoPeriodoDto>> getTipoPeriodo(	) throws TipoPeriodoException{	
 				
 		List<TipoPeriodoDto> lista= null;
 		

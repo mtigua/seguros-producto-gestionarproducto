@@ -21,7 +21,6 @@ import io.swagger.annotations.ApiResponses;
 import seguros.producto.gestionarproducto.configuration.PropertiesMsg;
 import seguros.producto.gestionarproducto.dto.DestinoVentaDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
-import seguros.producto.gestionarproducto.exceptions.UnauthorizedException;
 import seguros.producto.gestionarproducto.services.DestinoVentaService;
 import seguros.producto.gestionarproducto.servicesImpl.DestinoVentaException;
 
@@ -61,7 +60,7 @@ public class DestinoVentaController {
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/")
-	public ResponseEntity<List<DestinoVentaDto>> getDestinoVentas(	) throws DestinoVentaException, UnauthorizedException{	
+	public ResponseEntity<List<DestinoVentaDto>> getDestinoVentas(	) throws DestinoVentaException{	
 				
 		List<DestinoVentaDto> lista= null;
 		

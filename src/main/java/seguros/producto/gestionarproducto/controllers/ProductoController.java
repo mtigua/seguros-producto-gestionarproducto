@@ -25,7 +25,6 @@ import seguros.producto.gestionarproducto.configuration.PropertiesMsg;
 import seguros.producto.gestionarproducto.dto.PageProductoDto;
 import seguros.producto.gestionarproducto.dto.ProductoDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
-import seguros.producto.gestionarproducto.exceptions.UnauthorizedException;
 import seguros.producto.gestionarproducto.services.ProductoService;
 import seguros.producto.gestionarproducto.servicesImpl.PcbsException;
 import seguros.producto.gestionarproducto.servicesImpl.ProductoException;
@@ -68,7 +67,7 @@ public class ProductoController {
 	public ResponseEntity<String> saveProducto(
 
 			@RequestBody(required = false) @Valid ProductoDto producto
-			) throws ProductoException, UnauthorizedException{	
+			) throws ProductoException,PcbsException{	
 				
 		String result="";
 		
@@ -112,7 +111,7 @@ public class ProductoController {
 	            @RequestParam(required = false) String nemotecnico,
 	            @RequestParam(required = false) String descripcion
 	            
-			) throws ProductoException, UnauthorizedException{	
+			) throws ProductoException{	
 				
 		PageProductoDto pageProductoDto= null;
 		

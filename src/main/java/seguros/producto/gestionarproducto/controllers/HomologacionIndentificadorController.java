@@ -21,7 +21,6 @@ import io.swagger.annotations.ApiResponses;
 import seguros.producto.gestionarproducto.configuration.PropertiesMsg;
 import seguros.producto.gestionarproducto.dto.HomologacionIdentificadorDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
-import seguros.producto.gestionarproducto.exceptions.UnauthorizedException;
 import seguros.producto.gestionarproducto.services.HomologacionIdentificadorService;
 import seguros.producto.gestionarproducto.servicesImpl.HomologacionIdentificadorException;
 
@@ -60,7 +59,7 @@ public class HomologacionIndentificadorController {
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/")
 	public ResponseEntity<List<HomologacionIdentificadorDto>> getHomologacionIdentificador(
-			) throws HomologacionIdentificadorException, UnauthorizedException{	
+			) throws HomologacionIdentificadorException{	
 				
 		List<HomologacionIdentificadorDto> lista= null;
 		

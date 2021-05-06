@@ -21,7 +21,6 @@ import io.swagger.annotations.ApiResponses;
 import seguros.producto.gestionarproducto.configuration.PropertiesMsg;
 import seguros.producto.gestionarproducto.dto.TipoDescuentoDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
-import seguros.producto.gestionarproducto.exceptions.UnauthorizedException;
 import seguros.producto.gestionarproducto.services.TipoDescuentoService;
 import seguros.producto.gestionarproducto.servicesImpl.TipoDescuentoException;
 
@@ -60,7 +59,7 @@ public class TipoDescuentoController {
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/")
 	public ResponseEntity<List<TipoDescuentoDto>> getTipoDescuento(
-			) throws TipoDescuentoException, UnauthorizedException{	
+			) throws TipoDescuentoException{	
 				
 		List<TipoDescuentoDto> lista= null;
 		

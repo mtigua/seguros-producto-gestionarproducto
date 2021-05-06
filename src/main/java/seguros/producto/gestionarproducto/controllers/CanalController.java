@@ -22,7 +22,6 @@ import io.swagger.annotations.ApiResponses;
 import seguros.producto.gestionarproducto.configuration.PropertiesMsg;
 import seguros.producto.gestionarproducto.dto.CanalDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
-import seguros.producto.gestionarproducto.exceptions.UnauthorizedException;
 import seguros.producto.gestionarproducto.services.CanalService;
 import seguros.producto.gestionarproducto.servicesImpl.CanalException;
 
@@ -62,7 +61,7 @@ public class CanalController {
 	@GetMapping("/")
 	public ResponseEntity<List<CanalDto>> getCanal(
 			SecurityContextHolder auth
-			) throws CanalException, UnauthorizedException{	
+			) throws CanalException{	
 	  //  Collection<?extends GrantedAuthority> granted = auth.getContext().getAuthentication().getAuthorities();
 		List<CanalDto> lista= null;
 		try {	

@@ -39,7 +39,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 	private static final String FIELD_ERROR="error";
 	private static final String MSG_ROLES_NOT_PRESENT =  "No se pudo indentificar los roles";
 	private static final String FIELD_SUBJECT="subject";
-	
+	private static final String CHARACTER_ENCODING = "utf-8";
 
 	 
 	 private static final String[] AUTH_WHITELIST_FILTER = {
@@ -56,14 +56,14 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
 		try {
-			if (existeJWTToken(request, response)) {
+			if (existeJWTToken(request)) {
 				Claims claims = validateToken(request);
 				if (claims.get(PAYLOAD_ROLES) != null) {
 					setUpSpringAuthentication(claims);
 				} else {
 					SecurityContextHolder.clearContext();
 					response.setStatus(HttpStatus.UNAUTHORIZED.value());
-					response.setCharacterEncoding("utf-8");
+					response.setCharacterEncoding(CHARACTER_ENCODING);
 					ExceptionResponse errorResponse = new ExceptionResponse();
 					errorResponse.setErrorMessage(MSG_UNAUTHORIZED);
 					errorResponse.setRequestedURI(request.getRequestURI());
@@ -78,7 +78,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 			} else {				
 					SecurityContextHolder.clearContext();
 					response.setStatus(HttpStatus.UNAUTHORIZED.value());
-					response.setCharacterEncoding("utf-8");
+					response.setCharacterEncoding(CHARACTER_ENCODING);
 					ExceptionResponse errorResponse = new ExceptionResponse();
 					errorResponse.setErrorMessage(MSG_UNAUTHORIZED);
 					errorResponse.setRequestedURI(request.getRequestURI());
@@ -94,7 +94,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 		} catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e) {
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			response.setStatus(HttpStatus.UNAUTHORIZED.value());
-			response.setCharacterEncoding("utf-8");
+			response.setCharacterEncoding(CHARACTER_ENCODING);
 			ExceptionResponse errorResponse = new ExceptionResponse();
 			errorResponse.setErrorMessage(MSG_INVALID_TOKEN);
 			errorResponse.setRequestedURI(request.getRequestURI());
@@ -105,7 +105,6 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 			PrintWriter writer = response.getWriter();
             writer.write(Utils.convertObjectToJson(errorResponse));
             writer.flush();
-			return;
 		}
 	}	
 
@@ -126,7 +125,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 
 	}
 
-	private boolean existeJWTToken(HttpServletRequest request, HttpServletResponse res) {
+	private boolean existeJWTToken(HttpServletRequest request) {
 		String authenticationHeader = request.getHeader(HEADER_AUTHORIZACION_KEY);
 		if (authenticationHeader == null || !authenticationHeader.startsWith(TOKEN_BEARER_PREFIX))
 			return false;
