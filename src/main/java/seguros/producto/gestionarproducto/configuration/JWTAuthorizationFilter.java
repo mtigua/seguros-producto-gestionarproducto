@@ -75,8 +75,6 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 					details.addProperty(FIELD_SUBJECT, MSG_UNAUTHORIZED);
 					errorResponse.setDetails(details);
 		            writer.write(Utils.convertObjectToJson(errorResponse));
-		            writer.flush();
-		            writer.close();
 				}
 			} else {				
 					SecurityContextHolder.clearContext();
@@ -90,8 +88,6 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 					details.addProperty(FIELD_SUBJECT, MSG_UNAUTHORIZED);
 					errorResponse.setDetails(details);
 		            writer.write(Utils.convertObjectToJson(errorResponse));
-		            writer.flush();
-		            writer.close();
 			}
 			chain.doFilter(request, response);
 		} catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e) {
