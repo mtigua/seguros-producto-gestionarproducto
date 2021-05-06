@@ -55,7 +55,10 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 	 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+		PrintWriter writer = response.getWriter();
+		
 		try {
+			
 			if (existeJWTToken(request)) {
 				Claims claims = validateToken(request);
 				if (claims.get(PAYLOAD_ROLES) != null) {
@@ -71,7 +74,6 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 					details.addProperty(FIELD_ERROR, MSG_ROLES_NOT_PRESENT);
 					details.addProperty(FIELD_SUBJECT, MSG_UNAUTHORIZED);
 					errorResponse.setDetails(details);
-					PrintWriter writer = response.getWriter();
 		            writer.write(Utils.convertObjectToJson(errorResponse));
 		            writer.flush();
 		            writer.close();
@@ -87,7 +89,6 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 					details.addProperty(FIELD_ERROR, MSG_NOTFOUND_HEADER_AUTHORIZATION);
 					details.addProperty(FIELD_SUBJECT, MSG_UNAUTHORIZED);
 					errorResponse.setDetails(details);
-					PrintWriter writer = response.getWriter();
 		            writer.write(Utils.convertObjectToJson(errorResponse));
 		            writer.flush();
 		            writer.close();
@@ -103,11 +104,13 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter  {
 			JsonObject details = new JsonObject();
 			details.addProperty(FIELD_ERROR, e.getMessage());
 			details.addProperty(FIELD_SUBJECT, MSG_INVALID_TOKEN);
-			errorResponse.setDetails(details);
-			PrintWriter writer = response.getWriter();
+			errorResponse.setDetails(details);			
             writer.write(Utils.convertObjectToJson(errorResponse));
-            writer.flush();
-            writer.close();
+          
+		}
+		finally {
+			    writer.flush();
+	            writer.close();
 		}
 	}	
 
