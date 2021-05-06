@@ -7,7 +7,7 @@ import seguros.producto.gestionarproducto.configuration.Properties;
 import seguros.producto.gestionarproducto.configuration.PropertiesSql;
 
 @Repository
-public class CanalRepositoryCustomImpl implements CanalRepositoryCustom{
+public class DatoComplementarioRepositoryCustomImpl implements DatoComplementarioRepositoryCustom{
 
 	
 

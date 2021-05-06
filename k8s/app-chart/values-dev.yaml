@@ -9,7 +9,7 @@ configmap:
 replicaCount: 1
 
 image:
-  repository: IMAGE_PATTERN
+  repository: operacionesregistry.azurecr.io/pana/dev/seguros-producto-gestionarproducto:1.1.1
   pullPolicy: Always
 
 imagePullSecrets: [name: regcred]

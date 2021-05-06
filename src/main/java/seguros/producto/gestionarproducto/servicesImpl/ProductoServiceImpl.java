@@ -2,6 +2,7 @@ package seguros.producto.gestionarproducto.servicesImpl;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -248,6 +249,15 @@ public class ProductoServiceImpl implements ProductoService {
 			if(canal.getId()!=null) {
 				estadoIntegracion.setCanal(canal);
 			}
+			
+			Arrays.asList(producto.getCanales()).stream().forEach((p) ->{
+				Canal canalEntity= canalRepository.getOne(p);
+				if(canalEntity.getId()!=null) {					
+					productoEntity.addCanal(canalEntity);
+				}
+			});
+			
+			
 			estadoIntegracion.setIdProducto(productoEntity.getId());
 			estadoIntegracion.setState(State.Pendiente);
 			estadoIntegracion.setTipoAccion(ActionType.Crear);

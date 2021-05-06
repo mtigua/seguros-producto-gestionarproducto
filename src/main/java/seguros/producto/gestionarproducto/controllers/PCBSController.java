@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -28,13 +28,13 @@ import seguros.producto.gestionarproducto.dto.*;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
 import seguros.producto.gestionarproducto.services.PcbsService;
 import seguros.producto.gestionarproducto.servicesImpl.PcbsException;
-import seguros.producto.gestionarproducto.utils.Utils;
 
 @RestController
 @Api(value = "PCBS Resource")
 @RefreshScope
 @RequestMapping("/pcbs")
 @CrossOrigin(origins = "${domains.origin.allowed.gestionarproducto}", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.OPTIONS, RequestMethod.PUT, RequestMethod.DELETE})
+@PreAuthorize("hasRole( @generalProps.getROLE_FUNCIONAL() ) OR  hasRole( @generalProps.getROLE_APROBADOR() ) OR hasRole( @generalProps.getROLE_CONTINUIDAD_OPERATIVA() ) ") 
 public class PCBSController {
 
 	private static final String MSG_HTTP200 = "Operaci\u00f3n exitosa";
@@ -70,8 +70,6 @@ public class PCBSController {
 	@Autowired
 	private PcbsService pcbsService;
 	
-	@Autowired
-	private Utils utils;
 	
 	
 	@ApiOperation(value = SWAGGER_GET_Moneda, notes = SWAGGER_GET_Moneda)
@@ -612,8 +610,6 @@ public class PCBSController {
 	@GetMapping("/buscarRutProductManager")
 	public ResponseEntity<String> findRutProductManager(
 			@RequestParam("rut") @NotNull String numRut
-//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true)
-//			String token
 		) throws PcbsException {
 
 		String rut= "";

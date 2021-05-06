@@ -316,6 +316,8 @@ public class ProductoDto {
 
 	@NotBlank(message =  "La contrasena del product manager es requerido")
 	private String palabaraPaseProductManager;
+	
+	private Long[] canales= {4L};
 
 
 

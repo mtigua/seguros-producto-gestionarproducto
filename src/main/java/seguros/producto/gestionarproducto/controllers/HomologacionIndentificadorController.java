@@ -2,16 +2,13 @@ package seguros.producto.gestionarproducto.controllers;
 
 
 
-import static seguros.producto.gestionarproducto.utils.Constants.HEADER_AUTHORIZACION_KEY;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,19 +21,17 @@ import io.swagger.annotations.ApiResponses;
 import seguros.producto.gestionarproducto.configuration.PropertiesMsg;
 import seguros.producto.gestionarproducto.dto.HomologacionIdentificadorDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
-import seguros.producto.gestionarproducto.exceptions.UnauthorizedException;
 import seguros.producto.gestionarproducto.services.HomologacionIdentificadorService;
 import seguros.producto.gestionarproducto.servicesImpl.HomologacionIdentificadorException;
-import seguros.producto.gestionarproducto.utils.Utils;
 
 @RestController
 @Api(value="HomologacionIdentificador Resource")
 @RefreshScope
 @RequestMapping("/homologacion")
 @CrossOrigin(origins = "${domains.origin.allowed.gestionarproducto}", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PATCH,RequestMethod.OPTIONS,RequestMethod.PUT,RequestMethod.DELETE})
+@PreAuthorize("hasRole( @generalProps.getROLE_FUNCIONAL() ) OR  hasRole( @generalProps.getROLE_APROBADOR() ) OR hasRole( @generalProps.getROLE_CONTINUIDAD_OPERATIVA() ) ") 
 public class HomologacionIndentificadorController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(HomologacionIndentificadorController.class.getSimpleName());
 
 	
 	private static final String MSG_HTTP200 = "Operaci\u00f3n exitosa";
@@ -51,8 +46,7 @@ public class HomologacionIndentificadorController {
 	@Autowired
 	private HomologacionIdentificadorService homologacionIdentificadorService;
 	
-	@Autowired
-	private Utils utils;
+	
 	
 	
 	@ApiOperation(value = SWAGGER_GET_HomologacionIdentificador, notes = SWAGGER_GET_HomologacionIdentificador)
@@ -65,14 +59,11 @@ public class HomologacionIndentificadorController {
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/")
 	public ResponseEntity<List<HomologacionIdentificadorDto>> getHomologacionIdentificador(
-//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
-//			String token
-			) throws HomologacionIdentificadorException, UnauthorizedException{	
+			) throws HomologacionIdentificadorException{	
 				
 		List<HomologacionIdentificadorDto> lista= null;
 		
-		try {
-			  //String username=utils.getSamaccountname(token);		
+		try {	
 			  lista= homologacionIdentificadorService.findAll();
 			   
 		}
@@ -80,10 +71,6 @@ public class HomologacionIndentificadorController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_homologacion_identificador());
 			throw e;
 		}
-//		catch(UnauthorizedException e) {
-//			e.setSubject(propertiesMsg.getLogger_error_executing_get_homologacion_identificador());
-//			throw e;
-//		}
 		catch (Exception e) {
 			HomologacionIdentificadorException ex = new HomologacionIdentificadorException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_homologacion_identificador());

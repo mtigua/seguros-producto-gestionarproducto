@@ -2,18 +2,24 @@ package seguros.producto.gestionarproducto.repositories;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import seguros.producto.gestionarproducto.configuration.PropertiesSql;
+import seguros.producto.gestionarproducto.dto.CanalDto;
 import seguros.producto.gestionarproducto.dto.CompaniaDto;
 import seguros.producto.gestionarproducto.dto.NegocioDto;
 import seguros.producto.gestionarproducto.dto.PageProductoDto;
 import seguros.producto.gestionarproducto.dto.ProductoPageDto;
 import seguros.producto.gestionarproducto.dto.RamoDto;
 import seguros.producto.gestionarproducto.dto.TipoSeguroDto;
+import seguros.producto.gestionarproducto.entities.Canal;
+import seguros.producto.gestionarproducto.entities.Producto;
 import seguros.producto.gestionarproducto.servicesImpl.ProductoException;
 
 @Repository
@@ -28,6 +34,8 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 	
 	@Autowired 
 	private PropertiesSql propertiesSql;	
+	
+	
 	
 	
 	
@@ -107,6 +115,17 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 						productoPageDto.setRamo(ramo);
 						productoPageDto.setTipoSeguro(tipoSeguro);
 						
+						Producto productoEntity= entityManager.find(Producto.class, productoPageDto.getId());
+						if(productoEntity!=null) {
+							Set<Canal> canales=productoEntity.getCanales();
+							List<CanalDto> canalesDto= canales.stream().map( item-> {
+								CanalDto canalDto= new CanalDto();
+								BeanUtils.copyProperties(item, canalDto);
+								return canalDto;
+							}).collect(Collectors.toList());
+							
+							productoPageDto.setCanales(canalesDto);
+						}
 						lista.add(productoPageDto); 
 					});
 				}

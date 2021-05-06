@@ -2,16 +2,14 @@ package seguros.producto.gestionarproducto.controllers;
 
 
 
-import static seguros.producto.gestionarproducto.utils.Constants.HEADER_AUTHORIZACION_KEY;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,19 +22,18 @@ import io.swagger.annotations.ApiResponses;
 import seguros.producto.gestionarproducto.configuration.PropertiesMsg;
 import seguros.producto.gestionarproducto.dto.CanalDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
-import seguros.producto.gestionarproducto.exceptions.UnauthorizedException;
 import seguros.producto.gestionarproducto.services.CanalService;
 import seguros.producto.gestionarproducto.servicesImpl.CanalException;
-import seguros.producto.gestionarproducto.utils.Utils;
 
 @RestController
 @Api(value="Canal Resource")
 @RefreshScope
 @RequestMapping("/canal")
 @CrossOrigin(origins = "${domains.origin.allowed.gestionarproducto}", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PATCH,RequestMethod.OPTIONS,RequestMethod.PUT,RequestMethod.DELETE})
+@PreAuthorize("hasRole( @generalProps.getROLE_FUNCIONAL() ) OR  hasRole( @generalProps.getROLE_APROBADOR() ) OR hasRole( @generalProps.getROLE_CONTINUIDAD_OPERATIVA() ) ") 
 public class CanalController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(CanalController.class.getSimpleName());
+
 
 	
 	private static final String MSG_HTTP200 = "Operaci\u00f3n exitosa";
@@ -51,9 +48,7 @@ public class CanalController {
 	@Autowired
 	private CanalService canalService;
 	
-	@Autowired
-	private Utils utils;
-	
+
 	
 	@ApiOperation(value = SWAGGER_GET_Canal, notes = SWAGGER_GET_Canal)
 	@ApiResponses({ 
@@ -65,14 +60,11 @@ public class CanalController {
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/")
 	public ResponseEntity<List<CanalDto>> getCanal(
-//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
-//			String token
-			) throws CanalException, UnauthorizedException{	
-				
+			SecurityContextHolder auth
+			) throws CanalException{	
+	  //  Collection<?extends GrantedAuthority> granted = auth.getContext().getAuthentication().getAuthorities();
 		List<CanalDto> lista= null;
-		
-		try {
-			//  String username=utils.getSamaccountname(token);		
+		try {	
 			  lista= canalService.findAll();
 			   
 		}
@@ -80,10 +72,6 @@ public class CanalController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_canal());
 			throw e;
 		}
-//		catch(UnauthorizedException e) {
-//			e.setSubject(propertiesMsg.getLogger_error_executing_get_canal());
-//			throw e;
-//		}
 		catch (Exception e) {
 			CanalException ex = new CanalException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_canal());
@@ -94,7 +82,5 @@ public class CanalController {
 	}	
 	
 
-
-	
 
 }

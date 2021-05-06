@@ -31,6 +31,7 @@ public class ExceptionHandlerControllerAdvice  extends ResponseEntityExceptionHa
 	private static final String MSG_HTTP500 = "Error interno del sistema";
 	private static final String MSG_HTTP400 = "Formato de petici\u00F3n err\u00F3neo";
 	private static final String MSG_METHOD_NOT_SUPPORTED = "M\u00F3todo no soportado";
+	private static final String MSG_HTTP403 = "No tiene permiso para acceder a este recurso";
 
 	@ExceptionHandler(CommonException.class)
 	public ResponseEntity<ExceptionResponse> handleException(final CommonException e,
@@ -149,6 +150,19 @@ public class ExceptionHandlerControllerAdvice  extends ResponseEntityExceptionHa
 	    return new ResponseEntity<Object>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
+	@ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+	public ResponseEntity<ExceptionResponse> handleSpringSecurityDenied(final Exception e, final HttpServletRequest request) {
+		ExceptionResponse error = new ExceptionResponse();
+		error.setErrorMessage(e.getMessage());
+		JsonObject details = new JsonObject();
+		details.addProperty(FIELD_ERROR, e.getMessage());
+		details.addProperty(FIELD_SUBJECT,MSG_HTTP403);
+		error.setDetails(details);
+		error.setRequestedURI(request.getRequestURI());
+		logger.error(e.getMessage());
+		return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+	}	
+	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ExceptionResponse> handleGenericExceptions(final Exception e, final HttpServletRequest request) {
 		ExceptionResponse error = new ExceptionResponse();

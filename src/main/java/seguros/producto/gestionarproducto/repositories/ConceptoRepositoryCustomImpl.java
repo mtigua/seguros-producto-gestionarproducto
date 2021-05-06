@@ -9,14 +9,6 @@ import seguros.producto.gestionarproducto.configuration.PropertiesSql;
 @Repository
 public class ConceptoRepositoryCustomImpl implements ConceptoRepositoryCustom{
 
-	@Autowired
-	private EntityManager entityManager;
-	
-	@Autowired 
-	private PropertiesSql propertiesSql;	
-	
-	@Autowired 
-	private Properties properties;
 	
 
 	

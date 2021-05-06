@@ -9,14 +9,7 @@ import seguros.producto.gestionarproducto.configuration.PropertiesSql;
 @Repository
 public class HomologacionIdentificadorRepositoryCustomImpl implements HomologacionIdentificadorRepositoryCustom{
 
-	@Autowired
-	private EntityManager entityManager;
 	
-	@Autowired 
-	private PropertiesSql propertiesSql;	
-	
-	@Autowired 
-	private Properties properties;
 	
 
 	

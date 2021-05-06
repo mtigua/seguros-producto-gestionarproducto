@@ -5,7 +5,8 @@ package seguros.producto.gestionarproducto.entities;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDateTime;
-
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,17 +14,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.Max;
-
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import lombok.Data;
-
 
 @Entity(name = "plan_de_cobertura")
 @Data
@@ -452,6 +452,24 @@ public class Producto  {
 	@Lob
 	@Column(nullable = false,name = "palabra_pase_product_manager")
 	private String palabaraPaseProductManager;	
+	
+	@ManyToMany( cascade = {
+			CascadeType.PERSIST,
+			CascadeType.MERGE
+		})
+		@JoinTable( name = "producto_canal",
+			joinColumns = @JoinColumn (name = "producto_id"),
+			inverseJoinColumns =  @JoinColumn(name = "canal_id")
+		)
+	private Set<Canal> canales = new HashSet<Canal>();
+		
+	public void addCanal(Canal canal) {
+	        this.canales.add(canal);
+	 }
+		
+	public void removeCanal(Canal canal) {
+			this.canales.remove(canal);
+	}
     
 	@Column(name = "fecha_creacion", updatable=false)
 	@CreationTimestamp

@@ -2,16 +2,13 @@ package seguros.producto.gestionarproducto.controllers;
 
 
 
-import static seguros.producto.gestionarproducto.utils.Constants.HEADER_AUTHORIZACION_KEY;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,19 +21,20 @@ import io.swagger.annotations.ApiResponses;
 import seguros.producto.gestionarproducto.configuration.PropertiesMsg;
 import seguros.producto.gestionarproducto.dto.DestinoVentaDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
-import seguros.producto.gestionarproducto.exceptions.UnauthorizedException;
 import seguros.producto.gestionarproducto.services.DestinoVentaService;
 import seguros.producto.gestionarproducto.servicesImpl.DestinoVentaException;
-import seguros.producto.gestionarproducto.utils.Utils;
+
+
 
 @RestController
 @Api(value="Destino de venta Resource")
 @RefreshScope
 @RequestMapping("/destinoVentas")
 @CrossOrigin(origins = "${domains.origin.allowed.gestionarproducto}", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PATCH,RequestMethod.OPTIONS,RequestMethod.PUT,RequestMethod.DELETE})
+@PreAuthorize("hasRole( @generalProps.getROLE_FUNCIONAL() ) OR  hasRole( @generalProps.getROLE_APROBADOR() ) OR hasRole( @generalProps.getROLE_CONTINUIDAD_OPERATIVA() ) ") 
 public class DestinoVentaController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(DestinoVentaController.class.getSimpleName());
+
 
 	
 	private static final String MSG_HTTP200 = "Operaci\u00f3n exitosa";
@@ -51,9 +49,7 @@ public class DestinoVentaController {
 	@Autowired
 	private DestinoVentaService destinoVentaService;
 	
-	@Autowired
-	private Utils utils;
-	
+
 	
 	@ApiOperation(value = SWAGGER_GET_DESTINO_VENTA, notes = SWAGGER_GET_DESTINO_VENTA)
 	@ApiResponses({ 
@@ -64,15 +60,11 @@ public class DestinoVentaController {
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/")
-	public ResponseEntity<List<DestinoVentaDto>> getDestinoVentas(
-//			@RequestHeader(value = HEADER_AUTHORIZACION_KEY, required = true) 			
-//			String token
-			) throws DestinoVentaException, UnauthorizedException{	
+	public ResponseEntity<List<DestinoVentaDto>> getDestinoVentas(	) throws DestinoVentaException{	
 				
 		List<DestinoVentaDto> lista= null;
 		
-		try {
-			//  String username=utils.getSamaccountname(token);		
+		try {	
 			  lista= destinoVentaService.findAll();
 			   
 		}
@@ -80,10 +72,6 @@ public class DestinoVentaController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_destino_venta());
 			throw e;
 		}
-//		catch(UnauthorizedException e) {
-//			e.setSubject(propertiesMsg.getLogger_error_executing_get_destino_venta());
-//			throw e;
-//		}
 		catch (Exception e) {
 			DestinoVentaException ex = new DestinoVentaException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_destino_venta());
