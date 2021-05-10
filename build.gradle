@@ -8,7 +8,6 @@ buildscript {
         classpath('se.transmode.gradle:gradle-docker:1.2')
     }
 }
-  
 
 plugins {
 	
@@ -22,7 +21,6 @@ plugins {
 	
 	id 'io.franzbecker.gradle-lombok' version '1.8'
 	id 'java'
-	
 	
 }
 
@@ -70,7 +68,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'	
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
-	compile "org.springframework.kafka:spring-kafka:2.2.7.RELEASE"	
 	compile group: 'ch.qos.logback.contrib', name: 'logback-jackson', version: '0.1.5'
 	compile group: 'ch.qos.logback.contrib', name: 'logback-json-classic', version: '0.1.5'
 	compile group: 'com.github.danielwegener', name: 'logback-kafka-appender', version: '0.2.0-RC1'
@@ -79,22 +76,19 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok:1.18.4'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'	
 	compile 'net.logstash.logback:logstash-logback-encoder:4.11'
-	compile ('com.microsoft.sqlserver:mssql-jdbc')
+	compile "org.springframework.kafka:spring-kafka:2.2.7.RELEASE"
 	compile "org.json:json:20180813"
-	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.10'	
+	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.10'
+	compile group: 'org.springframework', name: 'spring-context-support', version: '5.2.8.RELEASE'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-	compile ("org.springframework.boot:spring-boot-starter-jdbc")
 	//Add Swagger2 dependencies
 	compile('io.springfox:springfox-swagger2:2.9.2')
-    compile('io.springfox:springfox-swagger-ui:2.9.2')
+   	compile('io.springfox:springfox-swagger-ui:2.9.2')
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compile 'io.jsonwebtoken:jjwt:0.7.0'
 	runtime group: 'org.springframework.cloud', name: 'spring-cloud-starter-bus-kafka', version: '2.2.0.RELEASE'
-    
-    //Multiple DataSource
-    compile ('com.microsoft.sqlserver:mssql-jdbc')
-    
+	compile ('com.microsoft.sqlserver:mssql-jdbc')
 }
 
 dependencyManagement {
@@ -105,14 +99,15 @@ dependencyManagement {
 
 sonarqube {
     properties {
-        property 'sonar.projectKey', 'seguros-producto-gestionarproducto'
+       	property 'sonar.projectKey', 'seguros-producto-gestionarproducto'
 		property 'sonar.host.url', 'http://sonar.rfsc.cl:9000/sonarqube'
 		property 'sonar.projectName', 'seguros-producto-gestionarproducto'
 		property 'sonar.scm.disabled', 'true'
 		property 'sonar.login', 'ef27af73bbad6d1246ebe63a2eec0f48057c4a41'
+
 		property "sonar.dependencyCheck.xmlReportPath", "${buildDir}/reports/dependency-check-report.xml"
-        property "sonar.dependencyCheck.htmlReportPath", "${buildDir}/reports/dependency-check-report.html"
-        property "sonar.dependencyCheck.jsonReportPath", "${buildDir}/reports/dependency-check-report.json"
+		property "sonar.dependencyCheck.htmlReportPath", "${buildDir}/reports/dependency-check-report.html"
+		property "sonar.dependencyCheck.jsonReportPath", "${buildDir}/reports/dependency-check-report.json"
         properties["sonar.sources"] += "build.gradle"
     }
 }
