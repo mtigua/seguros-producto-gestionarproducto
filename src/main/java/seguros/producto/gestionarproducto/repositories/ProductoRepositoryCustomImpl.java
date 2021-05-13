@@ -93,6 +93,8 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 						productoPageDto.setId( Long.valueOf( p[0].toString() ) );
 						productoPageDto.setNemot( p[1].toString() );
 						productoPageDto.setDescrip( p[2].toString() );
+						Long habilitado = p[11] == null?0L:Long.valueOf( p[11].toString()); 
+						productoPageDto.setHabilitado(habilitado);
 						
 						TipoSeguroDto tipoSeguro= new TipoSeguroDto();
 						tipoSeguro.setId(Long.valueOf( p[3].toString() ));
