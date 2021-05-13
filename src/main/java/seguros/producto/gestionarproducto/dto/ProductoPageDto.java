@@ -14,6 +14,8 @@ public class ProductoPageDto {
 	
 	private String descrip;
 	
+	private Long habilitado;
+	
 	private CompaniaDto compania;
 	
 	private TipoSeguroDto tipoSeguro;
