@@ -319,7 +319,7 @@ public class ProductoDto {
 	
 	private Long[] canales= {4L};
 
-
+	private Long habilitado;
 
 
 	@JsonIgnore
