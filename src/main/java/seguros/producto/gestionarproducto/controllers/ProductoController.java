@@ -38,7 +38,7 @@ import seguros.producto.gestionarproducto.servicesImpl.ProductoException;
 @RefreshScope
 @RequestMapping("/producto")
 @CrossOrigin(origins = "${domains.origin.allowed.gestionarproducto}", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PATCH,RequestMethod.OPTIONS,RequestMethod.PUT,RequestMethod.DELETE})
-//@PreAuthorize("hasRole( @generalProps.getROLE_FUNCIONAL() ) OR  hasRole( @generalProps.getROLE_APROBADOR() ) OR hasRole( @generalProps.getROLE_CONTINUIDAD_OPERATIVA() ) ") 
+@PreAuthorize("hasRole( @generalProps.getROLE_FUNCIONAL() ) OR  hasRole( @generalProps.getROLE_APROBADOR() ) OR hasRole( @generalProps.getROLE_CONTINUIDAD_OPERATIVA() ) ") 
 public class ProductoController {
 	
 	
@@ -105,7 +105,7 @@ public class ProductoController {
 		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
 		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
 	})
-	//@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/findAllPaginated")
 	public ResponseEntity<PageProductoDto> getProductosPaginated(
 			    @RequestParam(defaultValue = "0") int page,
@@ -146,7 +146,7 @@ public class ProductoController {
 		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
 		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
 	})
-	//@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@PutMapping("/enableDisable")
 	public ResponseEntity<String> enableDisableProducto(
 			@RequestBody @Valid EstadoProductoDto estadoProductoDto
