@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import seguros.producto.gestionarproducto.configuration.Properties;
 import seguros.producto.gestionarproducto.dto.ActionType;
+import seguros.producto.gestionarproducto.dto.EstadoProductoDto;
 import seguros.producto.gestionarproducto.dto.PageProductoDto;
 import seguros.producto.gestionarproducto.dto.ProductoDoDto;
 import seguros.producto.gestionarproducto.dto.ProductoDto;
@@ -351,6 +352,24 @@ public class ProductoServiceImpl implements ProductoService {
 			throw new ProductoException(e);
 		}
 		return result;
+	}
+
+	@Override
+	public void enableDisable(EstadoProductoDto estadoProductoDto) throws ProductoException {
+		try {
+			estadoProductoDto.getIdsProducto().forEach( id -> {
+				Optional<Producto> producto = productoRepository.findById(id);
+				if(producto.isPresent()) {
+					Producto productoEntity = producto.get();
+					productoEntity.setHabilitado(estadoProductoDto.getHabilitado());
+					productoRepository.save(productoEntity);
+				}
+				
+			});
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
 	}
 
 	

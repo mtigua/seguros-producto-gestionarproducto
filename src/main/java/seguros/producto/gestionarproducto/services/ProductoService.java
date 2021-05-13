@@ -2,6 +2,7 @@ package seguros.producto.gestionarproducto.services;
 
 import java.util.List;
 
+import seguros.producto.gestionarproducto.dto.EstadoProductoDto;
 import seguros.producto.gestionarproducto.dto.PageProductoDto;
 import seguros.producto.gestionarproducto.dto.ProductoDto;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
@@ -16,4 +17,5 @@ public interface ProductoService {
     public String encrypt(String palabrasePase) throws ProductoException;
     public String decrypt(String palabrasePase) throws ProductoException;
     public String getPassProductManagerByIdProducto(Long idProducto) throws ProductoException,ResourceNotFoundException;
+    public void enableDisable(EstadoProductoDto estadoProductoDto) throws ProductoException;
 }

@@ -388,6 +388,8 @@ public class Producto  {
 	private Boolean perMensual;
 	
 	private Boolean perCuotas;
+	
+	private Long habilitado;
 
 	@ManyToOne
 	@JoinColumn(name = "id_tipo_seguro", nullable=false)
