@@ -392,7 +392,7 @@ public class Producto  {
 	private Long habilitado = 0L;
 
 	@ManyToOne
-	@JoinColumn(name = "id_tipo_seguro", nullable=false)
+	@JoinColumn(name = "id_tipo_seguro")
 	private  TipoSeguro tipoSeguro;
 	
 	@ManyToOne
