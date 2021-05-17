@@ -45,7 +45,7 @@ bootJar {
     version = System.getProperty('tag', '1.1.1')
 }
 
-configurations {
+configurations { 
 	compileOnly {
 		extendsFrom annotationProcessor
 	}

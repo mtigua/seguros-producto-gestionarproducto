@@ -48,6 +48,8 @@ gradlew bootRun
 ```sh
 gradlew build
 ```
+#### Documentación api
+https://api-proxy-dev.adrfsc.cl/gestionarProducto/swagger-ui.html
 
 ## Docker
 
