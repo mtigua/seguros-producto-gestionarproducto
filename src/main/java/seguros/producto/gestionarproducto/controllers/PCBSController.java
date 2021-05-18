@@ -34,7 +34,7 @@ import seguros.producto.gestionarproducto.servicesImpl.PcbsException;
 @RefreshScope
 @RequestMapping("/pcbs")
 @CrossOrigin(origins = "${domains.origin.allowed.gestionarproducto}", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PATCH, RequestMethod.OPTIONS, RequestMethod.PUT, RequestMethod.DELETE})
-@PreAuthorize("hasRole( @generalProps.getROLE_FUNCIONAL() ) OR  hasRole( @generalProps.getROLE_APROBADOR() ) OR hasRole( @generalProps.getROLE_CONTINUIDAD_OPERATIVA() ) ") 
+//@PreAuthorize("hasRole( @generalProps.getROLE_FUNCIONAL() ) OR  hasRole( @generalProps.getROLE_APROBADOR() ) OR hasRole( @generalProps.getROLE_CONTINUIDAD_OPERATIVA() ) ") 
 public class PCBSController {
 
 	private static final String MSG_HTTP200 = "Operaci\u00f3n exitosa";
