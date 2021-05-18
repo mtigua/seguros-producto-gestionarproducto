@@ -38,10 +38,10 @@ resources:
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
    requests:
     memory: "512Mi"
-    cpu: "0.1"
+    cpu: "0.5"
    limits:
      memory: "1024Mi"
-     cpu: "0.7"
+     cpu: "1"
      
 httpProbe:
    path: /health
