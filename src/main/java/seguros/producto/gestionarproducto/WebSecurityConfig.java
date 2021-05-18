@@ -29,10 +29,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
 	   protected void configure(HttpSecurity http) throws Exception {
 			http.csrf().disable()
-		//	.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+			.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
 			.authorizeRequests()
 			.antMatchers(AUTH_WHITELIST).permitAll()
-		//	.anyRequest().authenticated()
+			.anyRequest().authenticated()
 			.and()
 			.headers()	        
 			.addHeaderWriter(new StaticHeadersWriter("Content-Security-Policy","default-src 'self'; script-src 'self' 'unsafe-eval' cdn.pendo.io; connect-src 'self' app.pendo.io; img-src 'self' data: cdn.pendo.io app.pendo.io; style-src 'self' 'unsafe-inline' app.pendo.io cdn.pendo.io"))
