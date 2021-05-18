@@ -40,7 +40,7 @@ group = 'seguros-producto-gestionarproducto'
 version = '1.1.1'
 sourceCompatibility = '1.8'
 
-bootJar {
+bootJar { 
     baseName = 'seguros-producto-gestionarproducto'
     version = System.getProperty('tag', '1.1.1')
 }
@@ -139,7 +139,7 @@ if (!project.hasProperty("env")) {
 }
 
 task buildDocker(type: Docker, dependsOn: build) {
-	baseImage = "operacionesregistry.azurecr.io/base/alpine/frolvlad-oraclejre8:cleaned"
+	baseImage = "operacionesregistry.azurecr.io/base/alpine/openkdk8:3.13.5"
 	maintainer = "adrfsc.cl"
 	hostUrl = "https://operacionesregistry.azurecr.io"
 	push = dockerPushToRegistry.toBoolean()
