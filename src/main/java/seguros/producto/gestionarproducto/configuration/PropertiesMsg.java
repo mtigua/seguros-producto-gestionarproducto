@@ -47,5 +47,9 @@ public class PropertiesMsg {
 	private String logger_error_executing_list_plan_cobertura;
 	private String logger_error_executing_find_codigopos;
 	private String logger_error_executing_get_palabrapase_product_manager;
+	private String logger_error_executing_get_tipo_cobertura;
+	private String logger_error_executing_get_parentesco;
+	private String logger_error_executing_get_tipo_tasa;
+	private String logger_error_executing_get_prima_sobre_que;
 
 }
