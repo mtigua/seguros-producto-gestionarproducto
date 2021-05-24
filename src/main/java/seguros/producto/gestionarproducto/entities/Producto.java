@@ -18,11 +18,13 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.Max;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
 import lombok.Data;
 
 @Entity(name = "plan_de_cobertura")
@@ -480,8 +482,31 @@ public class Producto  {
 	@Column(name = "fecha_modificacion")
     @UpdateTimestamp
     private LocalDateTime fechaModificacion;
-	 
+
 	
+	
+	@OneToMany( cascade = {CascadeType.PERSIST,CascadeType.MERGE}, orphanRemoval = true)
+	@JoinColumn(name = "producto_id")
+	private Set<TerminoCorto> terminosCortos;
+	
+	public void addTerminoCorto(TerminoCorto terminoCorto) {
+        this.terminosCortos.add(terminoCorto);
+    }
+	
+	public void removeTerminoCorto(TerminoCorto terminoCorto) {
+			this.terminosCortos.remove(terminoCorto);
+	}
+	
+	public void updateTerminoCorto(TerminoCorto terminoCorto) {
+		 this.terminosCortos.stream()
+				  .filter(t -> terminoCorto.getId().equals( t.getId() ) )
+				  .findFirst()
+				  .ifPresent(t-> {
+					  t=terminoCorto;
+					  
+				  } );
+	
+	}
 		
 		
 		

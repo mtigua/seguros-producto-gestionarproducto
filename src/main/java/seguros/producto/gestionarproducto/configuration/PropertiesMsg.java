@@ -47,6 +47,12 @@ public class PropertiesMsg {
 	private String logger_error_executing_list_plan_cobertura;
 	private String logger_error_executing_find_codigopos;
 	private String logger_error_executing_get_palabrapase_product_manager;
+	private String logger_error_executing_get_tipo_multa;
+	private String logger_error_executing_get_terminos_corto_by_product;
+	private String logger_error_executing_save_terminos_corto_by_product;
+	private String logger_error_executing_update_terminos_corto_by_product;
+	private String logger_error_executing_delete_terminos_corto_by_product;
+	private String logger_error_executing_get_info_producto;
 	private String logger_error_executing_get_tipo_cobertura;
 	private String logger_error_executing_get_parentesco;
 	private String logger_error_executing_get_tipo_tasa;

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import seguros.producto.gestionarproducto.configuration.PropertiesSql;
 import seguros.producto.gestionarproducto.dto.CanalDto;
 import seguros.producto.gestionarproducto.dto.CompaniaDto;
+import seguros.producto.gestionarproducto.dto.InfoProductoDto;
 import seguros.producto.gestionarproducto.dto.NegocioDto;
 import seguros.producto.gestionarproducto.dto.PageProductoDto;
 import seguros.producto.gestionarproducto.dto.ProductoPageDto;
@@ -33,10 +34,7 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 	private EntityManager entityManager;
 	
 	@Autowired 
-	private PropertiesSql propertiesSql;	
-	
-	
-	
+	private PropertiesSql propertiesSql;		
 	
 	
 
@@ -145,6 +143,44 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 		}
 
 		return pageProductoDto;
+	}
+
+
+
+
+
+
+	@SuppressWarnings({ "unchecked" })
+	@Override
+	public InfoProductoDto getInfoProducto(Long id) throws ProductoException {
+	
+		InfoProductoDto infoProductoDto= new InfoProductoDto();
+		String procedureName = propertiesSql.getGET_DATA_INFO_PRODUCTO();
+		List<Object[]> record=null;
+		
+	   try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);	
+			storedProcedureQuery.registerStoredProcedureParameter("idProducto", Long.class, ParameterMode.IN);
+			storedProcedureQuery.setParameter("idProducto",id );
+			
+			storedProcedureQuery.execute();
+			record = storedProcedureQuery.getResultList();
+			
+			if(record!=null) {
+				if(!record.isEmpty()) {
+					infoProductoDto.setNemotecnico( record.get(0)[1].toString() );
+					infoProductoDto.setCompania( record.get(0)[2].toString() );
+					infoProductoDto.setNegocio( record.get(0)[3].toString() );
+					infoProductoDto.setRamo( record.get(0)[4].toString() );
+				}
+			}
+       }
+       catch(Exception e) {
+    	    ProductoException exc = new ProductoException(e);
+			throw exc;
+       }
+       
+       return infoProductoDto;
 	}
 	
 
