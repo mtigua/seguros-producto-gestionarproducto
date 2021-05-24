@@ -3,8 +3,10 @@ package seguros.producto.gestionarproducto.servicesImpl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
@@ -14,10 +16,14 @@ import org.springframework.web.client.RestTemplate;
 import seguros.producto.gestionarproducto.configuration.Properties;
 import seguros.producto.gestionarproducto.dto.ActionType;
 import seguros.producto.gestionarproducto.dto.EstadoProductoDto;
+import seguros.producto.gestionarproducto.dto.InfoProductoDto;
 import seguros.producto.gestionarproducto.dto.PageProductoDto;
 import seguros.producto.gestionarproducto.dto.ProductoDoDto;
 import seguros.producto.gestionarproducto.dto.ProductoDto;
 import seguros.producto.gestionarproducto.dto.State;
+import seguros.producto.gestionarproducto.dto.TerminoCortoDto;
+import seguros.producto.gestionarproducto.dto.TerminoCortoSaveDto;
+import seguros.producto.gestionarproducto.dto.TipoMultaDto;
 import seguros.producto.gestionarproducto.entities.Canal;
 import seguros.producto.gestionarproducto.entities.DestinoVenta;
 import seguros.producto.gestionarproducto.entities.EstadoIntegracion;
@@ -25,8 +31,10 @@ import seguros.producto.gestionarproducto.entities.ModoTraspaso;
 import seguros.producto.gestionarproducto.entities.Producto;
 import seguros.producto.gestionarproducto.entities.ProductoDo;
 import seguros.producto.gestionarproducto.entities.TarifaPor;
+import seguros.producto.gestionarproducto.entities.TerminoCorto;
 import seguros.producto.gestionarproducto.entities.TipoAjuste;
 import seguros.producto.gestionarproducto.entities.TipoDescuento;
+import seguros.producto.gestionarproducto.entities.TipoMulta;
 import seguros.producto.gestionarproducto.entities.TipoPeriodo;
 import seguros.producto.gestionarproducto.entities.TipoPromocion;
 import seguros.producto.gestionarproducto.entities.TipoRecargo;
@@ -38,8 +46,10 @@ import seguros.producto.gestionarproducto.repositories.ModoTraspasoRepository;
 import seguros.producto.gestionarproducto.repositories.PCBSRepositoryCustom;
 import seguros.producto.gestionarproducto.repositories.ProductoRepository;
 import seguros.producto.gestionarproducto.repositories.TarifaPorRepository;
+import seguros.producto.gestionarproducto.repositories.TerminoCortoRepository;
 import seguros.producto.gestionarproducto.repositories.TipoAjusteRepository;
 import seguros.producto.gestionarproducto.repositories.TipoDescuentoRepository;
+import seguros.producto.gestionarproducto.repositories.TipoMultaRepository;
 import seguros.producto.gestionarproducto.repositories.TipoPeriodoRepository;
 import seguros.producto.gestionarproducto.repositories.TipoPromocionRepository;
 import seguros.producto.gestionarproducto.repositories.TipoRecargoRepository;
@@ -105,6 +115,12 @@ public class ProductoServiceImpl implements ProductoService {
 	private CanalRepository canalRepository;
 	
 	@Autowired
+	private TipoMultaRepository tipoMultaRepository;
+	
+	@Autowired
+	private TerminoCortoRepository terminoCortoRepository;
+	
+	@Autowired
 	private RestTemplate restTemplate;
 	
 	@Autowired
@@ -147,8 +163,8 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public String save(ProductoDto producto) throws ProductoException,PcbsException {
-        String result="";
+	public InfoProductoDto save(ProductoDto producto) throws ProductoException,PcbsException {
+		InfoProductoDto result=new InfoProductoDto();
 		
 		try {
 			Producto productoEntity = producto.toEntity();
@@ -265,7 +281,8 @@ public class ProductoServiceImpl implements ProductoService {
 			
 			estadoIntegracionService.save(estadoIntegracion);
 			
-			result= newNemotecnico;
+			result.setNemotecnico(newNemotecnico);
+			result.setId(productoEntity.getId());
 		}
 		catch(PcbsException e) {
 			throw e;
@@ -370,6 +387,205 @@ public class ProductoServiceImpl implements ProductoService {
 		catch(Exception e) {
 			throw new ProductoException(e);
 		}
+	}
+
+	
+	@Transactional
+	@Override
+	public List<TerminoCortoDto> getTerminosCortosByProduct(Long id) throws ProductoException,ResourceNotFoundException {
+		List<TerminoCortoDto> lista= new ArrayList<>();
+	
+		try {
+			Optional<Producto> productoO= productoRepository.findById(id);
+			if(productoO.isPresent()) {
+				Producto producto=productoO.get();
+				Set<TerminoCorto> listaTerminoCorto= producto.getTerminosCortos();
+			
+				lista=listaTerminoCorto.stream().map(e->{
+					
+					TerminoCortoDto t= new TerminoCortoDto(); 
+					BeanUtils.copyProperties(e, t);
+					if(e.getTipoMulta()!=null) { 
+						TipoMultaDto tipoMultaDto = new TipoMultaDto();
+						 BeanUtils.copyProperties(e.getTipoMulta(), tipoMultaDto);
+						 t.setTipoMulta(tipoMultaDto);
+					 }
+					return t;
+					
+				}).collect(Collectors.toList());
+				Collections.sort(lista,(TerminoCortoDto f1,TerminoCortoDto f2) -> f1.getMesHasta().compareTo(f2.getMesHasta()));
+			}
+			else {
+				ResourceNotFoundException e = new ResourceNotFoundException();
+				e.setConcreteException(e);
+				e.setErrorMessage(MSG_NOT_FOUND);
+				e.setDetail(MSG_NOT_FOUND);
+				throw e;
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+		return lista;
+	}
+
+	
+	@Transactional
+	@Override
+	public void saveTerminosCortosByProduct(Long id, List<TerminoCortoSaveDto> terminosCortos)
+			throws ProductoException, ResourceNotFoundException {
+
+		try {
+			Optional<Producto> productoO= productoRepository.findById(id);
+			if(productoO.isPresent()) {
+				Producto producto=productoO.get();				
+				
+				  terminosCortos.stream().forEach(e->{
+				  
+				  TerminoCorto terminoCortoEntity= new TerminoCorto();
+				  
+				  BeanUtils.copyProperties(e, terminoCortoEntity); 
+				  TipoMulta tipoMulta=	  tipoMultaRepository.getOne(e.getTipoMulta());
+				  if(tipoMulta.getId()!=null) { 
+					  terminoCortoEntity.setTipoMulta(tipoMulta); 
+					  }
+				  producto.addTerminoCorto(terminoCortoEntity);
+				  
+				  });
+				 
+
+				 productoRepository.save(producto);
+				
+			}
+			else {
+				ResourceNotFoundException e = new ResourceNotFoundException();
+				e.setConcreteException(e);
+				e.setErrorMessage(MSG_NOT_FOUND);
+				e.setDetail(MSG_NOT_FOUND);
+				throw e;
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+		
+	}
+
+	
+	@Transactional
+	@Override
+	public void deleteTerminosCortosByProduct(Long idProducto, Long idTerminoCorto)	throws ProductoException, ResourceNotFoundException {
+		
+		try {
+			
+			Optional<Producto> productoO= productoRepository.findById(idProducto);
+			Optional<TerminoCorto> terminoCortoO= terminoCortoRepository.findById(idTerminoCorto);
+			
+			if(productoO.isPresent() && terminoCortoO.isPresent()) {
+				Producto producto=productoO.get();				
+				TerminoCorto terminoCorto=terminoCortoO.get();
+				producto.removeTerminoCorto(terminoCorto);			 
+
+				productoRepository.save(producto);
+				
+			}
+			else {
+				ResourceNotFoundException e = new ResourceNotFoundException();
+				e.setConcreteException(e);
+				e.setErrorMessage(MSG_NOT_FOUND);
+				e.setDetail(MSG_NOT_FOUND);
+				throw e;
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+		
+	}
+
+	@Transactional
+	@Override
+	public void updateTerminosCortosByProduct(Long id, Long idTerminoCorto, TerminoCortoSaveDto terminosCortoDto)	throws ProductoException, ResourceNotFoundException {
+          try {
+			
+			Optional<Producto> productoO= productoRepository.findById(id);
+			Optional<TerminoCorto> terminoCortoO= terminoCortoRepository.findById(idTerminoCorto);
+			
+			if(productoO.isPresent() && terminoCortoO.isPresent()) {
+				Producto producto=productoO.get();				
+				TerminoCorto terminoCorto=terminoCortoO.get();
+				
+				BeanUtils.copyProperties(terminosCortoDto, terminoCorto);
+				terminoCorto.setId(idTerminoCorto);
+				  TipoMulta tipoMulta=	  tipoMultaRepository.getOne(terminosCortoDto.getTipoMulta());
+				  if(tipoMulta.getId()!=null) { 
+					  terminoCorto.setTipoMulta(tipoMulta); 
+				  }
+				
+				producto.updateTerminoCorto(terminoCorto);
+						 
+
+				productoRepository.save(producto);
+				
+			}
+			else {
+				ResourceNotFoundException e = new ResourceNotFoundException();
+				e.setConcreteException(e);
+				e.setErrorMessage(MSG_NOT_FOUND);
+				e.setDetail(MSG_NOT_FOUND);
+				throw e;
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+		
+		
+	}
+
+	@Transactional
+	@Override
+	public InfoProductoDto getInfoProducto(Long id) throws ProductoException, ResourceNotFoundException {
+		InfoProductoDto infoProductoDto=null;
+		
+		try {
+				
+				Optional<Producto> productoO= productoRepository.findById(id);
+				
+				if(productoO.isPresent()) {
+					infoProductoDto= productoRepository.getInfoProducto(id);					
+				}
+				else {
+					ResourceNotFoundException e = new ResourceNotFoundException();
+					e.setConcreteException(e);
+					e.setErrorMessage(MSG_NOT_FOUND);
+					e.setDetail(MSG_NOT_FOUND);
+					throw e;
+				}
+			}
+			catch(ProductoException e) {
+				throw e;
+			}
+			catch(ResourceNotFoundException e) {
+				throw e;
+			}
+			catch(Exception e) {
+				throw new ProductoException(e);
+			}
+		return infoProductoDto;
+			
 	}
 
 	
