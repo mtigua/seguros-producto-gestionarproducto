@@ -87,7 +87,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compile 'io.jsonwebtoken:jjwt:0.7.0'
-	runtime group: 'org.springframework.cloud', name: 'spring-cloud-starter-bus-kafka', version: '2.2.0.RELEASE'
+    runtime group: 'org.springframework.cloud', name: 'spring-cloud-starter-bus-kafka', version: '2.2.0.RELEASE'
 	compile ('com.microsoft.sqlserver:mssql-jdbc')
 }
 
