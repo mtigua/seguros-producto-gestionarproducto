@@ -22,26 +22,24 @@ public class TerminoCortoSaveDto  {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;	
 	
-	
-	private Long tipoMulta;
-
-	@NotNull(message = "La mes desde es requerida")
-	@Range(min = 1, max = 12)
-	private Integer mesDesde;
+	private Integer cuotas;	
 	
 	@NotNull(message = "La mes hasta es requerida")
 	@Range(min = 1, max = 12)
-	private Integer mesHasta;
-	
+	private Integer mesHasta;	
 	
 	private BigDecimal primaPeriodo;
 	
 	private BigDecimal monto;
 	
-	private Integer cuotas;
+	@NotNull(message = "La mes desde es requerida")
+	@Range(min = 1, max = 12)
+	private Integer mesDesde;	
 	
 	@Size(max=5)
 	private String moneda;
+	
+	private Long tipoMulta;
 	
 	@JsonIgnore
 	public TerminoCorto toEntity() {

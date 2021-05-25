@@ -29,7 +29,9 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 	
 	
 	private static final String VALUE_UNDEFINED="No se ha podido indentificar valor para el par\u00E1metro de salida: ";
-
+	static final String RESULT = "result";
+	static final String EXISTE = "existe";
+	
 	@Autowired
 	private EntityManager entityManager;
 	
@@ -185,6 +187,36 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 	
 
 
+	@Override
+    public String generateNemotecnico() throws ProductoException {
+        String generateNemotecnico = propertiesSql.getGENERATE_NEMOTECNICO();
+        String newNemotecnico = null;
+
+        try {
+            StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(generateNemotecnico);
+            storedProcedureQuery.registerStoredProcedureParameter(RESULT, String.class, ParameterMode.OUT);
+
+            storedProcedureQuery.execute();
+
+            Object result = storedProcedureQuery.getOutputParameterValue(RESULT);
+            if (result != null) {
+                newNemotecnico = String.valueOf(storedProcedureQuery.getOutputParameterValue(RESULT));
+            } else {
+            	ProductoException executeGenerateNemotecnico = new ProductoException();
+                executeGenerateNemotecnico.setErrorMessage(VALUE_UNDEFINED + EXISTE);
+                executeGenerateNemotecnico.setDetail(VALUE_UNDEFINED + EXISTE);
+                executeGenerateNemotecnico.setConcreteException(executeGenerateNemotecnico);
+                throw executeGenerateNemotecnico;
+            }
+
+        } catch (ProductoException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ProductoException(e);
+        }
+
+        return newNemotecnico;
+    }
 
 
 

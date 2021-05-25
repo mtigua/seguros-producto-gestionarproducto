@@ -43,7 +43,6 @@ import seguros.producto.gestionarproducto.entities.TipoTarifa;
 import seguros.producto.gestionarproducto.entities.TipoTraspaso;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
 import seguros.producto.gestionarproducto.repositories.ModoTraspasoRepository;
-import seguros.producto.gestionarproducto.repositories.PCBSRepositoryCustom;
 import seguros.producto.gestionarproducto.repositories.ProductoRepository;
 import seguros.producto.gestionarproducto.repositories.TarifaPorRepository;
 import seguros.producto.gestionarproducto.repositories.TerminoCortoRepository;
@@ -105,8 +104,6 @@ public class ProductoServiceImpl implements ProductoService {
 	@Autowired
 	private DestinoVentaRepository destinoVentaRepository;
 	
-	@Autowired
-	private PCBSRepositoryCustom pcbsRepository;
 	
 	@Autowired
 	private EstadoIntegracionService estadoIntegracionService;
@@ -163,12 +160,12 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public InfoProductoDto save(ProductoDto producto) throws ProductoException,PcbsException {
+	public InfoProductoDto save(ProductoDto producto) throws ProductoException {
 		InfoProductoDto result=new InfoProductoDto();
 		
 		try {
 			Producto productoEntity = producto.toEntity();
-			String newNemotecnico = pcbsRepository.generateNemotecnico();
+			String newNemotecnico = productoRepository.generateNemotecnico();
 
 			if(producto.getTipoSeguro()!=null && !VALUE_UNDEFINED.equals(producto.getTipoSeguro()) ) {
 				TipoSeguro tipoSeguro = tipoSeguroRepository.getOne(producto.getTipoSeguro());
@@ -284,7 +281,7 @@ public class ProductoServiceImpl implements ProductoService {
 			result.setNemotecnico(newNemotecnico);
 			result.setId(productoEntity.getId());
 		}
-		catch(PcbsException e) {
+		catch(ProductoException e) {
 			throw e;
 		}
 		catch(Exception e) {
@@ -296,7 +293,7 @@ public class ProductoServiceImpl implements ProductoService {
 	@Transactional
 	@Override
 	public PageProductoDto findAllPaginated(int page, int size, Integer idCompania, Integer idNegocio,
-			Integer idRamo, String nemotecnico, String descripcion) throws ProductoException, PcbsException {
+			Integer idRamo, String nemotecnico, String descripcion) throws ProductoException {
 	
 		PageProductoDto pageProductoDto= null;
 		
