@@ -35,7 +35,6 @@ import seguros.producto.gestionarproducto.dto.TerminoCortoSaveDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
 import seguros.producto.gestionarproducto.services.ProductoService;
-import seguros.producto.gestionarproducto.servicesImpl.PcbsException;
 import seguros.producto.gestionarproducto.servicesImpl.ProductoException;
 
 @RestController
@@ -83,7 +82,7 @@ public class ProductoController {
 	public ResponseEntity<InfoProductoDto> saveProducto(
 
 			@RequestBody(required = false) @Valid ProductoDto producto
-			) throws ProductoException,PcbsException{	
+			) throws ProductoException{	
 				
 		InfoProductoDto result=null;
 		
@@ -92,10 +91,6 @@ public class ProductoController {
 			   
 		}
 		catch(ProductoException e) {
-			e.setSubject(propertiesMsg.getLogger_error_executing_save_producto());
-			throw e;
-		}
-		catch(PcbsException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_save_producto());
 			throw e;
 		}
