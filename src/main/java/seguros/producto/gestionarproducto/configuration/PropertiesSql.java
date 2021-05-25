@@ -33,5 +33,6 @@ public class PropertiesSql {
 	private String LISTAR_PLAN_COBERTURA;
 	private String VALIDAR_BUSCAR_CODIGOPOS;
 	private String GET_DATA_INFO_PRODUCTO;
+	private String LISTAR_COBERTURAS_POR_PRODUCTO;
 
 }

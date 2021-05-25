@@ -1,7 +1,6 @@
 package seguros.producto.gestionarproducto.entities;
 
 import lombok.Data;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -9,16 +8,13 @@ import java.math.BigDecimal;
 @Data
 public class CoberturaProducto {
 
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
+	@EmbeddedId
+	private CoberturaProductoKey id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("id_producto")
     @JoinColumn(name = "id_producto", nullable = false)
     private  Producto producto;
-
-    @Column(name = "id_cobertura")
-    private int idCobertura;
 
     @Column(name = "id_deducible")
     private int idDeducible;
@@ -65,8 +61,8 @@ public class CoberturaProducto {
     @Column(name = "porc_prima")
     private BigDecimal porcPrima;
 
-    @Column(name = "id_prima_sobre_que")
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_prima_sobre_que")
     private PrimaSobreQue primaSobreQue;
 
 }

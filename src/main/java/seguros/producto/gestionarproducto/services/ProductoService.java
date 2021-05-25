@@ -2,12 +2,7 @@ package seguros.producto.gestionarproducto.services;
 
 import java.util.List;
 
-import seguros.producto.gestionarproducto.dto.EstadoProductoDto;
-import seguros.producto.gestionarproducto.dto.InfoProductoDto;
-import seguros.producto.gestionarproducto.dto.PageProductoDto;
-import seguros.producto.gestionarproducto.dto.ProductoDto;
-import seguros.producto.gestionarproducto.dto.TerminoCortoDto;
-import seguros.producto.gestionarproducto.dto.TerminoCortoSaveDto;
+import seguros.producto.gestionarproducto.dto.*;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
 import seguros.producto.gestionarproducto.servicesImpl.PcbsException;
 import seguros.producto.gestionarproducto.servicesImpl.ProductoException;
@@ -26,4 +21,5 @@ public interface ProductoService {
     public void deleteTerminosCortosByProduct(Long idProducto,Long idTerminoCorto) throws ProductoException,ResourceNotFoundException;
     public void updateTerminosCortosByProduct(Long id, Long idTerminoCorto, TerminoCortoSaveDto terminosCorto) throws ProductoException,ResourceNotFoundException;
     public InfoProductoDto getInfoProducto(Long id)  throws ProductoException,ResourceNotFoundException;
+    public List<CoberturaProductoDto> getCoberturasDtoByProducto(Long id) throws ProductoException,ResourceNotFoundException;
 }

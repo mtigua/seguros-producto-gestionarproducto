@@ -57,5 +57,6 @@ public class PropertiesMsg {
 	private String logger_error_executing_get_parentesco;
 	private String logger_error_executing_get_tipo_tasa;
 	private String logger_error_executing_get_prima_sobre_que;
+	private String logger_error_executing_get_coberturas_by_product;
 
 }
