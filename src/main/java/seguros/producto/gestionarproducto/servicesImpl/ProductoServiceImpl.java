@@ -407,6 +407,9 @@ public class ProductoServiceImpl implements ProductoService {
 						 BeanUtils.copyProperties(e.getTipoMulta(), tipoMultaDto);
 						 t.setTipoMulta(tipoMultaDto);
 					 }
+					if(e.getMoneda() == null) {
+						e.setMoneda("N/A");
+					}
 					return t;
 					
 				}).collect(Collectors.toList());
