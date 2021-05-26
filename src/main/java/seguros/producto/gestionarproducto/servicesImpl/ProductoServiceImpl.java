@@ -449,6 +449,9 @@ public class ProductoServiceImpl implements ProductoService {
 				  if(tipoMulta.getId()!=null) { 
 					  terminoCortoEntity.setTipoMulta(tipoMulta); 
 					  }
+				  if(terminoCortoEntity.getMoneda().equalsIgnoreCase("-1")) {
+					  terminoCortoEntity.setMoneda(null);
+				  }
 				  producto.addTerminoCorto(terminoCortoEntity);
 				  
 				  });
@@ -526,6 +529,9 @@ public class ProductoServiceImpl implements ProductoService {
 				  TipoMulta tipoMulta=	  tipoMultaRepository.getOne(terminosCortoDto.getTipoMulta());
 				  if(tipoMulta.getId()!=null) { 
 					  terminoCorto.setTipoMulta(tipoMulta); 
+				  }
+				  if(terminoCorto.getMoneda().equalsIgnoreCase("-1")) {
+					  terminoCorto.setMoneda(null);
 				  }
 				
 				producto.updateTerminoCorto(terminoCorto);
