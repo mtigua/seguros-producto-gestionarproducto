@@ -1,5 +1,6 @@
 package seguros.producto.gestionarproducto.repositories;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -11,14 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import seguros.producto.gestionarproducto.configuration.PropertiesSql;
-import seguros.producto.gestionarproducto.dto.CanalDto;
-import seguros.producto.gestionarproducto.dto.CompaniaDto;
-import seguros.producto.gestionarproducto.dto.InfoProductoDto;
-import seguros.producto.gestionarproducto.dto.NegocioDto;
-import seguros.producto.gestionarproducto.dto.PageProductoDto;
-import seguros.producto.gestionarproducto.dto.ProductoPageDto;
-import seguros.producto.gestionarproducto.dto.RamoDto;
-import seguros.producto.gestionarproducto.dto.TipoSeguroDto;
+import seguros.producto.gestionarproducto.dto.*;
 import seguros.producto.gestionarproducto.entities.Canal;
 import seguros.producto.gestionarproducto.entities.Producto;
 import seguros.producto.gestionarproducto.servicesImpl.ProductoException;
@@ -184,8 +178,6 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
        
        return infoProductoDto;
 	}
-	
-
 
 	@Override
     public String generateNemotecnico() throws ProductoException {
@@ -218,8 +210,40 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
         return newNemotecnico;
     }
 
+	@Override
+	public List<CoberturaProductoDto> findCoberturasDtoByProducto(Long id) throws ProductoException {
+		String procedureName = propertiesSql.getLISTAR_COBERTURAS_POR_PRODUCTO();
+		List<CoberturaProductoDto> coberturasDto =  new ArrayList<>();
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);
+			storedProcedureQuery.registerStoredProcedureParameter("idProducto", Long.class, ParameterMode.IN);
+			storedProcedureQuery.setParameter("idProducto",id );
+
+			storedProcedureQuery.execute();
+			List<Object[]> rs = storedProcedureQuery.getResultList();
+
+			if (rs != null) {
+				rs.stream().forEach((record) -> {
+					CoberturaProductoDto coberturaProductoDto = new CoberturaProductoDto();
+					coberturaProductoDto.setIdCobertura(record[0]!=null? Long.valueOf(record[0].toString()) : null );
+					coberturaProductoDto.setNombreCobertura(record[1]!=null?record[1].toString():"");
+					coberturaProductoDto.setNombreDeducible(record[2]!=null?record[2].toString():"");
+					coberturaProductoDto.setIva(record[3]!=null?record[3].toString():"");
+					coberturaProductoDto.setNombreTipo(record[4]!=null?record[4].toString():"");
+					coberturaProductoDto.setTasa(record[5]!=null? (BigDecimal) record[5]:null);
+					coberturaProductoDto.setEn(record[6]!=null?record[6].toString():"");
+					coberturaProductoDto.setValorPrima(record[7]!=null? (BigDecimal) record[7] :null);
+					coberturaProductoDto.setMontoAsegurado(record[8]!=null?record[8].toString():"");
+					coberturaProductoDto.setOrden(record[9]!=null? (Integer) record[9] :null);
+					coberturasDto.add(coberturaProductoDto);
+				});
+			}
+		} catch (Exception e) {
+			ProductoException exc = new ProductoException(e);
+			throw exc;
+		}
+		return coberturasDto;
+	}
 
 
-
-	
 }

@@ -35,5 +35,11 @@ public class PropertiesMsg {
 	private String logger_error_executing_update_terminos_corto_by_product;
 	private String logger_error_executing_delete_terminos_corto_by_product;
 	private String logger_error_executing_get_info_producto;
+	private String logger_error_executing_get_tipo_cobertura;
+	private String logger_error_executing_get_parentesco;
+	private String logger_error_executing_get_tipo_tasa;
+	private String logger_error_executing_get_prima_sobre_que;
+	private String logger_error_executing_get_coberturas_by_product;
+
 
 }

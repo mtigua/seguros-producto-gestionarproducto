@@ -8,13 +8,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import javax.transaction.Transactional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
 import seguros.producto.gestionarproducto.configuration.Properties;
 import seguros.producto.gestionarproducto.dto.ActionType;
+import seguros.producto.gestionarproducto.dto.CoberturaProductoDto;
 import seguros.producto.gestionarproducto.dto.EstadoProductoDto;
 import seguros.producto.gestionarproducto.dto.InfoProductoDto;
 import seguros.producto.gestionarproducto.dto.PageProductoDto;
@@ -42,6 +46,8 @@ import seguros.producto.gestionarproducto.entities.TipoSeguro;
 import seguros.producto.gestionarproducto.entities.TipoTarifa;
 import seguros.producto.gestionarproducto.entities.TipoTraspaso;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
+import seguros.producto.gestionarproducto.repositories.CanalRepository;
+import seguros.producto.gestionarproducto.repositories.DestinoVentaRepository;
 import seguros.producto.gestionarproducto.repositories.ModoTraspasoRepository;
 import seguros.producto.gestionarproducto.repositories.ProductoRepository;
 import seguros.producto.gestionarproducto.repositories.TarifaPorRepository;
@@ -57,8 +63,6 @@ import seguros.producto.gestionarproducto.repositories.TipoTarifaRepository;
 import seguros.producto.gestionarproducto.repositories.TipoTraspasoRepository;
 import seguros.producto.gestionarproducto.services.EstadoIntegracionService;
 import seguros.producto.gestionarproducto.services.ProductoService;
-import seguros.producto.gestionarproducto.repositories.CanalRepository;
-import seguros.producto.gestionarproducto.repositories.DestinoVentaRepository;
 
 
 @Service
@@ -594,14 +598,33 @@ public class ProductoServiceImpl implements ProductoService {
 			
 	}
 
-	
+	@Transactional
+	@Override
+	public List<CoberturaProductoDto> getCoberturasDtoByProducto(Long id) throws ProductoException, ResourceNotFoundException {
+		List<CoberturaProductoDto>  coberturasDto;
 
-	
+		try {
+			Optional<Producto> productoOp = productoRepository.findById(id);
+			if(productoOp.isPresent()) {
+				coberturasDto =productoRepository.findCoberturasDtoByProducto(id);
+			}
+			else {
+				ResourceNotFoundException e = new ResourceNotFoundException();
+				e.setConcreteException(e);
+				e.setErrorMessage(MSG_NOT_FOUND);
+				e.setDetail(MSG_NOT_FOUND);
+				throw e;
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
 
-	
-	
-	
+		return coberturasDto;
+	}
 
 
-	
 }
