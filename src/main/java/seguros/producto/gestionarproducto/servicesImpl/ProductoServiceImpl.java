@@ -412,7 +412,7 @@ public class ProductoServiceImpl implements ProductoService {
 						 t.setTipoMulta(tipoMultaDto);
 					 }
 					if(e.getMoneda() == null) {
-						e.setMoneda("N/A");
+						t.setMoneda("N/A");
 					}
 					return t;
 					
