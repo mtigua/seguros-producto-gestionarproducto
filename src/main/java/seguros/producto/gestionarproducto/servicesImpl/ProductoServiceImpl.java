@@ -49,7 +49,6 @@ import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
 import seguros.producto.gestionarproducto.repositories.CanalRepository;
 import seguros.producto.gestionarproducto.repositories.DestinoVentaRepository;
 import seguros.producto.gestionarproducto.repositories.ModoTraspasoRepository;
-import seguros.producto.gestionarproducto.repositories.PCBSRepositoryCustom;
 import seguros.producto.gestionarproducto.repositories.ProductoRepository;
 import seguros.producto.gestionarproducto.repositories.TarifaPorRepository;
 import seguros.producto.gestionarproducto.repositories.TerminoCortoRepository;
@@ -109,8 +108,6 @@ public class ProductoServiceImpl implements ProductoService {
 	@Autowired
 	private DestinoVentaRepository destinoVentaRepository;
 	
-	@Autowired
-	private PCBSRepositoryCustom pcbsRepository;
 	
 	@Autowired
 	private EstadoIntegracionService estadoIntegracionService;
@@ -167,12 +164,12 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public InfoProductoDto save(ProductoDto producto) throws ProductoException,PcbsException {
+	public InfoProductoDto save(ProductoDto producto) throws ProductoException {
 		InfoProductoDto result=new InfoProductoDto();
 		
 		try {
 			Producto productoEntity = producto.toEntity();
-			String newNemotecnico = pcbsRepository.generateNemotecnico();
+			String newNemotecnico = productoRepository.generateNemotecnico();
 
 			if(producto.getTipoSeguro()!=null && !VALUE_UNDEFINED.equals(producto.getTipoSeguro()) ) {
 				TipoSeguro tipoSeguro = tipoSeguroRepository.getOne(producto.getTipoSeguro());
@@ -288,7 +285,7 @@ public class ProductoServiceImpl implements ProductoService {
 			result.setNemotecnico(newNemotecnico);
 			result.setId(productoEntity.getId());
 		}
-		catch(PcbsException e) {
+		catch(ProductoException e) {
 			throw e;
 		}
 		catch(Exception e) {
@@ -300,7 +297,7 @@ public class ProductoServiceImpl implements ProductoService {
 	@Transactional
 	@Override
 	public PageProductoDto findAllPaginated(int page, int size, Integer idCompania, Integer idNegocio,
-			Integer idRamo, String nemotecnico, String descripcion) throws ProductoException, PcbsException {
+			Integer idRamo, String nemotecnico, String descripcion) throws ProductoException {
 	
 		PageProductoDto pageProductoDto= null;
 		
@@ -456,6 +453,9 @@ public class ProductoServiceImpl implements ProductoService {
 				  if(tipoMulta.getId()!=null) { 
 					  terminoCortoEntity.setTipoMulta(tipoMulta); 
 					  }
+				  if(terminoCortoEntity.getMoneda().equalsIgnoreCase("-1")) {
+					  terminoCortoEntity.setMoneda(null);
+				  }
 				  producto.addTerminoCorto(terminoCortoEntity);
 				  
 				  });
@@ -533,6 +533,9 @@ public class ProductoServiceImpl implements ProductoService {
 				  TipoMulta tipoMulta=	  tipoMultaRepository.getOne(terminosCortoDto.getTipoMulta());
 				  if(tipoMulta.getId()!=null) { 
 					  terminoCorto.setTipoMulta(tipoMulta); 
+				  }
+				  if(terminoCorto.getMoneda().equalsIgnoreCase("-1")) {
+					  terminoCorto.setMoneda(null);
 				  }
 				
 				producto.updateTerminoCorto(terminoCorto);
