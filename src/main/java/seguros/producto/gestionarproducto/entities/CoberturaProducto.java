@@ -2,7 +2,12 @@ package seguros.producto.gestionarproducto.entities;
 
 import lombok.Data;
 import javax.persistence.*;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity(name = "cobertura_plan")
 @Data
@@ -65,4 +70,11 @@ public class CoberturaProducto {
     @JoinColumn(name = "id_prima_sobre_que")
     private PrimaSobreQue primaSobreQue;
 
+    @Column(name = "fecha_creacion", updatable=false)
+	@CreationTimestamp
+	private LocalDateTime fechaCreacion;
+	
+	@Column(name = "fecha_modificacion")
+    @UpdateTimestamp
+    private LocalDateTime fechaModificacion;
 }
