@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 import lombok.Data;
@@ -30,12 +29,12 @@ public class TerminoCorto  {
 	private TipoMulta tipoMulta;
 	 
 
-	@Max(12)
+	
 	@Min(1)
 	@Column(nullable = false)
 	private Integer mesDesde;
 	
-	@Max(12)
+	
 	@Min(1)
 	@Column(nullable = false)
 	private Integer mesHasta;
