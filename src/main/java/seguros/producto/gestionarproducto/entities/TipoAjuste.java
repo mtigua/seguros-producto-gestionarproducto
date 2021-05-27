@@ -24,11 +24,6 @@ public class TipoAjuste  {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(unique = true)
-	private String nombre;
-	
-	private String descripcion;	
-	
 	@Column(name = "fecha_creacion", updatable=false)
 	@CreationTimestamp
 	private LocalDateTime fechaCreacion;
@@ -36,4 +31,11 @@ public class TipoAjuste  {
 	@Column(name = "fecha_modificacion")
     @UpdateTimestamp
     private LocalDateTime fechaModificacion;
+	
+	@Column(unique = true)
+	private String nombre;
+	
+	private String descripcion;	
+	
+	
 }

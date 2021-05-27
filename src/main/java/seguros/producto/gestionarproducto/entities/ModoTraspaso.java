@@ -24,6 +24,10 @@ public class ModoTraspaso  {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(name = "fecha_modificacion")
+    @UpdateTimestamp
+    private LocalDateTime fechaModificacion;
+	
 	@Column(unique = true)
 	private String nombre;
 	
@@ -33,8 +37,6 @@ public class ModoTraspaso  {
 	@CreationTimestamp
 	private LocalDateTime fechaCreacion;
 	
-	@Column(name = "fecha_modificacion")
-    @UpdateTimestamp
-    private LocalDateTime fechaModificacion;
+	
     
 }

@@ -19,12 +19,13 @@ public class CatalogoCantidadAjuste {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(unique = true)
-	private String name;
-	
 	@Column(name = "fecha_creacion", updatable=false)
 	@CreationTimestamp
 	private LocalDateTime fechaCreacion;
+	
+	@Column(unique = true)
+	private String name;	
+	
 	
 	@Column(name = "fecha_modificacion")
     @UpdateTimestamp

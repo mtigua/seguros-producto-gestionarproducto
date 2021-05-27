@@ -88,13 +88,15 @@ public class ProductoDo  {
 	@Column(name = "dopl_novalida_tit_cerrada")
 	private Boolean  doplNovalidaTitCerrada;
 	
+	@Column(name = "fecha_creacion", updatable=false)
+	@CreationTimestamp
+	private LocalDateTime fechaCreacion;
+	
 	@ManyToOne
 	@JoinColumn(name = "id_destino", nullable=false)
 	private  DestinoVenta doplAQuienSeVende;
 	
-	@Column(name = "fecha_creacion", updatable=false)
-	@CreationTimestamp
-	private LocalDateTime fechaCreacion;
+	
 	
 	@Column(name = "fecha_modificacion")
     @UpdateTimestamp

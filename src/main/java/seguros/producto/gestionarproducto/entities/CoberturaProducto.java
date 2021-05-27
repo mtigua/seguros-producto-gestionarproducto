@@ -60,6 +60,10 @@ public class CoberturaProducto {
     @Column(name = "porc_capital")
     private BigDecimal porcCapital;
 
+    @Column(name = "fecha_creacion", updatable=false)
+ 	@CreationTimestamp
+ 	private LocalDateTime fechaCreacion;
+    
     @Column
     private Integer orden;
 
@@ -69,10 +73,7 @@ public class CoberturaProducto {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_prima_sobre_que")
     private PrimaSobreQue primaSobreQue;
-
-    @Column(name = "fecha_creacion", updatable=false)
-	@CreationTimestamp
-	private LocalDateTime fechaCreacion;
+ 
 	
 	@Column(name = "fecha_modificacion")
     @UpdateTimestamp

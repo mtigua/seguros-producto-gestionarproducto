@@ -29,6 +29,10 @@ public class DatoComplementario  {
 	
 	private String descripcion;	
 	
+	@Column(name = "fecha_modificacion")
+    @UpdateTimestamp
+    private LocalDateTime fechaModificacion;
+	
 	@Column(nullable =false)
 	private String url;
 	
@@ -39,7 +43,5 @@ public class DatoComplementario  {
 	@CreationTimestamp
 	private LocalDateTime fechaCreacion;
 	
-	@Column(name = "fecha_modificacion")
-    @UpdateTimestamp
-    private LocalDateTime fechaModificacion;
+	
 }

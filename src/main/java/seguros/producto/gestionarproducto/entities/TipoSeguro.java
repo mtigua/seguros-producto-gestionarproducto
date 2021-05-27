@@ -27,11 +27,13 @@ public class TipoSeguro  {
 	@Column(unique = true)
 	private String nombre;
 	
-	private String descripcion;	
-	
 	@Column(name = "fecha_creacion", updatable=false)
 	@CreationTimestamp
 	private LocalDateTime fechaCreacion;
+	
+	
+	private String descripcion;	
+	
 	
 	@Column(name = "fecha_modificacion")
     @UpdateTimestamp

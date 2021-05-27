@@ -24,11 +24,12 @@ public class TipoTasa {
 	
 	private String descripcion;
 	
-	@Column(name = "fecha_creacion", updatable=false)
-	@CreationTimestamp
-	private LocalDateTime fechaCreacion;
 	
 	@Column(name = "fecha_modificacion")
     @UpdateTimestamp
     private LocalDateTime fechaModificacion;
+	
+	@Column(name = "fecha_creacion", updatable=false)
+	@CreationTimestamp
+	private LocalDateTime fechaCreacion;
 }

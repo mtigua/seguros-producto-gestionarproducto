@@ -24,14 +24,16 @@ public class Concepto  {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+
+	@Column(name = "fecha_creacion", updatable=false)
+	@CreationTimestamp
+	private LocalDateTime fechaCreacion;
+	
+	
 	@Column(unique = true)
 	private String name;
 	
 	private String descripcion;	
-	
-	@Column(name = "fecha_creacion", updatable=false)
-	@CreationTimestamp
-	private LocalDateTime fechaCreacion;
 	
 	@Column(name = "fecha_modificacion")
     @UpdateTimestamp

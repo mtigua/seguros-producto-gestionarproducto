@@ -44,11 +44,20 @@ public class TerminoCorto  {
 	@Column(nullable = false)
 	private Integer mesHasta;
 	
+	@Column(name = "fecha_modificacion")
+    @UpdateTimestamp
+    private LocalDateTime fechaModificacion;
+	
 	@Column(precision =10 , scale=2, nullable = false)
 	private BigDecimal primaPeriodo;
 	
 	@Column(precision =10 , scale=2, nullable = false)
 	private BigDecimal monto;
+	
+	@Column(name = "fecha_creacion", updatable=false)
+	@CreationTimestamp
+	private LocalDateTime fechaCreacion;
+	
 	
 	@Column(nullable = false)
 	private Integer cuotas;
@@ -57,12 +66,7 @@ public class TerminoCorto  {
 	private String moneda;
 		
 
-	@Column(name = "fecha_creacion", updatable=false)
-	@CreationTimestamp
-	private LocalDateTime fechaCreacion;
 	
-	@Column(name = "fecha_modificacion")
-    @UpdateTimestamp
-    private LocalDateTime fechaModificacion;
+	
     
 }

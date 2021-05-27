@@ -19,6 +19,10 @@ public class PrimaSobreQue {
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(name = "fecha_modificacion")
+    @UpdateTimestamp
+    private LocalDateTime fechaModificacion;
+	
 	@Column(unique = true)
 	private String nombre;
 	
@@ -28,7 +32,5 @@ public class PrimaSobreQue {
 	@CreationTimestamp
 	private LocalDateTime fechaCreacion;
 	
-	@Column(name = "fecha_modificacion")
-    @UpdateTimestamp
-    private LocalDateTime fechaModificacion;
+
 }

@@ -42,13 +42,15 @@ public class HomologacionIdentificador  {
 	@JoinColumn(name="id_concepto", nullable=false)
 	private Concepto concepto;
 	
+	@Column(name = "fecha_creacion", updatable=false)
+	@CreationTimestamp
+	private LocalDateTime fechaCreacion;
+	
 	@ManyToOne
 	@JoinColumn(name="id_canal", nullable=false)
 	private Canal canal;
 	
-	@Column(name = "fecha_creacion", updatable=false)
-	@CreationTimestamp
-	private LocalDateTime fechaCreacion;
+
 	
 	@Column(name = "fecha_modificacion")
     @UpdateTimestamp

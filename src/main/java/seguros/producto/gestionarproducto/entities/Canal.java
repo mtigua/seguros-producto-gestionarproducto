@@ -45,6 +45,10 @@ public class Canal  {
 		)
 	private Set<DatoComplementario> datosComplementarios = new HashSet<>();
 		
+	@Column(name = "fecha_creacion", updatable=false)
+	@CreationTimestamp
+	private LocalDateTime fechaCreacion;
+	
 	public void addDatoComplementario(DatoComplementario datoComplementario) {
 	        this.datosComplementarios.add(datoComplementario);
 	 }
@@ -53,9 +57,7 @@ public class Canal  {
 			this.datosComplementarios.remove(datoComplementario);
 	}
 	
-	@Column(name = "fecha_creacion", updatable=false)
-	@CreationTimestamp
-	private LocalDateTime fechaCreacion;
+	
 	
 	@Column(name = "fecha_modificacion")
     @UpdateTimestamp

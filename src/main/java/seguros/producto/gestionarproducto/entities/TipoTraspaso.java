@@ -27,8 +27,6 @@ public class TipoTraspaso  {
 	@Column(unique = true)
 	private String nombre;
 	
-	private String descripcion;	
-	
 	@Column(name = "fecha_creacion", updatable=false)
 	@CreationTimestamp
 	private LocalDateTime fechaCreacion;
@@ -36,4 +34,8 @@ public class TipoTraspaso  {
 	@Column(name = "fecha_modificacion")
     @UpdateTimestamp
     private LocalDateTime fechaModificacion;
+	
+	private String descripcion;	
+	
+
 }

@@ -24,13 +24,15 @@ public class TipoCompania  {
 	@Column(unique = true)
 	private String nombre;
 	
+	@Column(name = "fecha_modificacion")
+    @UpdateTimestamp
+    private LocalDateTime fechaModificacion;
+	
 	private String nemot;			
 	
 	@Column(name = "fecha_creacion", updatable=false)
 	@CreationTimestamp
 	private LocalDateTime fechaCreacion;
 	
-	@Column(name = "fecha_modificacion")
-    @UpdateTimestamp
-    private LocalDateTime fechaModificacion;
+	
 }
