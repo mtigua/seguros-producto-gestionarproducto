@@ -44,12 +44,13 @@ public class TerminoCorto  {
 	@Column(nullable = false)
 	private Integer mesHasta;
 	
-	@Column(precision =10 , scale=2)
+	@Column(precision =10 , scale=2, nullable = false)
 	private BigDecimal primaPeriodo;
 	
-	@Column(precision =10 , scale=2)
+	@Column(precision =10 , scale=2, nullable = false)
 	private BigDecimal monto;
 	
+	@Column(nullable = false)
 	private Integer cuotas;
 	
 	@Column(length = 5, name = "dome_mone_cod")
