@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.BeanUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -26,11 +25,9 @@ public class TerminoCortoDto  {
 	private TipoMultaDto tipoMulta;
 
 	@NotNull(message = "La mes desde es requerida")
-	@Range(min = 1, max = 12)
 	private Integer mesDesde;
 	
 	@NotNull(message = "La mes hasta es requerida")
-	@Range(min = 1, max = 12)
 	private Integer mesHasta;
 	
 	
