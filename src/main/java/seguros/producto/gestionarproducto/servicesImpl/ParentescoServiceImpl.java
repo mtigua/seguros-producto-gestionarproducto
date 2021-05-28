@@ -5,7 +5,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import seguros.producto.gestionarproducto.dto.ParentescoDto;
-import seguros.producto.gestionarproducto.dto.TipoCoberturaDto;
 import seguros.producto.gestionarproducto.repositories.ParentescoRepository;
 import seguros.producto.gestionarproducto.services.ParentescoService;
 

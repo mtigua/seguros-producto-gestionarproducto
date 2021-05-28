@@ -8,12 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import seguros.producto.gestionarproducto.configuration.PropertiesMsg;
-import seguros.producto.gestionarproducto.dto.TipoCoberturaDto;
 import seguros.producto.gestionarproducto.dto.TipoTasaDto;
-import seguros.producto.gestionarproducto.entities.TipoTasa;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
 import seguros.producto.gestionarproducto.services.TipoTasaService;
-import seguros.producto.gestionarproducto.servicesImpl.TipoCoberturaException;
 import seguros.producto.gestionarproducto.servicesImpl.TipoTasaException;
 
 import java.util.List;

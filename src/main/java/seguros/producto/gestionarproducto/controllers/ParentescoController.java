@@ -9,11 +9,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import seguros.producto.gestionarproducto.configuration.PropertiesMsg;
 import seguros.producto.gestionarproducto.dto.ParentescoDto;
-import seguros.producto.gestionarproducto.dto.TipoCoberturaDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
 import seguros.producto.gestionarproducto.services.ParentescoService;
 import seguros.producto.gestionarproducto.servicesImpl.ParentescoException;
-import seguros.producto.gestionarproducto.servicesImpl.TipoCoberturaException;
 
 import java.util.List;
 

@@ -220,6 +220,7 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 			storedProcedureQuery.setParameter("idProducto",id );
 
 			storedProcedureQuery.execute();
+			@SuppressWarnings("unchecked")
 			List<Object[]> rs = storedProcedureQuery.getResultList();
 
 			if (rs != null) {
