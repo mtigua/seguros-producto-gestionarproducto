@@ -30,11 +30,13 @@ public class TerminoCortoDto  {
 	@NotNull(message = "La mes hasta es requerida")
 	private Integer mesHasta;
 	
-	
+	@NotNull(message = "La prima es requerida")
 	private BigDecimal primaPeriodo;
 	
+	@NotNull(message = "El monto es requerido")
 	private BigDecimal monto;
 	
+	@NotNull(message = "La cuota es requerida")
 	private Integer cuotas;
 	
 	@Size(max=5)

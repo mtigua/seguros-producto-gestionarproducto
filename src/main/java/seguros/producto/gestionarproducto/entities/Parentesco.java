@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 
+
 @Entity(name = "parentesco")
 @Data
 public class Parentesco {
@@ -17,7 +18,9 @@ public class Parentesco {
 	@Column(unique = true)
 	private String nombre;
 	
+	
 	private String descripcion;	
 	
-    
+	
+	
 }

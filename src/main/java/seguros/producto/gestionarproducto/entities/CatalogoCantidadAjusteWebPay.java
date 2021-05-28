@@ -3,6 +3,7 @@ package seguros.producto.gestionarproducto.entities;
 
 import lombok.Data;
 
+
 import javax.persistence.*;
 
 
@@ -14,8 +15,7 @@ public class CatalogoCantidadAjusteWebPay {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	
 	@Column(unique = true)
 	private String name;
-	
-    
 }

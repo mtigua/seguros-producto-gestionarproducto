@@ -2,8 +2,8 @@ package seguros.producto.gestionarproducto.entities;
 
 
 import lombok.Data;
-
 import javax.persistence.*;
+
 
 
 @Entity(name = "catalogo_cantidad_cuotas")
@@ -15,7 +15,7 @@ public class CatalogoCantidadAjuste {
 	private Long id;
 	
 	@Column(unique = true)
-	private String name;
+	private String name;	
 	
-    
+	
 }

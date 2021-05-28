@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+
 import lombok.Data;
 
 
@@ -19,10 +20,11 @@ public class TipoTarifa  {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	
 	@Column(unique = true)
 	private String nombre;
 	
 	private String descripcion;	
 	
-    
+	
 }

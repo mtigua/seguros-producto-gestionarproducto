@@ -2,6 +2,7 @@ package seguros.producto.gestionarproducto.entities;
 
 
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,14 +16,15 @@ import lombok.Data;
 @Data
 public class TipoSeguro  {
 	
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(unique = true)
-	private String nombre;
+	private String nombre;	
 	
 	private String descripcion;	
 	
-    
+	
 }

@@ -2,6 +2,7 @@ package seguros.producto.gestionarproducto.entities;
 
 
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,9 +38,11 @@ public class HomologacionIdentificador  {
 	@JoinColumn(name="id_concepto", nullable=false)
 	private Concepto concepto;
 	
+	
 	@ManyToOne
 	@JoinColumn(name="id_canal", nullable=false)
 	private Canal canal;
 	
-    
+
+	
 }

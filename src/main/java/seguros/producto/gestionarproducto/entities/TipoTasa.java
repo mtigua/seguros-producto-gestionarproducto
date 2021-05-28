@@ -19,5 +19,4 @@ public class TipoTasa {
 	
 	private String descripcion;
 	
-    
 }

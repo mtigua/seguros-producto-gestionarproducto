@@ -2,6 +2,7 @@ package seguros.producto.gestionarproducto.entities;
 
 import lombok.Data;
 import javax.persistence.*;
+
 import java.math.BigDecimal;
 
 @Entity(name = "cobertura_plan")
@@ -64,5 +65,6 @@ public class CoberturaProducto {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_prima_sobre_que")
     private PrimaSobreQue primaSobreQue;
-
+ 
+	
 }

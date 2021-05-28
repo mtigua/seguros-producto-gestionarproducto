@@ -2,7 +2,6 @@ package seguros.producto.gestionarproducto.entities;
 
 
 import lombok.Data;
-
 import javax.persistence.*;
 
 
@@ -17,7 +16,8 @@ public class TipoCobertura {
 	@Column(unique = true)
 	private String nombre;
 	
+	
 	private String descripcion;
 	
-    
+	
 }

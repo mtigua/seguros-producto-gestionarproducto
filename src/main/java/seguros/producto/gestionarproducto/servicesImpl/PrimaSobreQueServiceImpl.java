@@ -5,9 +5,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import seguros.producto.gestionarproducto.dto.PrimaSobreQueDto;
-import seguros.producto.gestionarproducto.dto.TipoCoberturaDto;
 import seguros.producto.gestionarproducto.repositories.PrimaSobreQueRepository;
-import seguros.producto.gestionarproducto.repositories.TipoCoberturaRepository;
 import seguros.producto.gestionarproducto.services.PrimaSobreQueService;
 
 import javax.transaction.Transactional;

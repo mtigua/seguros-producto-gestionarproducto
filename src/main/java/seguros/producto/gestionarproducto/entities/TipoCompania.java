@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+
 import lombok.Data;
 
 
@@ -19,7 +20,8 @@ public class TipoCompania  {
 	@Column(unique = true)
 	private String nombre;
 	
+	
 	private String nemot;			
 	
-    
+	
 }

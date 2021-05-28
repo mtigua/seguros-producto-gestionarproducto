@@ -15,14 +15,17 @@ import lombok.Data;
 @Data
 public class DestinoVenta  {
 	
+	private String descripcion;	
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	
 	@Column(unique = true)
 	private String nombre;
 	
-	private String descripcion;	
 	
-    
+	
+	
 }
