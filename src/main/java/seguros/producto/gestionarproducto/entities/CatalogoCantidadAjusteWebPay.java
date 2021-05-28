@@ -23,12 +23,11 @@ public class CatalogoCantidadAjusteWebPay {
 	@CreationTimestamp
 	private LocalDateTime fechaCreacion;
 	
-	@Column(unique = true)
-	private String name;
-	
-	
 	
 	@Column(name = "fecha_modificacion")
     @UpdateTimestamp
     private LocalDateTime fechaModificacion;
+	
+	@Column(unique = true)
+	private String name;
 }

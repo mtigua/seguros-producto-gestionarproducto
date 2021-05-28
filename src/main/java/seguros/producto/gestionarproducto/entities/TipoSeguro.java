@@ -20,17 +20,16 @@ import lombok.Data;
 @Data
 public class TipoSeguro  {
 	
+	@Column(name = "fecha_creacion", updatable=false)
+	@CreationTimestamp
+	private LocalDateTime fechaCreacion;
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(unique = true)
-	private String nombre;
-	
-	@Column(name = "fecha_creacion", updatable=false)
-	@CreationTimestamp
-	private LocalDateTime fechaCreacion;
-	
+	private String nombre;	
 	
 	private String descripcion;	
 	

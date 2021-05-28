@@ -20,6 +20,10 @@ import lombok.Data;
 @Data
 public class TipoDescuento  {
 	
+	@Column(name = "fecha_modificacion")
+    @UpdateTimestamp
+    private LocalDateTime fechaModificacion;
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
@@ -35,7 +39,5 @@ public class TipoDescuento  {
 	
 	
 	
-	@Column(name = "fecha_modificacion")
-    @UpdateTimestamp
-    private LocalDateTime fechaModificacion;
+	
 }

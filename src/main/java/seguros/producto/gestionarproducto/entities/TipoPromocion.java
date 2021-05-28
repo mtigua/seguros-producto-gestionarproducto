@@ -22,17 +22,16 @@ public class TipoPromocion  {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
+	private Long id;	
+	
+	@Column(unique = true)
+	private String nombre;
 	
 	@Column(name = "fecha_creacion", updatable=false)
 	@CreationTimestamp
 	private LocalDateTime fechaCreacion;
 	
-	@Column(unique = true)
-	private String nombre;
-	
-	private String descripcion;	
-	
+	private String descripcion;		
 	
 	
 	@Column(name = "fecha_modificacion")
