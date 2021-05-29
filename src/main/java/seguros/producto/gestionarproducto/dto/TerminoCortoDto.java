@@ -24,10 +24,10 @@ public class TerminoCortoDto  {
 	
 	private TipoMultaDto tipoMulta;
 
-	@NotNull(message = "La mes desde es requerida")
+	@NotNull(message = "El mes desde es requerido")
 	private Integer mesDesde;
 	
-	@NotNull(message = "La mes hasta es requerida")
+	@NotNull(message = "El mes hasta es requerido")
 	private Integer mesHasta;
 	
 	@NotNull(message = "La prima es requerida")

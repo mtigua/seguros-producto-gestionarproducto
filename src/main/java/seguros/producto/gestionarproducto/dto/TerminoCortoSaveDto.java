@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.BeanUtils;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -24,16 +23,14 @@ public class TerminoCortoSaveDto  {
 	
 	private Integer cuotas;	
 	
-	@NotNull(message = "La mes hasta es requerida")
-	@Range(min = 1, max = 12)
+	@NotNull(message = "El mes hasta es requerido")
 	private Integer mesHasta;	
 	
 	private BigDecimal primaPeriodo;
 	
 	private BigDecimal monto;
 	
-	@NotNull(message = "La mes desde es requerida")
-	@Range(min = 1, max = 12)
+	@NotNull(message = "El mes desde es requerido")
 	private Integer mesDesde;	
 	
 	@Size(max=5)
