@@ -35,6 +35,8 @@ import seguros.producto.gestionarproducto.dto.PageProductoDto;
 import seguros.producto.gestionarproducto.dto.ProductoDto;
 import seguros.producto.gestionarproducto.dto.TerminoCortoDto;
 import seguros.producto.gestionarproducto.dto.TerminoCortoSaveDto;
+import seguros.producto.gestionarproducto.dto.TramoDto;
+import seguros.producto.gestionarproducto.dto.TramoListDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
 import seguros.producto.gestionarproducto.services.ProductoService;
@@ -64,6 +66,10 @@ public class ProductoController {
 	private static final String SWAGGER_UPDATE_TERMINOS_CORTOS_BY_PRODUCT = "Actualizar t\u00E9rminos cortos dado un producto";
 	private static final String SWAGGER_GET_INFO_PRODUCTO = "Obtener informacion resumida de producto";
 	private static final String SWAGGER_GET_COBERTURAS_BY_PRODUCT = "Obtener coberturas de un producto dado";
+	private static final String SWAGGER_GET_TRAMOS_BY_PRODUCT = "Obtener tramoS de un producto dado";
+	private static final String SWAGGER_SAVE_TRAMO_BY_PRODUCT = "Registrar tramo dado un producto";
+	private static final String SWAGGER_DELETE_TRAMO_BY_PRODUCT = "Eliminar tramo dado un producto";
+	private static final String SWAGGER_UPDATE_TRAMO_BY_PRODUCT = "Actualizar tramodado un producto";
 
 	
 	@Autowired
@@ -373,6 +379,144 @@ public class ProductoController {
 			throw ex;
 		}
 		return ResponseEntity.ok(coberturasProductoDto);
+	}
+	
+	
+	@ApiOperation(value = SWAGGER_GET_TRAMOS_BY_PRODUCT, notes = SWAGGER_GET_TRAMOS_BY_PRODUCT)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/{id}/tramo")
+	public ResponseEntity<List<TramoListDto>> getTramosByProduct(@PathVariable("id") Long id) throws ProductoException,ResourceNotFoundException{	
+		List<TramoListDto> lista=null;
+		try {	
+			lista= productoService.getTramosByProduct(id);
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_tramo_by_product());
+			throw e;
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_tramo_by_product());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tramo_by_product());
+			throw ex;
+		}		
+
+		return ResponseEntity.ok(lista);
+	}
+	
+	@ApiOperation(value = SWAGGER_SAVE_TRAMO_BY_PRODUCT, notes = SWAGGER_SAVE_TRAMO_BY_PRODUCT)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@PostMapping("/{id}/tramo")
+	public ResponseEntity<String> saveTramosByProduct(
+			@PathVariable("id") Long id,
+			@RequestBody @Valid TramoDto tramoDto,
+			@RequestParam(required = false) Long tipoRamo
+			) throws ProductoException,ResourceNotFoundException {	
+		
+		try {	
+			productoService.saveTramosByProduct(id,tramoDto,tipoRamo);
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_save_tramo_by_product());
+			throw e;
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_save_tramo_by_product());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_save_tramo_by_product());
+			throw ex;
+		}		
+
+		return ResponseEntity.ok(MSG_HTTP200);
+	}
+	
+	@ApiOperation(value = SWAGGER_UPDATE_TRAMO_BY_PRODUCT, notes = SWAGGER_UPDATE_TRAMO_BY_PRODUCT)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@PutMapping("/{id}/tramo/{idTramo}")
+	public ResponseEntity<String> updateTramoByProduct(
+			@PathVariable("id") Long idProducto,
+			@PathVariable("idTramo") Long idTramo,
+			@RequestBody @Valid TramoDto tramoDto,
+			@RequestParam(required = false) Long tipoRamo
+			) throws ProductoException,ResourceNotFoundException {	
+		
+		try {	
+			productoService.updateTramoByProduct(idProducto, idTramo, tramoDto,tipoRamo);
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_update_tramo_by_product());
+			throw e;
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_update_tramo_by_product());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_update_tramo_by_product());
+			throw ex;
+		}		
+
+		return ResponseEntity.ok(MSG_HTTP200);
+	}
+	
+	
+	@ApiOperation(value = SWAGGER_DELETE_TRAMO_BY_PRODUCT, notes = SWAGGER_DELETE_TRAMO_BY_PRODUCT)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@DeleteMapping("/{id}/tramo/{idTramo}")
+	public ResponseEntity<String> deleteTramoByProduct(
+			@PathVariable("id") Long idProducto,
+			@PathVariable("idTramo") Long idTramo		
+			) throws ProductoException,ResourceNotFoundException {	
+		
+		try {	
+			productoService.deleteTramoByProduct(idProducto,idTramo);
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_delete_tramo_by_product());
+			throw e;
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_delete_tramo_by_product());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_delete_tramo_by_product());
+			throw ex;
+		}		
+
+		return ResponseEntity.ok(MSG_HTTP200);
 	}
 
 }

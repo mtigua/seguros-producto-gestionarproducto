@@ -40,6 +40,13 @@ public class PropertiesMsg {
 	private String logger_error_executing_get_tipo_tasa;
 	private String logger_error_executing_get_prima_sobre_que;
 	private String logger_error_executing_get_coberturas_by_product;
+	private String logger_error_executing_get_tramo_by_product;
+	private String logger_error_executing_save_tramo_by_product;
+	private String logger_error_executing_update_tramo_by_product;
+	private String logger_error_executing_delete_tramo_by_product;
+	
+	private String logger_error_executing_get_tarifa_es;
+	private String logger_error_executing_get_tipo_tramo;
 
 
 }

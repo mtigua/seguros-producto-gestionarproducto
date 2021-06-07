@@ -17,5 +17,8 @@ public class InfoProductoDto  {
 		private String ramo;
 		
 		private String nemotecnico;
+		
+		private TipoRamoDto tipoRamo;
+		
 
 }
