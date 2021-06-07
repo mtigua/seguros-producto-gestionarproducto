@@ -21,4 +21,9 @@ public interface ProductoService {
     public void updateTerminosCortosByProduct(Long id, Long idTerminoCorto, TerminoCortoSaveDto terminosCorto) throws ProductoException,ResourceNotFoundException;
     public InfoProductoDto getInfoProducto(Long id)  throws ProductoException,ResourceNotFoundException;
     public List<CoberturaProductoDto> getCoberturasDtoByProducto(Long id) throws ProductoException,ResourceNotFoundException;
+   
+    public List<TramoListDto> getTramosByProduct(Long id) throws ProductoException,ResourceNotFoundException;
+    public void saveTramosByProduct(Long id, TramoDto tramoDto,Long tipoRamo) throws ProductoException,ResourceNotFoundException;
+    public void deleteTramoByProduct(Long idProducto,Long idTramo) throws ProductoException,ResourceNotFoundException;
+    public void updateTramoByProduct(Long id, Long idTramo, TramoDto tramoDto,Long tipoRamo) throws ProductoException,ResourceNotFoundException;
 }

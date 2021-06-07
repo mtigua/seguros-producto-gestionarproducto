@@ -507,6 +507,29 @@ public class Producto  {
 				  } );
 	
 	}
+	
+	@OneToMany( cascade = {CascadeType.PERSIST,CascadeType.MERGE}, orphanRemoval = true)
+	@JoinColumn(name = "producto_id")
+	private Set<Tramo> tramos;
+	
+	public void addTramo(Tramo tramo) {
+        this.tramos.add(tramo);
+    }
+	
+	public void removeTramo(Tramo tramo) {
+			this.tramos.remove(tramo);
+	}
+	
+	public void updateTramo(Tramo tramo) {
+		 this.tramos.stream()
+				  .filter(t -> tramo.getId().equals( t.getId() ) )
+				  .findFirst()
+				  .ifPresent(t-> {
+					  t=tramo;
+					  
+				  } );
+	
+	}
 		
 		
 		
