@@ -61,7 +61,18 @@ public class TramoValidator implements ConstraintValidator<TramoConstraint, Obje
 	               } catch (ArithmeticException ex) {
 	                 	customMessageForValidation(cxt,MENSAJE_ERROR_NOT_INTEGER_EDAD_DESDE,fieldNameValorDesde); 
 	            		return false;
-	               }            	
+	               } 
+	             if(!moneda.isEmpty()) {
+	    				customMessageForValidation(cxt,MENSAJE_ERROR_NOT_REQUIRED_MONEDA,fieldNameMoneda); 
+	        			return false;
+	    		   }            
+	             
+            }
+            else {
+            	if(moneda.isEmpty()) {
+    				customMessageForValidation(cxt,MENSAJE_ERROR_REQUIRED_MONEDA,fieldNameMoneda); 
+        			return false;
+    			}
             }
             
     		if(valorHasta.compareTo(valorDesde) < 0 ) {
@@ -69,18 +80,6 @@ public class TramoValidator implements ConstraintValidator<TramoConstraint, Obje
     			return false;
     		}	
     		
-    		if(tarifaEs==1L) {
-    			if(moneda.isEmpty()) {
-    				customMessageForValidation(cxt,MENSAJE_ERROR_REQUIRED_MONEDA,fieldNameMoneda); 
-        			return false;
-    			}
-    		}
-    		else {
-    			if(!moneda.isEmpty()) {
-    				customMessageForValidation(cxt,MENSAJE_ERROR_NOT_REQUIRED_MONEDA,fieldNameMoneda); 
-        			return false;
-    			}
-    		}
     		
     		if(tarifaEs==2L) {
     			if(tipoTasa <= 0L) {
