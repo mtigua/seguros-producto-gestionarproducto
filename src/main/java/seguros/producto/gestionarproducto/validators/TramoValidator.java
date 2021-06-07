@@ -42,7 +42,10 @@ public class TramoValidator implements ConstraintValidator<TramoConstraint, Obje
     	
             if(tipoTramo == 2L) {            	
 	             try {
-	            	 valorDesde.toBigIntegerExact();
+	            	 if(valorDesde.toBigIntegerExact()==null) {
+	            		 customMessageForValidation(cxt,MENSAJE_ERROR_NOT_INTEGER_EDAD_DESDE,fieldNameValorDesde); 
+		            		return false;
+	            	 }
 	            	    
 	               } catch (ArithmeticException ex) {
 	                 	customMessageForValidation(cxt,MENSAJE_ERROR_NOT_INTEGER_EDAD_DESDE,fieldNameValorDesde); 
@@ -50,7 +53,10 @@ public class TramoValidator implements ConstraintValidator<TramoConstraint, Obje
 	               }
 	             
 	             try {
-	            	 valorHasta.toBigIntegerExact();
+	            	 if(valorHasta.toBigIntegerExact()==null) {
+	            			customMessageForValidation(cxt,MENSAJE_ERROR_NOT_INTEGER_EDAD_DESDE,fieldNameValorDesde); 
+		            		return false;
+	            	 }
 	            	    
 	               } catch (ArithmeticException ex) {
 	                 	customMessageForValidation(cxt,MENSAJE_ERROR_NOT_INTEGER_EDAD_DESDE,fieldNameValorDesde); 

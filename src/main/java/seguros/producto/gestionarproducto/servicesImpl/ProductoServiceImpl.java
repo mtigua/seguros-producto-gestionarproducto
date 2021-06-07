@@ -290,7 +290,6 @@ public class ProductoServiceImpl implements ProductoService {
 			
 			EstadoIntegracion estadoIntegracion = new EstadoIntegracion();
 			
-			// TODO implementar guardado de canal para todos
 			Canal canal= canalRepository.getOne(4L);
 			
 			if(canal.getId()!=null) {
@@ -383,11 +382,11 @@ public class ProductoServiceImpl implements ProductoService {
 				result = restTemplate.postForObject(urlDecript, palabraPase, String.class);
 			}
 			else {
-				ResourceNotFoundException e = new ResourceNotFoundException();
-				e.setConcreteException(e);
-				e.setErrorMessage(MSG_NOT_FOUND);
-				e.setDetail(MSG_NOT_FOUND);
-				throw e;
+				ResourceNotFoundException ePass = new ResourceNotFoundException();
+				ePass.setConcreteException(ePass);
+				ePass.setErrorMessage(MSG_NOT_FOUND);
+				ePass.setDetail(MSG_NOT_FOUND);
+				throw ePass;
 			}
 			   
 			
@@ -449,11 +448,11 @@ public class ProductoServiceImpl implements ProductoService {
 				Collections.sort(lista,(TerminoCortoDto f1,TerminoCortoDto f2) -> f1.getMesHasta().compareTo(f2.getMesHasta()));
 			}
 			else {
-				ResourceNotFoundException e = new ResourceNotFoundException();
-				e.setConcreteException(e);
-				e.setErrorMessage(MSG_NOT_FOUND);
-				e.setDetail(MSG_NOT_FOUND);
-				throw e;
+				ResourceNotFoundException et = new ResourceNotFoundException();
+				et.setConcreteException(et);
+				et.setErrorMessage(MSG_NOT_FOUND);
+				et.setDetail(MSG_NOT_FOUND);
+				throw et;
 			}
 		}
 		catch(ResourceNotFoundException e) {
