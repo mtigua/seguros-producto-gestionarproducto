@@ -496,11 +496,11 @@ public class ProductoServiceImpl implements ProductoService {
 				
 			}
 			else {
-				ResourceNotFoundException e = new ResourceNotFoundException();
-				e.setConcreteException(e);
-				e.setErrorMessage(MSG_NOT_FOUND);
-				e.setDetail(MSG_NOT_FOUND);
-				throw e;
+				ResourceNotFoundException esave = new ResourceNotFoundException();
+				esave.setConcreteException(esave);
+				esave.setErrorMessage(MSG_NOT_FOUND);
+				esave.setDetail(MSG_NOT_FOUND);
+				throw esave;
 			}
 		}
 		catch(ResourceNotFoundException e) {
@@ -531,11 +531,11 @@ public class ProductoServiceImpl implements ProductoService {
 				
 			}
 			else {
-				ResourceNotFoundException e = new ResourceNotFoundException();
-				e.setConcreteException(e);
-				e.setErrorMessage(MSG_NOT_FOUND);
-				e.setDetail(MSG_NOT_FOUND);
-				throw e;
+				ResourceNotFoundException edelete = new ResourceNotFoundException();
+				edelete.setConcreteException(edelete);
+				edelete.setErrorMessage(MSG_NOT_FOUND);
+				edelete.setDetail(MSG_NOT_FOUND);
+				throw edelete;
 			}
 		}
 		catch(ResourceNotFoundException e) {
@@ -576,11 +576,11 @@ public class ProductoServiceImpl implements ProductoService {
 				
 			}
 			else {
-				ResourceNotFoundException e = new ResourceNotFoundException();
-				e.setConcreteException(e);
-				e.setErrorMessage(MSG_NOT_FOUND);
-				e.setDetail(MSG_NOT_FOUND);
-				throw e;
+				ResourceNotFoundException eupdate = new ResourceNotFoundException();
+				eupdate.setConcreteException(eupdate);
+				eupdate.setErrorMessage(MSG_NOT_FOUND);
+				eupdate.setDetail(MSG_NOT_FOUND);
+				throw eupdate;
 			}
 		}
 		catch(ResourceNotFoundException e) {
@@ -606,11 +606,11 @@ public class ProductoServiceImpl implements ProductoService {
 					infoProductoDto= productoRepository.getInfoProducto(id);					
 				}
 				else {
-					ResourceNotFoundException e = new ResourceNotFoundException();
-					e.setConcreteException(e);
-					e.setErrorMessage(MSG_NOT_FOUND);
-					e.setDetail(MSG_NOT_FOUND);
-					throw e;
+					ResourceNotFoundException einfo = new ResourceNotFoundException();
+					einfo.setConcreteException(einfo);
+					einfo.setErrorMessage(MSG_NOT_FOUND);
+					einfo.setDetail(MSG_NOT_FOUND);
+					throw einfo;
 				}
 			}
 			catch(ProductoException e) {
@@ -700,11 +700,11 @@ public class ProductoServiceImpl implements ProductoService {
 				Collections.sort(lista,(TramoListDto f1,TramoListDto f2) -> f1.getValorHasta().compareTo(f2.getValorHasta()));
 			}
 			else {
-				ResourceNotFoundException e = new ResourceNotFoundException();
-				e.setConcreteException(e);
-				e.setErrorMessage(MSG_NOT_FOUND);
-				e.setDetail(MSG_NOT_FOUND);
-				throw e;
+				ResourceNotFoundException egetramos = new ResourceNotFoundException();
+				egetramos.setConcreteException(egetramos);
+				egetramos.setErrorMessage(MSG_NOT_FOUND);
+				egetramos.setDetail(MSG_NOT_FOUND);
+				throw egetramos;
 			}
 		}
 		catch(ResourceNotFoundException e) {
@@ -781,11 +781,11 @@ public class ProductoServiceImpl implements ProductoService {
 				
 			}
 			else {
-				ResourceNotFoundException e = new ResourceNotFoundException();
-				e.setConcreteException(e);
-				e.setErrorMessage(MSG_NOT_FOUND);
-				e.setDetail(MSG_NOT_FOUND);
-				throw e;
+				ResourceNotFoundException esavetramo = new ResourceNotFoundException();
+				esavetramo.setConcreteException(esavetramo);
+				esavetramo.setErrorMessage(MSG_NOT_FOUND);
+				esavetramo.setDetail(MSG_NOT_FOUND);
+				throw esavetramo;
 			}
 		}
 		catch(ProductoException e) {
@@ -818,11 +818,11 @@ public class ProductoServiceImpl implements ProductoService {
 				
 			}
 			else {
-				ResourceNotFoundException e = new ResourceNotFoundException();
-				e.setConcreteException(e);
-				e.setErrorMessage(MSG_NOT_FOUND);
-				e.setDetail(MSG_NOT_FOUND);
-				throw e;
+				ResourceNotFoundException edeletetramo = new ResourceNotFoundException();
+				edeletetramo.setConcreteException(edeletetramo);
+				edeletetramo.setErrorMessage(MSG_NOT_FOUND);
+				edeletetramo.setDetail(MSG_NOT_FOUND);
+				throw edeletetramo;
 			}
 		}
 		catch(ResourceNotFoundException e) {
@@ -905,11 +905,11 @@ public class ProductoServiceImpl implements ProductoService {
 				
 			}
 			else {
-				ResourceNotFoundException e = new ResourceNotFoundException();
-				e.setConcreteException(e);
-				e.setErrorMessage(MSG_NOT_FOUND);
-				e.setDetail(MSG_NOT_FOUND);
-				throw e;
+				ResourceNotFoundException eupdatetramo = new ResourceNotFoundException();
+				eupdatetramo.setConcreteException(eupdatetramo);
+				eupdatetramo.setErrorMessage(MSG_NOT_FOUND);
+				eupdatetramo.setDetail(MSG_NOT_FOUND);
+				throw eupdatetramo;
 			}
 			}
 			catch(ResourceNotFoundException e) {
