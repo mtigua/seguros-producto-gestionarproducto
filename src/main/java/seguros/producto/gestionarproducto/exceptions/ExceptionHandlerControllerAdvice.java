@@ -163,6 +163,19 @@ public class ExceptionHandlerControllerAdvice  extends ResponseEntityExceptionHa
 		return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
 	}	
 	
+	@ExceptionHandler(ForbiddenException.class)
+	public ResponseEntity<ExceptionResponse> handleForbiddenException(final ForbiddenException e,final HttpServletRequest request) {
+		ExceptionResponse error = new ExceptionResponse();
+		error.setErrorMessage(e.getErrorMessage());
+		JsonObject details = new JsonObject();
+		details.addProperty(FIELD_ERROR, e.getDetail());
+		details.addProperty(FIELD_SUBJECT, e.getSubject());
+		error.setDetails(details);
+		error.setRequestedURI(request.getRequestURI());
+		logger.error(e.getDetail());
+		return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+	}
+	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ExceptionResponse> handleGenericExceptions(final Exception e, final HttpServletRequest request) {
 		ExceptionResponse error = new ExceptionResponse();
