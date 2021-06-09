@@ -5,11 +5,9 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
-public class UnauthorizedException extends RuntimeException {
+public class ForbiddenException extends RuntimeException{
 
-	
-	
-	private static final long serialVersionUID = -4163208132552471435L;
+	private static final long serialVersionUID = -9079454849611061074L;
 	private String subject;
 	private String detail;
 	private Exception concreteException;
