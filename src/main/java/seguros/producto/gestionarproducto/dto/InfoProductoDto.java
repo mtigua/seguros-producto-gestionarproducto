@@ -21,6 +21,8 @@ public class InfoProductoDto  {
 		private TipoRamoDto tipoRamo;
 
 		private String plan;
+
+		private Long idTipoCompania;
 		
 
 }

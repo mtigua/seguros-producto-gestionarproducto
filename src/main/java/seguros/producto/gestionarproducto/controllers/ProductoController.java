@@ -566,12 +566,16 @@ public class ProductoController {
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/{id}/recargoPorAsegurado")
-	public ResponseEntity<List<RecargoPorAseguradoDto>> getRecargoPorAseguradoByProduct(@PathVariable("id") Long id) throws ProductoException,ResourceNotFoundException{
+	public ResponseEntity<List<RecargoPorAseguradoDto>> getRecargoPorAseguradoByProduct(@PathVariable("id") Long id) throws ProductoException,ResourceNotFoundException, ForbiddenException{
 		List<RecargoPorAseguradoDto> lista=null;
 		try {
 			lista= productoService.getRecargoPorAseguradoByProduct(id);
 		}
 		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_recargo_por_asegurado_by_product());
+			throw e;
+		}
+		catch(ForbiddenException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_recargo_por_asegurado_by_product());
 			throw e;
 		}
@@ -600,12 +604,16 @@ public class ProductoController {
 	public ResponseEntity<String> saveRecargoPorAseguradoByProduct(
 			@PathVariable("id") Long id,
 			@RequestBody @Valid List<RecargoPorAseguradoDto> recargoPorAsegurado
-	) throws ProductoException,ResourceNotFoundException {
+	) throws ProductoException,ResourceNotFoundException, ForbiddenException {
 
 		try {
 			productoService.saveRecargoPorAseguradoByProduct(id,recargoPorAsegurado);
 		}
 		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_save_recargo_por_asegurado_by_product());
+			throw e;
+		}
+		catch(ForbiddenException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_save_recargo_por_asegurado_by_product());
 			throw e;
 		}
@@ -634,12 +642,16 @@ public class ProductoController {
 			@PathVariable("id") Long idProducto,
 			@PathVariable("idRecargoPorAsegurado") Long idRecargoPorAsegurado,
 			@RequestBody @Valid RecargoPorAseguradoDto recargoPorAsegurado
-	) throws ProductoException,ResourceNotFoundException {
+	) throws ProductoException,ResourceNotFoundException, ForbiddenException {
 
 		try {
 			productoService.updateRecargoPorAseguradoByProduct(idProducto, idRecargoPorAsegurado, recargoPorAsegurado);
 		}
 		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_update_recargo_por_asegurado_by_product());
+			throw e;
+		}
+		catch(ForbiddenException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_update_recargo_por_asegurado_by_product());
 			throw e;
 		}
@@ -669,12 +681,16 @@ public class ProductoController {
 	public ResponseEntity<String> deleteRecargoPorAseguradoByProduct(
 			@PathVariable("id") Long idProducto,
 			@PathVariable("idRecargoPorAsegurado") Long idRecargoPorAsegurado
-	) throws ProductoException,ResourceNotFoundException {
+	) throws ProductoException,ResourceNotFoundException, ForbiddenException {
 
 		try {
 			productoService.deleteRecargoPorAseguradoByProduct(idProducto,idRecargoPorAsegurado);
 		}
 		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_delete_recargo_por_asegurado_by_product());
+			throw e;
+		}
+		catch(ForbiddenException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_delete_recargo_por_asegurado_by_product());
 			throw e;
 		}

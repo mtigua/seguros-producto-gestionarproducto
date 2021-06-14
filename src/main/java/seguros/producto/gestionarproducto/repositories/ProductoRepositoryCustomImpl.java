@@ -172,7 +172,7 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 					infoProductoDto.setNegocio( record.get(0)[3].toString() );
 					infoProductoDto.setRamo( record.get(0)[4].toString() );
 					infoProductoDto.setPlan( record.get(0)[8].toString() );
-				
+					infoProductoDto.setIdTipoCompania( Long.valueOf(record.get(0)[9].toString()));
 					TipoRamoDto tipoRamo=new TipoRamoDto();
 					tipoRamo.setNombre( record.get(0)[6].toString()  );
 					tipoRamo.setId( Long.valueOf(record.get(0)[7].toString() ) );

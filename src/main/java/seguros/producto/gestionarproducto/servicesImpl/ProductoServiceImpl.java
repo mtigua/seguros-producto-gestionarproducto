@@ -91,6 +91,7 @@ public class ProductoServiceImpl implements ProductoService {
 	private static final String MSG_NOT_ALLOWED_TRAMO_PARA_SUBJECT = "No est\u00E1 permitido un valor para el campo tramoPara. Solo es permitido para productos de tipo de ramo Hogar";
 	private static final String MSG_FORBIDDEN_TRAMOS_BY_PRODUCT = "No est\u00E1 permitido la administraci\u00F3n de tramos para este producto";
 	private static final String MSG_FORBIDDEN_TERMINOS_CORTOS_BY_PRODUCT = "No est\u00E1 permitido la administraci\u00F3n de t\u00E9rminos cortos para este producto";
+	private static final String MSG_FORBIDDEN_RECARGO_POR_ASEGURADO_BY_PRODUCT = "No est\u00E1 permitido la administraci\u00F3n de recargo por asegurado para este producto";
 
 	@Autowired
 	private ProductoRepository productoRepository;
@@ -1045,22 +1046,33 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public List<RecargoPorAseguradoDto> getRecargoPorAseguradoByProduct(Long id) throws ProductoException,ResourceNotFoundException {
+	public List<RecargoPorAseguradoDto> getRecargoPorAseguradoByProduct(Long id) throws ProductoException,ResourceNotFoundException,ForbiddenException {
+		InfoProductoDto infoProducto = null;
 		List<RecargoPorAseguradoDto> lista= new ArrayList<>();
-
 		try {
 			Optional<Producto> productoO= productoRepository.findById(id);
 			if(productoO.isPresent()) {
-				Producto producto=productoO.get();
-				Set<RecargoPorAsegurado> listaRecargoPorAsegurado= producto.getRecargoPorAsegurado();
+				infoProducto= productoRepository.getInfoProducto(id);
+				Long idTipoRamo = infoProducto.getTipoRamo().getId();
+				Long idTipoCompania = infoProducto.getIdTipoCompania();
+				if(idTipoRamo == 8 || idTipoCompania == 1 || idTipoCompania == 3){
+					Producto producto=productoO.get();
+					Set<RecargoPorAsegurado> listaRecargoPorAsegurado= producto.getRecargoPorAsegurado();
 
-				lista=listaRecargoPorAsegurado.stream().map(e->{
+					lista=listaRecargoPorAsegurado.stream().map(e->{
 
-					RecargoPorAseguradoDto t= new RecargoPorAseguradoDto();
-					BeanUtils.copyProperties(e, t);
-					return t;
-				}).collect(Collectors.toList());
-				Collections.sort(lista,(RecargoPorAseguradoDto f1,RecargoPorAseguradoDto f2) -> f1.getDesdeAsegurado().compareTo(f2.getHastaAsegurado()));
+						RecargoPorAseguradoDto t= new RecargoPorAseguradoDto();
+						BeanUtils.copyProperties(e, t);
+						return t;
+					}).collect(Collectors.toList());
+					Collections.sort(lista,(RecargoPorAseguradoDto f1,RecargoPorAseguradoDto f2) -> f1.getDesdeAsegurado().compareTo(f2.getHastaAsegurado()));
+				}else{
+					ForbiddenException fe = new ForbiddenException();
+					fe.setConcreteException(fe);
+					fe.setErrorMessage(MSG_FORBIDDEN_RECARGO_POR_ASEGURADO_BY_PRODUCT);
+					fe.setDetail(MSG_FORBIDDEN_RECARGO_POR_ASEGURADO_BY_PRODUCT);
+					throw fe;
+				}
 			}
 			else {
 				ResourceNotFoundException et = new ResourceNotFoundException();
@@ -1073,6 +1085,9 @@ public class ProductoServiceImpl implements ProductoService {
 		catch(ResourceNotFoundException e) {
 			throw e;
 		}
+		catch(ForbiddenException e) {
+			throw e;
+		}
 		catch(Exception e) {
 			throw new ProductoException(e);
 		}
@@ -1083,22 +1098,30 @@ public class ProductoServiceImpl implements ProductoService {
 	@Transactional
 	@Override
 	public void saveRecargoPorAseguradoByProduct(Long id, List<RecargoPorAseguradoDto> recargoPorAsegurado)
-			throws ProductoException, ResourceNotFoundException {
-
+			throws ProductoException, ResourceNotFoundException,ForbiddenException {
+		InfoProductoDto infoProducto = null;
 		try {
 			Optional<Producto> productoO= productoRepository.findById(id);
 			if(productoO.isPresent()) {
 				Producto producto=productoO.get();
-
-				recargoPorAsegurado.stream().forEach(e->{
-					RecargoPorAsegurado recargoPorAseguradoEntity= new RecargoPorAsegurado();
-					BeanUtils.copyProperties(e, recargoPorAseguradoEntity);
-					producto.addRecargoPorAsegurado(recargoPorAseguradoEntity);
-				});
-
-
-				productoRepository.save(producto);
-
+				infoProducto= productoRepository.getInfoProducto(id);
+				Long idTipoRamo = infoProducto.getTipoRamo().getId();
+				Long idTipoCompania = infoProducto.getIdTipoCompania();
+				if(idTipoRamo == 8 || idTipoCompania == 1 || idTipoCompania == 3){
+					recargoPorAsegurado.stream().forEach(e->{
+						RecargoPorAsegurado recargoPorAseguradoEntity= new RecargoPorAsegurado();
+						BeanUtils.copyProperties(e, recargoPorAseguradoEntity);
+						producto.addRecargoPorAsegurado(recargoPorAseguradoEntity);
+					});
+					productoRepository.save(producto);
+				}
+				else{
+					ForbiddenException fe = new ForbiddenException();
+					fe.setConcreteException(fe);
+					fe.setErrorMessage(MSG_FORBIDDEN_RECARGO_POR_ASEGURADO_BY_PRODUCT);
+					fe.setDetail(MSG_FORBIDDEN_RECARGO_POR_ASEGURADO_BY_PRODUCT);
+					throw fe;
+				}
 			}
 			else {
 				ResourceNotFoundException esave = new ResourceNotFoundException();
@@ -1111,6 +1134,9 @@ public class ProductoServiceImpl implements ProductoService {
 		catch(ResourceNotFoundException e) {
 			throw e;
 		}
+		catch(ForbiddenException e) {
+			throw e;
+		}
 		catch(Exception e) {
 			throw new ProductoException(e);
 		}
@@ -1120,7 +1146,8 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public void deleteRecargoPorAseguradoByProduct(Long idProducto, Long idRecargoPorAsegurado)	throws ProductoException, ResourceNotFoundException {
+	public void deleteRecargoPorAseguradoByProduct(Long idProducto, Long idRecargoPorAsegurado)	throws ProductoException, ResourceNotFoundException, ForbiddenException{
+		InfoProductoDto infoProducto = null;
 
 		try {
 
@@ -1128,12 +1155,23 @@ public class ProductoServiceImpl implements ProductoService {
 			Optional<RecargoPorAsegurado> recargoPorAsegurado0= recargoPorAseguradoRepository.findById(idRecargoPorAsegurado);
 
 			if(productoO.isPresent() && recargoPorAsegurado0.isPresent()) {
-				Producto producto=productoO.get();
-				RecargoPorAsegurado recargoPorAsegurado=recargoPorAsegurado0.get();
-				producto.removeRecargoPorAsegurado(recargoPorAsegurado);
+				infoProducto= productoRepository.getInfoProducto(idProducto);
+				Long idTipoRamo = infoProducto.getTipoRamo().getId();
+				Long idTipoCompania = infoProducto.getIdTipoCompania();
+				if(idTipoRamo == 8 || idTipoCompania == 1 || idTipoCompania == 3){
+					Producto producto=productoO.get();
+					RecargoPorAsegurado recargoPorAsegurado=recargoPorAsegurado0.get();
+					producto.removeRecargoPorAsegurado(recargoPorAsegurado);
 
-				productoRepository.save(producto);
-
+					productoRepository.save(producto);
+				}
+				else{
+					ForbiddenException fe = new ForbiddenException();
+					fe.setConcreteException(fe);
+					fe.setErrorMessage(MSG_FORBIDDEN_RECARGO_POR_ASEGURADO_BY_PRODUCT);
+					fe.setDetail(MSG_FORBIDDEN_RECARGO_POR_ASEGURADO_BY_PRODUCT);
+					throw fe;
+				}
 			}
 			else {
 				ResourceNotFoundException edelete = new ResourceNotFoundException();
@@ -1146,6 +1184,9 @@ public class ProductoServiceImpl implements ProductoService {
 		catch(ResourceNotFoundException e) {
 			throw e;
 		}
+		catch(ForbiddenException e) {
+			throw e;
+		}
 		catch(Exception e) {
 			throw new ProductoException(e);
 		}
@@ -1154,23 +1195,36 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public void updateRecargoPorAseguradoByProduct(Long id, Long idRecargoPorAsegurado, RecargoPorAseguradoDto recargoPorAseguradoDto)	throws ProductoException, ResourceNotFoundException {
+	public void updateRecargoPorAseguradoByProduct(Long id, Long idRecargoPorAsegurado, RecargoPorAseguradoDto recargoPorAseguradoDto)	throws ProductoException, ResourceNotFoundException, ForbiddenException {
+		InfoProductoDto infoProducto = null;
 		try {
 
 			Optional<Producto> productoO= productoRepository.findById(id);
 			Optional<RecargoPorAsegurado> recargoPorAseguradoO= recargoPorAseguradoRepository.findById(idRecargoPorAsegurado);
 
 			if(productoO.isPresent() && recargoPorAseguradoO.isPresent()) {
-				Producto producto=productoO.get();
-				RecargoPorAsegurado recargoPorAsegurado=recargoPorAseguradoO.get();
+				infoProducto= productoRepository.getInfoProducto(id);
+				Long idTipoRamo = infoProducto.getTipoRamo().getId();
+				Long idTipoCompania = infoProducto.getIdTipoCompania();
+				if(idTipoRamo == 8 || idTipoCompania == 1 || idTipoCompania == 3){
+					Producto producto=productoO.get();
+					RecargoPorAsegurado recargoPorAsegurado=recargoPorAseguradoO.get();
 
-				BeanUtils.copyProperties(recargoPorAseguradoDto, recargoPorAsegurado);
-				recargoPorAsegurado.setId(idRecargoPorAsegurado);
+					BeanUtils.copyProperties(recargoPorAseguradoDto, recargoPorAsegurado);
+					recargoPorAsegurado.setId(idRecargoPorAsegurado);
 
-				producto.updateRecargoPorAsegurado(recargoPorAsegurado);
+					producto.updateRecargoPorAsegurado(recargoPorAsegurado);
 
 
-				productoRepository.save(producto);
+					productoRepository.save(producto);
+				}
+				else {
+					ResourceNotFoundException edelete = new ResourceNotFoundException();
+					edelete.setConcreteException(edelete);
+					edelete.setErrorMessage(MSG_NOT_FOUND);
+					edelete.setDetail(MSG_NOT_FOUND);
+					throw edelete;
+				}
 
 			}
 			else {
@@ -1182,6 +1236,9 @@ public class ProductoServiceImpl implements ProductoService {
 			}
 		}
 		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(ForbiddenException e) {
 			throw e;
 		}
 		catch(Exception e) {
