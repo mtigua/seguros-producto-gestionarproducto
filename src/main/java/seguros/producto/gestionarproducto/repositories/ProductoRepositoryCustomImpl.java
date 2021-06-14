@@ -256,5 +256,92 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 		return coberturasDto;
 	}
 
+	@Override
+	public List<CoberturaProductoCorrelativoDto> findCoberturasDtoByProductoCorrelative(Long id) throws ProductoException {
+		String procedureName = propertiesSql.getLISTAR_COBERTURAS_POR_PRODUCTO_CORRELATIVE();
+		List<CoberturaProductoCorrelativoDto> coberturasDtoCorrelative =  new ArrayList<>();
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);
+			storedProcedureQuery.registerStoredProcedureParameter("idProducto", Long.class, ParameterMode.IN);
+			storedProcedureQuery.setParameter("idProducto",id );
+
+			storedProcedureQuery.execute();
+			@SuppressWarnings("unchecked")
+			List<Object[]> rs = storedProcedureQuery.getResultList();
+
+			if (rs != null) {
+				rs.stream().forEach((record) -> {
+					CoberturaProductoCorrelativoDto coberturaProductoDto = new CoberturaProductoCorrelativoDto();
+					coberturaProductoDto.setCodeCorrelativo(record[0]!=null? Long.valueOf(record[0].toString()) : null );
+					coberturaProductoDto.setCodeDescription(record[1]!=null?record[1].toString():"");
+					coberturaProductoDto.setCobeConsinIva(record[2]!=null?record[2].toString():"");
+					coberturasDtoCorrelative.add(coberturaProductoDto);
+				});
+			}
+		} catch (Exception e) {
+			ProductoException exc = new ProductoException(e);
+			throw exc;
+		}
+		return coberturasDtoCorrelative;
+	}
+
+	@Override
+	public List<TipoIvaDTO> findTipoIva(Long id) throws ProductoException {
+		String procedureName = propertiesSql.getLISTAR_TIPO_IVA();
+		List<TipoIvaDTO> tiposIvas =  new ArrayList<>();
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);
+			storedProcedureQuery.registerStoredProcedureParameter("idProducto", Long.class, ParameterMode.IN);
+			storedProcedureQuery.setParameter("idProducto",id );
+
+			storedProcedureQuery.execute();
+			@SuppressWarnings("unchecked")
+			List<Object[]> rs = storedProcedureQuery.getResultList();
+
+			if (rs != null) {
+				rs.stream().forEach((record) -> {
+					TipoIvaDTO tipoIva = new TipoIvaDTO();
+					tipoIva.setCobeValor(record[0]!=null? Long.valueOf(record[0].toString()) : null );
+					tipoIva.setTipo(record[1]!=null?record[1].toString():"");
+					tipoIva.setCobeCodSuperint(record[2]!=null?record[2].toString():"");
+					tipoIva.setIva(record[3]!=null?record[3].toString():"");
+					tiposIvas.add(tipoIva);
+				});
+			}
+		} catch (Exception e) {
+			ProductoException exc = new ProductoException(e);
+			throw exc;
+		}
+		return tiposIvas;
+	}
+
+	@Override
+	public List<DeducibleDTO> findDeducibles(Long id) throws ProductoException {
+		String procedureName = propertiesSql.getLISTAR_DEDUCIBLE();
+		List<DeducibleDTO> deducibles =  new ArrayList<>();
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);
+			storedProcedureQuery.registerStoredProcedureParameter("idProducto", Long.class, ParameterMode.IN);
+			storedProcedureQuery.setParameter("idProducto",id );
+
+			storedProcedureQuery.execute();
+			@SuppressWarnings("unchecked")
+			List<Object[]> rs = storedProcedureQuery.getResultList();
+
+			if (rs != null) {
+				rs.stream().forEach((record) -> {
+					DeducibleDTO deducible = new DeducibleDTO();
+					deducible.setCodeDeducible(record[0]!=null? Long.valueOf(record[0].toString()) : null );
+					deducible.setCodeDescription(record[1]!=null?record[1].toString():"");
+					deducibles.add(deducible);
+				});
+			}
+		} catch (Exception e) {
+			ProductoException exc = new ProductoException(e);
+			throw exc;
+		}
+		return deducibles;
+	}
+
 
 }

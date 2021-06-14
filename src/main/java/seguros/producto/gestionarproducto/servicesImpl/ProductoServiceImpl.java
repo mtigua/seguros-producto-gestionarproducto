@@ -1,48 +1,49 @@
 package seguros.producto.gestionarproducto.servicesImpl;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import seguros.producto.gestionarproducto.configuration.Properties;
 import seguros.producto.gestionarproducto.dto.ActionType;
+import seguros.producto.gestionarproducto.dto.CoberturaDTO;
+import seguros.producto.gestionarproducto.dto.CoberturaProductoCorrelativoDto;
 import seguros.producto.gestionarproducto.dto.CoberturaProductoDto;
+import seguros.producto.gestionarproducto.dto.DeducibleDTO;
 import seguros.producto.gestionarproducto.dto.EstadoProductoDto;
 import seguros.producto.gestionarproducto.dto.InfoProductoDto;
+import seguros.producto.gestionarproducto.dto.OrdenCoberturaDTO;
 import seguros.producto.gestionarproducto.dto.PageProductoDto;
 import seguros.producto.gestionarproducto.dto.PrimaSobreQueDto;
 import seguros.producto.gestionarproducto.dto.ProductoDoDto;
 import seguros.producto.gestionarproducto.dto.ProductoDto;
+import seguros.producto.gestionarproducto.dto.RecargoPorAseguradoDto;
 import seguros.producto.gestionarproducto.dto.State;
 import seguros.producto.gestionarproducto.dto.TarifaEsDto;
 import seguros.producto.gestionarproducto.dto.TerminoCortoDto;
 import seguros.producto.gestionarproducto.dto.TerminoCortoSaveDto;
+import seguros.producto.gestionarproducto.dto.TipoIvaDTO;
 import seguros.producto.gestionarproducto.dto.TipoMultaDto;
 import seguros.producto.gestionarproducto.dto.TipoTasaDto;
 import seguros.producto.gestionarproducto.dto.TipoTramoDto;
 import seguros.producto.gestionarproducto.dto.TramoDto;
 import seguros.producto.gestionarproducto.dto.TramoListDto;
-import seguros.producto.gestionarproducto.dto.RecargoPorAseguradoDto;
 import seguros.producto.gestionarproducto.entities.Canal;
+import seguros.producto.gestionarproducto.entities.CoberturaProducto;
+import seguros.producto.gestionarproducto.entities.CoberturaProductoKey;
 import seguros.producto.gestionarproducto.entities.DestinoVenta;
 import seguros.producto.gestionarproducto.entities.EstadoIntegracion;
 import seguros.producto.gestionarproducto.entities.ModoTraspaso;
 import seguros.producto.gestionarproducto.entities.PrimaSobreQue;
 import seguros.producto.gestionarproducto.entities.Producto;
 import seguros.producto.gestionarproducto.entities.ProductoDo;
+import seguros.producto.gestionarproducto.entities.RecargoPorAsegurado;
 import seguros.producto.gestionarproducto.entities.TarifaEs;
 import seguros.producto.gestionarproducto.entities.TarifaPor;
 import seguros.producto.gestionarproducto.entities.TerminoCorto;
 import seguros.producto.gestionarproducto.entities.TipoAjuste;
+import seguros.producto.gestionarproducto.entities.TipoCobertura;
 import seguros.producto.gestionarproducto.entities.TipoDescuento;
 import seguros.producto.gestionarproducto.entities.TipoMulta;
 import seguros.producto.gestionarproducto.entities.TipoPeriodo;
@@ -54,18 +55,20 @@ import seguros.producto.gestionarproducto.entities.TipoTasa;
 import seguros.producto.gestionarproducto.entities.TipoTramo;
 import seguros.producto.gestionarproducto.entities.TipoTraspaso;
 import seguros.producto.gestionarproducto.entities.Tramo;
-import seguros.producto.gestionarproducto.entities.RecargoPorAsegurado;
 import seguros.producto.gestionarproducto.exceptions.ForbiddenException;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
 import seguros.producto.gestionarproducto.repositories.CanalRepository;
+import seguros.producto.gestionarproducto.repositories.CoberturaRepository;
 import seguros.producto.gestionarproducto.repositories.DestinoVentaRepository;
 import seguros.producto.gestionarproducto.repositories.ModoTraspasoRepository;
 import seguros.producto.gestionarproducto.repositories.PrimaSobreQueRepository;
 import seguros.producto.gestionarproducto.repositories.ProductoRepository;
+import seguros.producto.gestionarproducto.repositories.RecargoPorAseguradoRepository;
 import seguros.producto.gestionarproducto.repositories.TarifaEsRepository;
 import seguros.producto.gestionarproducto.repositories.TarifaPorRepository;
 import seguros.producto.gestionarproducto.repositories.TerminoCortoRepository;
 import seguros.producto.gestionarproducto.repositories.TipoAjusteRepository;
+import seguros.producto.gestionarproducto.repositories.TipoCoberturaRepository;
 import seguros.producto.gestionarproducto.repositories.TipoDescuentoRepository;
 import seguros.producto.gestionarproducto.repositories.TipoMultaRepository;
 import seguros.producto.gestionarproducto.repositories.TipoPeriodoRepository;
@@ -77,14 +80,23 @@ import seguros.producto.gestionarproducto.repositories.TipoTasaRepository;
 import seguros.producto.gestionarproducto.repositories.TipoTramoRepository;
 import seguros.producto.gestionarproducto.repositories.TipoTraspasoRepository;
 import seguros.producto.gestionarproducto.repositories.TramoRepository;
-import seguros.producto.gestionarproducto.repositories.RecargoPorAseguradoRepository;
 import seguros.producto.gestionarproducto.services.EstadoIntegracionService;
 import seguros.producto.gestionarproducto.services.ProductoService;
+
+import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 
 @Service
 public class ProductoServiceImpl implements ProductoService {
-	
+
 
 	private static final Long VALUE_UNDEFINED=-1L;
 	private static final String MSG_NOT_FOUND = "El recurso solicitado no existe";
@@ -95,65 +107,65 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Autowired
 	private ProductoRepository productoRepository;
-	
+
 	@Autowired
 	private TipoSeguroRepository tipoSeguroRepository;
 
 	@Autowired
 	private ModoTraspasoRepository modoTraspasoRepository;
-	
+
 	@Autowired
 	private TipoPromocionRepository tipoPromocionRepository;
-	
+
 	@Autowired
 	private TipoRecargoRepository tipoRecargoRepository;
-	
+
 	@Autowired
 	private TipoAjusteRepository tipoAjusteRepository;
-	
+
 	@Autowired
 	private TipoDescuentoRepository tipoDescuentoRepository;
-	
+
 	@Autowired
-	private TarifaPorRepository tarifaPorRepository;	
-	
+	private TarifaPorRepository tarifaPorRepository;
+
 	@Autowired
 	private TipoTarifaRepository tipoTarifaRepository;
-	
+
 	@Autowired
 	private TipoPeriodoRepository tipoPeriodoRepository;
-	
+
 	@Autowired
 	private TipoTraspasoRepository tipoTraspasoRepository;
-	
+
 	@Autowired
 	private DestinoVentaRepository destinoVentaRepository;
-	
-	
+
+
 	@Autowired
 	private EstadoIntegracionService estadoIntegracionService;
-	
+
 	@Autowired
 	private CanalRepository canalRepository;
-	
+
 	@Autowired
 	private TipoMultaRepository tipoMultaRepository;
-	
+
 	@Autowired
 	private TerminoCortoRepository terminoCortoRepository;
-	
+
 	@Autowired
 	private TramoRepository tramoRepository;
-	
+
 	@Autowired
 	private TipoTramoRepository tipoTramoRepository;
-	
+
 	@Autowired
 	private TipoTasaRepository tipoTasaRepository;
-	
+
 	@Autowired
 	private TarifaEsRepository tarifaEsRepository;
-	
+
 	@Autowired
 	private PrimaSobreQueRepository tramoParaRepository;
 
@@ -162,15 +174,24 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Autowired
 	private RestTemplate restTemplate;
-	
+
+	@Autowired
+	private TipoCoberturaRepository tipoCoberturaRepository ;
+
+	@Autowired
+	private CoberturaRepository coberturaRepository;
+
+	@Autowired
+	private PrimaSobreQueRepository primaSobreQueRepository;
+
 	@Autowired
 	private Properties properties;
-	
+
 	@Transactional
 	@Override
 	public List<ProductoDto> findAll() throws ProductoException {
 		List<ProductoDto> list=new ArrayList<>();
-		
+
 		try {
 			list= productoRepository.findAll().stream().map(item ->{
 				ProductoDto p= new ProductoDto();
@@ -191,21 +212,21 @@ public class ProductoServiceImpl implements ProductoService {
 				productoDoDto.setDoplAQuienSeVende(item.getProductDo().getDoplAQuienSeVende().getId());
 				p.setProductDo(productoDoDto);
 				return p;
-				 
+
 			}).collect(Collectors.toList());
 		}
 		catch(Exception e) {
 			throw new ProductoException(e);
 		}
 		return list;
-		
+
 	}
 
 	@Transactional
 	@Override
 	public InfoProductoDto save(ProductoDto producto) throws ProductoException {
 		InfoProductoDto result=new InfoProductoDto();
-		
+
 		try {
 			Producto productoEntity = producto.toEntity();
 			String newNemotecnico = productoRepository.generateNemotecnico();
@@ -256,7 +277,7 @@ public class ProductoServiceImpl implements ProductoService {
 				TarifaPor tarifaPor = tarifaPorRepository.getOne(producto.getTarifaPor());
 				if(tarifaPor.getId()!=null) {
 					productoEntity.setTarifaPor(tarifaPor);
-				}			
+				}
 			}
 			if(producto.getTipoTarifa()!=null && !VALUE_UNDEFINED.equals(producto.getTipoTarifa()) ) {
 				TipoTarifa tipoTarifa = tipoTarifaRepository.getOne(producto.getTipoTarifa());
@@ -276,50 +297,50 @@ public class ProductoServiceImpl implements ProductoService {
 				  productoEntity.setTipoTraspaso(tipoTraspaso);
 				}
 			}
-			
+
 			if( producto.getProductDo()!=null ) {
 				ProductoDo productoDo = producto.getProductDo().toEntity();
 				if(producto.getProductDo().getDoplAQuienSeVende()!=null && !VALUE_UNDEFINED.equals(producto.getProductDo().getDoplAQuienSeVende()) ) {
 					DestinoVenta destinoVenta = destinoVentaRepository.getOne(producto.getProductDo().getDoplAQuienSeVende());
-					
+
 					if(destinoVenta.getId()!=null) {
-						productoDo.setDoplAQuienSeVende(destinoVenta);	
-					}				
+						productoDo.setDoplAQuienSeVende(destinoVenta);
+					}
 					productoEntity.setProductDo(productoDo);
 				}
-			}			
-				
-			
+			}
+
+
 			productoEntity.setNemot(newNemotecnico);
-			
+
 			String palabraPase= encrypt(productoEntity.getPalabaraPaseProductManager());
-			productoEntity.setPalabaraPaseProductManager(palabraPase);		
-			
-			
+			productoEntity.setPalabaraPaseProductManager(palabraPase);
+
+
 			productoRepository.save(productoEntity);
-			
+
 			EstadoIntegracion estadoIntegracion = new EstadoIntegracion();
-			
+
 			Canal canal= canalRepository.getOne(4L);
-			
+
 			if(canal.getId()!=null) {
 				estadoIntegracion.setCanal(canal);
 			}
-			
+
 			Arrays.asList(producto.getCanales()).stream().forEach((p) ->{
 				Canal canalEntity= canalRepository.getOne(p);
-				if(canalEntity.getId()!=null) {					
+				if(canalEntity.getId()!=null) {
 					productoEntity.addCanal(canalEntity);
 				}
 			});
-			
-			
+
+
 			estadoIntegracion.setIdProducto(productoEntity.getId());
 			estadoIntegracion.setState(State.Pendiente);
 			estadoIntegracion.setTipoAccion(ActionType.Crear);
-			
+
 			estadoIntegracionService.save(estadoIntegracion);
-			
+
 			result.setNemotecnico(newNemotecnico);
 			result.setId(productoEntity.getId());
 		}
@@ -336,9 +357,9 @@ public class ProductoServiceImpl implements ProductoService {
 	@Override
 	public PageProductoDto findAllPaginated(int page, int size, Integer idCompania, Integer idNegocio,
 			Integer idRamo, String nemotecnico, String descripcion) throws ProductoException {
-	
+
 		PageProductoDto pageProductoDto= null;
-		
+
 		try {
 			pageProductoDto= productoRepository.findAllPaginated(page, size, idCompania, idNegocio, idRamo, nemotecnico, descripcion);
 		}
@@ -352,10 +373,10 @@ public class ProductoServiceImpl implements ProductoService {
 	public String encrypt(String palabrasePase) throws ProductoException {
 		String result = null;
 		String urlEncript= properties.getUrl_encrypt();
-		
+
 		try {
 			  result = restTemplate.postForObject(urlEncript, palabrasePase, String.class);
-			
+
 		}
 		catch(Exception e) {
 			throw new ProductoException(e);
@@ -367,10 +388,10 @@ public class ProductoServiceImpl implements ProductoService {
 	public String decrypt(String palabrasePase) throws ProductoException {
 		String result = null;
 		String urlDecrypt= properties.getUrl_decrypt();
-		
+
 		try {
 			 result = restTemplate.postForObject(urlDecrypt, palabrasePase, String.class);
-			
+
 		}
 		catch(Exception e) {
 			throw new ProductoException(e);
@@ -382,7 +403,7 @@ public class ProductoServiceImpl implements ProductoService {
 	public String getPassProductManagerByIdProducto(Long idProducto) throws ProductoException,ResourceNotFoundException {
 		String result = null;
 		String urlDecript= properties.getUrl_decrypt();
-		
+
 		try {
 			Optional<Producto> producto= productoRepository.findById(idProducto);
 			if(producto.isPresent()) {
@@ -398,8 +419,8 @@ public class ProductoServiceImpl implements ProductoService {
 				ePass.setDetail(MSG_NOT_FOUND);
 				throw ePass;
 			}
-			   
-			
+
+
 		}
 		catch(ResourceNotFoundException e) {
 			throw e;
@@ -420,7 +441,7 @@ public class ProductoServiceImpl implements ProductoService {
 					productoEntity.setHabilitado(estadoProductoDto.getHabilitado());
 					productoRepository.save(productoEntity);
 				}
-				
+
 			});
 		}
 		catch(Exception e) {
@@ -428,12 +449,12 @@ public class ProductoServiceImpl implements ProductoService {
 		}
 	}
 
-	
+
 	@Transactional
 	@Override
 	public List<TerminoCortoDto> getTerminosCortosByProduct(Long id) throws ProductoException,ResourceNotFoundException,ForbiddenException {
 		List<TerminoCortoDto> lista= new ArrayList<>();
-	
+
 		try {
 			Optional<Producto> productoO= productoRepository.findById(id);
 			if(productoO.isPresent()) {
@@ -490,7 +511,7 @@ public class ProductoServiceImpl implements ProductoService {
 		return lista;
 	}
 
-	
+
 	@Transactional
 	@Override
 	public void saveTerminosCortosByProduct(Long id, List<TerminoCortoSaveDto> terminosCortos)
@@ -503,7 +524,7 @@ public class ProductoServiceImpl implements ProductoService {
 				Boolean aplicaTc= producto.getAplicaTc();
 
 				if(Boolean.TRUE.equals(aplicaTc) ) {
-				
+
 					  terminosCortos.stream().forEach(e->{
 
 					  TerminoCorto terminoCortoEntity= new TerminoCorto();
@@ -530,7 +551,7 @@ public class ProductoServiceImpl implements ProductoService {
 					fe.setDetail(MSG_FORBIDDEN_TERMINOS_CORTOS_BY_PRODUCT);
 					throw fe;
 			}
-				
+
 			}
 			else {
 				ResourceNotFoundException esave = new ResourceNotFoundException();
@@ -549,19 +570,19 @@ public class ProductoServiceImpl implements ProductoService {
 		catch(Exception e) {
 			throw new ProductoException(e);
 		}
-		
+
 	}
 
-	
+
 	@Transactional
 	@Override
 	public void deleteTerminosCortosByProduct(Long idProducto, Long idTerminoCorto)	throws ProductoException, ResourceNotFoundException,ForbiddenException {
-		
+
 		try {
-			
+
 			Optional<Producto> productoO= productoRepository.findById(idProducto);
 			Optional<TerminoCorto> terminoCortoO= terminoCortoRepository.findById(idTerminoCorto);
-			
+
 			if(productoO.isPresent() && terminoCortoO.isPresent()) {
 				Boolean aplicaTc= productoO.get().getAplicaTc();
 
@@ -579,7 +600,7 @@ public class ProductoServiceImpl implements ProductoService {
 					fe.setDetail(MSG_FORBIDDEN_TERMINOS_CORTOS_BY_PRODUCT);
 					throw fe;
 			   }
-				
+
 			}
 			else {
 				ResourceNotFoundException edelete = new ResourceNotFoundException();
@@ -598,19 +619,19 @@ public class ProductoServiceImpl implements ProductoService {
 		catch(Exception e) {
 			throw new ProductoException(e);
 		}
-		
+
 	}
 
 	@Transactional
 	@Override
 	public void updateTerminosCortosByProduct(Long id, Long idTerminoCorto, TerminoCortoSaveDto terminosCortoDto)	throws ProductoException, ResourceNotFoundException,ForbiddenException {
           try {
-			
+
 			Optional<Producto> productoO= productoRepository.findById(id);
 			Optional<TerminoCorto> terminoCortoO= terminoCortoRepository.findById(idTerminoCorto);
-			
+
 			if(productoO.isPresent() && terminoCortoO.isPresent()) {
-				Producto producto=productoO.get();				
+				Producto producto=productoO.get();
 				TerminoCorto terminoCorto=terminoCortoO.get();
                 Boolean aplicaTc= productoO.get().getAplicaTc();
 
@@ -637,7 +658,7 @@ public class ProductoServiceImpl implements ProductoService {
 					fe.setDetail(MSG_FORBIDDEN_TERMINOS_CORTOS_BY_PRODUCT);
 					throw fe;
 			   }
-				
+
 			}
 			else {
 				ResourceNotFoundException eupdate = new ResourceNotFoundException();
@@ -656,21 +677,21 @@ public class ProductoServiceImpl implements ProductoService {
 		catch(Exception e) {
 			throw new ProductoException(e);
 		}
-		
-		
+
+
 	}
 
 
 	@Override
 	public InfoProductoDto getInfoProducto(Long id) throws ProductoException, ResourceNotFoundException {
 		InfoProductoDto infoProductoDto=null;
-		
+
 		try {
-				
+
 				Optional<Producto> productoO= productoRepository.findById(id);
-				
+
 				if(productoO.isPresent()) {
-					infoProductoDto= productoRepository.getInfoProducto(id);					
+					infoProductoDto= productoRepository.getInfoProducto(id);
 				}
 				else {
 					ResourceNotFoundException einfo = new ResourceNotFoundException();
@@ -690,7 +711,7 @@ public class ProductoServiceImpl implements ProductoService {
 				throw new ProductoException(e);
 			}
 		return infoProductoDto;
-			
+
 	}
 
 	@Transactional
@@ -721,12 +742,12 @@ public class ProductoServiceImpl implements ProductoService {
 		return coberturasDto;
 	}
 
-	
+
 	@Transactional
 	@Override
 	public List<TramoListDto> getTramosByProduct(Long id) throws ProductoException, ResourceNotFoundException,ForbiddenException {
 		List<TramoListDto> lista= new ArrayList<>();
-		
+
 		try {
 			Optional<Producto> productoO= productoRepository.findById(id);
 			if(productoO.isPresent()) {
@@ -801,12 +822,12 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public void saveTramosByProduct(Long id, TramoDto tramoDto,Long tipoRamo) throws ProductoException, ResourceNotFoundException,ForbiddenException {
-		
+	public void saveTramosByProduct(Long id, TramoDto tramoDto, Long tipoRamo) throws ProductoException, ResourceNotFoundException,ForbiddenException {
+
 		try {
 			Optional<Producto> productoO= productoRepository.findById(id);
 			if(productoO.isPresent()) {
-				Producto producto=productoO.get();				
+				Producto producto=productoO.get();
 	           TipoTarifa tipotarifa=producto.getTipoTarifa();
 
 				if(tipotarifa!=null && tipotarifa.getId()==1) {
@@ -892,7 +913,7 @@ public class ProductoServiceImpl implements ProductoService {
 		catch(Exception e) {
 			throw new ProductoException(e);
 		}
-		
+
 	}
 
 	@Transactional
@@ -900,10 +921,10 @@ public class ProductoServiceImpl implements ProductoService {
 	public void deleteTramoByProduct(Long idProducto, Long idTramo)
 			throws ProductoException, ResourceNotFoundException,ForbiddenException {
       try {
-			
+
 			Optional<Producto> productoO= productoRepository.findById(idProducto);
 			Optional<Tramo> tramoO= tramoRepository.findById(idTramo);
-			
+
 			if(productoO.isPresent() && tramoO.isPresent()) {
 				Producto producto=productoO.get();
 				TipoTarifa tipotarifa=producto.getTipoTarifa();
@@ -921,7 +942,7 @@ public class ProductoServiceImpl implements ProductoService {
 					fe.setDetail(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
 					throw fe;
 				}
-				
+
 			}
 			else {
 				ResourceNotFoundException edeletetramo = new ResourceNotFoundException();
@@ -940,22 +961,22 @@ public class ProductoServiceImpl implements ProductoService {
 		catch(Exception e) {
 			throw new ProductoException(e);
 		}
-		
+
 	}
 
 	@Transactional
 	@Override
 	public void updateTramoByProduct(Long id, Long idTramo, TramoDto tramoDto,Long tipoRamo)
 			throws ProductoException, ResourceNotFoundException,ForbiddenException {
-		
+
 		try {
-				
+
 			Optional<Producto> productoO= productoRepository.findById(id);
 			Optional<Tramo> tramoO= tramoRepository.findById(idTramo);
-			
+
 			if(productoO.isPresent() && tramoO.isPresent()) {
 				  Producto producto=productoO.get();
-				  
+
 				  Tramo tramoEntity= tramoO.get();
 				  TipoTarifa tipotarifa=producto.getTipoTarifa();
 
@@ -1021,7 +1042,7 @@ public class ProductoServiceImpl implements ProductoService {
 						fe.setDetail(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
 						throw fe;
 					}
-				
+
 			}
 				else {
 					ResourceNotFoundException eupdatetramo = new ResourceNotFoundException();
@@ -1040,8 +1061,8 @@ public class ProductoServiceImpl implements ProductoService {
 			catch(Exception e) {
 				throw new ProductoException(e);
 			}
-			
-		
+
+
 	}
 
 	@Transactional
@@ -1246,6 +1267,200 @@ public class ProductoServiceImpl implements ProductoService {
 		}
 
 
+	}
+
+	@Transactional
+	@Override
+	public void saveCoberturaProducto(CoberturaDTO cobertura)
+			throws ProductoException, ResourceNotFoundException {
+
+		try {
+			List<CoberturaProductoDto> coberturas = productoRepository.findCoberturasDtoByProducto(cobertura.getProducto());
+			AtomicReference<Integer> maxOrder = new AtomicReference<>(0);
+			if(coberturas.size() > 0) {
+				coberturas.stream().forEach(e->{
+					if (e.getOrden() > maxOrder.get()){
+						maxOrder.set(e.getOrden());
+					}
+				});
+
+				CoberturaProducto coberturaEntity = new CoberturaProducto();
+				CoberturaProductoKey coberturaKey = new CoberturaProductoKey(cobertura.getProducto(), cobertura.getCobertura());
+				coberturaEntity.setId(coberturaKey);
+				Optional<TipoCobertura> tipo = tipoCoberturaRepository.findById(cobertura.getTipoCobertura());
+				tipo.ifPresent(coberturaEntity::setTipoCobertura);
+				Optional<Producto> producto = productoRepository.findById(cobertura.getProducto());
+				producto.ifPresent(coberturaEntity::setProducto);
+				coberturaEntity.setEdadMaxIngreso(cobertura.getEdadMaximaIngreso());
+				coberturaEntity.setEdadMaxPermanencia(cobertura.getEdadMaximaPermanencia());
+				coberturaEntity.setIdDeducible(cobertura.getDeducible());
+				coberturaEntity.setIva(cobertura.getCobeConsinIva());
+				coberturaEntity.setMontoAsegurado(cobertura.getMontoAsegurado());
+				coberturaEntity.setOrden(maxOrder.get() + 1);
+				coberturaEntity.setPorcCapital(cobertura.getPorcentajeSobreCapitalAsegurado());
+				coberturaEntity.setPrimaMinima(cobertura.getPrimaMinima());
+				coberturaEntity.setValorPrima(cobertura.getMontoPrima());
+				coberturaEntity.setTasa(cobertura.getTasa());
+
+				// Todo: Aclarar de donde obtenemos este "PrimaSobre (ni idea)"
+				Optional<PrimaSobreQue> primaSobreQue =  primaSobreQueRepository.findById(1L);
+				primaSobreQue.ifPresent(coberturaEntity::setPrimaSobreQue);
+				Optional<TipoTasa> tipoTasa = tipoTasaRepository.findById(cobertura.getEn());
+				tipoTasa.ifPresent(coberturaEntity::setTipoTasa);
+				coberturaRepository.save(coberturaEntity);
+
+			} else {
+				ResourceNotFoundException e = new ResourceNotFoundException();
+				e.setConcreteException(e);
+				e.setErrorMessage(MSG_NOT_FOUND);
+				e.setDetail(MSG_NOT_FOUND);
+				throw e;
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+	}
+
+	@Transactional
+	@Override
+	public void updateOrderCobertura(OrdenCoberturaDTO ordenCobertura)
+			throws ProductoException, ResourceNotFoundException {
+
+		try {
+			List<CoberturaProductoDto> coberturas = productoRepository.findCoberturasDtoByProducto(ordenCobertura.getIdProducto());
+
+			if(!coberturas.isEmpty() && ordenCobertura.getToIndexRow() < coberturas.size() && ordenCobertura.getToIndexRow() >= 0) {
+
+				coberturas.get(ordenCobertura.getFromIndexRow())
+						.setOrden(coberturas.get(ordenCobertura.getToIndexRow()).getOrden());
+				CoberturaProductoKey coberturaKeyFrom = new CoberturaProductoKey(ordenCobertura.getIdProducto(), coberturas.get(ordenCobertura.getFromIndexRow()).getIdCobertura());
+				Optional<CoberturaProducto> coberturaProductoFrom = coberturaRepository.findById(coberturaKeyFrom);
+				coberturaProductoFrom.ifPresent(coberturaProducto -> {
+					coberturaProducto.setOrden(coberturas.get(ordenCobertura.getFromIndexRow()).getOrden());
+					coberturaRepository.save(coberturaProducto);
+				});
+
+				// up
+				if (ordenCobertura.getFromIndexRow() > ordenCobertura.getToIndexRow()){
+					for (int i = ordenCobertura.getToIndexRow();  i < ordenCobertura.getFromIndexRow(); i++ ){
+						Integer orden = coberturas.get(i).getOrden() + 1;
+						CoberturaProductoKey coberturaKey = new CoberturaProductoKey(ordenCobertura.getIdProducto(), coberturas.get(i).getIdCobertura());
+						Optional<CoberturaProducto> coberturaProducto = coberturaRepository.findById(coberturaKey);
+						coberturaProducto.ifPresent(producto -> {
+							producto.setOrden(orden);
+							coberturaRepository.save(producto);
+						});
+					}
+				} else  {
+					// down
+					for (int i = ordenCobertura.getToIndexRow();  i > ordenCobertura.getFromIndexRow(); i-- ){
+						Integer orden = coberturas.get(i).getOrden() - 1;
+						CoberturaProductoKey coberturaKey = new CoberturaProductoKey(ordenCobertura.getIdProducto(), coberturas.get(i).getIdCobertura());
+						Optional<CoberturaProducto> coberturaProducto = coberturaRepository.findById(coberturaKey);
+						coberturaProducto.ifPresent(producto -> {
+							producto.setOrden(orden);
+							coberturaRepository.save(producto);
+						});
+					}
+				}
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+
+	}
+
+	@Transactional
+	@Override
+	public List<CoberturaProductoCorrelativoDto> getCoberturasDtoByProductoCorrelative(Long id) throws ProductoException, ResourceNotFoundException {
+		List<CoberturaProductoCorrelativoDto>  coberturasDtoCorrelative;
+
+		try {
+			Optional<Producto> productoOp = productoRepository.findById(id);
+			if(productoOp.isPresent()) {
+				coberturasDtoCorrelative =productoRepository.findCoberturasDtoByProductoCorrelative(id);
+			}
+			else {
+				ResourceNotFoundException e = new ResourceNotFoundException();
+				e.setConcreteException(e);
+				e.setErrorMessage(MSG_NOT_FOUND);
+				e.setDetail(MSG_NOT_FOUND);
+				throw e;
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+
+		return coberturasDtoCorrelative;
+	}
+
+
+	@Transactional
+	@Override
+	public List<TipoIvaDTO> getTipoIvaByProducto(Long id) throws ProductoException, ResourceNotFoundException {
+		List<TipoIvaDTO>  tiposIvas;
+
+		try {
+			Optional<Producto> productoOp = productoRepository.findById(id);
+			if(productoOp.isPresent()) {
+				tiposIvas =productoRepository.findTipoIva(id);
+			}
+			else {
+				ResourceNotFoundException e = new ResourceNotFoundException();
+				e.setConcreteException(e);
+				e.setErrorMessage(MSG_NOT_FOUND);
+				e.setDetail(MSG_NOT_FOUND);
+				throw e;
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+
+		return tiposIvas;
+	}
+
+
+	@Transactional
+	@Override
+	public List<DeducibleDTO> getDeducibles(Long id) throws ProductoException, ResourceNotFoundException {
+		List<DeducibleDTO>  deducibles;
+
+		try {
+			Optional<Producto> productoOp = productoRepository.findById(id);
+			if(productoOp.isPresent()) {
+				deducibles = productoRepository.findDeducibles(id);
+			} else {
+				ResourceNotFoundException e = new ResourceNotFoundException();
+				e.setConcreteException(e);
+				e.setErrorMessage(MSG_NOT_FOUND);
+				e.setDetail(MSG_NOT_FOUND);
+				throw e;
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+
+		return deducibles;
 	}
 
 

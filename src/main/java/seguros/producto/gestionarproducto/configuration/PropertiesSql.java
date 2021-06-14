@@ -34,5 +34,8 @@ public class PropertiesSql {
 	private String VALIDAR_BUSCAR_CODIGOPOS;
 	private String GET_DATA_INFO_PRODUCTO;
 	private String LISTAR_COBERTURAS_POR_PRODUCTO;
+	private String LISTAR_COBERTURAS_POR_PRODUCTO_CORRELATIVE;
+	private String LISTAR_TIPO_IVA;
+	private String LISTAR_DEDUCIBLE;
 
 }
