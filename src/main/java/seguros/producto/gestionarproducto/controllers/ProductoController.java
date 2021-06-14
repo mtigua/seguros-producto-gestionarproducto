@@ -39,6 +39,7 @@ import seguros.producto.gestionarproducto.dto.TramoDto;
 import seguros.producto.gestionarproducto.dto.TramoListDto;
 import seguros.producto.gestionarproducto.dto.RecargoPorAseguradoDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
+import seguros.producto.gestionarproducto.exceptions.ForbiddenException;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
 import seguros.producto.gestionarproducto.services.ProductoService;
 import seguros.producto.gestionarproducto.servicesImpl.ProductoException;
@@ -197,10 +198,14 @@ public class ProductoController {
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/{id}/terminosCortos")
-	public ResponseEntity<List<TerminoCortoDto>> getTerminosCortosByProduct(@PathVariable("id") Long id) throws ProductoException,ResourceNotFoundException{	
+	public ResponseEntity<List<TerminoCortoDto>> getTerminosCortosByProduct(@PathVariable("id") Long id) throws ProductoException,ResourceNotFoundException,ForbiddenException{	
 		List<TerminoCortoDto> lista=null;
 		try {	
 			lista= productoService.getTerminosCortosByProduct(id);
+		}
+		catch(ForbiddenException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_terminos_corto_by_product());
+			throw e;
 		}
 		catch(ResourceNotFoundException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_terminos_corto_by_product());
@@ -231,12 +236,16 @@ public class ProductoController {
 	public ResponseEntity<String> saveTerminosCortosByProduct(
 			@PathVariable("id") Long id,
 			@RequestBody @Valid List<TerminoCortoSaveDto> terminosCortos			
-			) throws ProductoException,ResourceNotFoundException {	
+			) throws ProductoException,ResourceNotFoundException,ForbiddenException {	
 		
 		try {	
 			productoService.saveTerminosCortosByProduct(id,terminosCortos);
 		}
 		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_save_terminos_corto_by_product());
+			throw e;
+		}
+		catch(ForbiddenException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_save_terminos_corto_by_product());
 			throw e;
 		}
@@ -266,10 +275,14 @@ public class ProductoController {
 			@PathVariable("id") Long idProducto,
 			@PathVariable("idTerminoCorto") Long idTerminoCorto,
 			@RequestBody @Valid TerminoCortoSaveDto terminosCorto	
-			) throws ProductoException,ResourceNotFoundException {	
+			) throws ProductoException,ResourceNotFoundException,ForbiddenException {	
 		
 		try {	
 			productoService.updateTerminosCortosByProduct(idProducto, idTerminoCorto, terminosCorto);
+		}
+		catch(ForbiddenException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_update_terminos_corto_by_product());
+			throw e;
 		}
 		catch(ResourceNotFoundException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_update_terminos_corto_by_product());
@@ -301,10 +314,14 @@ public class ProductoController {
 	public ResponseEntity<String> deleteTerminosCortosByProduct(
 			@PathVariable("id") Long idProducto,
 			@PathVariable("idTerminoCorto") Long idTerminoCorto		
-			) throws ProductoException,ResourceNotFoundException {	
+			) throws ProductoException,ResourceNotFoundException,ForbiddenException {	
 		
 		try {	
 			productoService.deleteTerminosCortosByProduct(idProducto,idTerminoCorto);
+		}
+		catch(ForbiddenException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_delete_terminos_corto_by_product());
+			throw e;
 		}
 		catch(ResourceNotFoundException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_delete_terminos_corto_by_product());
@@ -396,10 +413,14 @@ public class ProductoController {
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/{id}/tramo")
-	public ResponseEntity<List<TramoListDto>> getTramosByProduct(@PathVariable("id") Long id) throws ProductoException,ResourceNotFoundException{	
+	public ResponseEntity<List<TramoListDto>> getTramosByProduct(@PathVariable("id") Long id) throws ProductoException,ResourceNotFoundException,ForbiddenException{	
 		List<TramoListDto> lista=null;
 		try {	
 			lista= productoService.getTramosByProduct(id);
+		}
+		catch(ForbiddenException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_tramo_by_product());
+			throw e;
 		}
 		catch(ResourceNotFoundException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_tramo_by_product());
@@ -431,10 +452,14 @@ public class ProductoController {
 			@PathVariable("id") Long id,
 			@RequestBody @Valid TramoDto tramoDto,
 			@RequestParam(required = false) Long tipoRamo
-			) throws ProductoException,ResourceNotFoundException {	
+			) throws ProductoException,ResourceNotFoundException,ForbiddenException {	
 		
 		try {	
 			productoService.saveTramosByProduct(id,tramoDto,tipoRamo);
+		}
+		catch(ForbiddenException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_save_tramo_by_product());
+			throw e;
 		}
 		catch(ResourceNotFoundException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_save_tramo_by_product());
@@ -467,12 +492,16 @@ public class ProductoController {
 			@PathVariable("idTramo") Long idTramo,
 			@RequestBody @Valid TramoDto tramoDto,
 			@RequestParam(required = false) Long tipoRamo
-			) throws ProductoException,ResourceNotFoundException {	
+			) throws ProductoException,ResourceNotFoundException,ForbiddenException {	
 		
 		try {	
 			productoService.updateTramoByProduct(idProducto, idTramo, tramoDto,tipoRamo);
 		}
 		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_update_tramo_by_product());
+			throw e;
+		}
+		catch(ForbiddenException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_update_tramo_by_product());
 			throw e;
 		}
@@ -502,10 +531,14 @@ public class ProductoController {
 	public ResponseEntity<String> deleteTramoByProduct(
 			@PathVariable("id") Long idProducto,
 			@PathVariable("idTramo") Long idTramo		
-			) throws ProductoException,ResourceNotFoundException {	
+			) throws ProductoException,ResourceNotFoundException,ForbiddenException {	
 		
 		try {	
 			productoService.deleteTramoByProduct(idProducto,idTramo);
+		}
+		catch(ForbiddenException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_delete_tramo_by_product());
+			throw e;
 		}
 		catch(ResourceNotFoundException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_delete_tramo_by_product());

@@ -3,6 +3,7 @@ package seguros.producto.gestionarproducto.services;
 import java.util.List;
 
 import seguros.producto.gestionarproducto.dto.*;
+import seguros.producto.gestionarproducto.exceptions.ForbiddenException;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
 import seguros.producto.gestionarproducto.servicesImpl.ProductoException;
 
@@ -15,17 +16,17 @@ public interface ProductoService {
     public String decrypt(String palabrasePase) throws ProductoException;
     public String getPassProductManagerByIdProducto(Long idProducto) throws ProductoException,ResourceNotFoundException;
     public void enableDisable(EstadoProductoDto estadoProductoDto) throws ProductoException;
-    public List<TerminoCortoDto> getTerminosCortosByProduct(Long id) throws ProductoException,ResourceNotFoundException;
-    public void saveTerminosCortosByProduct(Long id, List<TerminoCortoSaveDto> terminosCortos) throws ProductoException,ResourceNotFoundException;
-    public void deleteTerminosCortosByProduct(Long idProducto,Long idTerminoCorto) throws ProductoException,ResourceNotFoundException;
-    public void updateTerminosCortosByProduct(Long id, Long idTerminoCorto, TerminoCortoSaveDto terminosCorto) throws ProductoException,ResourceNotFoundException;
+    public List<TerminoCortoDto> getTerminosCortosByProduct(Long id) throws ProductoException,ResourceNotFoundException,ForbiddenException;
+    public void saveTerminosCortosByProduct(Long id, List<TerminoCortoSaveDto> terminosCortos) throws ProductoException,ResourceNotFoundException,ForbiddenException;
+    public void deleteTerminosCortosByProduct(Long idProducto,Long idTerminoCorto) throws ProductoException,ResourceNotFoundException,ForbiddenException;
+    public void updateTerminosCortosByProduct(Long id, Long idTerminoCorto, TerminoCortoSaveDto terminosCorto) throws ProductoException,ResourceNotFoundException,ForbiddenException;
     public InfoProductoDto getInfoProducto(Long id)  throws ProductoException,ResourceNotFoundException;
     public List<CoberturaProductoDto> getCoberturasDtoByProducto(Long id) throws ProductoException,ResourceNotFoundException;
    
-    public List<TramoListDto> getTramosByProduct(Long id) throws ProductoException,ResourceNotFoundException;
-    public void saveTramosByProduct(Long id, TramoDto tramoDto,Long tipoRamo) throws ProductoException,ResourceNotFoundException;
-    public void deleteTramoByProduct(Long idProducto,Long idTramo) throws ProductoException,ResourceNotFoundException;
-    public void updateTramoByProduct(Long id, Long idTramo, TramoDto tramoDto,Long tipoRamo) throws ProductoException,ResourceNotFoundException;
+    public List<TramoListDto> getTramosByProduct(Long id) throws ProductoException,ResourceNotFoundException,ForbiddenException;
+    public void saveTramosByProduct(Long id, TramoDto tramoDto,Long tipoRamo) throws ProductoException,ResourceNotFoundException,ForbiddenException;
+    public void deleteTramoByProduct(Long idProducto,Long idTramo) throws ProductoException,ResourceNotFoundException,ForbiddenException;
+    public void updateTramoByProduct(Long id, Long idTramo, TramoDto tramoDto,Long tipoRamo) throws ProductoException,ResourceNotFoundException,ForbiddenException;
 
     public List<RecargoPorAseguradoDto> getRecargoPorAseguradoByProduct(Long id) throws ProductoException,ResourceNotFoundException;
     public void saveRecargoPorAseguradoByProduct(Long id, List<RecargoPorAseguradoDto> recargoPorAsegurado) throws ProductoException,ResourceNotFoundException;
