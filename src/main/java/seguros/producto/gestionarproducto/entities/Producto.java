@@ -530,8 +530,30 @@ public class Producto  {
 				  } );
 	
 	}
-		
-		
+
+
+	@OneToMany( cascade = {CascadeType.PERSIST,CascadeType.MERGE}, orphanRemoval = true)
+	@JoinColumn(name = "producto_id")
+	private Set<RecargoPorAsegurado> recargoPorAsegurado;
+
+	public void addRecargoPorAsegurado(RecargoPorAsegurado recargoPorAsegurado) {
+		this.recargoPorAsegurado.add(recargoPorAsegurado);
+	}
+
+	public void removeRecargoPorAsegurado(RecargoPorAsegurado recargoPorAsegurado) {
+		this.recargoPorAsegurado.remove(recargoPorAsegurado);
+	}
+
+	public void updateRecargoPorAsegurado(RecargoPorAsegurado recargoPorAsegurado) {
+		this.recargoPorAsegurado.stream()
+				.filter(t -> recargoPorAsegurado.getId().equals( t.getId() ) )
+				.findFirst()
+				.ifPresent(t-> {
+					t=recargoPorAsegurado;
+
+				} );
+
+	}
 		
 	
 }

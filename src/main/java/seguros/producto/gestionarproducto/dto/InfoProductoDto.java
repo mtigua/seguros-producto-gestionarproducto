@@ -19,6 +19,10 @@ public class InfoProductoDto  {
 		private String nemotecnico;
 		
 		private TipoRamoDto tipoRamo;
+
+		private String plan;
+
+		private Long idTipoCompania;
 		
 
 }
