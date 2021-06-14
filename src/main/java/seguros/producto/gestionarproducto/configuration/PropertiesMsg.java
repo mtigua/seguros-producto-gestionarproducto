@@ -47,6 +47,12 @@ public class PropertiesMsg {
 	
 	private String logger_error_executing_get_tarifa_es;
 	private String logger_error_executing_get_tipo_tramo;
+	private String logger_error_executing_update_orden_cobertura;
+	private String logger_error_executing_save_cobertura;
+
+	private String logger_error_executing_get_coberturas_by_product_correlative;
+	private String logger_error_executing_tipo_iva_by_producto;
+	private String logger_error_executing_deducibles;
 
 	private String logger_error_executing_get_recargo_por_asegurado_by_product;
 	private String logger_error_executing_save_recargo_por_asegurado_by_product;
