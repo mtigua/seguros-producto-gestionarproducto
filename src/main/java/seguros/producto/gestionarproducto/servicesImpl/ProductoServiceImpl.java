@@ -1333,24 +1333,27 @@ public class ProductoServiceImpl implements ProductoService {
 		try {
 			List<CoberturaProductoDto> coberturas = productoRepository.findCoberturasDtoByProducto(ordenCobertura.getIdProducto());
 
-			if(coberturas.size() > 0 && ordenCobertura.getToIndexRow() < coberturas.size() && ordenCobertura.getToIndexRow() >= 0) {
+			if(!coberturas.isEmpty() && ordenCobertura.getToIndexRow() < coberturas.size() && ordenCobertura.getToIndexRow() >= 0) {
 
 				coberturas.get(ordenCobertura.getFromIndexRow())
 						.setOrden(coberturas.get(ordenCobertura.getToIndexRow()).getOrden());
 				CoberturaProductoKey coberturaKeyFrom = new CoberturaProductoKey(ordenCobertura.getIdProducto(), coberturas.get(ordenCobertura.getFromIndexRow()).getIdCobertura());
 				Optional<CoberturaProducto> coberturaProductoFrom = coberturaRepository.findById(coberturaKeyFrom);
-				coberturaProductoFrom.get().setOrden(coberturas.get(ordenCobertura.getFromIndexRow()).getOrden());
-				coberturaRepository.save(coberturaProductoFrom.get());
+				coberturaProductoFrom.ifPresent(coberturaProducto -> {
+					coberturaProducto.setOrden(coberturas.get(ordenCobertura.getFromIndexRow()).getOrden());
+					coberturaRepository.save(coberturaProducto);
+				});
 
 				// up
 				if (ordenCobertura.getFromIndexRow() > ordenCobertura.getToIndexRow()){
-
 					for (int i = ordenCobertura.getToIndexRow();  i < ordenCobertura.getFromIndexRow(); i++ ){
 						Integer orden = coberturas.get(i).getOrden() + 1;
 						CoberturaProductoKey coberturaKey = new CoberturaProductoKey(ordenCobertura.getIdProducto(), coberturas.get(i).getIdCobertura());
 						Optional<CoberturaProducto> coberturaProducto = coberturaRepository.findById(coberturaKey);
-						coberturaProducto.get().setOrden(orden);
-						coberturaRepository.save(coberturaProducto.get());
+						coberturaProducto.ifPresent(producto -> {
+							producto.setOrden(orden);
+							coberturaRepository.save(producto);
+						});
 					}
 				} else  {
 					// down
@@ -1358,8 +1361,10 @@ public class ProductoServiceImpl implements ProductoService {
 						Integer orden = coberturas.get(i).getOrden() - 1;
 						CoberturaProductoKey coberturaKey = new CoberturaProductoKey(ordenCobertura.getIdProducto(), coberturas.get(i).getIdCobertura());
 						Optional<CoberturaProducto> coberturaProducto = coberturaRepository.findById(coberturaKey);
-						coberturaProducto.get().setOrden(orden);
-						coberturaRepository.save(coberturaProducto.get());
+						coberturaProducto.ifPresent(producto -> {
+							producto.setOrden(orden);
+							coberturaRepository.save(producto);
+						});
 					}
 				}
 			}
