@@ -174,7 +174,16 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Autowired
 	private RestTemplate restTemplate;
-	
+
+	@Autowired
+	private TipoCoberturaRepository tipoCoberturaRepository ;
+
+	@Autowired
+	private CoberturaRepository coberturaRepository;
+
+	@Autowired
+	private PrimaSobreQueRepository primaSobreQueRepository;
+
 	@Autowired
 	private Properties properties;
 
