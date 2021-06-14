@@ -31,6 +31,7 @@ import seguros.producto.gestionarproducto.dto.TipoTasaDto;
 import seguros.producto.gestionarproducto.dto.TipoTramoDto;
 import seguros.producto.gestionarproducto.dto.TramoDto;
 import seguros.producto.gestionarproducto.dto.TramoListDto;
+import seguros.producto.gestionarproducto.dto.RecargoPorAseguradoDto;
 import seguros.producto.gestionarproducto.entities.Canal;
 import seguros.producto.gestionarproducto.entities.DestinoVenta;
 import seguros.producto.gestionarproducto.entities.EstadoIntegracion;
@@ -53,6 +54,7 @@ import seguros.producto.gestionarproducto.entities.TipoTasa;
 import seguros.producto.gestionarproducto.entities.TipoTramo;
 import seguros.producto.gestionarproducto.entities.TipoTraspaso;
 import seguros.producto.gestionarproducto.entities.Tramo;
+import seguros.producto.gestionarproducto.entities.RecargoPorAsegurado;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
 import seguros.producto.gestionarproducto.repositories.CanalRepository;
 import seguros.producto.gestionarproducto.repositories.DestinoVentaRepository;
@@ -74,6 +76,7 @@ import seguros.producto.gestionarproducto.repositories.TipoTasaRepository;
 import seguros.producto.gestionarproducto.repositories.TipoTramoRepository;
 import seguros.producto.gestionarproducto.repositories.TipoTraspasoRepository;
 import seguros.producto.gestionarproducto.repositories.TramoRepository;
+import seguros.producto.gestionarproducto.repositories.RecargoPorAseguradoRepository;
 import seguros.producto.gestionarproducto.services.EstadoIntegracionService;
 import seguros.producto.gestionarproducto.services.ProductoService;
 
@@ -149,6 +152,9 @@ public class ProductoServiceImpl implements ProductoService {
 	
 	@Autowired
 	private PrimaSobreQueRepository tramoParaRepository;
+
+	@Autowired
+	private RecargoPorAseguradoRepository recargoPorAseguradoRepository;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -920,6 +926,154 @@ public class ProductoServiceImpl implements ProductoService {
 			}
 			
 		
+	}
+
+	@Transactional
+	@Override
+	public List<RecargoPorAseguradoDto> getRecargoPorAseguradoByProduct(Long id) throws ProductoException,ResourceNotFoundException {
+		List<RecargoPorAseguradoDto> lista= new ArrayList<>();
+
+		try {
+			Optional<Producto> productoO= productoRepository.findById(id);
+			if(productoO.isPresent()) {
+				Producto producto=productoO.get();
+				Set<RecargoPorAsegurado> listaRecargoPorAsegurado= producto.getRecargoPorAsegurado();
+
+				lista=listaRecargoPorAsegurado.stream().map(e->{
+
+					RecargoPorAseguradoDto t= new RecargoPorAseguradoDto();
+					BeanUtils.copyProperties(e, t);
+					return t;
+				}).collect(Collectors.toList());
+				Collections.sort(lista,(RecargoPorAseguradoDto f1,RecargoPorAseguradoDto f2) -> f1.getDesdeAsegurado().compareTo(f2.getHastaAsegurado()));
+			}
+			else {
+				ResourceNotFoundException et = new ResourceNotFoundException();
+				et.setConcreteException(et);
+				et.setErrorMessage(MSG_NOT_FOUND);
+				et.setDetail(MSG_NOT_FOUND);
+				throw et;
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+		return lista;
+	}
+
+
+	@Transactional
+	@Override
+	public void saveRecargoPorAseguradoByProduct(Long id, List<RecargoPorAseguradoDto> recargoPorAsegurado)
+			throws ProductoException, ResourceNotFoundException {
+
+		try {
+			Optional<Producto> productoO= productoRepository.findById(id);
+			if(productoO.isPresent()) {
+				Producto producto=productoO.get();
+
+				recargoPorAsegurado.stream().forEach(e->{
+					RecargoPorAsegurado recargoPorAseguradoEntity= new RecargoPorAsegurado();
+					BeanUtils.copyProperties(e, recargoPorAseguradoEntity);
+					producto.addRecargoPorAsegurado(recargoPorAseguradoEntity);
+				});
+
+
+				productoRepository.save(producto);
+
+			}
+			else {
+				ResourceNotFoundException esave = new ResourceNotFoundException();
+				esave.setConcreteException(esave);
+				esave.setErrorMessage(MSG_NOT_FOUND);
+				esave.setDetail(MSG_NOT_FOUND);
+				throw esave;
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+
+	}
+
+
+	@Transactional
+	@Override
+	public void deleteRecargoPorAseguradoByProduct(Long idProducto, Long idRecargoPorAsegurado)	throws ProductoException, ResourceNotFoundException {
+
+		try {
+
+			Optional<Producto> productoO= productoRepository.findById(idProducto);
+			Optional<RecargoPorAsegurado> recargoPorAsegurado0= recargoPorAseguradoRepository.findById(idRecargoPorAsegurado);
+
+			if(productoO.isPresent() && recargoPorAsegurado0.isPresent()) {
+				Producto producto=productoO.get();
+				RecargoPorAsegurado recargoPorAsegurado=recargoPorAsegurado0.get();
+				producto.removeRecargoPorAsegurado(recargoPorAsegurado);
+
+				productoRepository.save(producto);
+
+			}
+			else {
+				ResourceNotFoundException edelete = new ResourceNotFoundException();
+				edelete.setConcreteException(edelete);
+				edelete.setErrorMessage(MSG_NOT_FOUND);
+				edelete.setDetail(MSG_NOT_FOUND);
+				throw edelete;
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+
+	}
+
+	@Transactional
+	@Override
+	public void updateRecargoPorAseguradoByProduct(Long id, Long idRecargoPorAsegurado, RecargoPorAseguradoDto recargoPorAseguradoDto)	throws ProductoException, ResourceNotFoundException {
+		try {
+
+			Optional<Producto> productoO= productoRepository.findById(id);
+			Optional<RecargoPorAsegurado> recargoPorAseguradoO= recargoPorAseguradoRepository.findById(idRecargoPorAsegurado);
+
+			if(productoO.isPresent() && recargoPorAseguradoO.isPresent()) {
+				Producto producto=productoO.get();
+				RecargoPorAsegurado recargoPorAsegurado=recargoPorAseguradoO.get();
+
+				BeanUtils.copyProperties(recargoPorAseguradoDto, recargoPorAsegurado);
+				recargoPorAsegurado.setId(idRecargoPorAsegurado);
+
+				producto.updateRecargoPorAsegurado(recargoPorAsegurado);
+
+
+				productoRepository.save(producto);
+
+			}
+			else {
+				ResourceNotFoundException eupdate = new ResourceNotFoundException();
+				eupdate.setConcreteException(eupdate);
+				eupdate.setErrorMessage(MSG_NOT_FOUND);
+				eupdate.setDetail(MSG_NOT_FOUND);
+				throw eupdate;
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+
+
 	}
 
 

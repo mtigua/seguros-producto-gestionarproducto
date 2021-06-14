@@ -171,6 +171,7 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 					infoProductoDto.setCompania( record.get(0)[2].toString() );
 					infoProductoDto.setNegocio( record.get(0)[3].toString() );
 					infoProductoDto.setRamo( record.get(0)[4].toString() );
+					infoProductoDto.setPlan( record.get(0)[8].toString() );
 				
 					TipoRamoDto tipoRamo=new TipoRamoDto();
 					tipoRamo.setNombre( record.get(0)[6].toString()  );

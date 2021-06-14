@@ -37,6 +37,7 @@ import seguros.producto.gestionarproducto.dto.TerminoCortoDto;
 import seguros.producto.gestionarproducto.dto.TerminoCortoSaveDto;
 import seguros.producto.gestionarproducto.dto.TramoDto;
 import seguros.producto.gestionarproducto.dto.TramoListDto;
+import seguros.producto.gestionarproducto.dto.RecargoPorAseguradoDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
 import seguros.producto.gestionarproducto.services.ProductoService;
@@ -48,7 +49,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @RefreshScope
 @RequestMapping("/producto")
 @CrossOrigin(origins = "${domains.origin.allowed.gestionarproducto}", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PATCH,RequestMethod.OPTIONS,RequestMethod.PUT,RequestMethod.DELETE})
-@PreAuthorize("hasRole( @generalProps.getROLE_FUNCIONAL() ) OR  hasRole( @generalProps.getROLE_APROBADOR() ) OR hasRole( @generalProps.getROLE_CONTINUIDAD_OPERATIVA() ) ") 
+@PreAuthorize("hasRole( @generalProps.getROLE_FUNCIONAL() ) OR  hasRole( @generalProps.getROLE_APROBADOR() ) OR hasRole( @generalProps.getROLE_CONTINUIDAD_OPERATIVA() ) ")
 public class ProductoController {
 	
 	
@@ -70,6 +71,10 @@ public class ProductoController {
 	private static final String SWAGGER_SAVE_TRAMO_BY_PRODUCT = "Registrar tramo dado un producto";
 	private static final String SWAGGER_DELETE_TRAMO_BY_PRODUCT = "Eliminar tramo dado un producto";
 	private static final String SWAGGER_UPDATE_TRAMO_BY_PRODUCT = "Actualizar tramodado un producto";
+	private static final String SWAGGER_GET_RECARGO_POR_SEGURADO_BY_PRODUCT = "Obtener recargo por asegurado de un producto dado";
+	private static final String SWAGGER_SAVE_RECARGO_POR_SEGURADO_BY_PRODUCT = "Registrar recargo por asegurado dado un producto";
+	private static final String SWAGGER_DELETE_RECARGO_POR_SEGURADO_BY_PRODUCT = "Eliminar recargo por asegurado dado un producto";
+	private static final String SWAGGER_UPDATE_RECARGO_POR_SEGURADO_BY_PRODUCT = "Actualizar recargo por asegurado dado un producto";
 
 	
 	@Autowired
@@ -519,4 +524,137 @@ public class ProductoController {
 		return ResponseEntity.ok(MSG_HTTP200);
 	}
 
+	@ApiOperation(value = SWAGGER_GET_RECARGO_POR_SEGURADO_BY_PRODUCT, notes = SWAGGER_GET_RECARGO_POR_SEGURADO_BY_PRODUCT)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/{id}/recargoPorAsegurado")
+	public ResponseEntity<List<RecargoPorAseguradoDto>> getRecargoPorAseguradoByProduct(@PathVariable("id") Long id) throws ProductoException,ResourceNotFoundException{
+		List<RecargoPorAseguradoDto> lista=null;
+		try {
+			lista= productoService.getRecargoPorAseguradoByProduct(id);
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_recargo_por_asegurado_by_product());
+			throw e;
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_recargo_por_asegurado_by_product());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_recargo_por_asegurado_by_product());
+			throw ex;
+		}
+
+		return ResponseEntity.ok(lista);
+	}
+
+	@ApiOperation(value = SWAGGER_SAVE_RECARGO_POR_SEGURADO_BY_PRODUCT, notes = SWAGGER_SAVE_RECARGO_POR_SEGURADO_BY_PRODUCT)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@PostMapping("/{id}/recargoPorAsegurado")
+	public ResponseEntity<String> saveRecargoPorAseguradoByProduct(
+			@PathVariable("id") Long id,
+			@RequestBody @Valid List<RecargoPorAseguradoDto> recargoPorAsegurado
+	) throws ProductoException,ResourceNotFoundException {
+
+		try {
+			productoService.saveRecargoPorAseguradoByProduct(id,recargoPorAsegurado);
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_save_recargo_por_asegurado_by_product());
+			throw e;
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_save_recargo_por_asegurado_by_product());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_save_recargo_por_asegurado_by_product());
+			throw ex;
+		}
+		return ResponseEntity.ok(MSG_HTTP200);
+	}
+
+	@ApiOperation(value = SWAGGER_UPDATE_RECARGO_POR_SEGURADO_BY_PRODUCT, notes = SWAGGER_UPDATE_RECARGO_POR_SEGURADO_BY_PRODUCT)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@PutMapping("/{id}/recargoPorAsegurado/{idRecargoPorAsegurado}")
+	public ResponseEntity<String> updateRecargoPorAseguradoByProduct(
+			@PathVariable("id") Long idProducto,
+			@PathVariable("idRecargoPorAsegurado") Long idRecargoPorAsegurado,
+			@RequestBody @Valid RecargoPorAseguradoDto recargoPorAsegurado
+	) throws ProductoException,ResourceNotFoundException {
+
+		try {
+			productoService.updateRecargoPorAseguradoByProduct(idProducto, idRecargoPorAsegurado, recargoPorAsegurado);
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_update_recargo_por_asegurado_by_product());
+			throw e;
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_update_recargo_por_asegurado_by_product());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_update_recargo_por_asegurado_by_product());
+			throw ex;
+		}
+
+		return ResponseEntity.ok(MSG_HTTP200);
+	}
+
+
+	@ApiOperation(value = SWAGGER_DELETE_RECARGO_POR_SEGURADO_BY_PRODUCT, notes = SWAGGER_DELETE_RECARGO_POR_SEGURADO_BY_PRODUCT)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@DeleteMapping("/{id}/recargoPorAsegurado/{idRecargoPorAsegurado}")
+	public ResponseEntity<String> deleteRecargoPorAseguradoByProduct(
+			@PathVariable("id") Long idProducto,
+			@PathVariable("idRecargoPorAsegurado") Long idRecargoPorAsegurado
+	) throws ProductoException,ResourceNotFoundException {
+
+		try {
+			productoService.deleteRecargoPorAseguradoByProduct(idProducto,idRecargoPorAsegurado);
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_delete_recargo_por_asegurado_by_product());
+			throw e;
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_delete_recargo_por_asegurado_by_product());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_delete_recargo_por_asegurado_by_product());
+			throw ex;
+		}
+
+		return ResponseEntity.ok(MSG_HTTP200);
+	}
 }
