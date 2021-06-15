@@ -21,7 +21,7 @@
 - Gesti�n de conceptos
 - Gesti�n de homologaci�n indentificador
 - Gesti�n de Registro de cobertura
-
+- Gesti�n de Recargo por asegurado
 
 
 ## Tecnolog�as
