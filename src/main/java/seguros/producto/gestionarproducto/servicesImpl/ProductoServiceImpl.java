@@ -1277,45 +1277,40 @@ public class ProductoServiceImpl implements ProductoService {
 		try {
 			List<CoberturaProductoDto> coberturas = productoRepository.findCoberturasDtoByProducto(cobertura.getProducto());
 			AtomicReference<Integer> maxOrder = new AtomicReference<>(0);
-			if(coberturas.size() > 0) {
-				coberturas.stream().forEach(e->{
-					if (e.getOrden() > maxOrder.get()){
-						maxOrder.set(e.getOrden());
-					}
-				});
 
-				CoberturaProducto coberturaEntity = new CoberturaProducto();
-				CoberturaProductoKey coberturaKey = new CoberturaProductoKey(cobertura.getProducto(), cobertura.getCobertura());
-				coberturaEntity.setId(coberturaKey);
-				Optional<TipoCobertura> tipo = tipoCoberturaRepository.findById(cobertura.getTipoCobertura());
-				tipo.ifPresent(coberturaEntity::setTipoCobertura);
-				Optional<Producto> producto = productoRepository.findById(cobertura.getProducto());
-				producto.ifPresent(coberturaEntity::setProducto);
-				coberturaEntity.setEdadMaxIngreso(cobertura.getEdadMaximaIngreso());
-				coberturaEntity.setEdadMaxPermanencia(cobertura.getEdadMaximaPermanencia());
-				coberturaEntity.setIdDeducible(cobertura.getDeducible());
-				coberturaEntity.setIva(cobertura.getCobeConsinIva());
-				coberturaEntity.setMontoAsegurado(cobertura.getMontoAsegurado());
-				coberturaEntity.setOrden(maxOrder.get() + 1);
-				coberturaEntity.setPorcCapital(cobertura.getPorcentajeSobreCapitalAsegurado());
-				coberturaEntity.setPrimaMinima(cobertura.getPrimaMinima());
-				coberturaEntity.setValorPrima(cobertura.getMontoPrima());
-				coberturaEntity.setTasa(cobertura.getTasa());
+			coberturas.stream().forEach(e->{
+				if (e.getOrden() > maxOrder.get()){
+					maxOrder.set(e.getOrden());
+				}
+			});
 
-				// Todo: Aclarar de donde obtenemos este "PrimaSobre (ni idea)"
-				Optional<PrimaSobreQue> primaSobreQue =  primaSobreQueRepository.findById(1L);
-				primaSobreQue.ifPresent(coberturaEntity::setPrimaSobreQue);
+			CoberturaProducto coberturaEntity = new CoberturaProducto();
+			CoberturaProductoKey coberturaKey = new CoberturaProductoKey(cobertura.getProducto(), cobertura.getCobertura());
+			coberturaEntity.setId(coberturaKey);
+			Optional<TipoCobertura> tipo = tipoCoberturaRepository.findById(cobertura.getTipoCobertura());
+			tipo.ifPresent(coberturaEntity::setTipoCobertura);
+			Optional<Producto> producto = productoRepository.findById(cobertura.getProducto());
+			producto.ifPresent(coberturaEntity::setProducto);
+			coberturaEntity.setEdadMaxIngreso(cobertura.getEdadMaximaIngreso());
+			coberturaEntity.setEdadMaxPermanencia(cobertura.getEdadMaximaPermanencia());
+			coberturaEntity.setIdDeducible(cobertura.getDeducible());
+			coberturaEntity.setIva(cobertura.getCobeConsinIva());
+			coberturaEntity.setMontoAsegurado(cobertura.getMontoAsegurado());
+			coberturaEntity.setOrden(maxOrder.get() + 1);
+			coberturaEntity.setPorcCapital(cobertura.getPorcentajeSobreCapitalAsegurado());
+			coberturaEntity.setPrimaMinima(cobertura.getPrimaMinima());
+			coberturaEntity.setValorPrima(cobertura.getMontoPrima());
+			coberturaEntity.setTasa(cobertura.getTasa());
+
+			// Todo: Aclarar de donde obtenemos este "PrimaSobre (ni idea)"
+			Optional<PrimaSobreQue> primaSobreQue =  primaSobreQueRepository.findById(1L);
+			primaSobreQue.ifPresent(coberturaEntity::setPrimaSobreQue);
+			if (cobertura.getEn() != null){
 				Optional<TipoTasa> tipoTasa = tipoTasaRepository.findById(cobertura.getEn());
 				tipoTasa.ifPresent(coberturaEntity::setTipoTasa);
-				coberturaRepository.save(coberturaEntity);
-
-			} else {
-				ResourceNotFoundException e = new ResourceNotFoundException();
-				e.setConcreteException(e);
-				e.setErrorMessage(MSG_NOT_FOUND);
-				e.setDetail(MSG_NOT_FOUND);
-				throw e;
 			}
+			coberturaRepository.save(coberturaEntity);
+
 		}
 		catch(ResourceNotFoundException e) {
 			throw e;
