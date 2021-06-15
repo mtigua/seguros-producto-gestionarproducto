@@ -1,31 +1,32 @@
 # seguros-producto-gestionarproducto
 
 ![N|Solid](https://www.tarjetacencosud.cl//TarjetaMasWEB/img/favicon/ms-icon-144x144.png)
-**seguros-producto-gestionarproducto**: es un microservicio que permite la gestión de productos financieros y tradicionales
+**seguros-producto-gestionarproducto**: es un microservicio que permite la gestiï¿½n de productos financieros y tradicionales
 
 ## Funcionalidades
 
-- Gestión de canales de venta
-- Gestión de destino de ventas
-- Gestión de Producto
-- Gestión de tipo de periodo
-- Gestión de tipo de recargo
-- Gestión de tipo de traspaso
-- Gestión de tipo de seguro
-- Gestión de tipo de descuento
-- Gestión de modo de traspaso
-- Gestión de tarifa por
-- Gestión de tipo de promoción
-- Gestión de tipo de ajuste
-- Gestión de tipo de tarifa
-- Gestión de conceptos
-- Gestión de homologación indentificador
+- Gestiï¿½n de canales de venta
+- Gestiï¿½n de destino de ventas
+- Gestiï¿½n de Producto
+- Gestiï¿½n de tipo de periodo
+- Gestiï¿½n de tipo de recargo
+- Gestiï¿½n de tipo de traspaso
+- Gestiï¿½n de tipo de seguro
+- Gestiï¿½n de tipo de descuento
+- Gestiï¿½n de modo de traspaso
+- Gestiï¿½n de tarifa por
+- Gestiï¿½n de tipo de promociï¿½n
+- Gestiï¿½n de tipo de ajuste
+- Gestiï¿½n de tipo de tarifa
+- Gestiï¿½n de conceptos
+- Gestiï¿½n de homologaciï¿½n indentificador
+- Gestiï¿½n de Registro de cobertura
 
 
 
-## Tecnologías
+## Tecnologï¿½as
 
-Se utilizaron varias librerias de código abierto para funcionar correctamente, entre las más importantes están:
+Se utilizaron varias librerias de cï¿½digo abierto para funcionar correctamente, entre las mï¿½s importantes estï¿½n:
 
 - [org.springframework.boot:spring-boot-starter-web](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web)
 - [org.springframework.cloud:spring-cloud-starter-config](https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-config)
@@ -43,27 +44,27 @@ Iniciar el servidor
 gradlew bootRun
 ```
 
-#### Proceso para compilación
+#### Proceso para compilaciï¿½n
 
 ```sh
 gradlew build
 ```
-#### Documentación api
+#### Documentaciï¿½n api
 https://api-proxy-dev.adrfsc.cl/gestionarProducto/swagger-ui.html
 
 ## Docker
 
 Para implementar en un contenedor Docker.
 
-El microservicio hace uso de un plugin de docker para la generación de la imagen ejecutando la siguiente tarea:
+El microservicio hace uso de un plugin de docker para la generaciï¿½n de la imagen ejecutando la siguiente tarea:
 
 
 ```sh
 ./gradlew buildDocker -PdockerTag=${tag} -Penv=${env} -PkafkaTruststoreJks=truststore-kafka-${env}.jks
 ```
 
-Esto creará la imagen de **seguros-producto-gestionarproducto** con las dependencias necesarias.
-Asegúrese de cambiar ${tag} con el tag correspondiente y ${env} con el ambiente correspondiente
+Esto crearï¿½ la imagen de **seguros-producto-gestionarproducto** con las dependencias necesarias.
+Asegï¿½rese de cambiar ${tag} con el tag correspondiente y ${env} con el ambiente correspondiente
 
 Una vez hecho esto, ejecute la imagen de Docker y asigne el puerto a lo que desee en tu host. 
 
@@ -73,7 +74,7 @@ En este ejemplo, simplemente asignamos el puerto 8000 del host al puerto 8080 de
 docker run -d -p 8000:8080 operacionesregistry.azurecr.io/pana/dev/seguros-producto-gestionarproducto:1.1.1
 ```
 
-Verifique la implementación navegando a la dirección de su servidor en su navegador preferido.
+Verifique la implementaciï¿½n navegando a la direcciï¿½n de su servidor en su navegador preferido.
 
 ```sh
 127.0.0.1:8000
@@ -81,4 +82,4 @@ Verifique la implementación navegando a la dirección de su servidor en su navega
 
 ## License
 
-Copyright © Cencosud Scotiabank
+Copyright ï¿½ Cencosud Scotiabank
