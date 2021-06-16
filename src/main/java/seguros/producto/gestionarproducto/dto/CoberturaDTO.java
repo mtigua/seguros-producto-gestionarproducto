@@ -1,10 +1,12 @@
 package seguros.producto.gestionarproducto.dto;
 
 import lombok.Data;
+import seguros.producto.gestionarproducto.validators.CoberturaConstraint;
 
 import java.math.BigDecimal;
 
 @Data
+@CoberturaConstraint
 public class CoberturaDTO {
 	private Long cobertura;
 	private String cobeConsinIva;
@@ -17,9 +19,9 @@ public class CoberturaDTO {
 	private String paraParentesco;
 	private BigDecimal porcentajeSobreCapitalAsegurado;
 	private BigDecimal primaMinima;
-	private Long tarifa;
-	private Long tarifaValor;
+	private BigDecimal tarifa;
 	private BigDecimal tasa;
 	private Long tipoCobertura;
 	private Long producto;
+	private String ramoName;
 }

@@ -275,6 +275,8 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 					coberturaProductoDto.setCodeCorrelativo(record[0]!=null? Long.valueOf(record[0].toString()) : null );
 					coberturaProductoDto.setCodeDescription(record[1]!=null?record[1].toString():"");
 					coberturaProductoDto.setCobeConsinIva(record[2]!=null?record[2].toString():"");
+					coberturaProductoDto.setDomiTicoCod(record[3]!=null?record[3].toString():"");
+					coberturaProductoDto.setIva(record[4]!=null?record[4].toString():"");
 					coberturasDtoCorrelative.add(coberturaProductoDto);
 				});
 			}
