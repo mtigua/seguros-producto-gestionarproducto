@@ -9,5 +9,7 @@ public class CoberturaProductoCorrelativoDto {
 	private Long codeCorrelativo;
 	private String codeDescription;
 	private String cobeConsinIva;
+	private String domiTicoCod;
+	private String iva;
 
 }

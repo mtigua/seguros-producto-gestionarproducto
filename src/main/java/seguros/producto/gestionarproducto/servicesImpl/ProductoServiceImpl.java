@@ -1299,7 +1299,7 @@ public class ProductoServiceImpl implements ProductoService {
 			coberturaEntity.setOrden(maxOrder.get() + 1);
 			coberturaEntity.setPorcCapital(cobertura.getPorcentajeSobreCapitalAsegurado());
 			coberturaEntity.setPrimaMinima(cobertura.getPrimaMinima());
-			coberturaEntity.setValorPrima(cobertura.getMontoPrima());
+			coberturaEntity.setValorPrima(cobertura.getTarifa());
 			coberturaEntity.setTasa(cobertura.getTasa());
 
 			// Todo: Aclarar de donde obtenemos este "PrimaSobre (ni idea)"

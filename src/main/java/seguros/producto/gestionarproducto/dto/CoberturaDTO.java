@@ -19,9 +19,9 @@ public class CoberturaDTO {
 	private String paraParentesco;
 	private BigDecimal porcentajeSobreCapitalAsegurado;
 	private BigDecimal primaMinima;
-	private Long tarifa;
-	private Long tarifaValor;
+	private BigDecimal tarifa;
 	private BigDecimal tasa;
 	private Long tipoCobertura;
 	private Long producto;
+	private String ramoName;
 }
