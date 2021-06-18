@@ -37,5 +37,6 @@ public class PropertiesSql {
 	private String LISTAR_COBERTURAS_POR_PRODUCTO_CORRELATIVE;
 	private String LISTAR_TIPO_IVA;
 	private String LISTAR_DEDUCIBLE;
+	private String verificarNemotecnico;
 
 }

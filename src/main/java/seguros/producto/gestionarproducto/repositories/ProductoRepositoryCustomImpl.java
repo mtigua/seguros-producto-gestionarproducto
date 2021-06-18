@@ -190,37 +190,6 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 	}
 
 	@Override
-    public String generateNemotecnico() throws ProductoException {
-        String generateNemotecnico = propertiesSql.getGENERATE_NEMOTECNICO();
-        String newNemotecnico = null;
-
-        try {
-            StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(generateNemotecnico);
-            storedProcedureQuery.registerStoredProcedureParameter(RESULT, String.class, ParameterMode.OUT);
-
-            storedProcedureQuery.execute();
-
-            Object result = storedProcedureQuery.getOutputParameterValue(RESULT);
-            if (result != null) {
-                newNemotecnico = String.valueOf(storedProcedureQuery.getOutputParameterValue(RESULT));
-            } else {
-            	ProductoException executeGenerateNemotecnico = new ProductoException();
-                executeGenerateNemotecnico.setErrorMessage(VALUE_UNDEFINED + EXISTE);
-                executeGenerateNemotecnico.setDetail(VALUE_UNDEFINED + EXISTE);
-                executeGenerateNemotecnico.setConcreteException(executeGenerateNemotecnico);
-                throw executeGenerateNemotecnico;
-            }
-
-        } catch (ProductoException e) {
-            throw e;
-        } catch (Exception e) {
-            throw new ProductoException(e);
-        }
-
-        return newNemotecnico;
-    }
-
-	@Override
 	public List<CoberturaProductoDto> findCoberturasDtoByProducto(Long id) throws ProductoException {
 		String procedureName = propertiesSql.getLISTAR_COBERTURAS_POR_PRODUCTO();
 		List<CoberturaProductoDto> coberturasDto =  new ArrayList<>();
@@ -343,6 +312,53 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 			throw exc;
 		}
 		return deducibles;
+	}
+
+
+
+
+
+
+	@Override
+	public boolean verificarSiExisteNemotecnico(String nemotecnico) throws ProductoException {
+
+		String procedureName = propertiesSql.getVerificarNemotecnico();
+		
+		boolean existe=false;
+		
+		 try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);	
+			storedProcedureQuery.registerStoredProcedureParameter("nemotecnico", String.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("existe", Integer.class, ParameterMode.OUT);		
+			
+			
+			storedProcedureQuery.setParameter("nemotecnico",nemotecnico );
+			
+			storedProcedureQuery.execute();
+			
+			Object result= storedProcedureQuery.getOutputParameterValue("existe");
+			if(result!=null) {
+				int res= (int) storedProcedureQuery.getOutputParameterValue("existe");
+				existe= res==0?false:true;
+			}
+		  else {
+			    ProductoException exc = new ProductoException();
+				exc.setErrorMessage(VALUE_UNDEFINED + "existe");	        	
+				exc.setDetail(VALUE_UNDEFINED + "existe");
+				exc.setConcreteException(exc);
+				throw exc;
+		  }	
+			
+		}
+		catch(ProductoException e){
+				throw e;
+		}
+		catch(Exception e) {
+			ProductoException exc = new ProductoException(e);
+			throw exc;
+		}
+		 return existe;
+
 	}
 
 

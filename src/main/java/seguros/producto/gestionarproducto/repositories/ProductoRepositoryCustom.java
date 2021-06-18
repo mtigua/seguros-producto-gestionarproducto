@@ -20,6 +20,7 @@ public interface ProductoRepositoryCustom {
 	public List<TipoIvaDTO> findTipoIva(Long id) throws ProductoException;
 
 	public List<DeducibleDTO> findDeducibles(Long id) throws ProductoException;
+	
+	public boolean verificarSiExisteNemotecnico(String nemotecnico)  throws ProductoException;
 
-	public String generateNemotecnico() throws ProductoException;
 }
