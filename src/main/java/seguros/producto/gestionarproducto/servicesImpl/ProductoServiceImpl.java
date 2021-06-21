@@ -35,6 +35,7 @@ import seguros.producto.gestionarproducto.entities.CoberturaProductoKey;
 import seguros.producto.gestionarproducto.entities.DestinoVenta;
 import seguros.producto.gestionarproducto.entities.EstadoIntegracion;
 import seguros.producto.gestionarproducto.entities.ModoTraspaso;
+import seguros.producto.gestionarproducto.entities.Parentesco;
 import seguros.producto.gestionarproducto.entities.PrimaSobreQue;
 import seguros.producto.gestionarproducto.entities.Producto;
 import seguros.producto.gestionarproducto.entities.ProductoDo;
@@ -61,6 +62,7 @@ import seguros.producto.gestionarproducto.repositories.CanalRepository;
 import seguros.producto.gestionarproducto.repositories.CoberturaRepository;
 import seguros.producto.gestionarproducto.repositories.DestinoVentaRepository;
 import seguros.producto.gestionarproducto.repositories.ModoTraspasoRepository;
+import seguros.producto.gestionarproducto.repositories.ParentescoRepository;
 import seguros.producto.gestionarproducto.repositories.PrimaSobreQueRepository;
 import seguros.producto.gestionarproducto.repositories.ProductoRepository;
 import seguros.producto.gestionarproducto.repositories.RecargoPorAseguradoRepository;
@@ -157,6 +159,9 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Autowired
 	private TramoRepository tramoRepository;
+
+	@Autowired
+	private ParentescoRepository parentescoRepository;
 
 	@Autowired
 	private TipoTramoRepository tipoTramoRepository;
@@ -1285,15 +1290,17 @@ public class ProductoServiceImpl implements ProductoService {
 		try {
 			List<CoberturaProductoDto> coberturas = productoRepository.findCoberturasDtoByProducto(cobertura.getProducto());
 			AtomicReference<Integer> maxOrder = new AtomicReference<>(0);
+			AtomicReference<Long> maxCobertura = new AtomicReference<>(0L);
 
 			coberturas.stream().forEach(e->{
+				maxCobertura.set(e.getMaxCobertura());
 				if (e.getOrden() > maxOrder.get()){
 					maxOrder.set(e.getOrden());
 				}
 			});
 
 			CoberturaProducto coberturaEntity = new CoberturaProducto();
-			CoberturaProductoKey coberturaKey = new CoberturaProductoKey(cobertura.getProducto(), cobertura.getCobertura());
+			CoberturaProductoKey coberturaKey = new CoberturaProductoKey(cobertura.getProducto(), (maxCobertura.get() + 1));
 			coberturaEntity.setId(coberturaKey);
 			Optional<TipoCobertura> tipo = tipoCoberturaRepository.findById(cobertura.getTipoCobertura());
 			tipo.ifPresent(coberturaEntity::setTipoCobertura);
@@ -1309,6 +1316,8 @@ public class ProductoServiceImpl implements ProductoService {
 			coberturaEntity.setPrimaMinima(cobertura.getPrimaMinima());
 			coberturaEntity.setValorPrima(cobertura.getTarifa());
 			coberturaEntity.setTasa(cobertura.getTasa());
+			Optional<Parentesco> parentesco = parentescoRepository.findById(cobertura.getParaParentesco());
+			parentesco.ifPresent(coberturaEntity::setParentesco);
 
 			// Todo: Aclarar de donde obtenemos este "PrimaSobre (ni idea)"
 			Optional<PrimaSobreQue> primaSobreQue =  primaSobreQueRepository.findById(1L);
@@ -1441,13 +1450,13 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public List<DeducibleDTO> getDeducibles(Long id) throws ProductoException, ResourceNotFoundException {
+	public List<DeducibleDTO> getDeducibles(Long id, Long idCobertura) throws ProductoException, ResourceNotFoundException {
 		List<DeducibleDTO>  deducibles;
 
 		try {
 			Optional<Producto> productoOp = productoRepository.findById(id);
 			if(productoOp.isPresent()) {
-				deducibles = productoRepository.findDeducibles(id);
+				deducibles = productoRepository.findDeducibles(id, idCobertura);
 			} else {
 				ResourceNotFoundException e = new ResourceNotFoundException();
 				e.setConcreteException(e);

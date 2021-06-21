@@ -16,7 +16,7 @@ public class CoberturaDTO {
 	private Long en;
 	private String montoAsegurado;
 	private BigDecimal montoPrima;
-	private String paraParentesco;
+	private Long paraParentesco;
 	private BigDecimal porcentajeSobreCapitalAsegurado;
 	private BigDecimal primaMinima;
 	private BigDecimal tarifa;
