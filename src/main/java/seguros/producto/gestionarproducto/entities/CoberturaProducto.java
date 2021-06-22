@@ -34,13 +34,13 @@ public class CoberturaProducto {
     @Column(length = 50)
     private String iva;
 
-    @Column(precision = 8, scale = 4,name = "valor_prima")
+    @Column(name = "valor_prima")
     private BigDecimal valorPrima;
 
     @Column(length = 20,name = "monto_asegurado")
     private String montoAsegurado;
 
-    @Column(precision = 8, scale = 4,name = "prima_minima")
+    @Column(name = "prima_minima")
     private BigDecimal primaMinima;
 
     @Column(name = "edad_max_ingreso")
