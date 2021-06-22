@@ -690,11 +690,15 @@ public class ProductoController {
 			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
-	@GetMapping("/{id}/listarDeducible")
-	public ResponseEntity<List<DeducibleDTO>> getDeducibles(@PathVariable("id") Long id) throws ProductoException,ResourceNotFoundException{
+	@GetMapping("/{id}/listarDeducible/{idCobertura}/cobertura")
+	public ResponseEntity<List<DeducibleDTO>> getDeducibles(
+			@PathVariable("id") Long id,
+			@PathVariable("idCobertura") Long idCobertura
+	)
+			throws ProductoException,ResourceNotFoundException{
 		List<DeducibleDTO> deducibles = null;
 		try {
-			deducibles = productoService.getDeducibles(id);
+			deducibles = productoService.getDeducibles(id, idCobertura);
 		}
 		catch(ResourceNotFoundException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_deducibles());

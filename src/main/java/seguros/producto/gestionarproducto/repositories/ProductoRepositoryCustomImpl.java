@@ -217,6 +217,7 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 					coberturaProductoDto.setValorPrima(record[7]!=null? (BigDecimal) record[7] :null);
 					coberturaProductoDto.setMontoAsegurado(record[8]!=null?record[8].toString():"");
 					coberturaProductoDto.setOrden(record[9]!=null? (Integer) record[9] :null);
+					coberturaProductoDto.setMaxCobertura(record[10]!=null? Long.valueOf(record[10].toString()) :0l);
 					coberturasDto.add(coberturaProductoDto);
 				});
 			}
@@ -289,13 +290,15 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 	}
 
 	@Override
-	public List<DeducibleDTO> findDeducibles(Long id) throws ProductoException {
+	public List<DeducibleDTO> findDeducibles(Long id, Long idCobertura) throws ProductoException {
 		String procedureName = propertiesSql.getLISTAR_DEDUCIBLE();
 		List<DeducibleDTO> deducibles =  new ArrayList<>();
 		try {
 			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);
 			storedProcedureQuery.registerStoredProcedureParameter("idProducto", Long.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("idCobertura", Long.class, ParameterMode.IN);
 			storedProcedureQuery.setParameter("idProducto",id );
+			storedProcedureQuery.setParameter("idCobertura",idCobertura );
 
 			storedProcedureQuery.execute();
 			@SuppressWarnings("unchecked")

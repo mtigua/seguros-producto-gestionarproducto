@@ -11,7 +11,7 @@ public interface ProductoService {
 
     public List<CoberturaProductoCorrelativoDto> getCoberturasDtoByProductoCorrelative(Long id) throws ProductoException,ResourceNotFoundException;
     public List<TipoIvaDTO> getTipoIvaByProducto(Long id) throws ProductoException,ResourceNotFoundException;
-    public List<DeducibleDTO> getDeducibles(Long id) throws ProductoException,ResourceNotFoundException;
+    public List<DeducibleDTO> getDeducibles(Long id, Long idCobertura) throws ProductoException,ResourceNotFoundException;
 	public List<ProductoDto> findAll() throws ProductoException;
 	public InfoProductoDto save(ProductoDto producto) throws ProductoException;
 	public void saveCoberturaProducto(CoberturaDTO cobertura) throws ProductoException;

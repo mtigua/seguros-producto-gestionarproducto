@@ -18,5 +18,6 @@ public class CoberturaProductoDto {
 	private BigDecimal valorPrima;
 	private String montoAsegurado;
 	private Integer orden;
+	private Long maxCobertura;
 
 }
