@@ -4,7 +4,7 @@
 
 configmap: 
    name: cm-seguros-producto-gestionarproducto
-   env: uat
+   env: prod
 
 replicaCount: 1
 

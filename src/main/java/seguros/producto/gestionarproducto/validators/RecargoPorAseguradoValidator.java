@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import seguros.producto.gestionarproducto.dto.RecargoPorAseguradoDto;
-import seguros.producto.gestionarproducto.dto.TramoDto;
 
 public class RecargoPorAseguradoValidator implements ConstraintValidator<RecargoPorAseguradoConstraint, Object> {
 
