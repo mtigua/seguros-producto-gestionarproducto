@@ -25,6 +25,8 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 	
 	
 	private static final String VALUE_UNDEFINED="No se ha podido indentificar valor para el par\u00E1metro de salida: ";
+	private static final String NEMOTECNICO_NO_EXISTE="El nemot\u00E9cnico no existe";
+	
 	static final String RESULT = "result";
 	static final String EXISTE = "existe";
 	
@@ -342,7 +344,21 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 			Object result= storedProcedureQuery.getOutputParameterValue("existe");
 			if(result!=null) {
 				int res= (int) storedProcedureQuery.getOutputParameterValue("existe");
-				existe= res==0?false:true;
+				
+				if(res==0) {
+					existe=false;
+				}
+				else if(res==1) {
+					existe=true;
+				}
+				else {
+					    ProductoException exc = new ProductoException();
+						exc.setErrorMessage(NEMOTECNICO_NO_EXISTE);	        	
+						exc.setDetail(NEMOTECNICO_NO_EXISTE);
+						exc.setConcreteException(exc);
+						throw exc;
+				}
+				
 			}
 		  else {
 			    ProductoException exc = new ProductoException();

@@ -54,5 +54,9 @@ public class Properties {
 	
 	private String ROLE_CONTINUIDAD_OPERATIVA;
 	
+	private String URL_UPLOAD_TO_SFTP;
+	
+	private String URL_DOWNLOAD_FROM_SFTP;
+	
 		 
 }

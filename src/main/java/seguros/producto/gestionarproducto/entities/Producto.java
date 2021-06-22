@@ -437,6 +437,9 @@ public class Producto  {
 	@Column(name = "id_grupo_mejor_oferta")
 	private int idGrupoMejorOferta;
 	
+	@Column(name = "file_name_condicionado_particular")
+	private String fileNameCondicionadoParticular;
+	
 	@ManyToOne
 	@JoinColumn(name = "id_tipo_traspaso")
 	private  TipoTraspaso tipoTraspaso;
