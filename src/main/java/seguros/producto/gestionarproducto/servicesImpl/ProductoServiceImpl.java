@@ -1316,8 +1316,10 @@ public class ProductoServiceImpl implements ProductoService {
 			coberturaEntity.setPrimaMinima(cobertura.getPrimaMinima());
 			coberturaEntity.setValorPrima(cobertura.getTarifa());
 			coberturaEntity.setTasa(cobertura.getTasa());
-			Optional<Parentesco> parentesco = parentescoRepository.findById(cobertura.getParaParentesco());
-			parentesco.ifPresent(coberturaEntity::setParentesco);
+			if (cobertura.getParaParentesco() != null){
+				Optional<Parentesco> parentesco = parentescoRepository.findById(cobertura.getParaParentesco());
+				parentesco.ifPresent(coberturaEntity::setParentesco);
+			}
 
 			// Todo: Aclarar de donde obtenemos este "PrimaSobre (ni idea)"
 			Optional<PrimaSobreQue> primaSobreQue =  primaSobreQueRepository.findById(1L);
