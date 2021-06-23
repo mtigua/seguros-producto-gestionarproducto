@@ -1089,40 +1089,36 @@ public class ProductoServiceImpl implements ProductoService {
 			Optional<Tramo> tramoO= tramoRepository.findById(idTramo);
 
 			if(productoO.isPresent() && tramoO.isPresent()) {
-				Producto producto=productoO.get();
-				TipoTarifa tipotarifa=producto.getTipoTarifa();
+				Producto producto01=productoO.get();
+				TipoTarifa tipotarifa=producto01.getTipoTarifa();
 
 				if(tipotarifa!=null && tipotarifa.getId()==1) {
 						Tramo tramo=tramoO.get();
-						producto.removeTramo(tramo);
+						producto01.removeTramo(tramo);
 
-						productoRepository.save(producto);
+						productoRepository.save(producto01);
 				}
 				else {
-					ForbiddenException fe = new ForbiddenException();
-					fe.setConcreteException(fe);
-					fe.setErrorMessage(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
-					fe.setDetail(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
-					throw fe;
+					ForbiddenException forbiddenException01 = new ForbiddenException();
+					forbiddenException01.setConcreteException(forbiddenException01);
+					forbiddenException01.setErrorMessage(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
+					forbiddenException01.setDetail(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
+					throw forbiddenException01;
 				}
 
 			}
 			else {
-				ResourceNotFoundException edeletetramo = new ResourceNotFoundException();
-				edeletetramo.setConcreteException(edeletetramo);
-				edeletetramo.setErrorMessage(MSG_NOT_FOUND);
-				edeletetramo.setDetail(MSG_NOT_FOUND);
-				throw edeletetramo;
+				ResourceNotFoundException exceptionOnDeletedTramo = new ResourceNotFoundException();
+				exceptionOnDeletedTramo.setConcreteException(exceptionOnDeletedTramo);
+				exceptionOnDeletedTramo.setErrorMessage(MSG_NOT_FOUND);
+				exceptionOnDeletedTramo.setDetail(MSG_NOT_FOUND);
+				throw exceptionOnDeletedTramo;
 			}
 		}
-		catch(ResourceNotFoundException e) {
-			throw e;
-		}
-        catch(ForbiddenException e) {
-			throw e;
-		}
-		catch(Exception e) {
-			throw new ProductoException(e);
+		catch(ResourceNotFoundException | ForbiddenException e23) {
+			throw e23;
+		} catch(Exception e24) {
+			throw new ProductoException(e24);
 		}
 
 	}
@@ -1150,29 +1146,25 @@ public class ProductoServiceImpl implements ProductoService {
 						coberturaProducto.removeTramoCobertura(tramo);
 						productoRepository.save(producto);
 				} else {
-					ForbiddenException fe = new ForbiddenException();
-					fe.setConcreteException(fe);
-					fe.setErrorMessage(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
-					fe.setDetail(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
-					throw fe;
+					ForbiddenException fe24 = new ForbiddenException();
+					fe24.setConcreteException(fe24);
+					fe24.setErrorMessage(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
+					fe24.setDetail(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
+					throw fe24;
 				}
 
 			} else {
-				ResourceNotFoundException edeletetramo = new ResourceNotFoundException();
-				edeletetramo.setConcreteException(edeletetramo);
-				edeletetramo.setErrorMessage(MSG_NOT_FOUND);
-				edeletetramo.setDetail(MSG_NOT_FOUND);
-				throw edeletetramo;
+				ResourceNotFoundException edeletetramo24 = new ResourceNotFoundException();
+				edeletetramo24.setConcreteException(edeletetramo24);
+				edeletetramo24.setErrorMessage(MSG_NOT_FOUND);
+				edeletetramo24.setDetail(MSG_NOT_FOUND);
+				throw edeletetramo24;
 			}
 		}
-		catch(ResourceNotFoundException e) {
-			throw e;
-		}
-        catch(ForbiddenException e) {
-			throw e;
-		}
-		catch(Exception e) {
-			throw new ProductoException(e);
+		catch(ResourceNotFoundException | ForbiddenException e25) {
+			throw e25;
+		} catch(Exception e27) {
+			throw new ProductoException(e27);
 		}
 
 	}
@@ -1188,85 +1180,85 @@ public class ProductoServiceImpl implements ProductoService {
 			Optional<Tramo> tramoO= tramoRepository.findById(idTramo);
 
 			if(productoO.isPresent() && tramoO.isPresent()) {
-				  Producto producto=productoO.get();
+				  Producto producto30=productoO.get();
 
 				  Tramo tramoEntity= tramoO.get();
-				  TipoTarifa tipotarifa=producto.getTipoTarifa();
+				  TipoTarifa tipotarifa=producto30.getTipoTarifa();
 
 				  if(tipotarifa!=null && tipotarifa.getId()==1) {
 						  BeanUtils.copyProperties(tramoDto, tramoEntity);
 						  tramoEntity.setId(idTramo);
 
-						  TipoTramo tipoTramo=	tipoTramoRepository.getOne(tramoDto.getTipoTramo());
-						  if(tipoTramo.getId()!=null) {
-							  tramoEntity.setTipoTramo(tipoTramo);
+						  TipoTramo tipoTramo4=	tipoTramoRepository.getOne(tramoDto.getTipoTramo());
+						  if(tipoTramo4.getId()!=null) {
+							  tramoEntity.setTipoTramo(tipoTramo4);
 						  }
-						  TarifaEs tarifaEs= tarifaEsRepository.getOne(tramoDto.getTarifaEs());
-						  if(tarifaEs.getId()!=null) {
-							  tramoEntity.setTarifaEs(tarifaEs);
+						  TarifaEs tarifaEs4= tarifaEsRepository.getOne(tramoDto.getTarifaEs());
+						  if(tarifaEs4.getId()!=null) {
+							  tramoEntity.setTarifaEs(tarifaEs4);
 						  }
 
-						 TipoTasa tipoTasa=null;
+						 TipoTasa tipoTasa4=null;
 						  if(tramoDto.getTipoTasa()!=null && tramoDto.getTipoTasa()>0L) {
-							   tipoTasa=  tipoTasaRepository.getOne(tramoDto.getTipoTasa());
-							  if(tipoTasa.getId()!=null) {
-								  tramoEntity.setTipoTasa(tipoTasa);
+							   tipoTasa4=  tipoTasaRepository.getOne(tramoDto.getTipoTasa());
+							  if(tipoTasa4.getId()!=null) {
+								  tramoEntity.setTipoTasa(tipoTasa4);
 							  }
 						  }
 
-						  PrimaSobreQue tramoPara=	null;
+						  PrimaSobreQue tramoPara4=	null;
 						  if(tramoDto.getTramoPara()!=null && tramoDto.getTramoPara()>=0L) {
 							  InfoProductoDto infoProductoDto= this.getInfoProducto(id);
 							  Long idTipoRamo=infoProductoDto.getTipoRamo().getId();
 							  if(idTipoRamo==2L) {
-								  tramoPara= tramoParaRepository.getOne(tramoDto.getTramoPara());
-								  if(tramoPara.getId()!=null) {
-									  tramoEntity.setTipoTramo(tipoTramo);
+								  tramoPara4= tramoParaRepository.getOne(tramoDto.getTramoPara());
+								  if(tramoPara4.getId()!=null) {
+									  tramoEntity.setTipoTramo(tipoTramo4);
 								  }
 							  }
 							  else {
-								    ProductoException e = new ProductoException();
-									e.setConcreteException(e);
-									e.setErrorMessage(MSG_NOT_ALLOWED_TRAMO_PARA_SUBJECT);
-									e.setDetail(MSG_NOT_ALLOWED_TRAMO_PARA_SUBJECT);
-									throw e;
+								    ProductoException e31 = new ProductoException();
+									e31.setConcreteException(e31);
+									e31.setErrorMessage(MSG_NOT_ALLOWED_TRAMO_PARA_SUBJECT);
+									e31.setDetail(MSG_NOT_ALLOWED_TRAMO_PARA_SUBJECT);
+									throw e31;
 							  }
 
 						  }
 
-						  Set<Tramo> listaTramos= producto.getTramos();
+						  Set<Tramo> listaTramos= producto30.getTramos();
 
-						  for(Tramo tr:listaTramos){
-								  tr.setTipoTramo(tipoTramo);
-								  tr.setTipoTasa(tipoTasa);
-								  tr.setMoneda(tramoEntity.getMoneda());
-								  tr.setTarifaEs(tarifaEs);
-								  tr.setTramoPara(tramoPara);
+						  for(Tramo tr30:listaTramos){
+								  tr30.setTipoTramo(tipoTramo4);
+								  tr30.setTipoTasa(tipoTasa4);
+								  tr30.setMoneda(tramoEntity.getMoneda());
+								  tr30.setTarifaEs(tarifaEs4);
+								  tr30.setTramoPara(tramoPara4);
 						  }
 
-						  producto.updateTramo(tramoEntity);
+						  producto30.updateTramo(tramoEntity);
 
-						 productoRepository.save(producto);
+						 productoRepository.save(producto30);
 				  }
 				  else {
-						ForbiddenException fe = new ForbiddenException();
-						fe.setConcreteException(fe);
-						fe.setErrorMessage(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
-						fe.setDetail(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
-						throw fe;
+						ForbiddenException fe30 = new ForbiddenException();
+						fe30.setConcreteException(fe30);
+						fe30.setErrorMessage(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
+						fe30.setDetail(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
+						throw fe30;
 					}
 
 			}
 				else {
-					ResourceNotFoundException eupdatetramo = new ResourceNotFoundException();
-					eupdatetramo.setConcreteException(eupdatetramo);
-					eupdatetramo.setErrorMessage(MSG_NOT_FOUND);
-					eupdatetramo.setDetail(MSG_NOT_FOUND);
-					throw eupdatetramo;
+					ResourceNotFoundException eupdatetramo30 = new ResourceNotFoundException();
+					eupdatetramo30.setConcreteException(eupdatetramo30);
+					eupdatetramo30.setErrorMessage(MSG_NOT_FOUND);
+					eupdatetramo30.setDetail(MSG_NOT_FOUND);
+					throw eupdatetramo30;
 				}
 			}
-		    catch(ForbiddenException | ResourceNotFoundException e) {
-				throw e;
+		    catch(ForbiddenException | ResourceNotFoundException e31) {
+				throw e31;
 			} catch(Exception e) {
 				throw new ProductoException(e);
 			}
@@ -1291,56 +1283,56 @@ public class ProductoServiceImpl implements ProductoService {
 				CoberturaProducto coberturaProducto = coberturaO.get();
 
 				TramoCobertura tramoEntity= tramoO.get();
-				TipoTarifa tipotarifa=producto.getTipoTarifa();
+				TipoTarifa tipotarifa33=producto.getTipoTarifa();
 
-				if(tipotarifa!=null && tipotarifa.getId()==1) {
+				if(tipotarifa33!=null && tipotarifa33.getId()==1) {
 					BeanUtils.copyProperties(tramoDto, tramoEntity);
 					tramoEntity.setId(idTramo);
 
-					TipoTramo tipoTramo=	tipoTramoRepository.getOne(tramoDto.getTipoTramo());
-					if(tipoTramo.getId()!=null) {
-						tramoEntity.setTipoTramo(tipoTramo);
+					TipoTramo tipoTramo33=	tipoTramoRepository.getOne(tramoDto.getTipoTramo());
+					if(tipoTramo33.getId()!=null) {
+						tramoEntity.setTipoTramo(tipoTramo33);
 					}
-					TarifaEs tarifaEs= tarifaEsRepository.getOne(tramoDto.getTarifaEs());
-					if(tarifaEs.getId()!=null) {
-						tramoEntity.setTarifaEs(tarifaEs);
+					TarifaEs tarifaEs33= tarifaEsRepository.getOne(tramoDto.getTarifaEs());
+					if(tarifaEs33.getId()!=null) {
+						tramoEntity.setTarifaEs(tarifaEs33);
 					}
 
-					TipoTasa tipoTasa=null;
+					TipoTasa tipoTasa33=null;
 					if(tramoDto.getTipoTasa()!=null && tramoDto.getTipoTasa()>0L) {
-						tipoTasa=  tipoTasaRepository.getOne(tramoDto.getTipoTasa());
-						if(tipoTasa.getId()!=null) {
-							tramoEntity.setTipoTasa(tipoTasa);
+						tipoTasa33=  tipoTasaRepository.getOne(tramoDto.getTipoTasa());
+						if(tipoTasa33.getId()!=null) {
+							tramoEntity.setTipoTasa(tipoTasa33);
 						}
 					}
 
-					PrimaSobreQue tramoPara = null;
+					PrimaSobreQue tramoPara33 = null;
 					if(tramoDto.getTramoPara()!=null && tramoDto.getTramoPara()>=0L) {
 						InfoProductoDto infoProductoDto= this.getInfoProducto(id);
 						Long idTipoRamo=infoProductoDto.getTipoRamo().getId();
 						if(idTipoRamo==2L) {
-							tramoPara= tramoParaRepository.getOne(tramoDto.getTramoPara());
-							if(tramoPara.getId()!=null) {
-								tramoEntity.setTipoTramo(tipoTramo);
+							tramoPara33= tramoParaRepository.getOne(tramoDto.getTramoPara());
+							if(tramoPara33.getId()!=null) {
+								tramoEntity.setTipoTramo(tipoTramo33);
 							}
 						} else {
-							ProductoException e = new ProductoException();
-							e.setConcreteException(e);
-							e.setErrorMessage(MSG_NOT_ALLOWED_TRAMO_PARA_SUBJECT);
-							e.setDetail(MSG_NOT_ALLOWED_TRAMO_PARA_SUBJECT);
-							throw e;
+							ProductoException e33 = new ProductoException();
+							e33.setConcreteException(e33);
+							e33.setErrorMessage(MSG_NOT_ALLOWED_TRAMO_PARA_SUBJECT);
+							e33.setDetail(MSG_NOT_ALLOWED_TRAMO_PARA_SUBJECT);
+							throw e33;
 						}
 
 					}
 
-					Set<TramoCobertura> listaTramos= coberturaProducto.getTramoCoberturas();
+					Set<TramoCobertura> listaTramos33= coberturaProducto.getTramoCoberturas();
 
-					for(TramoCobertura tr:listaTramos){
-						tr.setTipoTramo(tipoTramo);
-						tr.setTipoTasa(tipoTasa);
+					for(TramoCobertura tr:listaTramos33){
+						tr.setTipoTramo(tipoTramo33);
+						tr.setTipoTasa(tipoTasa33);
 						tr.setMoneda(tramoEntity.getMoneda());
-						tr.setTarifaEs(tarifaEs);
-						tr.setTramoPara(tramoPara);
+						tr.setTarifaEs(tarifaEs33);
+						tr.setTramoPara(tramoPara33);
 					}
 
 					coberturaProducto.updateCobertura(tramoEntity);
@@ -1348,26 +1340,26 @@ public class ProductoServiceImpl implements ProductoService {
 					coberturaRepository.save(coberturaProducto);
 				}
 				else {
-					ForbiddenException fe = new ForbiddenException();
-					fe.setConcreteException(fe);
-					fe.setErrorMessage(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
-					fe.setDetail(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
-					throw fe;
+					ForbiddenException fe33 = new ForbiddenException();
+					fe33.setConcreteException(fe33);
+					fe33.setErrorMessage(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
+					fe33.setDetail(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
+					throw fe33;
 				}
 
 			}
 			else {
-				ResourceNotFoundException eupdatetramo = new ResourceNotFoundException();
-				eupdatetramo.setConcreteException(eupdatetramo);
-				eupdatetramo.setErrorMessage(MSG_NOT_FOUND);
-				eupdatetramo.setDetail(MSG_NOT_FOUND);
-				throw eupdatetramo;
+				ResourceNotFoundException eupdatetramo33 = new ResourceNotFoundException();
+				eupdatetramo33.setConcreteException(eupdatetramo33);
+				eupdatetramo33.setErrorMessage(MSG_NOT_FOUND);
+				eupdatetramo33.setDetail(MSG_NOT_FOUND);
+				throw eupdatetramo33;
 			}
 		}
-		catch(ForbiddenException | ResourceNotFoundException e) {
-			throw e;
-		} catch(Exception e) {
-			throw new ProductoException(e);
+		catch(ForbiddenException | ResourceNotFoundException e33) {
+			throw e33;
+		} catch(Exception e33) {
+			throw new ProductoException(e33);
 		}
 
 
