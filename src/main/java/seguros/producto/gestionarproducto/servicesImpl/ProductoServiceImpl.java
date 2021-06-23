@@ -1361,8 +1361,6 @@ public class ProductoServiceImpl implements ProductoService {
 		} catch(Exception e33) {
 			throw new ProductoException(e33);
 		}
-
-
 	}
 
 	@Transactional
