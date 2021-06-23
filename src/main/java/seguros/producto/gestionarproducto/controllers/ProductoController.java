@@ -48,6 +48,7 @@ import seguros.producto.gestionarproducto.exceptions.ForbiddenException;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
 import seguros.producto.gestionarproducto.services.ProductoService;
 import seguros.producto.gestionarproducto.servicesImpl.ProductoException;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @Api(value="Producto Resource")

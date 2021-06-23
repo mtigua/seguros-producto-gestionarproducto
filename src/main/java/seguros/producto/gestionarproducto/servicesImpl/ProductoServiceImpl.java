@@ -849,7 +849,6 @@ public class ProductoServiceImpl implements ProductoService {
 
 				Producto producto=productoO.get();
 				CoberturaProducto cobertura = coberturaO.get();
-				TipoTarifa tipotarifa=producto.getTipoTarifa();
 
 					Set<TramoCobertura> listaTramos= cobertura.getTramoCoberturas();
 
