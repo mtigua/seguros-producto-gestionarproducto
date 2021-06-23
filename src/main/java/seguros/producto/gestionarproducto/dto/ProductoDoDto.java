@@ -63,6 +63,8 @@ public class ProductoDoDto  {
 	
 	private  Long doplAQuienSeVende;
 	
+	private String fileNameCondicionadoParticular;
+	
 	@JsonIgnore 
 	public ProductoDo toEntity() {
 		ProductoDo productoDo = new ProductoDo();
