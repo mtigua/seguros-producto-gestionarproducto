@@ -4,6 +4,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Entity(name = "cobertura_plan")
 @Data
@@ -11,6 +12,31 @@ public class CoberturaProducto {
 
 	@EmbeddedId
 	private CoberturaProductoKey id;
+
+
+    @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE}, orphanRemoval = true)
+    @JoinColumns({
+            @JoinColumn(name = "id_cobertura", referencedColumnName = "id_cobertura"),
+            @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
+    })
+    private Set<TramoCobertura> tramoCoberturas;
+
+    public void addTramoCobertura(TramoCobertura tramoCobertura) {
+        this.tramoCoberturas.add(tramoCobertura);
+    }
+
+    public void removeTramoCobertura(TramoCobertura tramoCobertura) {
+        this.tramoCoberturas.remove(tramoCobertura);
+    }
+
+    public void updateCobertura(TramoCobertura tramoCobertura) {
+        this.tramoCoberturas.stream()
+                .filter(t -> tramoCobertura.getId().equals( t.getId() ) )
+                .findFirst()
+                .ifPresent(t-> {
+                    t=tramoCobertura;
+                } );
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("id_producto")
