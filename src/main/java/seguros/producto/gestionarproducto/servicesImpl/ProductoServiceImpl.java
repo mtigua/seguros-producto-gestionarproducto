@@ -108,6 +108,8 @@ public class ProductoServiceImpl implements ProductoService {
 	private static final String MSG_FORBIDDEN_TRAMOS_BY_PRODUCT = "No est\u00E1 permitido la administraci\u00F3n de tramos para este producto";
 	private static final String MSG_FORBIDDEN_TERMINOS_CORTOS_BY_PRODUCT = "No est\u00E1 permitido la administraci\u00F3n de t\u00E9rminos cortos para este producto";
 	private static final String MSG_FORBIDDEN_RECARGO_POR_ASEGURADO_BY_PRODUCT = "No est\u00E1 permitido la administraci\u00F3n de recargo por asegurado para este producto";
+	private static final String MSG_FORBIDDEN_COBERTURA_POR_ASEGURADO_BY_PRODUCT = "No est\u00E1 permitido la creación de una misma cobertura, intente con otro";
+	private static final String MSG_FORBIDDEN_ERROR_REGISTER = "Error en el registro";
 	private static final String MSG_FORBIDDEN_NEMOTECNICO_EN_USO = "El nemot\u00E9cnico ya esta en uso";
 
 	@Autowired
@@ -1284,7 +1286,7 @@ public class ProductoServiceImpl implements ProductoService {
 				TramoCobertura tramoEntity= tramoO.get();
 				TipoTarifa tipotarifa33=producto.getTipoTarifa();
 
-				if(tipotarifa33!=null && tipotarifa33.getId()==1) {
+
 					BeanUtils.copyProperties(tramoDto, tramoEntity);
 					tramoEntity.setId(idTramo);
 
@@ -1337,15 +1339,6 @@ public class ProductoServiceImpl implements ProductoService {
 					coberturaProducto.updateCobertura(tramoEntity);
 
 					coberturaRepository.save(coberturaProducto);
-				}
-				else {
-					ForbiddenException fe33 = new ForbiddenException();
-					fe33.setConcreteException(fe33);
-					fe33.setErrorMessage(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
-					fe33.setDetail(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
-					throw fe33;
-				}
-
 			}
 			else {
 				ResourceNotFoundException eupdatetramo33 = new ResourceNotFoundException();
@@ -1561,54 +1554,65 @@ public class ProductoServiceImpl implements ProductoService {
 	@Transactional
 	@Override
 	public void saveCoberturaProducto(CoberturaDTO cobertura)
-			throws ProductoException, ResourceNotFoundException {
+			throws ProductoException, ResourceNotFoundException, ForbiddenException {
 
 		try {
-			List<CoberturaProductoDto> coberturas = productoRepository.findCoberturasDtoByProducto(cobertura.getProducto());
-			AtomicReference<Integer> maxOrder = new AtomicReference<>(0);
-			AtomicReference<Long> maxCobertura = new AtomicReference<>(0L);
+			CoberturaProductoKey coberturaKey = new CoberturaProductoKey(cobertura.getProducto(), (cobertura.getCobertura()));
+			Optional<CoberturaProducto> coberturaProducto36 = coberturaRepository.findById(coberturaKey);
 
-			coberturas.stream().forEach(e->{
-				maxCobertura.set(e.getMaxCobertura());
-				if (e.getOrden() > maxOrder.get()){
-					maxOrder.set(e.getOrden());
+			if(!coberturaProducto36.isPresent()){
+				List<CoberturaProductoDto> coberturas = productoRepository.findCoberturasDtoByProducto(cobertura.getProducto());
+				AtomicReference<Integer> maxOrder = new AtomicReference<>(0);
+				AtomicReference<Long> maxCobertura = new AtomicReference<>(0L);
+
+				coberturas.stream().forEach(e->{
+					maxCobertura.set(e.getMaxCobertura());
+					if (e.getOrden() > maxOrder.get()){
+						maxOrder.set(e.getOrden());
+					}
+				});
+
+				CoberturaProducto coberturaEntity = new CoberturaProducto();
+				coberturaEntity.setId(coberturaKey);
+				Optional<TipoCobertura> tipo = tipoCoberturaRepository.findById(cobertura.getTipoCobertura());
+				tipo.ifPresent(coberturaEntity::setTipoCobertura);
+				Optional<Producto> producto = productoRepository.findById(cobertura.getProducto());
+				producto.ifPresent(coberturaEntity::setProducto);
+				coberturaEntity.setEdadMaxIngreso(cobertura.getEdadMaximaIngreso());
+				coberturaEntity.setEdadMaxPermanencia(cobertura.getEdadMaximaPermanencia());
+				coberturaEntity.setIdDeducible(cobertura.getDeducible());
+				coberturaEntity.setIva(cobertura.getCobeConsinIva());
+				coberturaEntity.setMontoAsegurado(cobertura.getMontoAsegurado());
+				coberturaEntity.setOrden(maxOrder.get() + 1);
+				coberturaEntity.setPorcCapital(cobertura.getPorcentajeSobreCapitalAsegurado());
+				coberturaEntity.setPrimaMinima(cobertura.getPrimaMinima());
+				coberturaEntity.setValorPrima(cobertura.getTarifa());
+				coberturaEntity.setTasa(cobertura.getTasa());
+				if (cobertura.getParaParentesco() != null){
+					Optional<Parentesco> parentesco = parentescoRepository.findById(cobertura.getParaParentesco());
+					parentesco.ifPresent(coberturaEntity::setParentesco);
 				}
-			});
 
-			CoberturaProducto coberturaEntity = new CoberturaProducto();
-			CoberturaProductoKey coberturaKey = new CoberturaProductoKey(cobertura.getProducto(), (maxCobertura.get() + 1));
-			coberturaEntity.setId(coberturaKey);
-			Optional<TipoCobertura> tipo = tipoCoberturaRepository.findById(cobertura.getTipoCobertura());
-			tipo.ifPresent(coberturaEntity::setTipoCobertura);
-			Optional<Producto> producto = productoRepository.findById(cobertura.getProducto());
-			producto.ifPresent(coberturaEntity::setProducto);
-			coberturaEntity.setEdadMaxIngreso(cobertura.getEdadMaximaIngreso());
-			coberturaEntity.setEdadMaxPermanencia(cobertura.getEdadMaximaPermanencia());
-			coberturaEntity.setIdDeducible(cobertura.getDeducible());
-			coberturaEntity.setIva(cobertura.getCobeConsinIva());
-			coberturaEntity.setMontoAsegurado(cobertura.getMontoAsegurado());
-			coberturaEntity.setOrden(maxOrder.get() + 1);
-			coberturaEntity.setPorcCapital(cobertura.getPorcentajeSobreCapitalAsegurado());
-			coberturaEntity.setPrimaMinima(cobertura.getPrimaMinima());
-			coberturaEntity.setValorPrima(cobertura.getTarifa());
-			coberturaEntity.setTasa(cobertura.getTasa());
-			if (cobertura.getParaParentesco() != null){
-				Optional<Parentesco> parentesco = parentescoRepository.findById(cobertura.getParaParentesco());
-				parentesco.ifPresent(coberturaEntity::setParentesco);
+				// Todo: Aclarar de donde obtenemos este "PrimaSobre (ni idea)"
+				Optional<PrimaSobreQue> primaSobreQue =  primaSobreQueRepository.findById(1L);
+				primaSobreQue.ifPresent(coberturaEntity::setPrimaSobreQue);
+				if (cobertura.getEn() != null){
+					Optional<TipoTasa> tipoTasa = tipoTasaRepository.findById(cobertura.getEn());
+					tipoTasa.ifPresent(coberturaEntity::setTipoTasa);
+				}
+				coberturaRepository.save(coberturaEntity);
+			} else {
+				ForbiddenException fe36 = new ForbiddenException();
+				fe36.setConcreteException(fe36);
+				fe36.setErrorMessage(MSG_FORBIDDEN_COBERTURA_POR_ASEGURADO_BY_PRODUCT);
+				fe36.setDetail(MSG_FORBIDDEN_COBERTURA_POR_ASEGURADO_BY_PRODUCT);
+				fe36.setSubject(MSG_FORBIDDEN_ERROR_REGISTER);
+				throw fe36;
 			}
-
-			// Todo: Aclarar de donde obtenemos este "PrimaSobre (ni idea)"
-			Optional<PrimaSobreQue> primaSobreQue =  primaSobreQueRepository.findById(1L);
-			primaSobreQue.ifPresent(coberturaEntity::setPrimaSobreQue);
-			if (cobertura.getEn() != null){
-				Optional<TipoTasa> tipoTasa = tipoTasaRepository.findById(cobertura.getEn());
-				tipoTasa.ifPresent(coberturaEntity::setTipoTasa);
-			}
-			coberturaRepository.save(coberturaEntity);
 
 		}
-		catch(ResourceNotFoundException e) {
-			throw e;
+		catch(ResourceNotFoundException | ForbiddenException e35) {
+			throw e35;
 		}
 		catch(Exception e) {
 			throw new ProductoException(e);
