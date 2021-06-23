@@ -325,7 +325,6 @@ public class ProductoDto {
 
 	private Set<TerminoCorto> terminosCortos;
 
-	private String fileNameCondicionadoParticular;
 	
 	@JsonIgnore
 	public Producto toEntity() {
