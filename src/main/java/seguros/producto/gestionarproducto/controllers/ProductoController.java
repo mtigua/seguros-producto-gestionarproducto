@@ -78,9 +78,13 @@ public class ProductoController {
 	private static final String SWAGGER_GET_INFO_PRODUCTO = "Obtener informacion resumida de producto";
 	private static final String SWAGGER_GET_COBERTURAS_BY_PRODUCT = "Obtener coberturas de un producto dado";
 	private static final String SWAGGER_GET_TRAMOS_BY_PRODUCT = "Obtener tramoS de un producto dado";
+	private static final String SWAGGER_GET_TRAMOS_BY_PRODUCT_COBERTURA = "Obtener tramos de un producto y cobertura";
 	private static final String SWAGGER_SAVE_TRAMO_BY_PRODUCT = "Registrar tramo dado un producto";
+	private static final String SWAGGER_SAVE_TRAMO_BY_PRODUCT_COBERTURA = "Registrar tramo dado un producto y cobertura";
 	private static final String SWAGGER_DELETE_TRAMO_BY_PRODUCT = "Eliminar tramo dado un producto";
+	private static final String SWAGGER_DELETE_TRAMO_BY_PRODUCT_COBERTURA = "Eliminar tramo dado una cobertura asociado a un producto";
 	private static final String SWAGGER_UPDATE_TRAMO_BY_PRODUCT = "Actualizar tramodado un producto";
+	private static final String SWAGGER_UPDATE_TRAMO_BY_PRODUCT_AND_COBERTURA = "Actualizar tramo dado un producto y cobertura";
 	private static final String SWAGGER_GET_RECARGO_POR_SEGURADO_BY_PRODUCT = "Obtener recargo por asegurado de un producto dado";
 	private static final String SWAGGER_SAVE_RECARGO_POR_SEGURADO_BY_PRODUCT = "Registrar recargo por asegurado dado un producto";
 	private static final String SWAGGER_DELETE_RECARGO_POR_SEGURADO_BY_PRODUCT = "Eliminar recargo por asegurado dado un producto";
@@ -176,6 +180,9 @@ public class ProductoController {
 		catch(ProductoException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_save_cobertura());
 			throw e;
+		}
+		catch(ResourceNotFoundException | ForbiddenException e35) {
+			throw e35;
 		}
 		catch (Exception e) {
 			ProductoException ex = new ProductoException(e);
@@ -504,7 +511,7 @@ public class ProductoController {
 		return ResponseEntity.ok(lista);
 	}
 
-	@ApiOperation(value = SWAGGER_GET_TRAMOS_BY_PRODUCT, notes = SWAGGER_GET_TRAMOS_BY_PRODUCT)
+	@ApiOperation(value = SWAGGER_GET_TRAMOS_BY_PRODUCT_COBERTURA, notes = SWAGGER_GET_TRAMOS_BY_PRODUCT_COBERTURA)
 	@ApiResponses({
 			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
 			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
@@ -580,7 +587,7 @@ public class ProductoController {
 		return ResponseEntity.ok(MSG_HTTP200);
 	}
 
-	@ApiOperation(value = SWAGGER_SAVE_TRAMO_BY_PRODUCT, notes = SWAGGER_SAVE_TRAMO_BY_PRODUCT)
+	@ApiOperation(value = SWAGGER_SAVE_TRAMO_BY_PRODUCT_COBERTURA, notes = SWAGGER_SAVE_TRAMO_BY_PRODUCT_COBERTURA)
 	@ApiResponses({
 			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
 			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
@@ -628,7 +635,7 @@ public class ProductoController {
 		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
-	@PutMapping("/{id}/tramoCobertura/{idTramo}/tramo")
+	@PutMapping("/{id}/tramo/{idTramo}/tramo")
 	public ResponseEntity<String> updateTramoByProduct(
 			@PathVariable("id") Long idProducto,
 			@PathVariable("idTramo") Long idTramo,
@@ -660,7 +667,7 @@ public class ProductoController {
 		return ResponseEntity.ok(MSG_HTTP200);
 	}
 
-	@ApiOperation(value = SWAGGER_UPDATE_TRAMO_BY_PRODUCT, notes = SWAGGER_UPDATE_TRAMO_BY_PRODUCT)
+	@ApiOperation(value = SWAGGER_UPDATE_TRAMO_BY_PRODUCT_AND_COBERTURA, notes = SWAGGER_UPDATE_TRAMO_BY_PRODUCT_AND_COBERTURA)
 	@ApiResponses({
 			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
 			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
@@ -740,7 +747,7 @@ public class ProductoController {
 		return ResponseEntity.ok(MSG_HTTP200);
 	}
 
-	@ApiOperation(value = SWAGGER_DELETE_TRAMO_BY_PRODUCT, notes = SWAGGER_DELETE_TRAMO_BY_PRODUCT)
+	@ApiOperation(value = SWAGGER_DELETE_TRAMO_BY_PRODUCT_COBERTURA, notes = SWAGGER_DELETE_TRAMO_BY_PRODUCT_COBERTURA)
 	@ApiResponses({
 			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
 			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
