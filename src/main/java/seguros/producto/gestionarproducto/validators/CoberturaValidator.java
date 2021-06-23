@@ -43,123 +43,117 @@ public class CoberturaValidator implements ConstraintValidator<CoberturaConstrai
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext cxt) {
-    	CoberturaDTO coberturaDTO = (CoberturaDTO) obj;
+    	CoberturaDTO coberturaDTO1 = (CoberturaDTO) obj;
 
-    	if (coberturaDTO.getCobertura() == null) {
+    	if (coberturaDTO1.getCobertura() == null) {
 			customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_COBERTURA, fieldNameValor_Cobertura);
 		}
-    	if (coberturaDTO.getTipoCobertura() == null) {
+    	if (coberturaDTO1.getTipoCobertura() == null) {
 			customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_TIPO, fieldNameValorTipo);
 		}
 
-    	if (TipoCoberturaEnum.TASA.getId().equals(coberturaDTO.getTipoCobertura())){
-			if (coberturaDTO.getTasa() == null) {
+    	if (TipoCoberturaEnum.TASA.getId().equals(coberturaDTO1.getTipoCobertura())){
+			if (coberturaDTO1.getTasa() == null) {
 				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_TASA, fieldNameValor_Tasa);
 				return false;
 			}
-			if (coberturaDTO.getEn() == null) {
+			if (coberturaDTO1.getEn() == null) {
 				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_EN, fieldNameValor_En);
 				return false;
 			}
-			if (coberturaDTO.getMontoAsegurado() == null) {
-				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_MONTO_ASEGURADO, fieldNameValorMonto_Asegurado);
-				return false;
-			}
-			if (coberturaDTO.getEdadMaximaIngreso() == null) {
-				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_EDAD_MAXIMA, fieldNameValor_EdadMaximaIngreso);
-				return false;
-			}
-			if (coberturaDTO.getPrimaMinima() == null) {
-				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_PRIMA_MINIMA, fieldNameValor_PrimaMinima);
-				return false;
-			}
-			if (coberturaDTO.getPorcentajeSobreCapitalAsegurado() == null) {
+			if (validateMount(cxt, coberturaDTO1)) return false;
+			if (coberturaDTO1.getPorcentajeSobreCapitalAsegurado() == null) {
 				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_POR_CAPITAL_ASEGURADO, fieldNameValor_PorcentajeSobreCapitalAsegurado);
 				return false;
 			}
-			if ((coberturaDTO.getMontoPrima().compareTo(BigDecimal.ZERO) != 0)) {
+			if ((coberturaDTO1.getMontoPrima().compareTo(BigDecimal.ZERO) != 0)) {
 				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_MONTO_PRIMA, fieldNameValor_Prima);
 				return false;
 			}
-			if ((coberturaDTO.getTarifa().compareTo(BigDecimal.ZERO) != 0)) {
+			if ((coberturaDTO1.getTarifa().compareTo(BigDecimal.ZERO) != 0)) {
 				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_TARIFA_VALOR, fieldNameValor_Tarifa);
 				return false;
 			}
 		}
 
-		if (TipoCoberturaEnum.TARIFA.getId().equals(coberturaDTO.getTipoCobertura())){
-			if (coberturaDTO.getTarifa() == null) {
+		if (TipoCoberturaEnum.TARIFA.getId().equals(coberturaDTO1.getTipoCobertura())){
+			if (coberturaDTO1.getTarifa() == null) {
 				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_TARIFA, fieldNameValor_Tarifa);
 				return false;
 			}
-			if (coberturaDTO.getMontoAsegurado() == null) {
+			if (coberturaDTO1.getMontoAsegurado() == null) {
 				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_MONTO_ASEGURADO, fieldNameValorMonto_Asegurado);
 				return false;
 			}
-			if (coberturaDTO.getEdadMaximaIngreso() == null) {
+			if (coberturaDTO1.getEdadMaximaIngreso() == null) {
 				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_EDAD_MAXIMA, fieldNameValor_EdadMaximaIngreso);
 				return false;
 			}
-			if (coberturaDTO.getEdadMaximaPermanencia() == null) {
+			if (coberturaDTO1.getEdadMaximaPermanencia() == null) {
 				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_EDAD_MAXIMA_PERMANENCIA, fieldNameValor_EdadMaximaPermanencia);
 				return false;
 			}
-			if (coberturaDTO.getPorcentajeSobreCapitalAsegurado() == null) {
+			if (coberturaDTO1.getPorcentajeSobreCapitalAsegurado() == null) {
 				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_POR_CAPITAL_ASEGURADO, fieldNameValor_PorcentajeSobreCapitalAsegurado);
 				return false;
 			}
-			if ((coberturaDTO.getMontoPrima().compareTo(BigDecimal.ZERO) != 0)) {
+			if ((coberturaDTO1.getMontoPrima().compareTo(BigDecimal.ZERO) != 0)) {
 				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_MONTO_PRIMA, fieldNameValor_Prima);
 				return false;
 			}
-			if ((coberturaDTO.getTasa().compareTo(BigDecimal.ZERO) != 0)) {
+			if ((coberturaDTO1.getTasa().compareTo(BigDecimal.ZERO) != 0)) {
 				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_TASA_ZERO, fieldNameValor_Tasa);
 				return false;
 			}
 		}
 
-		if (TipoCoberturaEnum.TRAMO.getId().equals(coberturaDTO.getTipoCobertura())){
-			if ((coberturaDTO.getTasa().compareTo(BigDecimal.ZERO) != 0)) {
+		if (TipoCoberturaEnum.TRAMO.getId().equals(coberturaDTO1.getTipoCobertura())){
+			if ((coberturaDTO1.getTasa().compareTo(BigDecimal.ZERO) != 0)) {
 				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_TASA_ZERO, fieldNameValor_Tasa);
 				return false;
 			}
-			if ((coberturaDTO.getTarifa().compareTo(BigDecimal.ZERO) != 0)) {
+			if ((coberturaDTO1.getTarifa().compareTo(BigDecimal.ZERO) != 0)) {
 				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_TARIFA_VALOR, fieldNameValor_Tarifa);
 				return false;
 			}
-			if ((coberturaDTO.getMontoPrima().compareTo(BigDecimal.ZERO) != 0)) {
+			if ((coberturaDTO1.getMontoPrima().compareTo(BigDecimal.ZERO) != 0)) {
 				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_MONTO_PRIMA, fieldNameValor_Prima);
 				return false;
 			}
-			if (coberturaDTO.getMontoAsegurado() == null) {
-				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_MONTO_ASEGURADO, fieldNameValorMonto_Asegurado);
-				return false;
-			}
-			if (coberturaDTO.getEdadMaximaIngreso() == null) {
-				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_EDAD_MAXIMA, fieldNameValor_EdadMaximaIngreso);
-				return false;
-			}
-			if (coberturaDTO.getPrimaMinima() == null) {
-				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_PRIMA_MINIMA, fieldNameValor_PrimaMinima);
-				return false;
-			}
-			if (coberturaDTO.getEdadMaximaPermanencia() == null) {
+			if (validateMount(cxt, coberturaDTO1)) return false;
+			if (coberturaDTO1.getEdadMaximaPermanencia() == null) {
 				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_EDAD_MAXIMA_PERMANENCIA, fieldNameValor_EdadMaximaPermanencia);
 				return false;
 			}
-			if (coberturaDTO.getPorcentajeSobreCapitalAsegurado() == null) {
+			if (coberturaDTO1.getPorcentajeSobreCapitalAsegurado() == null) {
 				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_POR_CAPITAL_ASEGURADO, fieldNameValor_PorcentajeSobreCapitalAsegurado);
 				return false;
 			}
-			if (coberturaDTO.getParaParentesco() == null) {
+			if (coberturaDTO1.getParaParentesco() == null) {
 				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_PARENTESCO, fieldNameValor_Parentesco);
 				return false;
 			}
 		}
     	return true;
     }
-    
-    private void customMessageForValidation(ConstraintValidatorContext cxt, String message, String field) {
+
+	private boolean validateMount(ConstraintValidatorContext cxt, CoberturaDTO coberturaDTO1) {
+		if (coberturaDTO1.getMontoAsegurado() == null) {
+			customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_MONTO_ASEGURADO, fieldNameValorMonto_Asegurado);
+			return true;
+		}
+		if (coberturaDTO1.getEdadMaximaIngreso() == null) {
+			customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_EDAD_MAXIMA, fieldNameValor_EdadMaximaIngreso);
+			return true;
+		}
+		if (coberturaDTO1.getPrimaMinima() == null) {
+			customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_PRIMA_MINIMA, fieldNameValor_PrimaMinima);
+			return true;
+		}
+		return false;
+	}
+
+	private void customMessageForValidation(ConstraintValidatorContext cxt, String message, String field) {
     	cxt.disableDefaultConstraintViolation();
     	cxt.buildConstraintViolationWithTemplate(message).addPropertyNode(field).addConstraintViolation();
     }
