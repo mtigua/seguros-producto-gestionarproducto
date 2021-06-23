@@ -92,6 +92,9 @@ public class ProductoDo  {
 	@CreationTimestamp
 	private LocalDateTime fechaCreacion;
 	
+	@Column(name = "file_name_condicionado_particular")
+	private String fileNameCondicionadoParticular;
+	
 	@ManyToOne
 	@JoinColumn(name = "id_destino", nullable=false)
 	private  DestinoVenta doplAQuienSeVende;
