@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 
-
+@SuppressWarnings("unchecked")
 @Entity(name = "tramo_cobertura")
 @Data
 public class TramoCobertura {
@@ -22,51 +22,38 @@ public class TramoCobertura {
 	private Long id;
 
 	@ManyToOne	  
-	@JoinColumn(name = "id_tipo_tasa") 
+	@JoinColumn(name = "id_tipo_tasa")
 	private TipoTasa tipoTasa;
-
-	@ManyToOne	  
-	@JoinColumn(name = "id_tipo_tramo",nullable = false) 
-	private TipoTramo tipoTramo;
 	
 	@ManyToOne	  
-	@JoinColumn(name = "id_tarifa_es",nullable = false) 
+	@JoinColumn(name = "id_tarifa_es",nullable = false)
 	private TarifaEs tarifaEs;
 
-	@Column(name = "id_cobertura")
+	@Column(name = "id_cobertura" ,  insertable = true, updatable = true)
 	private Long idCobertura;
 
 	@ManyToOne
 	@JoinColumn(name = "id_producto")
 	private Producto producto;
 
-	/*
-	@ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
-	@JoinColumns({
-			@JoinColumn(name = "id_cobertura", referencedColumnName = "id_cobertura"),
-			@JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
-	})
-	private CoberturaProducto cobertura;
-	*/
-
-
 	@ManyToOne	  
-	@JoinColumn(name = "id_tramo_para") 
+	@JoinColumn(name = "id_tramo_para")
 	private PrimaSobreQue tramoPara;
 	
-	@Column(length = 5, name = "dome_mone_cod")
+	@Column(length = 5, name = "dome_mone_cod",  insertable = true, updatable = true)
 	private String moneda;
 		
-	@Column(name = "valor_desde",nullable = false)
+	@Column(name = "valor_desde",nullable = false,  insertable = true, updatable = true)
 	private BigDecimal valorDesde;
 	
-	@Column(name = "valor_hasta",nullable = false)
+	@Column(name = "valor_hasta",nullable = false,  insertable = true, updatable = true)
 	private BigDecimal valorHasta;
 	
-	
-	@Column(name = "valor",nullable = false)
+	@Column(name = "valor",nullable = false,  insertable = true, updatable = true)
 	private BigDecimal valor;
-	
 
+	@ManyToOne
+	@JoinColumn(name = "id_tipo_tramo",nullable = false)
+	private TipoTramo tipoTramo;
     
 }

@@ -483,20 +483,20 @@ public class ProductoController {
 		try {
 			lista= productoService.getTramosByProduct(id);
 		}
-		catch(ForbiddenException e) {
-			e.setSubject(propertiesMsg.getLogger_error_executing_get_tramo_by_product());
-			throw e;
+		catch(ForbiddenException exceptionTramo1) {
+			exceptionTramo1.setSubject(propertiesMsg.getLogger_error_executing_get_tramo_by_product());
+			throw exceptionTramo1;
 		}
-		catch(ResourceNotFoundException e) {
-			e.setSubject(propertiesMsg.getLogger_error_executing_get_tramo_by_product());
-			throw e;
+		catch(ResourceNotFoundException notFoundExceptionTramo) {
+			notFoundExceptionTramo.setSubject(propertiesMsg.getLogger_error_executing_get_tramo_by_product());
+			throw notFoundExceptionTramo;
 		}
-		catch(ProductoException e) {
-			e.setSubject(propertiesMsg.getLogger_error_executing_get_tramo_by_product());
-			throw e;
+		catch(ProductoException productException1) {
+			productException1.setSubject(propertiesMsg.getLogger_error_executing_get_tramo_by_product());
+			throw productException1;
 		}
-		catch (Exception e) {
-			ProductoException ex = new ProductoException(e);
+		catch (Exception exceptionTramo2) {
+			ProductoException ex = new ProductoException(exceptionTramo2);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tramo_by_product());
 			throw ex;
 		}
