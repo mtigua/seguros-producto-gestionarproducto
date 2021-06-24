@@ -33,7 +33,7 @@ public class SftpServiceImpl implements SftpService{
 	@Autowired
 	private Properties properties;
 	
-	private static final List<String> validExtension=  Arrays.asList("doc","pdf");
+	private static final List<String> validExtension=  Arrays.asList("doc","pdf","docx");
 	private static final String MSG_EXTENSION_NOT_VALID= "Tipo de fichero no permitido";
 	private static final String QUERY_PARAM_REMOTE_PATH="{remotePath}";
 
@@ -129,7 +129,7 @@ public class SftpServiceImpl implements SftpService{
 		boolean isValid=true;
 	
 		Optional<MultipartFile> optional  = files.stream().
-				filter(x -> !validExtension.contains( FilenameUtils.getExtension(x.getOriginalFilename()) ) )
+				filter(x -> !validExtension.contains( FilenameUtils.getExtension(x.getOriginalFilename()).toLowerCase() ) )
                 .findFirst();
 		
 		if(optional.isPresent()) {
