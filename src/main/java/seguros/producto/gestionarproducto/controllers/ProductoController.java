@@ -32,6 +32,7 @@ import seguros.producto.gestionarproducto.dto.CoberturaProductoDto;
 import seguros.producto.gestionarproducto.dto.EstadoProductoDto;
 import seguros.producto.gestionarproducto.dto.InfoProductoDto;
 import seguros.producto.gestionarproducto.dto.PageProductoDto;
+import seguros.producto.gestionarproducto.dto.ProductoDetallePromocionDto;
 import seguros.producto.gestionarproducto.dto.ProductoDto;
 import seguros.producto.gestionarproducto.dto.TerminoCortoDto;
 import seguros.producto.gestionarproducto.dto.TerminoCortoSaveDto;
@@ -43,6 +44,7 @@ import seguros.producto.gestionarproducto.dto.OrdenCoberturaDTO;
 import seguros.producto.gestionarproducto.dto.CoberturaProductoCorrelativoDto;
 import seguros.producto.gestionarproducto.dto.TipoIvaDTO;
 import seguros.producto.gestionarproducto.dto.DeducibleDTO;
+import seguros.producto.gestionarproducto.dto.DetallePromocionDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
 import seguros.producto.gestionarproducto.exceptions.ForbiddenException;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
@@ -89,6 +91,10 @@ public class ProductoController {
 	private static final String SWAGGER_SAVE_RECARGO_POR_SEGURADO_BY_PRODUCT = "Registrar recargo por asegurado dado un producto";
 	private static final String SWAGGER_DELETE_RECARGO_POR_SEGURADO_BY_PRODUCT = "Eliminar recargo por asegurado dado un producto";
 	private static final String SWAGGER_UPDATE_RECARGO_POR_SEGURADO_BY_PRODUCT = "Actualizar recargo por asegurado dado un producto";
+	private static final String SWAGGER_GET_DETALLES_PROMOCION_BY_PRODUCT = "Obtener los detalles de promocion de un producto dado";
+	private static final String SWAGGER_SAVE_DETALLE_PROMOCION_BY_PRODUCT = "Registrar el detalle de una promocion dado un producto";
+	private static final String SWAGGER_UPDATE_DETALLE_PROMOCION_BY_PRODUCT = "Actualizar el detalle de una promocion dado un producto";
+	private static final String SWAGGER_DELETE_DETALLE_PROMOCION_BY_PRODUCT = "Eliminar el detalle de una promocion dado un producto";
 
 	
 	@Autowired
@@ -1029,4 +1035,159 @@ public class ProductoController {
 
 		return ResponseEntity.ok(MSG_HTTP200);
 	}
+	
+	
+	@ApiOperation(value = SWAGGER_GET_DETALLES_PROMOCION_BY_PRODUCT, notes = SWAGGER_GET_DETALLES_PROMOCION_BY_PRODUCT)
+	@ApiResponses({
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/{id}/detallepromocion")
+	public ResponseEntity<ProductoDetallePromocionDto> getDetallePromocionByProduct(@PathVariable("id") Long id) throws ProductoException,ResourceNotFoundException,ForbiddenException{
+		ProductoDetallePromocionDto productoDetallePromocionDto=null;
+		try {
+			productoDetallePromocionDto = productoService.getDetallePromocionByProduct(id);
+		}
+		catch(ForbiddenException forbiddenDetallePromoGet) {
+			forbiddenDetallePromoGet.setSubject(propertiesMsg.getLogger_error_executing_get_detallepromocion_by_product());
+			throw forbiddenDetallePromoGet;
+		}
+		catch(ResourceNotFoundException notFoundDetallePromoGet) {
+			notFoundDetallePromoGet.setSubject(propertiesMsg.getLogger_error_executing_get_detallepromocion_by_product());
+			throw notFoundDetallePromoGet;
+		}
+		catch(ProductoException productDetallePromoGet) {
+			productDetallePromoGet.setSubject(propertiesMsg.getLogger_error_executing_get_detallepromocion_by_product());
+			throw productDetallePromoGet;
+		}
+		catch (Exception exDetallePromoGet) {
+			ProductoException ex = new ProductoException(exDetallePromoGet);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_detallepromocion_by_product());
+			throw ex;
+		}
+		return ResponseEntity.ok(productoDetallePromocionDto);
+	}
+
+	@ApiOperation(value = SWAGGER_SAVE_DETALLE_PROMOCION_BY_PRODUCT, notes = SWAGGER_SAVE_DETALLE_PROMOCION_BY_PRODUCT)
+	@ApiResponses({
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@PostMapping("/{id}/detallepromocion")
+	public ResponseEntity<String> saveDetallePromocionByProduct(
+			@PathVariable("id") Long id,
+			@RequestBody @Valid DetallePromocionDto detallePromocionDto
+			) throws ProductoException,ResourceNotFoundException,ForbiddenException {
+
+		try {
+			productoService.saveDetallePromocionByProduct(id,detallePromocionDto);
+		}
+		catch(ForbiddenException forbiddenDetallePromoSave) {
+			forbiddenDetallePromoSave.setSubject(propertiesMsg.getLogger_error_executing_save_detallepromocion_by_product());
+			throw forbiddenDetallePromoSave;
+		}
+		catch(ResourceNotFoundException notFoundDetallePromoSave) {
+			notFoundDetallePromoSave.setSubject(propertiesMsg.getLogger_error_executing_save_detallepromocion_by_product());
+			throw notFoundDetallePromoSave;
+		}
+		catch(ProductoException productDetallePromoSave) {
+			productDetallePromoSave.setSubject(propertiesMsg.getLogger_error_executing_save_detallepromocion_by_product());
+			throw productDetallePromoSave;
+		}
+		catch (Exception exDetallePromoSave) {
+			ProductoException ex = new ProductoException(exDetallePromoSave);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_save_detallepromocion_by_product());
+			throw ex;
+		}
+
+		return ResponseEntity.ok(MSG_HTTP200);
+	}
+	
+
+	@ApiOperation(value = SWAGGER_UPDATE_DETALLE_PROMOCION_BY_PRODUCT, notes = SWAGGER_UPDATE_DETALLE_PROMOCION_BY_PRODUCT)
+	@ApiResponses({
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@PutMapping("/{id}/detallepromocion/{idDetallePromocion}")
+	public ResponseEntity<String> updateDetallePromocionByProduct(
+			@PathVariable("id") Long idProducto,
+			@PathVariable("idDetallePromocion") Long idDetallePromocion,
+			@RequestBody @Valid DetallePromocionDto detallePromocionDto
+			) throws ProductoException,ResourceNotFoundException,ForbiddenException {
+
+		try {
+			productoService.updateDetallePromocionByProduct(idProducto, idDetallePromocion, detallePromocionDto);
+		}
+		catch(ResourceNotFoundException notFoundDetallePromoUpdate) {
+			notFoundDetallePromoUpdate.setSubject(propertiesMsg.getLogger_error_executing_update_detallepromocion_by_product());
+			throw notFoundDetallePromoUpdate;
+		}
+		catch(ForbiddenException forbiddenDetallePromoUpdate) {
+			forbiddenDetallePromoUpdate.setSubject(propertiesMsg.getLogger_error_executing_update_detallepromocion_by_product());
+			throw forbiddenDetallePromoUpdate;
+		}
+		catch(ProductoException productDetallePromoUpdate) {
+			productDetallePromoUpdate.setSubject(propertiesMsg.getLogger_error_executing_update_detallepromocion_by_product());
+			throw productDetallePromoUpdate;
+		}
+		catch (Exception exDetallePromoUpdate) {
+			ProductoException ex = new ProductoException(exDetallePromoUpdate);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_update_detallepromocion_by_product());
+			throw ex;
+		}
+
+		return ResponseEntity.ok(MSG_HTTP200);
+	}	
+	
+	
+	
+	
+	@ApiOperation(value = SWAGGER_DELETE_DETALLE_PROMOCION_BY_PRODUCT, notes = SWAGGER_DELETE_DETALLE_PROMOCION_BY_PRODUCT)
+	@ApiResponses({
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@DeleteMapping("/{id}/detallepromocion/{idDetallePromocion}")
+	public ResponseEntity<String> deleteDetallePromocionByProduct(
+			@PathVariable("id") Long idProducto,
+			@PathVariable("idDetallePromocion") Long idDetallePromocion
+			) throws ProductoException,ResourceNotFoundException,ForbiddenException {
+
+		try {
+			productoService.deleteDetallePromocionByProduct(idProducto,idDetallePromocion);
+		}
+		catch(ForbiddenException forbiddenDetallePromoDel) {
+			forbiddenDetallePromoDel.setSubject(propertiesMsg.getLogger_error_executing_delete_detallepromocion_by_product());
+			throw forbiddenDetallePromoDel;
+		}
+		catch(ResourceNotFoundException notFoundDetallePromoDel) {
+			notFoundDetallePromoDel.setSubject(propertiesMsg.getLogger_error_executing_delete_detallepromocion_by_product());
+			throw notFoundDetallePromoDel;
+		}
+		catch(ProductoException productDetallePromoDel) {
+			productDetallePromoDel.setSubject(propertiesMsg.getLogger_error_executing_delete_detallepromocion_by_product());
+			throw productDetallePromoDel;
+		}
+		catch (Exception exDetallePromoDel) {
+			ProductoException ex = new ProductoException(exDetallePromoDel);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_delete_detallepromocion_by_product());
+			throw ex;
+		}
+
+		return ResponseEntity.ok(MSG_HTTP200);
+	}
+	
 }
