@@ -557,6 +557,28 @@ public class Producto  {
 				} );
 
 	}
+	
+	
+	@OneToMany( cascade = {CascadeType.PERSIST,CascadeType.MERGE}, orphanRemoval = true)
+	@JoinColumn(name = "producto_id")
+	private Set<DetallePromocion> detallePromociones;
+	
+	public void addDetallePromocion(DetallePromocion detallePromocion) {
+        this.detallePromociones.add(detallePromocion);
+    }
+	
+	public void removeDetallePromocion(DetallePromocion detallePromocion) {
+			this.detallePromociones.remove(detallePromocion);
+	}
+	
+	public void updateDetallePromocion(DetallePromocion detallePromocion) {
+		 this.detallePromociones.stream()
+				  .filter(t -> detallePromocion.getId().equals( t.getId() ) )
+				  .findFirst()
+				  .ifPresent(t-> {
+					  t=detallePromocion;
+				  } );
+	}
 		
 	
 }
