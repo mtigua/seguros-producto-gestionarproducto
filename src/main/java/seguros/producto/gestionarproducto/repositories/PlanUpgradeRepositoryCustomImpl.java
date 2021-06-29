@@ -112,7 +112,7 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
     @Override
     public List<ProdDto> getPlanesExistentesOAceptadosPorNemotecnico(Long id, String nemoU, String nemoP, Boolean esAceptado) throws ProductoException {
         List<ProdDto> lista = new ArrayList<>();
-        List<Object[]> record=null;
+        List<Object[]> recordSet=null;
         String procedureName;
         if(esAceptado){
              procedureName = propertiesSql.getLISTAR_PLANES_ACEPTADOS_POR_NEMOTECNICO();
@@ -129,13 +129,13 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
             storedProcedureQuery.setParameter(NEMOP,nemoP );
 
             storedProcedureQuery.execute();
-            record = storedProcedureQuery.getResultList();
-            if(record!=null && !record.isEmpty()){
-                    record.stream().forEach(p-> {
+            recordSet = storedProcedureQuery.getResultList();
+            if(recordSet!=null && !recordSet.isEmpty()){
+                    recordSet.stream().forEach(u-> {
                         ProdDto prodDto = new ProdDto();
-                        prodDto.setId(Long.valueOf( p[0].toString() ));
-                        prodDto.setNemo( p[1].toString() );
-                        prodDto.setNombre( p[2].toString() );
+                        prodDto.setNombre( u[2].toString() );
+                        prodDto.setNemo( u[1].toString() );
+                        prodDto.setId(Long.valueOf( u[0].toString() ));
                         lista.add(prodDto);
                     });
             }else{
