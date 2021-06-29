@@ -15,10 +15,10 @@ import java.util.List;
 public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCustom {
 
     private static final String VALUE_UNDEFINED="No se ha podido indentificar valor para el par\u00E1metro de salida: ";
-    private static final String NEMOTECNICO_NO_EXISTE="El nemot\u00E9cnico no existe";
 
-    static final String RESULT = "result";
-    static final String EXISTE = "existe";
+    static final String ID_PRODUCTO = "idProducto";
+    static final String NEMOU = "nemoU";
+    static final String NEMOP = "nemoP";
 
     @Autowired
     private EntityManager entityManager;
@@ -34,13 +34,12 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
         String procedureName = propertiesSql.getLISTAR_UPGRADES_POR_PRODUCTO();
         try{
             StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);
-            storedProcedureQuery.registerStoredProcedureParameter("idProducto", Long.class, ParameterMode.IN);
-            storedProcedureQuery.setParameter("idProducto",id );
+            storedProcedureQuery.registerStoredProcedureParameter(ID_PRODUCTO, Long.class, ParameterMode.IN);
+            storedProcedureQuery.setParameter(ID_PRODUCTO,id );
 
             storedProcedureQuery.execute();
             record = storedProcedureQuery.getResultList();
-            if(record!=null){
-                if(!record.isEmpty()){
+            if(record!=null && !record.isEmpty()){
                    record.stream().forEach(p-> {
                         PlanUpgradeDto planUpgradeDto = new PlanUpgradeDto();
                         planUpgradeDto.setIdUpgrade(Long.valueOf( p[0].toString() ));
@@ -53,7 +52,12 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
                         planUpgradeDto.setDiasRenuncia(Integer.valueOf( p[7].toString() ));
                         lista.add(planUpgradeDto);
                    });
-                }
+            }else{
+                ProductoException exc = new ProductoException();
+                exc.setErrorMessage(VALUE_UNDEFINED + "existe");
+                exc.setDetail(VALUE_UNDEFINED + "existe");
+                exc.setConcreteException(exc);
+                throw exc;
             }
         }catch(ProductoException e){
             throw e;
@@ -78,8 +82,7 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
 
             storedProcedureQuery.execute();
             record = storedProcedureQuery.getResultList();
-            if(record!=null){
-                if(!record.isEmpty()){
+            if(record!=null && !record.isEmpty()){
                     record.stream().forEach(p-> {
                         ProdDto prodDto = new ProdDto();
                         prodDto.setId(Long.valueOf( p[0].toString() ));
@@ -87,7 +90,12 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
                         prodDto.setNombre( p[2].toString() );
                         lista.add(prodDto);
                     });
-                }
+            }else{
+                ProductoException exc = new ProductoException();
+                exc.setErrorMessage(VALUE_UNDEFINED + "existe");
+                exc.setDetail(VALUE_UNDEFINED + "existe");
+                exc.setConcreteException(exc);
+                throw exc;
             }
         }catch(ProductoException e){
             throw e;
@@ -107,17 +115,16 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
         String procedureName = propertiesSql.getLISTAR_PLANES_EXISTENTES_POR_NEMOTECNICO();
         try{
             StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);
-            storedProcedureQuery.registerStoredProcedureParameter("idProducto", Long.class, ParameterMode.IN);
-            storedProcedureQuery.registerStoredProcedureParameter("nemoU", String.class, ParameterMode.IN);
-            storedProcedureQuery.registerStoredProcedureParameter("nemoP", String.class, ParameterMode.IN);
-            storedProcedureQuery.setParameter("idProducto",id );
-            storedProcedureQuery.setParameter("nemoU",nemoU );
-            storedProcedureQuery.setParameter("nemoP",nemoP );
+            storedProcedureQuery.registerStoredProcedureParameter(ID_PRODUCTO, Long.class, ParameterMode.IN);
+            storedProcedureQuery.registerStoredProcedureParameter(NEMOU, String.class, ParameterMode.IN);
+            storedProcedureQuery.registerStoredProcedureParameter(NEMOP, String.class, ParameterMode.IN);
+            storedProcedureQuery.setParameter(ID_PRODUCTO,id );
+            storedProcedureQuery.setParameter(NEMOU,nemoU );
+            storedProcedureQuery.setParameter(NEMOP,nemoP );
 
             storedProcedureQuery.execute();
             record = storedProcedureQuery.getResultList();
-            if(record!=null){
-                if(!record.isEmpty()){
+            if(record!=null && !record.isEmpty()){
                     record.stream().forEach(p-> {
                         ProdDto prodDto = new ProdDto();
                         prodDto.setId(Long.valueOf( p[0].toString() ));
@@ -125,7 +132,12 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
                         prodDto.setNombre( p[2].toString() );
                         lista.add(prodDto);
                     });
-                }
+            }else{
+                ProductoException exc = new ProductoException();
+                exc.setErrorMessage(VALUE_UNDEFINED + "existe");
+                exc.setDetail(VALUE_UNDEFINED + "existe");
+                exc.setConcreteException(exc);
+                throw exc;
             }
         }catch(ProductoException e){
             throw e;
@@ -145,25 +157,29 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
         String procedureName = propertiesSql.getLISTAR_PLANES_ACEPTADOS_POR_NEMOTECNICO();
         try{
             StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);
-            storedProcedureQuery.registerStoredProcedureParameter("idProducto", Long.class, ParameterMode.IN);
+            storedProcedureQuery.registerStoredProcedureParameter(ID_PRODUCTO, Long.class, ParameterMode.IN);
             storedProcedureQuery.registerStoredProcedureParameter("nemoU", String.class, ParameterMode.IN);
             storedProcedureQuery.registerStoredProcedureParameter("nemoP", String.class, ParameterMode.IN);
-            storedProcedureQuery.setParameter("idProducto",id );
-            storedProcedureQuery.setParameter("nemoU",nemoU );
-            storedProcedureQuery.setParameter("nemoP",nemoP );
+            storedProcedureQuery.setParameter(ID_PRODUCTO,id );
+            storedProcedureQuery.setParameter(NEMOU,nemoU );
+            storedProcedureQuery.setParameter(NEMOP,nemoP );
 
             storedProcedureQuery.execute();
             record = storedProcedureQuery.getResultList();
-            if(record!=null){
-                if(!record.isEmpty()){
-                    record.stream().forEach(p-> {
-                        ProdDto prodDto = new ProdDto();
-                        prodDto.setId(Long.valueOf( p[0].toString() ));
-                        prodDto.setNemo( p[1].toString() );
-                        prodDto.setNombre( p[2].toString() );
-                        lista.add(prodDto);
-                    });
-                }
+            if(record!=null && !record.isEmpty()){
+                record.stream().forEach(p-> {
+                    ProdDto prodDto = new ProdDto();
+                    prodDto.setId(Long.valueOf( p[0].toString() ));
+                    prodDto.setNemo( p[1].toString() );
+                    prodDto.setNombre( p[2].toString() );
+                    lista.add(prodDto);
+                });
+            }else{
+                ProductoException exc = new ProductoException();
+                exc.setErrorMessage(VALUE_UNDEFINED + "existe");
+                exc.setDetail(VALUE_UNDEFINED + "existe");
+                exc.setConcreteException(exc);
+                throw exc;
             }
         }catch(ProductoException e){
             throw e;
@@ -181,9 +197,9 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
         String procedureName = propertiesSql.getELIMINAR_UPGRADES_POR_PRODUCTO();
         try{
             StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);
-            storedProcedureQuery.registerStoredProcedureParameter("idProducto", Long.class, ParameterMode.IN);
+            storedProcedureQuery.registerStoredProcedureParameter(ID_PRODUCTO, Long.class, ParameterMode.IN);
             storedProcedureQuery.registerStoredProcedureParameter("idUpgrade", Long.class, ParameterMode.IN);
-            storedProcedureQuery.setParameter("idProducto",id );
+            storedProcedureQuery.setParameter(ID_PRODUCTO,id );
             storedProcedureQuery.setParameter("idUpgrade",idUpgrade );
             storedProcedureQuery.execute();
         }catch(ProductoException e){
