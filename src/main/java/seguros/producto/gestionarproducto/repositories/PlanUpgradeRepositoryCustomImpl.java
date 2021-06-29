@@ -26,6 +26,14 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
     @Autowired
     private PropertiesSql propertiesSql;
 
+    public ProductoException setException(){
+        ProductoException exc = new ProductoException();
+        exc.setErrorMessage(VALUE_UNDEFINED );
+        exc.setDetail(VALUE_UNDEFINED );
+        exc.setConcreteException(exc);
+        return exc;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public List<PlanUpgradeDto> getPlanUpgrade(Long id) throws ProductoException {
@@ -53,18 +61,14 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
                         lista.add(planUpgradeDto);
                    });
             }else{
-                ProductoException exc = new ProductoException();
-                exc.setErrorMessage(VALUE_UNDEFINED );
-                exc.setDetail(VALUE_UNDEFINED );
-                exc.setConcreteException(exc);
-                throw exc;
+                throw setException();
             }
         }catch(ProductoException e){
             throw e;
         }
         catch(Exception e) {
-            ProductoException exc = new ProductoException(e);
-            throw exc;
+            ProductoException productoExceptionexc = new ProductoException(e);
+            throw productoExceptionexc;
         }
         return lista;
     }
@@ -91,11 +95,8 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
                         lista.add(prodDto);
                     });
             }else{
-                ProductoException exc = new ProductoException();
-                exc.setErrorMessage(VALUE_UNDEFINED );
-                exc.setDetail(VALUE_UNDEFINED );
-                exc.setConcreteException(exc);
-                throw exc;
+                ProductoException exception = setException();
+                throw exception;
             }
         }catch(ProductoException e){
             throw e;
@@ -109,10 +110,15 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<ProdDto> getPlanesExistentesPorNemotecnico(Long id, String nemoU, String nemoP) throws ProductoException {
+    public List<ProdDto> getPlanesExistentesOAceptadosPorNemotecnico(Long id, String nemoU, String nemoP, Boolean esAceptado) throws ProductoException {
         List<ProdDto> lista = new ArrayList<>();
         List<Object[]> record=null;
-        String procedureName = propertiesSql.getLISTAR_PLANES_EXISTENTES_POR_NEMOTECNICO();
+        String procedureName;
+        if(esAceptado){
+             procedureName = propertiesSql.getLISTAR_PLANES_ACEPTADOS_POR_NEMOTECNICO();
+        }else{
+             procedureName = propertiesSql.getLISTAR_PLANES_EXISTENTES_POR_NEMOTECNICO();
+        }
         try{
             StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);
             storedProcedureQuery.registerStoredProcedureParameter(ID_PRODUCTO, Long.class, ParameterMode.IN);
@@ -133,60 +139,15 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
                         lista.add(prodDto);
                     });
             }else{
-                ProductoException exc = new ProductoException();
-                exc.setErrorMessage(VALUE_UNDEFINED);
-                exc.setDetail(VALUE_UNDEFINED);
-                exc.setConcreteException(exc);
-                throw exc;
+                ProductoException productoException = setException();
+                throw productoException;
             }
         }catch(ProductoException e){
             throw e;
         }
         catch(Exception e) {
-            ProductoException exc = new ProductoException(e);
-            throw exc;
-        }
-        return lista;
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<ProdDto> getPlanesAceptadosPorNemotecnico(Long id, String nemoU, String nemoP) throws ProductoException {
-        List<ProdDto> lista = new ArrayList<>();
-        List<Object[]> record=null;
-        String procedureName = propertiesSql.getLISTAR_PLANES_ACEPTADOS_POR_NEMOTECNICO();
-        try{
-            StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);
-            storedProcedureQuery.registerStoredProcedureParameter(ID_PRODUCTO, Long.class, ParameterMode.IN);
-            storedProcedureQuery.registerStoredProcedureParameter(NEMOU, String.class, ParameterMode.IN);
-            storedProcedureQuery.registerStoredProcedureParameter(NEMOP, String.class, ParameterMode.IN);
-            storedProcedureQuery.setParameter(ID_PRODUCTO,id );
-            storedProcedureQuery.setParameter(NEMOU,nemoU );
-            storedProcedureQuery.setParameter(NEMOP,nemoP );
-
-            storedProcedureQuery.execute();
-            record = storedProcedureQuery.getResultList();
-            if(record!=null && !record.isEmpty()){
-                record.stream().forEach(p-> {
-                    ProdDto prodDto = new ProdDto();
-                    prodDto.setId(Long.valueOf( p[0].toString() ));
-                    prodDto.setNemo( p[1].toString() );
-                    prodDto.setNombre( p[2].toString() );
-                    lista.add(prodDto);
-                });
-            }else{
-                ProductoException exc = new ProductoException();
-                exc.setErrorMessage(VALUE_UNDEFINED);
-                exc.setDetail(VALUE_UNDEFINED);
-                exc.setConcreteException(exc);
-                throw exc;
-            }
-        }catch(ProductoException e){
-            throw e;
-        }
-        catch(Exception e) {
-            ProductoException exc = new ProductoException(e);
-            throw exc;
+            ProductoException excepct = new ProductoException(e);
+            throw excepct;
         }
         return lista;
     }

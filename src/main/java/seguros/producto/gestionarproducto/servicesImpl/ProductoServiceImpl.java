@@ -1655,7 +1655,7 @@ public class ProductoServiceImpl implements ProductoService {
 			if(productoO.isPresent()) {
 				Producto producto=productoO.get();
 				if(producto.getUpgrade()){
-					lista = planUpgradeRepository.getPlanesExistentesPorNemotecnico(id,nemoU,nemoP);
+					lista = planUpgradeRepository.getPlanesExistentesOAceptadosPorNemotecnico(id,nemoU,nemoP,false);
 				}else{
 					ForbiddenException fe = new ForbiddenException();
 					fe.setConcreteException(fe);
@@ -1693,7 +1693,7 @@ public class ProductoServiceImpl implements ProductoService {
 			if(productoO.isPresent()) {
 				Producto producto=productoO.get();
 				if(producto.getUpgrade()){
-					lista = planUpgradeRepository.getPlanesAceptadosPorNemotecnico(id,nemoU,nemoP);
+					lista = planUpgradeRepository.getPlanesExistentesOAceptadosPorNemotecnico(id,nemoU,nemoP,true);
 				}else{
 					ForbiddenException fe = new ForbiddenException();
 					fe.setConcreteException(fe);
