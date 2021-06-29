@@ -38,5 +38,10 @@ public class PropertiesSql {
 	private String LISTAR_TIPO_IVA;
 	private String LISTAR_DEDUCIBLE;
 	private String verificarNemotecnico;
+	private String LISTAR_UPGRADES_POR_PRODUCTO;
+	private String LISTAR_PRODUCTOS_POR_NEMOTECNICO;
+	private String LISTAR_PLANES_EXISTENTES_POR_NEMOTECNICO;
+	private String LISTAR_PLANES_ACEPTADOS_POR_NEMOTECNICO;
+	private String ELIMINAR_UPGRADES_POR_PRODUCTO;
 
 }

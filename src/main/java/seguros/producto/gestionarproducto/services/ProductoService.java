@@ -42,4 +42,12 @@ public interface ProductoService {
     public void saveRecargoPorAseguradoByProduct(Long id, List<RecargoPorAseguradoDto> recargoPorAsegurado) throws ProductoException,ResourceNotFoundException,ForbiddenException;
     public void deleteRecargoPorAseguradoByProduct(Long idProducto,Long idRecargoPorAsegurado) throws ProductoException,ResourceNotFoundException,ForbiddenException;
     public void updateRecargoPorAseguradoByProduct(Long id, Long idRecargoPorAsegurado, RecargoPorAseguradoDto recargoPorAsegurado) throws ProductoException,ResourceNotFoundException,ForbiddenException;
+
+    public List<PlanUpgradeDto> getPlanUpgradeByProduct(Long id) throws ProductoException,ResourceNotFoundException,ForbiddenException;
+    public List<ProdDto> getProductByNemo(Long id,String nemo) throws ProductoException,ResourceNotFoundException,ForbiddenException;
+    public List<ProdDto> getPlanesExistentesByNemo(Long id,String nemoU, String nemoP) throws ProductoException,ResourceNotFoundException,ForbiddenException;
+    public List<ProdDto> getPlanesAceptadosByNemo(Long id,String nemoU, String nemoP) throws ProductoException,ResourceNotFoundException,ForbiddenException;
+    public void saveUpgradeByProduct(Long id, List<PlanUpgradeDto> upgrades) throws ProductoException,ResourceNotFoundException,ForbiddenException;
+    public void deleteUpgradeByProduct(Long idProducto,Long idUpgrade) throws ProductoException,ResourceNotFoundException,ForbiddenException;
+    public void updateUpgradeByProduct(Long id, Long idUpgrade, PlanUpgradeDto planUpgradeDto) throws ProductoException,ResourceNotFoundException,ForbiddenException;
 }

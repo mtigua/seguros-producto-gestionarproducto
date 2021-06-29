@@ -557,6 +557,28 @@ public class Producto  {
 				} );
 
 	}
+
+	@OneToMany( cascade = {CascadeType.PERSIST,CascadeType.MERGE}, orphanRemoval = true)
+	@JoinColumn(name = "plan_vigente")
+	private Set<PlanUpgrade> planUpgrade;
+
+	public void addPlanUpgrade(PlanUpgrade planUpgrade) {
+		this.planUpgrade.add(planUpgrade);
+	}
+
+	public void removePlanUpgrade(PlanUpgrade planUpgrade) {
+		this.planUpgrade.remove(planUpgrade);
+	}
+
+	public void updatePlanUpgrade(PlanUpgrade planUpgrade) {
+		this.planUpgrade.stream()
+				.filter(t -> planUpgrade.getId().equals( t.getId() ) )
+				.findFirst()
+				.ifPresent(t-> {
+					t=planUpgrade;
+
+				} );
+	}
 		
 	
 }

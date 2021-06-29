@@ -38,6 +38,8 @@ import seguros.producto.gestionarproducto.dto.TerminoCortoSaveDto;
 import seguros.producto.gestionarproducto.dto.TramoDto;
 import seguros.producto.gestionarproducto.dto.TramoListDto;
 import seguros.producto.gestionarproducto.dto.RecargoPorAseguradoDto;
+import seguros.producto.gestionarproducto.dto.PlanUpgradeDto;
+import seguros.producto.gestionarproducto.dto.ProdDto;
 import seguros.producto.gestionarproducto.dto.CoberturaDTO;
 import seguros.producto.gestionarproducto.dto.OrdenCoberturaDTO;
 import seguros.producto.gestionarproducto.dto.CoberturaProductoCorrelativoDto;
@@ -89,6 +91,13 @@ public class ProductoController {
 	private static final String SWAGGER_SAVE_RECARGO_POR_SEGURADO_BY_PRODUCT = "Registrar recargo por asegurado dado un producto";
 	private static final String SWAGGER_DELETE_RECARGO_POR_SEGURADO_BY_PRODUCT = "Eliminar recargo por asegurado dado un producto";
 	private static final String SWAGGER_UPDATE_RECARGO_POR_SEGURADO_BY_PRODUCT = "Actualizar recargo por asegurado dado un producto";
+	private static final String SWAGGER_GET_PLAN_UPGRADE_BY_PRODUCT = "Obtener los planes upgrades de un producto dado";
+	private static final String SWAGGER_GET_PRODUCTO_BY_NEMO = "Obtener los productos dado un nemotecnico";
+	private static final String SWAGGER_GET_PLAN_EXISTENTE_BY_NEMO = "Obtener los planes existentes dado un nemotecnico";
+	private static final String SWAGGER_GET_PLAN_ACEPTADO_BY_NEMO = "Obtener los planes aceptados dado un nemotecnico";
+	private static final String SWAGGER_SAVE_PLAN_UPGRADE_BY_PRODUCT = "Registrar planes upgrades dado un producto";
+	private static final String SWAGGER_DELETE_PLAN_UPGRADE_BY_PRODUCT = "Eliminar plan upgrade dado un producto";
+	private static final String SWAGGER_UPDATE_PLAN_UPGRADE_BY_PRODUCT = "Actualizar plan upgrade dado un producto";
 
 	
 	@Autowired
@@ -1024,6 +1033,260 @@ public class ProductoController {
 		catch (Exception e) {
 			ProductoException ex = new ProductoException(e);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_delete_recargo_por_asegurado_by_product());
+			throw ex;
+		}
+
+		return ResponseEntity.ok(MSG_HTTP200);
+	}
+
+	@ApiOperation(value = SWAGGER_GET_PLAN_UPGRADE_BY_PRODUCT, notes = SWAGGER_GET_PLAN_UPGRADE_BY_PRODUCT)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/{id}/upgrade")
+	public ResponseEntity<List<PlanUpgradeDto>> getPlanUpgradeByProduct(@PathVariable("id") Long id) throws ProductoException,ResourceNotFoundException, ForbiddenException{
+		List<PlanUpgradeDto> lista=null;
+		try {
+			lista= productoService.getPlanUpgradeByProduct(id);
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_plan_upgrade_by_product());
+			throw e;
+		}
+		catch(ForbiddenException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_plan_upgrade_by_product());
+			throw e;
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_plan_upgrade_by_product());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_plan_upgrade_by_product());
+			throw ex;
+		}
+
+		return ResponseEntity.ok(lista);
+	}
+
+	@ApiOperation(value = SWAGGER_GET_PRODUCTO_BY_NEMO, notes = SWAGGER_GET_PRODUCTO_BY_NEMO)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/{id}/upgrade/uFilter/{uNemo}")
+	public ResponseEntity<List<ProdDto>> getProductByNemo(@PathVariable("id") Long id, @PathVariable("uNemo") String nemo) throws ProductoException,ResourceNotFoundException, ForbiddenException{
+		List<ProdDto> lista=null;
+		try {
+			lista= productoService.getProductByNemo(id,nemo);
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_product_by_nemo());
+			throw e;
+		}
+		catch(ForbiddenException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_product_by_nemo());
+			throw e;
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_product_by_nemo());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_product_by_nemo());
+			throw ex;
+		}
+
+		return ResponseEntity.ok(lista);
+	}
+
+	@ApiOperation(value = SWAGGER_GET_PLAN_UPGRADE_BY_PRODUCT, notes = SWAGGER_GET_PLAN_UPGRADE_BY_PRODUCT)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/{id}/upgrade/pFilter/{uNemo}/{pNemo}")
+	public ResponseEntity<List<ProdDto>> getPlanExistentesByProduct(@PathVariable("id") Long id, @PathVariable("uNemo") String nemoU, @PathVariable("pNemo") String nemoP) throws ProductoException,ResourceNotFoundException, ForbiddenException{
+		List<ProdDto> lista=null;
+		try {
+			lista= productoService.getPlanesExistentesByNemo(id,nemoU,nemoP);
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_plan_existente_by_nemo());
+			throw e;
+		}
+		catch(ForbiddenException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_plan_existente_by_nemo());
+			throw e;
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_plan_existente_by_nemo());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_plan_existente_by_nemo());
+			throw ex;
+		}
+
+		return ResponseEntity.ok(lista);
+	}
+
+	@ApiOperation(value = SWAGGER_GET_PLAN_UPGRADE_BY_PRODUCT, notes = SWAGGER_GET_PLAN_UPGRADE_BY_PRODUCT)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/{id}/upgrade/accepted/{uNemo}/{pNemo}")
+	public ResponseEntity<List<ProdDto>> getPlanAcceptedByProduct(@PathVariable("id") Long id, @PathVariable("uNemo") String nemoU, @PathVariable("pNemo") String nemoP) throws ProductoException,ResourceNotFoundException, ForbiddenException{
+		List<ProdDto> lista=null;
+		try {
+			lista= productoService.getPlanesAceptadosByNemo(id,nemoU,nemoP);
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_plan_aceptado_by_nemo());
+			throw e;
+		}
+		catch(ForbiddenException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_plan_aceptado_by_nemo());
+			throw e;
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_plan_aceptado_by_nemo());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_plan_aceptado_by_nemo());
+			throw ex;
+		}
+
+		return ResponseEntity.ok(lista);
+	}
+
+	@ApiOperation(value = SWAGGER_SAVE_RECARGO_POR_SEGURADO_BY_PRODUCT, notes = SWAGGER_SAVE_RECARGO_POR_SEGURADO_BY_PRODUCT)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@PostMapping("/{id}/upgrade")
+	public ResponseEntity<String> saveUpgradeByProduct(
+			@PathVariable("id") Long id,
+			@RequestBody @Valid List<PlanUpgradeDto> upgrades
+	) throws ProductoException,ResourceNotFoundException, ForbiddenException {
+		try {
+			productoService.saveUpgradeByProduct(id,upgrades);
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_save_plan_upgrade_by_product());
+			throw e;
+		}
+		catch(ForbiddenException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_save_plan_upgrade_by_product());
+			throw e;
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_save_plan_upgrade_by_product());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_save_plan_upgrade_by_product());
+			throw ex;
+		}
+		return ResponseEntity.ok(MSG_HTTP200);
+	}
+
+	@ApiOperation(value = SWAGGER_UPDATE_RECARGO_POR_SEGURADO_BY_PRODUCT, notes = SWAGGER_UPDATE_RECARGO_POR_SEGURADO_BY_PRODUCT)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@PutMapping("/{id}/upgrade/{idUpgrade}")
+	public ResponseEntity<String> updateUpgradeByProduct(
+			@PathVariable("id") Long idProducto,
+			@PathVariable("idUpgrade") Long idUpgrade,
+			@RequestBody @Valid PlanUpgradeDto upgrade
+	) throws ProductoException,ResourceNotFoundException, ForbiddenException {
+
+		try {
+			productoService.updateUpgradeByProduct(idProducto, idUpgrade, upgrade);
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_update_plan_upgrade_by_product());
+			throw e;
+		}
+		catch(ForbiddenException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_update_plan_upgrade_by_product());
+			throw e;
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_update_plan_upgrade_by_product());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_update_plan_upgrade_by_product());
+			throw ex;
+		}
+
+		return ResponseEntity.ok(MSG_HTTP200);
+	}
+
+
+	@ApiOperation(value = SWAGGER_DELETE_RECARGO_POR_SEGURADO_BY_PRODUCT, notes = SWAGGER_DELETE_RECARGO_POR_SEGURADO_BY_PRODUCT)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@DeleteMapping("/{id}/upgrade/{idUpgrade}")
+	public ResponseEntity<String> deleteUpgradeByProduct(
+			@PathVariable("id") Long idProducto,
+			@PathVariable("idUpgrade") Long idUpgrade
+	) throws ProductoException,ResourceNotFoundException, ForbiddenException {
+
+		try {
+			productoService.deleteUpgradeByProduct(idProducto,idUpgrade);
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_delete_plan_upgrade_by_product());
+			throw e;
+		}
+		catch(ForbiddenException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_delete_plan_upgrade_by_product());
+			throw e;
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_delete_plan_upgrade_by_product());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_delete_plan_upgrade_by_product());
 			throw ex;
 		}
 
