@@ -54,8 +54,8 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
                    });
             }else{
                 ProductoException exc = new ProductoException();
-                exc.setErrorMessage(VALUE_UNDEFINED + "existe");
-                exc.setDetail(VALUE_UNDEFINED + "existe");
+                exc.setErrorMessage(VALUE_UNDEFINED );
+                exc.setDetail(VALUE_UNDEFINED );
                 exc.setConcreteException(exc);
                 throw exc;
             }
@@ -92,8 +92,8 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
                     });
             }else{
                 ProductoException exc = new ProductoException();
-                exc.setErrorMessage(VALUE_UNDEFINED + "existe");
-                exc.setDetail(VALUE_UNDEFINED + "existe");
+                exc.setErrorMessage(VALUE_UNDEFINED );
+                exc.setDetail(VALUE_UNDEFINED );
                 exc.setConcreteException(exc);
                 throw exc;
             }
@@ -134,8 +134,8 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
                     });
             }else{
                 ProductoException exc = new ProductoException();
-                exc.setErrorMessage(VALUE_UNDEFINED + "existe");
-                exc.setDetail(VALUE_UNDEFINED + "existe");
+                exc.setErrorMessage(VALUE_UNDEFINED);
+                exc.setDetail(VALUE_UNDEFINED);
                 exc.setConcreteException(exc);
                 throw exc;
             }
@@ -158,8 +158,8 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
         try{
             StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);
             storedProcedureQuery.registerStoredProcedureParameter(ID_PRODUCTO, Long.class, ParameterMode.IN);
-            storedProcedureQuery.registerStoredProcedureParameter("nemoU", String.class, ParameterMode.IN);
-            storedProcedureQuery.registerStoredProcedureParameter("nemoP", String.class, ParameterMode.IN);
+            storedProcedureQuery.registerStoredProcedureParameter(NEMOU, String.class, ParameterMode.IN);
+            storedProcedureQuery.registerStoredProcedureParameter(NEMOP, String.class, ParameterMode.IN);
             storedProcedureQuery.setParameter(ID_PRODUCTO,id );
             storedProcedureQuery.setParameter(NEMOU,nemoU );
             storedProcedureQuery.setParameter(NEMOP,nemoP );
@@ -176,8 +176,8 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
                 });
             }else{
                 ProductoException exc = new ProductoException();
-                exc.setErrorMessage(VALUE_UNDEFINED + "existe");
-                exc.setDetail(VALUE_UNDEFINED + "existe");
+                exc.setErrorMessage(VALUE_UNDEFINED);
+                exc.setDetail(VALUE_UNDEFINED);
                 exc.setConcreteException(exc);
                 throw exc;
             }
