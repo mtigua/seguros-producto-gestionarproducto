@@ -22,14 +22,12 @@ public class CoberturaValidator implements ConstraintValidator<CoberturaConstrai
 	public static final String MENSAJE_ERROR_REQUIRED_MONTO_PRIMA= "El campo monto prima debe ser igual a 0";
 	public static final String MENSAJE_ERROR_REQUIRED_EDAD_MAXIMA_PERMANENCIA= "El campo edad lastima permanencia es requerido";
 	public static final String MENSAJE_ERROR_REQUIRED_POR_CAPITAL_ASEGURADO= "El campo porcentage es requerido";
-	public static final String MENSAJE_ERROR_REQUIRED_PARENTESCO= "El campo parentesco es requerido";
 
 	public static final String fieldNameValor_Cobertura= "cobertura";
 	public static final String fieldNameValorTipo= "tipoCobertura";
 	public static final String fieldNameValorMonto_Asegurado= "montoAsegurado";
 	public static final String fieldNameValor_EdadMaximaIngreso= "edadMaximaIngreso";
 	public static final String fieldNameValor_PorcentajeSobreCapitalAsegurado= "porcentajeSobreCapitalAsegurado";
-	public static final String fieldNameValor_Parentesco= "paraParentesco";
 	public static final String fieldNameValor_PrimaMinima= "primaMinima";
 	public static final String fieldNameValor_EdadMaximaPermanencia= "edadMaximaPermanencia";
 	public static final String fieldNameValor_Tasa= "tasa";
@@ -127,10 +125,6 @@ public class CoberturaValidator implements ConstraintValidator<CoberturaConstrai
 			}
 			if (coberturaDTO1.getPorcentajeSobreCapitalAsegurado() == null) {
 				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_POR_CAPITAL_ASEGURADO, fieldNameValor_PorcentajeSobreCapitalAsegurado);
-				return false;
-			}
-			if (coberturaDTO1.getParaParentesco() == null) {
-				customMessageForValidation(cxt, MENSAJE_ERROR_REQUIRED_PARENTESCO, fieldNameValor_Parentesco);
 				return false;
 			}
 		}
