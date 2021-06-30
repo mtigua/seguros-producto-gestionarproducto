@@ -71,12 +71,6 @@ public class ConceptoController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_concepto());
 			throw e;
 		}
-		catch (Exception e) {
-			ConceptoException ex = new ConceptoException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_concepto());
-			throw ex;
-		}		
-
 		return ResponseEntity.ok(lista);
 	}	
 	

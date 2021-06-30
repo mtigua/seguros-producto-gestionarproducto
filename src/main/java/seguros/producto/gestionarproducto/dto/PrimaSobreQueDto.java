@@ -14,6 +14,18 @@ public class PrimaSobreQueDto {
 		@NotBlank(message = "El campo nombre de la prima sobre es requerido")
 		private String nombre;
 		
-		private String descripcion;	
+		private String descripcion;
 
+		public PrimaSobreQueDto(Long id,String nombre,String descripcion) {
+			super();
+			this.id = id;
+			this.nombre = nombre;
+			this.descripcion = descripcion;
+		}
+
+		public PrimaSobreQueDto() {
+			super();
+		}	
+
+		
 }

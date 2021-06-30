@@ -70,12 +70,7 @@ public class TipoTraspasoController {
 		catch(TipoTraspasoException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_traspaso());
 			throw e;
-		}
-		catch (Exception e) {
-			TipoTraspasoException ex = new TipoTraspasoException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_traspaso());
-			throw ex;
-		}		
+		}	
 
 		return ResponseEntity.ok(lista);
 	}	

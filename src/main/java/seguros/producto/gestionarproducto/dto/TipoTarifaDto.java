@@ -14,7 +14,20 @@ public class TipoTarifaDto  {
 		@NotBlank(message = "El campo nombre de tipo de tarifa es requerido")
 		private String nombre;
 		
-		private String descripcion;	
+		private String descripcion;
+
+		public TipoTarifaDto(Long id, String nombre,
+				String descripcion) {
+			super();
+			this.id = id;
+			this.nombre = nombre;
+			this.descripcion = descripcion;
+		}
+
+		public TipoTarifaDto() {
+			super();
+		}	
 	
+		
     
 }

@@ -58,11 +58,6 @@ public class TipoCoberturaController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_cobertura());
 			throw e;
 		}
-		catch (Exception e) {
-			TipoCoberturaException ex = new TipoCoberturaException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_cobertura());
-			throw ex;
-		}		
 
 		return ResponseEntity.ok(lista);
 	}	

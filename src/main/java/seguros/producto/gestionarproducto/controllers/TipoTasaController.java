@@ -55,12 +55,6 @@ public class TipoTasaController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_tasa());
 			throw e;
 		}
-		catch (Exception e) {
-			TipoTasaException ex = new TipoTasaException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_tasa());
-			throw ex;
-		}		
-
 		return ResponseEntity.ok(lista);
 	}	
 	
