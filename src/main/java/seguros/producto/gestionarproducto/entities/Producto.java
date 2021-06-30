@@ -557,20 +557,20 @@ public class Producto  {
 				} );
 
 	}
-	
-	
+
+
 	@OneToMany( cascade = {CascadeType.PERSIST,CascadeType.MERGE}, orphanRemoval = true)
 	@JoinColumn(name = "producto_id")
 	private Set<DetallePromocion> detallePromociones;
-	
+
 	public void addDetallePromocion(DetallePromocion detallePromocion) {
         this.detallePromociones.add(detallePromocion);
     }
-	
+
 	public void removeDetallePromocion(DetallePromocion detallePromocion) {
 			this.detallePromociones.remove(detallePromocion);
 	}
-	
+
 	public void updateDetallePromocion(DetallePromocion detallePromocion) {
 		 this.detallePromociones.stream()
 				  .filter(t -> detallePromocion.getId().equals( t.getId() ) )
@@ -579,6 +579,28 @@ public class Producto  {
 					  t=detallePromocion;
 				  } );
 	}
-		
-	
+
+	@OneToMany( cascade = {CascadeType.PERSIST,CascadeType.MERGE}, orphanRemoval = true)
+	@JoinColumn(name = "plan_vigente")
+	private Set<PlanUpgrade> planUpgrade;
+
+	public void addPlanUpgrade(PlanUpgrade planUpgrade) {
+		this.planUpgrade.add(planUpgrade);
+	}
+
+	public void removePlanUpgrade(PlanUpgrade planUpgrade) {
+		this.planUpgrade.remove(planUpgrade);
+	}
+
+	public void updatePlanUpgrade(PlanUpgrade planUpgrade) {
+		this.planUpgrade.stream()
+				.filter(t -> planUpgrade.getId().equals( t.getId() ) )
+				.findFirst()
+				.ifPresent(t-> {
+					t=planUpgrade;
+
+				} );
+	}
+
+
 }

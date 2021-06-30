@@ -58,9 +58,17 @@ public class PropertiesMsg {
 	private String logger_error_executing_save_recargo_por_asegurado_by_product;
 	private String logger_error_executing_update_recargo_por_asegurado_by_product;
 	private String logger_error_executing_delete_recargo_por_asegurado_by_product;
-	
+
 	private String logger_error_executing_get_detallepromocion_by_product;
 	private String logger_error_executing_save_detallepromocion_by_product;
 	private String logger_error_executing_update_detallepromocion_by_product;
 	private String logger_error_executing_delete_detallepromocion_by_product;
+
+	private String logger_error_executing_get_plan_upgrade_by_product;
+	private String logger_error_executing_get_product_by_nemo;
+	private String logger_error_executing_get_plan_aceptado_by_nemo;
+	private String logger_error_executing_get_plan_existente_by_nemo;
+	private String logger_error_executing_save_plan_upgrade_by_product;
+	private String logger_error_executing_update_plan_upgrade_by_product;
+	private String logger_error_executing_delete_plan_upgrade_by_product;
 }
