@@ -60,7 +60,8 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
                         planUpgradeDto.setDiasRenuncia(Integer.valueOf( p[7].toString() ));
                         lista.add(planUpgradeDto);
                    });
-            }else{
+            }
+            if (record == null){
                 throw setException();
             }
         }catch(ProductoException e){
@@ -94,7 +95,8 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
                         prodDto.setNombre( p[2].toString() );
                         lista.add(prodDto);
                     });
-            }else{
+            }
+            if(record==null){
                 ProductoException exception = setException();
                 throw exception;
             }
@@ -138,7 +140,8 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
                         prodDto.setId(Long.valueOf( u[0].toString() ));
                         lista.add(prodDto);
                     });
-            }else{
+            }
+            if(recordSet == null){
                 ProductoException productoException = setException();
                 throw productoException;
             }

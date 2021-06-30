@@ -1759,13 +1759,9 @@ public class ProductoServiceImpl implements ProductoService {
 				throw esave;
 			}
 		}
-		catch(ResourceNotFoundException e) {
+		catch(ResourceNotFoundException | ForbiddenException e) {
 			throw e;
-		}
-		catch(ForbiddenException e) {
-			throw e;
-		}
-		catch(Exception e) {
+		} catch(Exception e) {
 			throw new ProductoException(e);
 		}
 
