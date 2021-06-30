@@ -55,12 +55,7 @@ public class ParentescoController {
 		catch(ParentescoException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_parentesco());
 			throw e;
-		}
-		catch (Exception e) {
-			ParentescoException ex = new ParentescoException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_parentesco());
-			throw ex;
-		}		
+		}	
 
 		return ResponseEntity.ok(lista);
 	}	

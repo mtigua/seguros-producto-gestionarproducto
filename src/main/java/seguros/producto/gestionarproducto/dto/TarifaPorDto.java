@@ -13,6 +13,20 @@ public class TarifaPorDto  {
 	@NotBlank(message = "El campo nombre de tarifa por es requerido")
 	private String nombre;
 	
-	private String descripcion;	  
+	private String descripcion;
+
+	public TarifaPorDto(Long id, String nombre,
+			String descripcion) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+	}
+
+	public TarifaPorDto() {
+		super();
+	}	  
+	
+	
     
 }

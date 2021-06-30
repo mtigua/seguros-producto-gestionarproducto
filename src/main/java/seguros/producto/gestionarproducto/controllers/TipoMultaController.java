@@ -68,11 +68,6 @@ public class TipoMultaController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_multa());
 			throw e;
 		}
-		catch (Exception e) {
-			TipoMultaException ex = new TipoMultaException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_multa());
-			throw ex;
-		}		
 
 		return ResponseEntity.ok(lista);
 	}	

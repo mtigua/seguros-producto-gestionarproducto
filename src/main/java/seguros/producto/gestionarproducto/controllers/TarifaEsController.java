@@ -55,11 +55,6 @@ public class TarifaEsController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_tarifa_es());
 			throw e;
 		}
-		catch (Exception e) {
-			TarifaEsException ex = new TarifaEsException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tarifa_es());
-			throw ex;
-		}		
 
 		return ResponseEntity.ok(lista);
 	}	

@@ -13,7 +13,20 @@ public class TarifaEsDto  {
 	@NotBlank(message = "El campo nombre de canal es requerido")
 	private String nombre;
 	
-	private String descripcion;	
+	private String descripcion;
+
+	public TarifaEsDto(Long id,String nombre,String descripcion) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+	}
+
+	public TarifaEsDto() {
+		super();
+	}	
+	
+	
 	
     
 }

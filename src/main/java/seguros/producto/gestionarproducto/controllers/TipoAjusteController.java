@@ -70,11 +70,6 @@ public class TipoAjusteController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_ajuste());
 			throw e;
 		}
-		catch (Exception e) {
-			TipoAjusteException ex = new TipoAjusteException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_ajuste());
-			throw ex;
-		}		
 
 		return ResponseEntity.ok(lista);
 	}	

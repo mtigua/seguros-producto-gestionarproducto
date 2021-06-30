@@ -56,12 +56,6 @@ public class PrimaSobreQueController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_prima_sobre_que());
 			throw e;
 		}
-		catch (Exception e) {
-			PrimaSobreQueException ex = new PrimaSobreQueException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_prima_sobre_que());
-			throw ex;
-		}		
-
 		return ResponseEntity.ok(lista);
 	}	
 	

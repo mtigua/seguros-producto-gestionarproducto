@@ -70,11 +70,6 @@ public class ModoTraspasoController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_modo_traspaso());
 			throw e;
 		}
-		catch (Exception e) {
-			ModoTraspasoException ex = new ModoTraspasoException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_modo_traspaso());
-			throw ex;
-		}		
 
 		return ResponseEntity.ok(lista);
 	}	
