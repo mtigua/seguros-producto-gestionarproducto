@@ -1068,6 +1068,7 @@ public class ProductoController {
 		}
 		catch(ProductoException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_plan_upgrade_by_product());
+			e.setDetail(propertiesMsg.getLogger_error_executing_get_plan_upgrade_by_product());
 			throw e;
 		}
 		catch (Exception e) {
@@ -1103,6 +1104,7 @@ public class ProductoController {
 		}
 		catch(ProductoException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_product_by_nemo());
+			e.setDetail(propertiesMsg.getLogger_error_executing_get_product_by_nemo());
 			throw e;
 		}
 		catch (Exception e) {
@@ -1114,7 +1116,7 @@ public class ProductoController {
 		return ResponseEntity.ok(lista);
 	}
 
-	@ApiOperation(value = SWAGGER_GET_PLAN_UPGRADE_BY_PRODUCT, notes = SWAGGER_GET_PLAN_UPGRADE_BY_PRODUCT)
+	@ApiOperation(value = SWAGGER_GET_PLAN_EXISTENTE_BY_NEMO, notes = SWAGGER_GET_PLAN_EXISTENTE_BY_NEMO)
 	@ApiResponses({
 			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
 			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
@@ -1138,6 +1140,7 @@ public class ProductoController {
 		}
 		catch(ProductoException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_plan_existente_by_nemo());
+			e.setDetail(propertiesMsg.getLogger_error_executing_get_plan_existente_by_nemo());
 			throw e;
 		}
 		catch (Exception e) {
@@ -1149,7 +1152,7 @@ public class ProductoController {
 		return ResponseEntity.ok(lista);
 	}
 
-	@ApiOperation(value = SWAGGER_GET_PLAN_UPGRADE_BY_PRODUCT, notes = SWAGGER_GET_PLAN_UPGRADE_BY_PRODUCT)
+	@ApiOperation(value = SWAGGER_GET_PLAN_ACEPTADO_BY_NEMO, notes = SWAGGER_GET_PLAN_ACEPTADO_BY_NEMO)
 	@ApiResponses({
 			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
 			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
@@ -1173,6 +1176,7 @@ public class ProductoController {
 		}
 		catch(ProductoException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_plan_aceptado_by_nemo());
+			e.setDetail(propertiesMsg.getLogger_error_executing_get_plan_aceptado_by_nemo());
 			throw e;
 		}
 		catch (Exception e) {
@@ -1184,7 +1188,7 @@ public class ProductoController {
 		return ResponseEntity.ok(lista);
 	}
 
-	@ApiOperation(value = SWAGGER_SAVE_RECARGO_POR_SEGURADO_BY_PRODUCT, notes = SWAGGER_SAVE_RECARGO_POR_SEGURADO_BY_PRODUCT)
+	@ApiOperation(value = SWAGGER_SAVE_PLAN_UPGRADE_BY_PRODUCT, notes = SWAGGER_SAVE_PLAN_UPGRADE_BY_PRODUCT)
 	@ApiResponses({
 			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
 			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
@@ -1220,7 +1224,7 @@ public class ProductoController {
 		return ResponseEntity.ok(MSG_HTTP200);
 	}
 
-	@ApiOperation(value = SWAGGER_UPDATE_RECARGO_POR_SEGURADO_BY_PRODUCT, notes = SWAGGER_UPDATE_RECARGO_POR_SEGURADO_BY_PRODUCT)
+	@ApiOperation(value = SWAGGER_UPDATE_PLAN_UPGRADE_BY_PRODUCT, notes = SWAGGER_UPDATE_PLAN_UPGRADE_BY_PRODUCT)
 	@ApiResponses({
 			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
 			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
@@ -1260,7 +1264,7 @@ public class ProductoController {
 	}
 
 
-	@ApiOperation(value = SWAGGER_DELETE_RECARGO_POR_SEGURADO_BY_PRODUCT, notes = SWAGGER_DELETE_RECARGO_POR_SEGURADO_BY_PRODUCT)
+	@ApiOperation(value = SWAGGER_DELETE_PLAN_UPGRADE_BY_PRODUCT, notes = SWAGGER_DELETE_PLAN_UPGRADE_BY_PRODUCT)
 	@ApiResponses({
 			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
 			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
