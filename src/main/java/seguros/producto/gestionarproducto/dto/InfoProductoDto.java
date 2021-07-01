@@ -10,8 +10,12 @@ public class InfoProductoDto  {
 	
 	    private Long id;
 	    
-	    private String compania;		
-		
+	    private String compania;
+
+	    private Long companiaId;
+
+	    private Long negocioId;
+
 		private String negocio;
 		
 		private String ramo;
