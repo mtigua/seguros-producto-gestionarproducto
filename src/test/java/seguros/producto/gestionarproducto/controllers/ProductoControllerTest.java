@@ -28,6 +28,7 @@ import seguros.producto.gestionarproducto.dto.TipoMultaDto;
 import seguros.producto.gestionarproducto.dto.TipoRamoDto;
 import seguros.producto.gestionarproducto.dto.TipoTasaDto;
 import seguros.producto.gestionarproducto.dto.TipoTramoDto;
+import seguros.producto.gestionarproducto.dto.TramoDto;
 import seguros.producto.gestionarproducto.dto.TramoListDto;
 import seguros.producto.gestionarproducto.exceptions.ForbiddenException;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
@@ -85,21 +86,80 @@ public class ProductoControllerTest {
 		 productoController.getTerminosCortosByProduct(1L);		 
 	}
 
-//	@Test
-//	public void testSaveTerminosCortosByProduct() {
-//		
-//		
-//	}
+	@Test
+	public void testSaveWhenOkTerminosCortosByProduct() {
+		Mockito.doNothing().when(productoService).saveTerminosCortosByProduct(1L, getListaTerminosCortosSaveDtoMock());		
+		ResponseEntity<String> response = productoController.saveTerminosCortosByProduct(1L, getListaTerminosCortosSaveDtoMock());
+		assertEquals(HttpStatus.OK, response.getStatusCode());		
+	}
+	
+	@Test(expected = ResourceNotFoundException.class)
+	public void testSaveWhenError404TerminosCortosByProduct() {
+		 Mockito.doThrow(ResourceNotFoundException.class).when(productoService).saveTerminosCortosByProduct(1L, getListaTerminosCortosSaveDtoMock());		
+		 productoController.saveTerminosCortosByProduct(1L, getListaTerminosCortosSaveDtoMock());		
+	}
+	
+	@Test(expected = ForbiddenException.class)
+	public void testSaveWhenError403TerminosCortosByProduct() {
+		 Mockito.doThrow(ForbiddenException.class).when(productoService).saveTerminosCortosByProduct(1L, getListaTerminosCortosSaveDtoMock());		
+		 productoController.saveTerminosCortosByProduct(1L, getListaTerminosCortosSaveDtoMock());			
+	}
+	
+	@Test(expected = ProductoException.class)
+	public void testSaveWhenError500TerminosCortosByProduct() {
+		 Mockito.doThrow(ProductoException.class).when(productoService).saveTerminosCortosByProduct(1L, getListaTerminosCortosSaveDtoMock());		
+		 productoController.saveTerminosCortosByProduct(1L, getListaTerminosCortosSaveDtoMock());			
+	}
 
-//	@Test
-//	public void testUpdateTerminosCortosByProduct() {
-//		fail("Not yet implemented");
-//	}
+	@Test
+	public void testUpdateWhenOkTerminosCortosByProduct() {
+		Mockito.doNothing().when(productoService).updateTerminosCortosByProduct(1L,1L, getListaTerminosCortosSaveDtoMock().get(0));		
+		ResponseEntity<String> response = productoController.updateTerminosCortosByProduct(1L,1L, getListaTerminosCortosSaveDtoMock().get(0));
+		assertEquals(HttpStatus.OK, response.getStatusCode());	
+	}
+	
+	@Test(expected = ResourceNotFoundException.class)
+	public void testUpdateWhenError404TerminosCortosByProduct() {
+		 Mockito.doThrow(ResourceNotFoundException.class).when(productoService).updateTerminosCortosByProduct(1L,1L, getListaTerminosCortosSaveDtoMock().get(0));		
+		 productoController.updateTerminosCortosByProduct(1L,1L, getListaTerminosCortosSaveDtoMock().get(0));	
+	}
+	
+	@Test(expected = ForbiddenException.class)
+	public void testUpdateWhenError403TerminosCortosByProduct() {
+		 Mockito.doThrow(ForbiddenException.class).when(productoService).updateTerminosCortosByProduct(1L,1L, getListaTerminosCortosSaveDtoMock().get(0));		
+		 productoController.updateTerminosCortosByProduct(1L,1L, getListaTerminosCortosSaveDtoMock().get(0));	
+	}
+	
+	@Test(expected = ProductoException.class)
+	public void testUpdateWhenError500TerminosCortosByProduct() {
+		 Mockito.doThrow(ProductoException.class).when(productoService).updateTerminosCortosByProduct(1L,1L, getListaTerminosCortosSaveDtoMock().get(0));		
+		 productoController.updateTerminosCortosByProduct(1L,1L, getListaTerminosCortosSaveDtoMock().get(0));	
+	}
 
-//	@Test
-//	public void testDeleteTerminosCortosByProduct() {
-//		fail("Not yet implemented");
-//	}
+	@Test
+	public void testDeleteWhenOkTerminosCortosByProduct() {
+		Mockito.doNothing().when(productoService).deleteTerminosCortosByProduct(1L,1L);		
+		ResponseEntity<String> response = productoController.deleteTerminosCortosByProduct(1L,1L);	
+		assertEquals(HttpStatus.OK, response.getStatusCode());	
+	}
+	
+	@Test(expected = ResourceNotFoundException.class)
+	public void testDeleteWhenError404TerminosCortosByProduct() {
+		 Mockito.doThrow(ResourceNotFoundException.class).when(productoService).deleteTerminosCortosByProduct(1L,1L);			
+		 productoController.deleteTerminosCortosByProduct(1L,1L);	
+	}
+	
+	@Test(expected = ForbiddenException.class)
+	public void testDeleteWhenError403TerminosCortosByProduct() {
+		 Mockito.doThrow(ForbiddenException.class).when(productoService).deleteTerminosCortosByProduct(1L,1L);			
+		 productoController.deleteTerminosCortosByProduct(1L,1L);	
+	}
+	
+	@Test(expected = ProductoException.class)
+	public void testDeleteWhenError500TerminosCortosByProduct() {
+		 Mockito.doThrow(ProductoException.class).when(productoService).deleteTerminosCortosByProduct(1L,1L);			
+		 productoController.deleteTerminosCortosByProduct(1L,1L);	
+	}
 
 	@Test
 	public void testWhenOkGetTramosByProduct() {
@@ -126,21 +186,89 @@ public class ProductoControllerTest {
 		 Mockito.when(productoService.getTramosByProduct(1L)).thenThrow(ProductoException.class);
 		 productoController.getTramosByProduct(1L);
 	}
-//
-//	@Test
-//	public void testSaveTramosByProduct() {
-//		fail("Not yet implemented");
-//	}
-//
-//	@Test
-//	public void testUpdateTramoByProduct() {
-//		fail("Not yet implemented");
-//	}
-//
-//	@Test
-//	public void testDeleteTramoByProductLongLong() {
-//		fail("Not yet implemented");
-//	}
+
+	@Test
+	public void testSaveWhenOkTramosByProduct() {
+		TramoDto tramoDto= createTramoDto( 1L, 2L,1L,1L, "PESA",new BigDecimal(10.10), new BigDecimal(20), new BigDecimal(50));		
+		Mockito.doNothing().when(productoService).saveTramosByProduct(1L, tramoDto, 1L);		
+		ResponseEntity<String> response = productoController.saveTramosByProduct(1L, tramoDto, 1L);
+		assertEquals(HttpStatus.OK, response.getStatusCode());	
+	}
+	
+	@Test(expected = ResourceNotFoundException.class)
+	public void testSaveWhenError404TramosByProduct() {
+		TramoDto tramoDto= createTramoDto( 1L, 2L,1L,1L, "PESA",new BigDecimal(10.10), new BigDecimal(20), new BigDecimal(50));		
+		Mockito.doThrow(ResourceNotFoundException.class).when(productoService).saveTramosByProduct(1L, tramoDto, 1L);		
+		productoController.saveTramosByProduct(1L, tramoDto, 1L);
+	}
+	
+	@Test(expected = ForbiddenException.class)
+	public void testSaveWhenError403TramosByProduct() {
+		TramoDto tramoDto= createTramoDto( 1L, 2L,1L,1L, "PESA",new BigDecimal(10.10), new BigDecimal(20), new BigDecimal(50));		
+		Mockito.doThrow(ForbiddenException.class).when(productoService).saveTramosByProduct(1L, tramoDto, 1L);		
+		productoController.saveTramosByProduct(1L, tramoDto, 1L);
+	}
+	
+	@Test(expected = ProductoException.class)
+	public void testSaveWhenError500TramosByProduct() {
+		TramoDto tramoDto= createTramoDto( 1L, 2L,1L,1L, "PESA",new BigDecimal(10.10), new BigDecimal(20), new BigDecimal(50));		
+		Mockito.doThrow(ProductoException.class).when(productoService).saveTramosByProduct(1L, tramoDto, 1L);		
+		productoController.saveTramosByProduct(1L, tramoDto, 1L);
+	}
+
+	@Test
+	public void testUpdateWhenOkTramoByProduct() {
+		TramoDto tramoDto= createTramoDto( 1L, 2L,1L,1L, "PESA",new BigDecimal(10.10), new BigDecimal(20), new BigDecimal(50));		
+		Mockito.doNothing().when(productoService).updateTramoByProduct(1L,1L, tramoDto, 1L);		
+		ResponseEntity<String> response = productoController.updateTramoByProduct(1L,1L, tramoDto, 1L);	
+		assertEquals(HttpStatus.OK, response.getStatusCode());	
+	}
+	
+	@Test(expected = ResourceNotFoundException.class)
+	public void testUpdateWhenError404TramoByProduct() {
+		TramoDto tramoDto= createTramoDto( 1L, 2L,1L,1L, "PESA",new BigDecimal(10.10), new BigDecimal(20), new BigDecimal(50));		
+		Mockito.doThrow(ResourceNotFoundException.class).when(productoService).updateTramoByProduct(1L,1L, tramoDto, 1L);		
+		productoController.updateTramoByProduct(1L,1L, tramoDto, 1L);
+	}
+	
+	@Test(expected = ProductoException.class)
+	public void testUpdateWhenError500TramoByProduct() {
+		TramoDto tramoDto= createTramoDto( 1L, 2L,1L,1L, "PESA",new BigDecimal(10.10), new BigDecimal(20), new BigDecimal(50));		
+		Mockito.doThrow(ProductoException.class).when(productoService).updateTramoByProduct(1L,1L, tramoDto, 1L);		
+		productoController.updateTramoByProduct(1L,1L, tramoDto, 1L);
+	}
+	
+	@Test(expected = ForbiddenException.class)
+	public void testUpdateWhenError403TramoByProduct() {
+		TramoDto tramoDto= createTramoDto( 1L, 2L,1L,1L, "PESA",new BigDecimal(10.10), new BigDecimal(20), new BigDecimal(50));		
+		Mockito.doThrow(ForbiddenException.class).when(productoService).updateTramoByProduct(1L,1L, tramoDto, 1L);		
+		productoController.updateTramoByProduct(1L,1L, tramoDto, 1L);
+	}
+
+	@Test
+	public void testDeleteWhenOkTramoByProductLongLong() {		
+		Mockito.doNothing().when(productoService).deleteTramoByProduct(1L,1L);		
+		ResponseEntity<String> response = productoController.deleteTramoByProduct(1L,1L);	
+		assertEquals(HttpStatus.OK, response.getStatusCode());	
+	}
+	
+	@Test(expected = ResourceNotFoundException.class)
+	public void testDeleteWhenError404TramoByProductLongLong() {		
+		Mockito.doThrow(ResourceNotFoundException.class).when(productoService).deleteTramoByProduct(1L,1L);		
+		productoController.deleteTramoByProduct(1L,1L);	
+	}
+	
+	@Test(expected = ForbiddenException.class)
+	public void testDeleteWhenError403TramoByProductLongLong() {		
+		Mockito.doThrow(ForbiddenException.class).when(productoService).deleteTramoByProduct(1L,1L);		
+		productoController.deleteTramoByProduct(1L,1L);	
+	}
+	
+	@Test(expected = ProductoException.class)
+	public void testDeleteWhenError500TramoByProductLongLong() {		
+		Mockito.doThrow(ProductoException.class).when(productoService).deleteTramoByProduct(1L,1L);		
+		productoController.deleteTramoByProduct(1L,1L);	
+	}
 
 	@Test
 	public void testWhenEmptyGetProductosPaginated() {
@@ -283,6 +411,22 @@ public class ProductoControllerTest {
 		tramoListDto.setTramoPara(tramoPara);		
 		
 		return tramoListDto;		
+		
+	}
+	
+	private TramoDto createTramoDto( Long tipoTasa, Long tipoTramo, Long tarifaEs, Long tramoPara, String moneda, BigDecimal valorDesde, BigDecimal valorHasta, BigDecimal valor) {
+		TramoDto tramoDto= new TramoDto();
+		tramoDto.setId(null);
+		tramoDto.setTarifaEs(tarifaEs);
+		tramoDto.setMoneda(moneda);
+		tramoDto.setTipoTasa(tipoTasa);
+		tramoDto.setTipoTramo(tipoTramo);
+		tramoDto.setValor(valor);
+		tramoDto.setValorDesde(valorDesde);
+		tramoDto.setValorHasta(valorHasta);
+		tramoDto.setTramoPara(tramoPara);		
+		
+		return tramoDto;		
 		
 	}
 	
