@@ -612,7 +612,7 @@ public class ProductoServiceImpl implements ProductoService {
 
 	}
 
-
+	
 	@Transactional
 	@Override
 	public void deleteTerminosCortosByProduct(Long idProducto, Long idTerminoCorto)	throws ProductoException, ResourceNotFoundException,ForbiddenException {
