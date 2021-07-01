@@ -1,4 +1,4 @@
-package seguros.producto.gestionarproducto;
+package seguros.producto.gestionarproducto.controllers;
 
 import static org.junit.Assert.*;
 
