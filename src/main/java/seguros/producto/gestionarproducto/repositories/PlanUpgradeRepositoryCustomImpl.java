@@ -157,14 +157,16 @@ public class PlanUpgradeRepositoryCustomImpl implements PlanUpgradeRepositoryCus
 
     @SuppressWarnings("unchecked")
     @Override
-    public void deletePlanUpgrade(Long id, Long idUpgrade) throws ProductoException {
+    public void deletePlanUpgrade(Long id, Long idUpgrade,String nemoP) throws ProductoException {
         String procedureName = propertiesSql.getELIMINAR_UPGRADES_POR_PRODUCTO();
         try{
             StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);
             storedProcedureQuery.registerStoredProcedureParameter(ID_PRODUCTO, Long.class, ParameterMode.IN);
             storedProcedureQuery.registerStoredProcedureParameter("idUpgrade", Long.class, ParameterMode.IN);
+            storedProcedureQuery.registerStoredProcedureParameter(NEMOP, String.class, ParameterMode.IN);
             storedProcedureQuery.setParameter(ID_PRODUCTO,id );
             storedProcedureQuery.setParameter("idUpgrade",idUpgrade );
+            storedProcedureQuery.setParameter(NEMOP,nemoP );
             storedProcedureQuery.execute();
         }catch(ProductoException e){
             throw e;

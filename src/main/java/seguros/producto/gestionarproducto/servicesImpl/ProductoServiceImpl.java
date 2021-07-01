@@ -1724,7 +1724,7 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public void saveUpgradeByProduct(Long id, List<PlanUpgradeDto> upgrades)
+	public void saveUpgradeByProduct(Long id, List<PlanUpgradeDto> upgrades,String nemoP)
 			throws ProductoException, ResourceNotFoundException,ForbiddenException {
 		try {
 			Optional<Producto> productoO= productoRepository.findById(id);
@@ -1732,7 +1732,7 @@ public class ProductoServiceImpl implements ProductoService {
 				Producto producto=productoO.get();
 				if(producto.getUpgrade()){
 					PlanUpgradeDto planUpgradeDto = upgrades.get(0);
-					planUpgradeRepository.deletePlanUpgrade(id,Long.valueOf(planUpgradeDto.getPlanUpgrade()));
+					planUpgradeRepository.deletePlanUpgrade(id,Long.valueOf(planUpgradeDto.getPlanUpgrade()),nemoP);
 					upgrades.stream().forEach(e->{
 						PlanUpgrade upgradeEntity= new PlanUpgrade();
 						upgradeEntity.setPlanUpgrade(Long.valueOf(e.getPlanUpgrade()));
