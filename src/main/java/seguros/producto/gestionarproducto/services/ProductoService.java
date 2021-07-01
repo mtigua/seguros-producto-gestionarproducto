@@ -52,7 +52,7 @@ public interface ProductoService {
     public List<ProdDto> getProductByNemo(Long id,String nemo) throws ProductoException,ResourceNotFoundException,ForbiddenException;
     public List<ProdDto> getPlanesExistentesByNemo(Long id,String nemoU, String nemoP) throws ProductoException,ResourceNotFoundException,ForbiddenException;
     public List<ProdDto> getPlanesAceptadosByNemo(Long id,String nemoU, String nemoP) throws ProductoException,ResourceNotFoundException,ForbiddenException;
-    public void saveUpgradeByProduct(Long id, List<PlanUpgradeDto> upgrades) throws ProductoException,ResourceNotFoundException,ForbiddenException;
+    public void saveUpgradeByProduct(Long id, List<PlanUpgradeDto> upgrades, String nemoP) throws ProductoException,ResourceNotFoundException,ForbiddenException;
     public void deleteUpgradeByProduct(Long idProducto,Long idUpgrade) throws ProductoException,ResourceNotFoundException,ForbiddenException;
     public void updateUpgradeByProduct(Long id, Long idUpgrade, PlanUpgradeDto planUpgradeDto) throws ProductoException,ResourceNotFoundException,ForbiddenException;
 }

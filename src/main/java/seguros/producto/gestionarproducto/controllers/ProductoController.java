@@ -1145,13 +1145,14 @@ public class ProductoController {
 			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
-	@PostMapping("/{id}/upgrade")
+	@PostMapping("/{id}/upgrade/{pNemo}")
 	public ResponseEntity<String> saveUpgradeByProduct(
 			@PathVariable("id") Long id,
+			@PathVariable("pNemo") String nemoP,
 			@RequestBody @Valid List<PlanUpgradeDto> upgrades
 	) throws ProductoException,ResourceNotFoundException, ForbiddenException {
 		try {
-			productoService.saveUpgradeByProduct(id,upgrades);
+			productoService.saveUpgradeByProduct(id,upgrades,nemoP);
 		}
 		catch(ResourceNotFoundException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_save_plan_upgrade_by_product());
