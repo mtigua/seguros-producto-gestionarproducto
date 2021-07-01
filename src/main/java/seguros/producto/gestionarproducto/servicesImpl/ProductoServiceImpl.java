@@ -1159,19 +1159,10 @@ public class ProductoServiceImpl implements ProductoService {
 			if(productoO.isPresent() && tramoO.isPresent() && coberturaProducto1.isPresent()) {
 				Producto producto=productoO.get();
 				CoberturaProducto coberturaProducto = coberturaProducto1.get();
-				TipoTarifa tipotarifa=producto.getTipoTarifa();
 
-				if(tipotarifa!=null && tipotarifa.getId()==1) {
-						TramoCobertura tramo = tramoO.get();
-						coberturaProducto.removeTramoCobertura(tramo);
-						productoRepository.save(producto);
-				} else {
-					ForbiddenException fe24 = new ForbiddenException();
-					fe24.setConcreteException(fe24);
-					fe24.setErrorMessage(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
-					fe24.setDetail(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
-					throw fe24;
-				}
+				TramoCobertura tramo = tramoO.get();
+				coberturaProducto.removeTramoCobertura(tramo);
+				productoRepository.save(producto);
 
 			} else {
 				ResourceNotFoundException edeletetramo24 = new ResourceNotFoundException();
