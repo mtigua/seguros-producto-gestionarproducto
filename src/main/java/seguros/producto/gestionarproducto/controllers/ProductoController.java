@@ -237,11 +237,6 @@ public class ProductoController {
 		catch(ProductoException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
 			throw e;
-		}
-		catch (Exception e) {
-			ProductoException ex = new ProductoException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
-			throw ex;
 		}		
 
 		return ResponseEntity.ok(pageProductoDto);
@@ -300,12 +295,7 @@ public class ProductoController {
 		catch(ProductoException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_terminos_corto_by_product());
 			throw e;
-		}
-		catch (Exception e) {
-			ProductoException ex = new ProductoException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_terminos_corto_by_product());
-			throw ex;
-		}		
+		}	
 
 		return ResponseEntity.ok(lista);
 	}
@@ -338,12 +328,7 @@ public class ProductoController {
 		catch(ProductoException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_save_terminos_corto_by_product());
 			throw e;
-		}
-		catch (Exception e) {
-			ProductoException ex = new ProductoException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_save_terminos_corto_by_product());
-			throw ex;
-		}		
+		}	
 
 		return ResponseEntity.ok(MSG_HTTP200);
 	}
@@ -377,12 +362,7 @@ public class ProductoController {
 		catch(ProductoException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_update_terminos_corto_by_product());
 			throw e;
-		}
-		catch (Exception e) {
-			ProductoException ex = new ProductoException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_update_terminos_corto_by_product());
-			throw ex;
-		}		
+		}	
 
 		return ResponseEntity.ok(MSG_HTTP200);
 	}
@@ -416,12 +396,7 @@ public class ProductoController {
 		catch(ProductoException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_delete_terminos_corto_by_product());
 			throw e;
-		}
-		catch (Exception e) {
-			ProductoException ex = new ProductoException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_delete_terminos_corto_by_product());
-			throw ex;
-		}		
+		}	
 
 		return ResponseEntity.ok(MSG_HTTP200);
 	}
@@ -449,12 +424,7 @@ public class ProductoController {
 		catch(ProductoException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_info_producto());
 			throw e;
-		}
-		catch (Exception e) {
-			ProductoException ex = new ProductoException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_info_producto());
-			throw ex;
-		}		
+		}	
 
 		return ResponseEntity.ok(infoProductoDto);
 	}
@@ -515,11 +485,6 @@ public class ProductoController {
 		catch(ProductoException productException1) {
 			productException1.setSubject(propertiesMsg.getLogger_error_executing_get_tramo_by_product());
 			throw productException1;
-		}
-		catch (Exception exceptionTramo2) {
-			ProductoException ex = new ProductoException(exceptionTramo2);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tramo_by_product());
-			throw ex;
 		}
 
 		return ResponseEntity.ok(lista);
@@ -591,11 +556,6 @@ public class ProductoController {
 		catch(ProductoException exceptionProductoError) {
 			exceptionProductoError.setSubject(propertiesMsg.getLogger_error_executing_save_tramo_by_product());
 			throw exceptionProductoError;
-		}
-		catch (Exception exception8) {
-			ProductoException ex = new ProductoException(exception8);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_save_tramo_by_product());
-			throw ex;
 		}
 
 		return ResponseEntity.ok(MSG_HTTP200);
@@ -752,12 +712,6 @@ public class ProductoController {
 			e15.setSubject(propertiesMsg.getLogger_error_executing_delete_tramo_by_product());
 			throw e15;
 		}
-		catch (Exception e16) {
-			ProductoException ex = new ProductoException(e16);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_delete_tramo_by_product());
-			throw ex;
-		}
-
 		return ResponseEntity.ok(MSG_HTTP200);
 	}
 
