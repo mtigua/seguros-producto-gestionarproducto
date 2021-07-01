@@ -632,11 +632,6 @@ public class ProductoController {
 			productoException11.setSubject(propertiesMsg.getLogger_error_executing_update_tramo_by_product());
 			throw productoException11;
 		}
-		catch (Exception exception11) {
-			ProductoException ex = new ProductoException(exception11);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_update_tramo_by_product());
-			throw ex;
-		}
 
 		return ResponseEntity.ok(MSG_HTTP200);
 	}
