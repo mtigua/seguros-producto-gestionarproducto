@@ -169,6 +169,7 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 			
 			if(record!=null) {
 				if(!record.isEmpty()) {
+					infoProductoDto.setId(Long.valueOf(record.get(0)[0].toString()));
 					infoProductoDto.setNemotecnico( record.get(0)[1].toString() );
 					infoProductoDto.setCompania( record.get(0)[2].toString() );
 					infoProductoDto.setNegocio( record.get(0)[3].toString() );
@@ -179,7 +180,12 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 					tipoRamo.setNombre( record.get(0)[6].toString()  );
 					tipoRamo.setId( Long.valueOf(record.get(0)[7].toString() ) );
 					
+					TipoPromocionDto tipoPromocion = new TipoPromocionDto();
+					tipoPromocion.setNombre(record.get(0)[10].toString() );
+					tipoPromocion.setId(record.get(0)[11]!=null?Long.valueOf(record.get(0)[11].toString()) : null );
+					
 					infoProductoDto.setTipoRamo(tipoRamo);
+					infoProductoDto.setTipoPromocion(tipoPromocion);
 				}
 			}
        }

@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.transaction.Transactional;
 
@@ -16,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
 
 import seguros.producto.gestionarproducto.configuration.Properties;
 import seguros.producto.gestionarproducto.dto.ActionType;
@@ -30,7 +32,6 @@ import seguros.producto.gestionarproducto.dto.InfoProductoDto;
 import seguros.producto.gestionarproducto.dto.OrdenCoberturaDTO;
 import seguros.producto.gestionarproducto.dto.PageProductoDto;
 import seguros.producto.gestionarproducto.dto.PrimaSobreQueDto;
-import seguros.producto.gestionarproducto.dto.ProductoDetallePromocionDto;
 import seguros.producto.gestionarproducto.dto.ProductoDoDto;
 import seguros.producto.gestionarproducto.dto.ProductoDto;
 import seguros.producto.gestionarproducto.dto.RecargoPorAseguradoDto;
@@ -1771,25 +1772,18 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public ProductoDetallePromocionDto getDetallePromocionByProduct(Long id) throws ProductoException,ResourceNotFoundException,ForbiddenException {
-		ProductoDetallePromocionDto productoDetallePromocionDto = null;
-		List<DetallePromocionListDto> detallePromocionesDto;
+	public List<DetallePromocionListDto> getDetallePromocionesByProduct(Long id) throws ProductoException,ResourceNotFoundException,ForbiddenException {
+		List<DetallePromocionListDto> detallePromocionesDto = null;
 		
 		try {
 			Optional<Producto> productoOp= productoRepository.findById(id);
 			if(productoOp.isPresent()) {
 				Producto producto=productoOp.get();
-				productoDetallePromocionDto = new ProductoDetallePromocionDto();
-				productoDetallePromocionDto.setId(producto.getId());
 
-				if (producto.getTipoPromocion() != null) { 
-					TipoPromocionDto tipoPromocionDto = new TipoPromocionDto();
-					BeanUtils.copyProperties(producto.getTipoPromocion(),tipoPromocionDto);
-				}
+				List<DetallePromocion> detallePromociones = producto.getDetallePromociones().stream()
+						  .filter(t -> producto.getTipoPromocion().getId().equals( t.getTipoPromocion().getId())).collect(Collectors.toList());
 				
-				Set<DetallePromocion>  detallePromociones  = producto.getDetallePromociones();
-				
-				detallePromocionesDto=detallePromociones.stream().map(detalle->{
+				detallePromocionesDto = detallePromociones.stream().map(detalle->{
 					DetallePromocionListDto detallePromocionDto = new DetallePromocionListDto();
 					BeanUtils.copyProperties(detalle, detallePromocionDto);
 					
@@ -1800,11 +1794,7 @@ public class ProductoServiceImpl implements ProductoService {
 					}
 					
 					return detallePromocionDto;
-					
 				}).collect(Collectors.toList());
-				
-				productoDetallePromocionDto.setDetallePromociones(detallePromocionesDto);
-				
 				
 			}
 			else {
@@ -1819,7 +1809,7 @@ public class ProductoServiceImpl implements ProductoService {
 			throw new ProductoException(eg);
 		}
 		
-		return productoDetallePromocionDto;
+		return detallePromocionesDto;
 	 }
 
 	@Transactional
@@ -1830,18 +1820,40 @@ public class ProductoServiceImpl implements ProductoService {
 			Optional<Producto> productoOp= productoRepository.findById(id);
 			if(productoOp.isPresent()) {
 				Producto producto=productoOp.get();
-				DetallePromocion detallePromocion = new DetallePromocion();
-				BeanUtils.copyProperties(detallePromocionDto, detallePromocion);
 				
-				TipoPromocion tipoPromocion = null;
-				if (detallePromocionDto.getIdTipoPromocion()!=null) {
-					tipoPromocion = tipoPromocionRepository.getOne(detallePromocionDto.getIdTipoPromocion());
-					if (tipoPromocion!=null) {
-						detallePromocion.setTipoPromocion(tipoPromocion);
+				// Se buscan si hay promociones que no correspondan al tipo de promocion actual, si existen son eliminadas 
+				
+				List<DetallePromocion> detallePromocionesToDel = producto.getDetallePromociones().stream()
+				  .filter(t -> !producto.getTipoPromocion().getId().equals( t.getTipoPromocion().getId())).collect(Collectors.toList());
+				detallePromocionesToDel.forEach((detalle) ->{
+					producto.removeDetallePromocion(detalle);
+				});
+						 
+				
+					
+				Optional<DetallePromocion> detallePromoOp = producto.getDetallePromociones().stream()
+				  .filter(t -> detallePromocionDto.getIdProductoEnPromocion()!=null && detallePromocionDto.getIdProductoEnPromocion().equals( t.getIdProductoEnPromocion() ) )
+				  .findFirst();
+				
+				if (detallePromoOp.isPresent()) {
+					DetallePromocion detallePromocion = detallePromoOp.get();
+					detallePromocion.setDespachoADomicilio(detallePromocionDto.getDespachoADomicilio());
+					detallePromocion.setEntregaEnTienda(detallePromocionDto.getEntregaEnTienda());
+					producto.updateDetallePromocion(detallePromocion);
+				}
+				else {
+					DetallePromocion detallePromocion = new DetallePromocion();
+					BeanUtils.copyProperties(detallePromocionDto, detallePromocion);
+					TipoPromocion tipoPromocion = null;
+					if (detallePromocionDto.getIdTipoPromocion()!=null) {
+						tipoPromocion = tipoPromocionRepository.getOne(detallePromocionDto.getIdTipoPromocion());
+						if (tipoPromocion!=null) {
+							detallePromocion.setTipoPromocion(tipoPromocion);
+						}
 					}
+					producto.addDetallePromocion(detallePromocion);
 				}
 				
-				producto.addDetallePromocion(detallePromocion);
 				productoRepository.save(producto);
 			}
 			else {

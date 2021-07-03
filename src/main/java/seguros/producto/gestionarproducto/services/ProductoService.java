@@ -43,7 +43,7 @@ public interface ProductoService {
     public void deleteRecargoPorAseguradoByProduct(Long idProducto,Long idRecargoPorAsegurado) throws ProductoException,ResourceNotFoundException,ForbiddenException;
     public void updateRecargoPorAseguradoByProduct(Long id, Long idRecargoPorAsegurado, RecargoPorAseguradoDto recargoPorAsegurado) throws ProductoException,ResourceNotFoundException,ForbiddenException;
     
-    public ProductoDetallePromocionDto getDetallePromocionByProduct(Long id) throws ProductoException,ResourceNotFoundException,ForbiddenException;
+    public List<DetallePromocionListDto> getDetallePromocionesByProduct(Long id) throws ProductoException,ResourceNotFoundException,ForbiddenException;
     public void saveDetallePromocionByProduct(Long id, DetallePromocionDto detallePromocionDto) throws ProductoException,ResourceNotFoundException,ForbiddenException;
 	public void updateDetallePromocionByProduct(Long idProducto, Long idDetallePromocion, DetallePromocionDto detallePromocionDto) throws ProductoException, ResourceNotFoundException,ForbiddenException;
 	public void deleteDetallePromocionByProduct(Long idProducto, Long idDetallePromocion) throws ProductoException, ResourceNotFoundException,ForbiddenException;

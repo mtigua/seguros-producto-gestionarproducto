@@ -7,11 +7,11 @@ import lombok.Data;
 public class DetallePromocionListDto {
 	private Long id;	
     private TipoPromocionDto tipoPromocion;	
-	private Long idPromocionProducto;
 	private Integer montoGiftCard;
 	private Integer cuotasDesde;
 	private Integer cuotasHasta;
 	private Integer tramoPuntos;
+	private Long idProductoEnPromocion;
 	private Boolean despachoADomicilio;
 	private Boolean entregaEnTienda;
 }

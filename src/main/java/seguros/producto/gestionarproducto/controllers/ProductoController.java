@@ -32,7 +32,6 @@ import seguros.producto.gestionarproducto.dto.CoberturaProductoDto;
 import seguros.producto.gestionarproducto.dto.EstadoProductoDto;
 import seguros.producto.gestionarproducto.dto.InfoProductoDto;
 import seguros.producto.gestionarproducto.dto.PageProductoDto;
-import seguros.producto.gestionarproducto.dto.ProductoDetallePromocionDto;
 import seguros.producto.gestionarproducto.dto.ProductoDto;
 import seguros.producto.gestionarproducto.dto.TerminoCortoDto;
 import seguros.producto.gestionarproducto.dto.TerminoCortoSaveDto;
@@ -45,6 +44,7 @@ import seguros.producto.gestionarproducto.dto.CoberturaProductoCorrelativoDto;
 import seguros.producto.gestionarproducto.dto.TipoIvaDTO;
 import seguros.producto.gestionarproducto.dto.DeducibleDTO;
 import seguros.producto.gestionarproducto.dto.DetallePromocionDto;
+import seguros.producto.gestionarproducto.dto.DetallePromocionListDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
 import seguros.producto.gestionarproducto.exceptions.ForbiddenException;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
@@ -1046,10 +1046,10 @@ public class ProductoController {
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/{id}/detallepromocion")
-	public ResponseEntity<ProductoDetallePromocionDto> getDetallePromocionByProduct(@PathVariable("id") Long id) throws ProductoException,ResourceNotFoundException,ForbiddenException{
-		ProductoDetallePromocionDto productoDetallePromocionDto=null;
+	public ResponseEntity<List<DetallePromocionListDto>> getDetallePromocionByProduct(@PathVariable("id") Long id) throws ProductoException,ResourceNotFoundException,ForbiddenException{
+		List<DetallePromocionListDto> lista=null;
 		try {
-			productoDetallePromocionDto = productoService.getDetallePromocionByProduct(id);
+			lista = productoService.getDetallePromocionesByProduct(id);
 		}
 		catch(ForbiddenException forbiddenDetallePromoGet) {
 			forbiddenDetallePromoGet.setSubject(propertiesMsg.getLogger_error_executing_get_detallepromocion_by_product());
@@ -1068,7 +1068,7 @@ public class ProductoController {
 			ex.setSubject(propertiesMsg.getLogger_error_executing_get_detallepromocion_by_product());
 			throw ex;
 		}
-		return ResponseEntity.ok(productoDetallePromocionDto);
+		return ResponseEntity.ok(lista);
 	}
 
 	@ApiOperation(value = SWAGGER_SAVE_DETALLE_PROMOCION_BY_PRODUCT, notes = SWAGGER_SAVE_DETALLE_PROMOCION_BY_PRODUCT)
