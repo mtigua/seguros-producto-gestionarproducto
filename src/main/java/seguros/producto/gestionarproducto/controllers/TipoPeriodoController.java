@@ -72,11 +72,6 @@ public class TipoPeriodoController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_periodo());
 			throw e;
 		}
-		catch (Exception e) {
-			TipoPeriodoException ex = new TipoPeriodoException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_periodo());
-			throw ex;
-		}		
 
 		return ResponseEntity.ok(lista);
 	}	

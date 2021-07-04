@@ -71,12 +71,7 @@ public class DestinoVentaController {
 		catch(DestinoVentaException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_destino_venta());
 			throw e;
-		}
-		catch (Exception e) {
-			DestinoVentaException ex = new DestinoVentaException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_destino_venta());
-			throw ex;
-		}		
+		}	
 
 		return ResponseEntity.ok(lista);
 	}	

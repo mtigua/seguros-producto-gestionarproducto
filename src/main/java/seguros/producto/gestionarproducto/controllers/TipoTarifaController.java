@@ -72,11 +72,6 @@ public class TipoTarifaController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_tarifa());
 			throw e;
 		}
-		catch (Exception e) {
-			TipoTarifaException ex = new TipoTarifaException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_tarifa());
-			throw ex;
-		}		
 
 		return ResponseEntity.ok(lista);
 	}	

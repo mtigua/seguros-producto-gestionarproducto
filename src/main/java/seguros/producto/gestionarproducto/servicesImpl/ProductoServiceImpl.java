@@ -35,6 +35,8 @@ import seguros.producto.gestionarproducto.dto.PrimaSobreQueDto;
 import seguros.producto.gestionarproducto.dto.ProductoDoDto;
 import seguros.producto.gestionarproducto.dto.ProductoDto;
 import seguros.producto.gestionarproducto.dto.RecargoPorAseguradoDto;
+import seguros.producto.gestionarproducto.dto.PlanUpgradeDto;
+import seguros.producto.gestionarproducto.dto.ProdDto;
 import seguros.producto.gestionarproducto.dto.State;
 import seguros.producto.gestionarproducto.dto.TarifaEsDto;
 import seguros.producto.gestionarproducto.dto.TerminoCortoDto;
@@ -58,6 +60,7 @@ import seguros.producto.gestionarproducto.entities.PrimaSobreQue;
 import seguros.producto.gestionarproducto.entities.Producto;
 import seguros.producto.gestionarproducto.entities.ProductoDo;
 import seguros.producto.gestionarproducto.entities.RecargoPorAsegurado;
+import seguros.producto.gestionarproducto.entities.PlanUpgrade;
 import seguros.producto.gestionarproducto.entities.TarifaEs;
 import seguros.producto.gestionarproducto.entities.TarifaPor;
 import seguros.producto.gestionarproducto.entities.TerminoCorto;
@@ -86,6 +89,7 @@ import seguros.producto.gestionarproducto.repositories.ParentescoRepository;
 import seguros.producto.gestionarproducto.repositories.PrimaSobreQueRepository;
 import seguros.producto.gestionarproducto.repositories.ProductoRepository;
 import seguros.producto.gestionarproducto.repositories.RecargoPorAseguradoRepository;
+import seguros.producto.gestionarproducto.repositories.PlanUpgradeRepository;
 import seguros.producto.gestionarproducto.repositories.TarifaEsRepository;
 import seguros.producto.gestionarproducto.repositories.TarifaPorRepository;
 import seguros.producto.gestionarproducto.repositories.TerminoCortoRepository;
@@ -117,6 +121,7 @@ public class ProductoServiceImpl implements ProductoService {
 	private static final String MSG_FORBIDDEN_TRAMOS_BY_PRODUCT = "No est\u00E1 permitido la administraci\u00F3n de tramos para este producto";
 	private static final String MSG_FORBIDDEN_TERMINOS_CORTOS_BY_PRODUCT = "No est\u00E1 permitido la administraci\u00F3n de t\u00E9rminos cortos para este producto";
 	private static final String MSG_FORBIDDEN_RECARGO_POR_ASEGURADO_BY_PRODUCT = "No est\u00E1 permitido la administraci\u00F3n de recargo por asegurado para este producto";
+	private static final String MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT = "No est\u00E1 permitido la administraci\u00F3n de upgrade para este producto";
 	private static final String MSG_FORBIDDEN_COBERTURA_POR_ASEGURADO_BY_PRODUCT = "No est\u00E1 permitido la creación de una misma cobertura, intente con otro";
 	private static final String MSG_FORBIDDEN_ERROR_REGISTER = "Error en el registro";
 	private static final String MSG_FORBIDDEN_NEMOTECNICO_EN_USO = "El nemot\u00E9cnico ya esta en uso";
@@ -193,6 +198,9 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Autowired
 	private RecargoPorAseguradoRepository recargoPorAseguradoRepository;
+
+	@Autowired
+	private PlanUpgradeRepository planUpgradeRepository;
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -605,7 +613,7 @@ public class ProductoServiceImpl implements ProductoService {
 
 	}
 
-
+	
 	@Transactional
 	@Override
 	public void deleteTerminosCortosByProduct(Long idProducto, Long idTerminoCorto)	throws ProductoException, ResourceNotFoundException,ForbiddenException {
@@ -1152,19 +1160,10 @@ public class ProductoServiceImpl implements ProductoService {
 			if(productoO.isPresent() && tramoO.isPresent() && coberturaProducto1.isPresent()) {
 				Producto producto=productoO.get();
 				CoberturaProducto coberturaProducto = coberturaProducto1.get();
-				TipoTarifa tipotarifa=producto.getTipoTarifa();
 
-				if(tipotarifa!=null && tipotarifa.getId()==1) {
-						TramoCobertura tramo = tramoO.get();
-						coberturaProducto.removeTramoCobertura(tramo);
-						productoRepository.save(producto);
-				} else {
-					ForbiddenException fe24 = new ForbiddenException();
-					fe24.setConcreteException(fe24);
-					fe24.setErrorMessage(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
-					fe24.setDetail(MSG_FORBIDDEN_TRAMOS_BY_PRODUCT);
-					throw fe24;
-				}
+				TramoCobertura tramo = tramoO.get();
+				coberturaProducto.removeTramoCobertura(tramo);
+				productoRepository.save(producto);
 
 			} else {
 				ResourceNotFoundException edeletetramo24 = new ResourceNotFoundException();
@@ -1537,12 +1536,12 @@ public class ProductoServiceImpl implements ProductoService {
 
 					productoRepository.save(producto);
 				}
-				else {
-					ResourceNotFoundException edelete = new ResourceNotFoundException();
-					edelete.setConcreteException(edelete);
-					edelete.setErrorMessage(MSG_NOT_FOUND);
-					edelete.setDetail(MSG_NOT_FOUND);
-					throw edelete;
+				else{
+					ForbiddenException fe = new ForbiddenException();
+					fe.setConcreteException(fe);
+					fe.setErrorMessage(MSG_FORBIDDEN_RECARGO_POR_ASEGURADO_BY_PRODUCT);
+					fe.setDetail(MSG_FORBIDDEN_RECARGO_POR_ASEGURADO_BY_PRODUCT);
+					throw fe;
 				}
 
 			}
@@ -1562,6 +1561,282 @@ public class ProductoServiceImpl implements ProductoService {
 
 
 	}
+
+	@Transactional
+	@Override
+	public List<PlanUpgradeDto> getPlanUpgradeByProduct(Long id) throws ProductoException,ResourceNotFoundException,ForbiddenException {
+		List<PlanUpgradeDto> lista= new ArrayList<>();
+		try {
+			Optional<Producto> productoO= productoRepository.findById(id);
+			if(productoO.isPresent()) {
+				Producto producto=productoO.get();
+				if(producto.getUpgrade()){
+					lista = planUpgradeRepository.getPlanUpgrade(id);
+				}else{
+					ForbiddenException fe = new ForbiddenException();
+					fe.setConcreteException(fe);
+					fe.setErrorMessage(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
+					fe.setDetail(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
+					throw fe;
+				}
+			}
+			else {
+				ResourceNotFoundException et = new ResourceNotFoundException();
+				et.setConcreteException(et);
+				et.setErrorMessage(MSG_NOT_FOUND);
+				et.setDetail(MSG_NOT_FOUND);
+				throw et;
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(ForbiddenException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+		return lista;
+	}
+
+	@Transactional
+	@Override
+	public List<ProdDto> getProductByNemo(Long id,String nemo) throws ProductoException,ResourceNotFoundException,ForbiddenException {
+		List<ProdDto> lista= new ArrayList<>();
+		try {
+			Optional<Producto> productoO= productoRepository.findById(id);
+			if(productoO.isPresent()) {
+				Producto producto=productoO.get();
+				if(producto.getUpgrade()){
+					lista = planUpgradeRepository.getProductoPorNemotecnico(nemo);
+				}else{
+					ForbiddenException fe = new ForbiddenException();
+					fe.setConcreteException(fe);
+					fe.setErrorMessage(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
+					fe.setDetail(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
+					throw fe;
+				}
+			}
+			else {
+				ResourceNotFoundException et = new ResourceNotFoundException();
+				et.setConcreteException(et);
+				et.setErrorMessage(MSG_NOT_FOUND);
+				et.setDetail(MSG_NOT_FOUND);
+				throw et;
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(ForbiddenException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+		return lista;
+	}
+
+	@Transactional
+	@Override
+	public List<ProdDto> getPlanesExistentesByNemo(Long id,String nemoU, String nemoP) throws ProductoException,ResourceNotFoundException,ForbiddenException {
+		List<ProdDto> lista= new ArrayList<>();
+		try {
+			Optional<Producto> productoO= productoRepository.findById(id);
+			if(productoO.isPresent()) {
+				Producto producto=productoO.get();
+				if(producto.getUpgrade()){
+					lista = planUpgradeRepository.getPlanesExistentesOAceptadosPorNemotecnico(id,nemoU,nemoP,false);
+				}else{
+					ForbiddenException fe = new ForbiddenException();
+					fe.setConcreteException(fe);
+					fe.setErrorMessage(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
+					fe.setDetail(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
+					throw fe;
+				}
+			}
+			else {
+				ResourceNotFoundException et = new ResourceNotFoundException();
+				et.setConcreteException(et);
+				et.setErrorMessage(MSG_NOT_FOUND);
+				et.setDetail(MSG_NOT_FOUND);
+				throw et;
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(ForbiddenException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+		return lista;
+	}
+
+	@Transactional
+	@Override
+	public List<ProdDto> getPlanesAceptadosByNemo(Long id,String nemoU, String nemoP) throws ProductoException,ResourceNotFoundException,ForbiddenException {
+		List<ProdDto> lista= new ArrayList<>();
+		try {
+			Optional<Producto> productoO= productoRepository.findById(id);
+			if(productoO.isPresent()) {
+				Producto producto=productoO.get();
+				if(producto.getUpgrade()){
+					lista = planUpgradeRepository.getPlanesExistentesOAceptadosPorNemotecnico(id,nemoU,nemoP,true);
+				}else{
+					ForbiddenException fe = new ForbiddenException();
+					fe.setConcreteException(fe);
+					fe.setErrorMessage(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
+					fe.setDetail(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
+					throw fe;
+				}
+			}
+			else {
+				ResourceNotFoundException et = new ResourceNotFoundException();
+				et.setConcreteException(et);
+				et.setErrorMessage(MSG_NOT_FOUND);
+				et.setDetail(MSG_NOT_FOUND);
+				throw et;
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(ForbiddenException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+		return lista;
+	}
+
+	@Transactional
+	@Override
+	public void saveUpgradeByProduct(Long id, List<PlanUpgradeDto> upgrades,String nemoP)
+			throws ProductoException, ResourceNotFoundException,ForbiddenException {
+		try {
+			Optional<Producto> productoO= productoRepository.findById(id);
+			if(productoO.isPresent()) {
+				Producto producto=productoO.get();
+				if(producto.getUpgrade()){
+					PlanUpgradeDto planUpgradeDto = upgrades.get(0);
+					planUpgradeRepository.deletePlanUpgrade(id,Long.valueOf(planUpgradeDto.getPlanUpgrade()),nemoP);
+					upgrades.stream().forEach(e->{
+						PlanUpgrade upgradeEntity= new PlanUpgrade();
+						upgradeEntity.setPlanUpgrade(Long.valueOf(e.getPlanUpgrade()));
+						upgradeEntity.setPlanVigente(Long.valueOf(e.getPlanVigente()));
+						upgradeEntity.setPlanPrevio(Long.valueOf(e.getPlanPrevio()));
+						upgradeEntity.setDiasRenuncia(e.getDiasRenuncia());
+						producto.addPlanUpgrade(upgradeEntity);
+					});
+					productoRepository.save(producto);
+				}
+				else{
+					ForbiddenException fe = new ForbiddenException();
+					fe.setConcreteException(fe);
+					fe.setErrorMessage(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
+					fe.setDetail(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
+					throw fe;
+				}
+			}
+			else {
+				ResourceNotFoundException esave = new ResourceNotFoundException();
+				esave.setConcreteException(esave);
+				esave.setErrorMessage(MSG_NOT_FOUND);
+				esave.setDetail(MSG_NOT_FOUND);
+				throw esave;
+			}
+		}
+		catch(ResourceNotFoundException | ForbiddenException e) {
+			throw e;
+		} catch(Exception e) {
+			throw new ProductoException(e);
+		}
+
+	}
+
+	@Transactional
+	@Override
+	public void deleteUpgradeByProduct(Long idProducto, Long idUpgrade)	throws ProductoException, ResourceNotFoundException, ForbiddenException{
+		try {
+			Optional<Producto> productoO= productoRepository.findById(idProducto);
+			Optional<PlanUpgrade> planUpgrade0= planUpgradeRepository.findById(idUpgrade);
+			if(productoO.isPresent() && planUpgrade0.isPresent()) {
+				Producto producto=productoO.get();
+				if(producto.getUpgrade()){
+					PlanUpgrade planUpgrade=planUpgrade0.get();
+					producto.removePlanUpgrade(planUpgrade);
+					productoRepository.save(producto);
+				}
+				else{
+					ForbiddenException fe = new ForbiddenException();
+					fe.setConcreteException(fe);
+					fe.setErrorMessage(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
+					fe.setDetail(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
+					throw fe;
+				}
+			}
+			else {
+				ResourceNotFoundException edelete = new ResourceNotFoundException();
+				edelete.setConcreteException(edelete);
+				edelete.setErrorMessage(MSG_NOT_FOUND);
+				edelete.setDetail(MSG_NOT_FOUND);
+				throw edelete;
+			}
+		}
+		catch(ResourceNotFoundException | ForbiddenException e) {
+			throw e;
+		} catch(Exception e) {
+			throw new ProductoException(e);
+		}
+
+	}
+
+	@Transactional
+	@Override
+	public void updateUpgradeByProduct(Long id, Long idUpgrade, PlanUpgradeDto planUpgradeDto)	throws ProductoException, ResourceNotFoundException, ForbiddenException {
+		try {
+			Optional<Producto> productoO= productoRepository.findById(id);
+			Optional<PlanUpgrade> planUpgrade0= planUpgradeRepository.findById(idUpgrade);
+
+			if(productoO.isPresent() && planUpgrade0.isPresent()) {
+				Producto producto=productoO.get();
+				if(producto.getUpgrade()){
+					PlanUpgrade planUpgrade=planUpgrade0.get();
+					planUpgrade.setDiasRenuncia(planUpgradeDto.getDiasRenuncia());
+					planUpgrade.setId(idUpgrade);
+					producto.updatePlanUpgrade(planUpgrade);
+					productoRepository.save(producto);
+				}
+				else{
+					ForbiddenException fe = new ForbiddenException();
+					fe.setConcreteException(fe);
+					fe.setErrorMessage(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
+					fe.setDetail(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
+					throw fe;
+				}
+			}
+			else {
+				ResourceNotFoundException eupdate = new ResourceNotFoundException();
+				eupdate.setConcreteException(eupdate);
+				eupdate.setErrorMessage(MSG_NOT_FOUND);
+				eupdate.setDetail(MSG_NOT_FOUND);
+				throw eupdate;
+			}
+		}
+		catch(ResourceNotFoundException | ForbiddenException e) {
+			throw e;
+		} catch(Exception e) {
+			throw new ProductoException(e);
+		}
+
+
+	}
+
 
 	@Transactional
 	@Override

@@ -70,12 +70,7 @@ public class TipoDescuentoController {
 		catch(TipoDescuentoException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_descuento());
 			throw e;
-		}
-		catch (Exception e) {
-			TipoDescuentoException ex = new TipoDescuentoException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_descuento());
-			throw ex;
-		}		
+		}	
 
 		return ResponseEntity.ok(lista);
 	}	

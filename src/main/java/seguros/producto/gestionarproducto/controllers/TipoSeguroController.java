@@ -72,11 +72,6 @@ public class TipoSeguroController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_seguro());
 			throw e;
 		}
-		catch (Exception e) {
-			TipoSeguroException ex = new TipoSeguroException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_seguro());
-			throw ex;
-		}		
 
 		return ResponseEntity.ok(lista);
 	}	

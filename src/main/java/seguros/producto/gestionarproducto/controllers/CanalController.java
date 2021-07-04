@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,7 +59,6 @@ public class CanalController {
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@GetMapping("/")
 	public ResponseEntity<List<CanalDto>> getCanal(
-			SecurityContextHolder auth
 			) throws CanalException{	
 	  //  Collection<?extends GrantedAuthority> granted = auth.getContext().getAuthentication().getAuthorities();
 		List<CanalDto> lista= null;
@@ -72,11 +70,6 @@ public class CanalController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_canal());
 			throw e;
 		}
-		catch (Exception e) {
-			CanalException ex = new CanalException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_canal());
-			throw ex;
-		}		
 
 		return ResponseEntity.ok(lista);
 	}	

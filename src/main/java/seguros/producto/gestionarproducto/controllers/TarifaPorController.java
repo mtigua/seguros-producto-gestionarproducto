@@ -71,11 +71,6 @@ public class TarifaPorController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_tarifa_por());
 			throw e;
 		}
-		catch (Exception e) {
-			TarifaPorException ex = new TarifaPorException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tarifa_por());
-			throw ex;
-		}		
 
 		return ResponseEntity.ok(lista);
 	}	

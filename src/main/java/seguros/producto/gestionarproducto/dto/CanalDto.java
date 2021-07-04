@@ -18,5 +18,18 @@ public class CanalDto  {
 	private String descripcion;	
 	
 	private List<DatoComplementarioDto> datosComplentarios;
+
+	public CanalDto(Long id,String nombre,String descripcion, List<DatoComplementarioDto> datosComplentarios) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+		this.datosComplentarios = datosComplentarios;
+	}
+
+	public CanalDto() {
+		super();
+	}
     
+	
 }

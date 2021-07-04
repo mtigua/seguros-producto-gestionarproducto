@@ -13,7 +13,18 @@ public class ModoTraspasoDto  {
 	@NotBlank(message = "El campo nombre de modo de traspaso es requerido")
 	private String nombre;
 	
-	private String descripcion;	
+	private String descripcion;
+
+	public ModoTraspasoDto(Long id, String nombre, String descripcion) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+	}
+
+	public ModoTraspasoDto() {
+		super();
+	}	
 	
     
 }

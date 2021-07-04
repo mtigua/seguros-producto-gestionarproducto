@@ -60,12 +60,7 @@ public class TipoTramoController {
 		catch(TipoTramoException e) {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_tramo());
 			throw e;
-		}
-		catch (Exception e) {
-			TipoTramoException ex = new TipoTramoException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_tramo());
-			throw ex;
-		}		
+		}	
 
 		return ResponseEntity.ok(lista);
 	}	

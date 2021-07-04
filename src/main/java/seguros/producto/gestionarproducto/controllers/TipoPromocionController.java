@@ -71,11 +71,6 @@ public class TipoPromocionController {
 			e.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_promocion());
 			throw e;
 		}
-		catch (Exception e) {
-			TipoPromocionException ex = new TipoPromocionException(e);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_get_tipo_promocion());
-			throw ex;
-		}		
 
 		return ResponseEntity.ok(lista);
 	}	
