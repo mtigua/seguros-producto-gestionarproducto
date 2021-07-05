@@ -13,11 +13,11 @@ public class DetallePromocionValidator implements ConstraintValidator<DetallePro
 	
 	public static final String MENSAJE_ERROR_VALOR_GIFTCARD = "El monto del gift card debe ser mayor a cero";
 	public static final String MENSAJE_ERROR_NOT_VALID= "El campo cuotasHasta debe ser mayor que el campo cuotasDesde";
-	public static final String MENSAJE_ERROR_REQUIRED_ID_PROMOCION_PRODUCTO= "El campo idPromocionProducto (Producto en promocion) es requerido";
+	public static final String MENSAJE_ERROR_REQUIRED_ID_PRODUCTO_EN_PROMOCION= "El campo idProductoEnPromocion (Producto en promocion) es requerido";
 	
 	public static final String fieldNameMontoGiftCard= "montoGiftCard";
 	public static final String fieldNameCuotasHasta = "cuotasHasta";
-	public static final String fieldNameIdPromocionProducto = "idPromocionProducto";
+	public static final String fieldNameIdProductoEnPromocion = "idProductoEnPromocion";
 	
 	
     @Override
@@ -43,8 +43,8 @@ public class DetallePromocionValidator implements ConstraintValidator<DetallePro
 	    		}	
 	    		break;
 	    	case ID_TIPO_PROMOCION_PRODUCTO:
-	    		if (detallePromocionDto.getIdPromocionProducto()  <= 0L) {
-    				customMessageForValidation(cxt,MENSAJE_ERROR_REQUIRED_ID_PROMOCION_PRODUCTO,fieldNameIdPromocionProducto); 
+	    		if (detallePromocionDto.getIdProductoEnPromocion()  <= 0L) {
+    				customMessageForValidation(cxt,MENSAJE_ERROR_REQUIRED_ID_PRODUCTO_EN_PROMOCION,fieldNameIdProductoEnPromocion); 
         			return false;
 	    		}
 	    		break;	
