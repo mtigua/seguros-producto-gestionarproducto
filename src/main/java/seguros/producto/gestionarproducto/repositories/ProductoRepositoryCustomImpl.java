@@ -183,7 +183,7 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 					tipoRamo.setId( Long.valueOf(record.get(0)[7].toString() ) );
 					
 					TipoPromocionDto tipoPromocion = new TipoPromocionDto();
-					tipoPromocion.setNombre(record.get(0)[10].toString() );
+					tipoPromocion.setNombre(record.get(0)[10]!=null? record.get(0)[10].toString() : null );
 					tipoPromocion.setId(record.get(0)[11]!=null?Long.valueOf(record.get(0)[11].toString()) : null );
 					
 					infoProductoDto.setTipoRamo(tipoRamo);
