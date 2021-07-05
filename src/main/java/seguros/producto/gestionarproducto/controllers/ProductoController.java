@@ -609,7 +609,7 @@ public class ProductoController {
 		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
-	@PutMapping("/{id}/tramo/{idTramo}/tramo")
+	@PutMapping("/{id}/tramo/{idTramo}")
 	public ResponseEntity<String> updateTramoByProduct(
 			@PathVariable("id") Long idProducto,
 			@PathVariable("idTramo") Long idTramo,
