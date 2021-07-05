@@ -26,8 +26,8 @@ public class DetallePromocion  {
 	@JoinColumn(name = "id_tipo_promocion",nullable = false)
 	private  TipoPromocion tipoPromocion;	
 	
-	@Column(name = "id_promocion_producto")
-	private Long idPromocionProducto;
+	@Column(name = "id_producto_en_promocion")
+	private Long idProductoEnPromocion;
 		
 	@Column(name = "monto_giftcard")
 	private Integer montoGiftCard;

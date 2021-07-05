@@ -28,5 +28,7 @@ public class InfoProductoDto  {
 
 		private Long idTipoCompania;
 		
+		private TipoPromocionDto tipoPromocion;
+		
 
 }

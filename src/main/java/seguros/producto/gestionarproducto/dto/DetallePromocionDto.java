@@ -14,7 +14,7 @@ public class DetallePromocionDto {
 	@NotNull(message = "El tipo de promocion es requerido")
 	private Long idTipoPromocion;	
 	
-	private Long idPromocionProducto;
+	private Long idProductoEnPromocion;
 	private Integer montoGiftCard;
 	private Integer cuotasDesde;
 	private Integer cuotasHasta;
