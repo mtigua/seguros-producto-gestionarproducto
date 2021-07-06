@@ -13,7 +13,6 @@ public class FormDataInicioDto {
 
 	private Long id;
 
-	@NotNull(message =  "El campo idCiaNegocioRamo es requerido")
 	private Integer idCiaNegocioRamo;		
 	
 	@NotNull(message =  "El campo ramo es requerido")

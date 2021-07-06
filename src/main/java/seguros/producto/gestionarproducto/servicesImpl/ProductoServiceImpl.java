@@ -2229,6 +2229,10 @@ public class ProductoServiceImpl implements ProductoService {
 		InfoProductoDto result=new InfoProductoDto();
 		
 		try {			
+			String idCompania= String.valueOf(producto.getIdCompania());
+			String idRamo= String.valueOf(producto.getIdRamo());
+			String idNegocio= String.valueOf(producto.getIdNegocio());
+			Integer idCiaNegocioRamo= Integer.valueOf(idCompania+idNegocio+idRamo);
 			
 			if(VALUE_UNDEFINED.equals(id)) {
 				Producto productoEntity = new Producto();
@@ -2244,8 +2248,10 @@ public class ProductoServiceImpl implements ProductoService {
 						}
 					});
 				}
-				
+			
+				productoEntity.setIdCiaNegocioRamo(idCiaNegocioRamo);
 				productoRepository.save(productoEntity);
+				result.setId(productoEntity.getId());
 			}			
 			else {
 				Optional<Producto> productoOpt= productoRepository.findById(id);
@@ -2267,9 +2273,11 @@ public class ProductoServiceImpl implements ProductoService {
 								}
 							});
 						}
-						
+					
+						productoEntity.setIdCiaNegocioRamo(idCiaNegocioRamo);
 						productoEntity.setId(id);					
 						productoRepository.save(productoEntity);
+						result.setId(id);
 					}					
 					else {
 							ProductoException ePass = new ProductoException();
@@ -2313,6 +2321,7 @@ public class ProductoServiceImpl implements ProductoService {
 				productoEntity.setNemot(nemotecnico);
 				productoEntity.setId(id);
 				productoRepository.save(productoEntity);
+				result.setId(id);
 				
 			}
 			else {
@@ -2384,6 +2393,7 @@ public class ProductoServiceImpl implements ProductoService {
 				}
 				productoEntity.setId(id);
 				productoRepository.save(productoEntity);
+				result.setId(id);
 				
 			}
 			else {
@@ -2432,6 +2442,7 @@ public class ProductoServiceImpl implements ProductoService {
 				
 				productoEntity.setId(id);
 				productoRepository.save(productoEntity);
+				result.setId(id);
 				
 			}
 			else {
@@ -2461,6 +2472,7 @@ public class ProductoServiceImpl implements ProductoService {
 				
 				productoEntity.setId(id);
 				productoRepository.save(productoEntity);
+				result.setId(id);
 				
 			}
 			else {
@@ -2511,6 +2523,7 @@ public class ProductoServiceImpl implements ProductoService {
 				
 				productoEntity.setId(id);
 				productoRepository.save(productoEntity);
+				result.setId(id);
 				
 			}
 			else {
