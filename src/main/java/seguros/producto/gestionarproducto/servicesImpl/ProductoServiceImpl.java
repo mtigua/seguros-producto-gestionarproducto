@@ -2224,8 +2224,7 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public InfoProductoDto saveFormInicio(Long id, FormDataInicioDto producto) throws ProductoException,ResourceNotFoundException {
-		
+	public InfoProductoDto saveFormInicio(Long id, FormDataInicioDto producto) throws ProductoException,ResourceNotFoundException {		
 		
 		InfoProductoDto result=new InfoProductoDto();
 		
@@ -2247,27 +2246,39 @@ public class ProductoServiceImpl implements ProductoService {
 				}
 				
 				productoRepository.save(productoEntity);
-			}
-			
+			}			
 			else {
 				Optional<Producto> productoOpt= productoRepository.findById(id);
 				if(productoOpt.isPresent()) {
+
 					Producto productoEntity = productoOpt.get();
-					BeanUtils.copyProperties(producto, productoEntity);
-				
-					Long[] canales= producto.getCanales();
+					boolean nemotecnicoEnUso= productoRepository.verificarSiExisteNemotecnico(producto.getNemot());
+
+					if(!nemotecnicoEnUso) {
+						BeanUtils.copyProperties(producto, productoEntity);
 					
-					if(canales!=null) {
-						Arrays.asList(producto.getCanales()).stream().forEach((p) ->{
-							Canal canalEntity= canalRepository.getOne(p);
-							if(canalEntity.getId()!=null) {
-								productoEntity.addCanal(canalEntity);
-							}
-						});
-					}
+						Long[] canales= producto.getCanales();
+						
+						if(canales!=null) {
+							Arrays.asList(producto.getCanales()).stream().forEach((p) ->{
+								Canal canalEntity= canalRepository.getOne(p);
+								if(canalEntity.getId()!=null) {
+									productoEntity.addCanal(canalEntity);
+								}
+							});
+						}
+						
+						productoEntity.setId(id);					
+						productoRepository.save(productoEntity);
+					}					
+					else {
+							ProductoException ePass = new ProductoException();
+							ePass.setConcreteException(ePass);
+							ePass.setErrorMessage(MSG_FORBIDDEN_NEMOTECNICO_EN_USO);
+							ePass.setDetail(MSG_FORBIDDEN_NEMOTECNICO_EN_USO);
+							throw ePass;
+						}
 					
-					productoEntity.setId(id);					
-					productoRepository.save(productoEntity);
 				}
 				else {
 					lanzarExcepcionRecursoNoEncontrado();
@@ -2296,8 +2307,10 @@ public class ProductoServiceImpl implements ProductoService {
 			Optional<Producto> productoOpt= productoRepository.findById(id);
 			if(productoOpt.isPresent()) {
 				Producto productoEntity=productoOpt.get();
+				String nemotecnico= productoEntity.getNemot();
 				BeanUtils.copyProperties(producto, productoEntity);
 				
+				productoEntity.setNemot(nemotecnico);
 				productoEntity.setId(id);
 				productoRepository.save(productoEntity);
 				

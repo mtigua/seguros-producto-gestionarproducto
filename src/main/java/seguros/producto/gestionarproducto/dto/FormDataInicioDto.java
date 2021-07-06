@@ -34,6 +34,9 @@ public class FormDataInicioDto {
 	
 	private Long[] canales= {4L};
 	
+	@Size(max=4)
+	@NotBlank(message =  "El nemotecnico es requerido")
+	private String nemot;
 
 
 
