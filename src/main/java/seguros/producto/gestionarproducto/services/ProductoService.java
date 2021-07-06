@@ -55,4 +55,15 @@ public interface ProductoService {
     public void saveUpgradeByProduct(Long id, List<PlanUpgradeDto> upgrades, String nemoP) throws ProductoException,ResourceNotFoundException,ForbiddenException;
     public void deleteUpgradeByProduct(Long idProducto,Long idUpgrade) throws ProductoException,ResourceNotFoundException,ForbiddenException;
     public void updateUpgradeByProduct(Long id, Long idUpgrade, PlanUpgradeDto planUpgradeDto) throws ProductoException,ResourceNotFoundException,ForbiddenException;
+    
+    
+    public InfoProductoDto saveFormInicio(Long id,FormDataInicioDto producto) throws ProductoException,ResourceNotFoundException;
+    public InfoProductoDto saveFormEncabezado(Long id,FormDataEncabezadoDto producto) throws ProductoException,ResourceNotFoundException;
+    public InfoProductoDto saveFormGeneral(Long id,FormDataGeneralDto producto) throws ProductoException,ResourceNotFoundException;
+    public InfoProductoDto saveFormTraspaso(Long id,FormDataTraspasoDto producto) throws ProductoException,ResourceNotFoundException;
+    public InfoProductoDto saveFormVDD(Long id,FormDataVidaVehiculoDeclaracionDto producto) throws ProductoException,ResourceNotFoundException;
+    public InfoProductoDto saveFormDescripcionOperativa(Long id,FormDataDescripcionOperativaDto producto) throws ProductoException,ResourceNotFoundException;
+    
+    
+    
 }

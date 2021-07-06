@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import seguros.producto.gestionarproducto.dto.ProductoDoDto;
+import seguros.producto.gestionarproducto.dto.FormDataDescripcionOperativaDto;
 import seguros.producto.gestionarproducto.repositories.ProductoDoRepository;
 import seguros.producto.gestionarproducto.services.ProductoDoService;
 
@@ -24,12 +24,12 @@ public class ProductoDoServiceImpl implements ProductoDoService {
 	
 	@Transactional
 	@Override
-	public List<ProductoDoDto> findAll() throws ProductoDoException {
-		List<ProductoDoDto> list=new ArrayList<>();
+	public List<FormDataDescripcionOperativaDto> findAll() throws ProductoDoException {
+		List<FormDataDescripcionOperativaDto> list=new ArrayList<>();
 		
 		try {
 			list= productoDoRepository.findAll().stream().map(item ->{
-				ProductoDoDto p= new ProductoDoDto();
+				FormDataDescripcionOperativaDto p= new FormDataDescripcionOperativaDto();
 				BeanUtils.copyProperties(item, p);
 				return p;
 				 

@@ -32,7 +32,12 @@ import seguros.producto.gestionarproducto.dto.InfoProductoDto;
 import seguros.producto.gestionarproducto.dto.OrdenCoberturaDTO;
 import seguros.producto.gestionarproducto.dto.PageProductoDto;
 import seguros.producto.gestionarproducto.dto.PrimaSobreQueDto;
-import seguros.producto.gestionarproducto.dto.ProductoDoDto;
+import seguros.producto.gestionarproducto.dto.FormDataDescripcionOperativaDto;
+import seguros.producto.gestionarproducto.dto.FormDataEncabezadoDto;
+import seguros.producto.gestionarproducto.dto.FormDataGeneralDto;
+import seguros.producto.gestionarproducto.dto.FormDataInicioDto;
+import seguros.producto.gestionarproducto.dto.FormDataTraspasoDto;
+import seguros.producto.gestionarproducto.dto.FormDataVidaVehiculoDeclaracionDto;
 import seguros.producto.gestionarproducto.dto.ProductoDto;
 import seguros.producto.gestionarproducto.dto.RecargoPorAseguradoDto;
 import seguros.producto.gestionarproducto.dto.PlanUpgradeDto;
@@ -240,7 +245,7 @@ public class ProductoServiceImpl implements ProductoService {
 				newProductoDto.setTipoTraspaso(item.getTipoTraspaso().getId());
 				newProductoDto.setTipoAcreedor(item.getTipoAcreedor().getId());
 				newProductoDto.setTipoFacturar(item.getTipoFacturar().getId());
-				ProductoDoDto productoDoDto= new ProductoDoDto();
+				FormDataDescripcionOperativaDto productoDoDto= new FormDataDescripcionOperativaDto();
 				BeanUtils.copyProperties(item.getProductDo(), productoDoDto);
 				productoDoDto.setDoplAQuienSeVende(item.getProductDo().getDoplAQuienSeVende().getId());
 				newProductoDto.setProductDo(productoDoDto);
@@ -2215,6 +2220,298 @@ public class ProductoServiceImpl implements ProductoService {
 		e.setErrorMessage(MSG_NOT_FOUND);
 		e.setDetail(MSG_NOT_FOUND);
 		throw e;
+	}
+
+	@Transactional
+	@Override
+	public InfoProductoDto saveFormInicio(Long id, FormDataInicioDto producto) throws ProductoException,ResourceNotFoundException {
+		
+		
+		InfoProductoDto result=new InfoProductoDto();
+		
+		try {			
+			
+			if(VALUE_UNDEFINED.equals(id)) {
+				Producto productoEntity = new Producto();
+				BeanUtils.copyProperties(producto, productoEntity);
+			
+				Long[] canales= producto.getCanales();
+				
+				if(canales!=null) {
+					Arrays.asList(producto.getCanales()).stream().forEach((p) ->{
+						Canal canalEntity= canalRepository.getOne(p);
+						if(canalEntity.getId()!=null) {
+							productoEntity.addCanal(canalEntity);
+						}
+					});
+				}
+				
+				productoRepository.save(productoEntity);
+			}
+			
+			else {
+				Optional<Producto> productoOpt= productoRepository.findById(id);
+				if(productoOpt.isPresent()) {
+					Producto productoEntity = productoOpt.get();
+					BeanUtils.copyProperties(producto, productoEntity);
+				
+					Long[] canales= producto.getCanales();
+					
+					if(canales!=null) {
+						Arrays.asList(producto.getCanales()).stream().forEach((p) ->{
+							Canal canalEntity= canalRepository.getOne(p);
+							if(canalEntity.getId()!=null) {
+								productoEntity.addCanal(canalEntity);
+							}
+						});
+					}
+					
+					productoEntity.setId(id);					
+					productoRepository.save(productoEntity);
+				}
+				else {
+					lanzarExcepcionRecursoNoEncontrado();
+				}
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(ProductoException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+		
+		return result;
+	}
+
+	@Transactional
+	@Override
+	public InfoProductoDto saveFormEncabezado(Long id, FormDataEncabezadoDto producto) throws ProductoException {
+       InfoProductoDto result=new InfoProductoDto();
+		
+		try {
+			Optional<Producto> productoOpt= productoRepository.findById(id);
+			if(productoOpt.isPresent()) {
+				Producto productoEntity=productoOpt.get();
+				BeanUtils.copyProperties(producto, productoEntity);
+				
+				productoEntity.setId(id);
+				productoRepository.save(productoEntity);
+				
+			}
+			else {
+				lanzarExcepcionRecursoNoEncontrado();
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+		
+		return result;
+	}
+
+	@Transactional
+	@Override
+	public InfoProductoDto saveFormGeneral(Long id, FormDataGeneralDto producto) throws ProductoException {
+      InfoProductoDto result=new InfoProductoDto();
+		
+	  	 try {
+			Optional<Producto> productoOpt= productoRepository.findById(id);
+			if(productoOpt.isPresent()) {
+				Producto productoEntity=productoOpt.get();
+				BeanUtils.copyProperties(producto, productoEntity);
+				
+				if(producto.getTipoPromocion()!=null && !VALUE_UNDEFINED.equals(producto.getTipoPromocion()) ) {
+					TipoPromocion tipoPromocion = tipoPromocionRepository.getOne(producto.getTipoPromocion());
+					if(tipoPromocion.getId()!=null) {
+						productoEntity.setTipoPromocion(tipoPromocion);
+					}
+				}
+				if(producto.getTipoAjuste()!=null && !VALUE_UNDEFINED.equals(producto.getTipoAjuste()) ) {
+					TipoAjuste tipoAjuste = tipoAjusteRepository.getOne(producto.getTipoAjuste());
+					if(tipoAjuste.getId()!=null) {
+						productoEntity.setTipoAjuste(tipoAjuste);
+					}
+				}
+				if(producto.getTipoRecargo()!=null && !VALUE_UNDEFINED.equals(producto.getTipoRecargo()) ) {
+					TipoRecargo tipoRecargo = tipoRecargoRepository.getOne(producto.getTipoRecargo());
+					if(tipoRecargo.getId()!=null) {
+						productoEntity.setTipoRecargo(tipoRecargo);
+					}
+				}
+				if(producto.getTipoDescuento()!=null && !VALUE_UNDEFINED.equals(producto.getTipoDescuento()) ) {
+					TipoDescuento tipoDescuento = tipoDescuentoRepository.getOne(producto.getTipoDescuento());
+					if(tipoDescuento.getId()!=null) {
+						productoEntity.setTipoDescuento(tipoDescuento);
+					}
+				}
+				if(producto.getTarifaPor()!=null && !VALUE_UNDEFINED.equals(producto.getTarifaPor())) {
+					TarifaPor tarifaPor = tarifaPorRepository.getOne(producto.getTarifaPor());
+					if(tarifaPor.getId()!=null) {
+						productoEntity.setTarifaPor(tarifaPor);
+					}
+				}
+				if(producto.getTipoTarifa()!=null && !VALUE_UNDEFINED.equals(producto.getTipoTarifa()) ) {
+					TipoTarifa tipoTarifa = tipoTarifaRepository.getOne(producto.getTipoTarifa());
+					if(tipoTarifa.getId()!=null) {
+						productoEntity.setTipoTarifa(tipoTarifa);
+					}
+				}
+				if(producto.getTipoPeriodo()!=null && !VALUE_UNDEFINED.equals(producto.getTipoPeriodo()) ) {
+					TipoPeriodo tipoPeriodo = tipoPeriodoRepository.getOne(producto.getTipoPeriodo());
+					if(tipoPeriodo.getId() != null) {
+						productoEntity.setTipoPeriodo(tipoPeriodo);
+					}
+				}
+				productoEntity.setId(id);
+				productoRepository.save(productoEntity);
+				
+			}
+			else {
+				lanzarExcepcionRecursoNoEncontrado();
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+		
+		return result;
+	}
+
+	@Transactional
+	@Override
+	public InfoProductoDto saveFormTraspaso(Long id, FormDataTraspasoDto producto) throws ProductoException {
+       InfoProductoDto result=new InfoProductoDto();
+		
+	   	try {
+			Optional<Producto> productoOpt= productoRepository.findById(id);
+			if(productoOpt.isPresent()) {
+				Producto productoEntity=productoOpt.get();
+				BeanUtils.copyProperties(producto, productoEntity);
+				
+				if(producto.getTipoTraspaso()!=null && !VALUE_UNDEFINED.equals(producto.getTipoTraspaso()) ) {
+					TipoTraspaso tipoTraspaso = tipoTraspasoRepository.getOne(producto.getTipoTraspaso());
+					if(tipoTraspaso.getId()!=null) {
+						productoEntity.setTipoTraspaso(tipoTraspaso);
+					}
+				}
+				if(producto.getTipoAcreedor()!=null && !VALUE_UNDEFINED.equals(producto.getTipoAcreedor())) {
+					ModoTraspaso tipoAcreedor = modoTraspasoRepository.getOne(producto.getTipoAcreedor());
+					if(tipoAcreedor.getId()!=null) {
+						productoEntity.setTipoAcreedor(tipoAcreedor);
+					}
+				}
+				if(producto.getTipoFacturar()!=null && !VALUE_UNDEFINED.equals(producto.getTipoFacturar())) {
+					ModoTraspaso tipoFacturar = modoTraspasoRepository.getOne(producto.getTipoFacturar());
+					if(tipoFacturar.getId()!=null) {
+						productoEntity.setTipoFacturar(tipoFacturar);
+					}
+				}
+				
+				productoEntity.setId(id);
+				productoRepository.save(productoEntity);
+				
+			}
+			else {
+				lanzarExcepcionRecursoNoEncontrado();
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+	    }
+		
+		return result;
+	}
+
+	@Transactional
+	@Override
+	public InfoProductoDto saveFormVDD(Long id, FormDataVidaVehiculoDeclaracionDto producto) throws ProductoException {
+       InfoProductoDto result=new InfoProductoDto();
+		
+	   	try {
+			Optional<Producto> productoOpt= productoRepository.findById(id);
+			if(productoOpt.isPresent()) {
+				Producto productoEntity=productoOpt.get();
+				BeanUtils.copyProperties(producto, productoEntity);
+				
+				productoEntity.setId(id);
+				productoRepository.save(productoEntity);
+				
+			}
+			else {
+				lanzarExcepcionRecursoNoEncontrado();
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+		
+		return result;
+	}
+
+	@Transactional
+	@Override
+	public InfoProductoDto saveFormDescripcionOperativa(Long id, FormDataDescripcionOperativaDto producto)
+			throws ProductoException {
+      InfoProductoDto result=new InfoProductoDto();
+		
+	  	try {
+			Optional<Producto> productoOpt= productoRepository.findById(id);
+			if(productoOpt.isPresent()) {
+				Producto productoEntity = productoOpt.get();				
+						
+				ProductoDo productoDoEntity=productoEntity.getProductDo();
+				
+				if(productoDoEntity==null) {
+					productoDoEntity = producto.toEntity();
+					BeanUtils.copyProperties(producto, productoDoEntity);	
+				}
+				else {
+					Long idProductoDoEntity=productoDoEntity.getId();
+					BeanUtils.copyProperties(producto, productoDoEntity);	
+					productoDoEntity.setId(idProductoDoEntity);
+				}									
+				
+				if(producto.getDoplAQuienSeVende()!=null && !VALUE_UNDEFINED.equals(producto.getDoplAQuienSeVende()) ) {
+						DestinoVenta destinoVenta = destinoVentaRepository.getOne(producto.getDoplAQuienSeVende());
+	
+						if(destinoVenta.getId()!=null) {
+							productoDoEntity.setDoplAQuienSeVende(destinoVenta);
+						}
+						productoEntity.setProductDo(productoDoEntity);
+				}				
+				
+				productoEntity.setId(id);
+				productoRepository.save(productoEntity);
+				
+			}
+			else {
+				lanzarExcepcionRecursoNoEncontrado();
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
+		}
+		catch(Exception e) {
+			throw new ProductoException(e);
+		}
+		
+		return result;
 	}
 
 	

@@ -15,7 +15,7 @@ import seguros.producto.gestionarproducto.entities.ProductoDo;
 
 
 @Data
-public class ProductoDoDto  {
+public class FormDataDescripcionOperativaDto  {
 	
 
 	private Long id;
