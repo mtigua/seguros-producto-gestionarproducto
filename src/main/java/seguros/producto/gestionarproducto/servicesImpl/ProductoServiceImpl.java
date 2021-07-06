@@ -2527,6 +2527,220 @@ public class ProductoServiceImpl implements ProductoService {
 		return result;
 	}
 
+	@Transactional
+	@Override
+	public FormDataInicioDto getFormInicio(Long id) throws ProductoException, ResourceNotFoundException {
+ 
+		FormDataInicioDto form= new FormDataInicioDto();
+      
+		try {
+    	   Optional<Producto> productoOpt= productoRepository.findById(id);
+    	   
+    	   if(productoOpt.isPresent()) {
+    		   Producto productoEntity= productoOpt.get();
+    		   BeanUtils.copyProperties(productoEntity, form);
+    		   
+    		   Set<Canal> canales= productoEntity.getCanales();
+    		   if(canales!=null) {
+    			   
+    			   List<Long> canalesList =  canales.stream().map(item->{
+    				   
+    				   return item.getId();
+    			   }).collect(Collectors.toList());
+    			   
+    			   Long[] canalesResult = new Long[canales.size()];   
+    			   canalesResult = canalesList.toArray(canalesResult);
+    			   form.setCanales( canalesResult);
+    			  
+    		   }
+    	   }
+    	   else {
+    		   lanzarExcepcionRecursoNoEncontrado();
+    	   }
+    	   
+       }
+       catch(ResourceNotFoundException e) {
+			throw e;
+		}
+       catch(Exception e) {
+    	   throw new ProductoException(e);
+       }
+		return form;
+       
+	}
+
+	
+	@Transactional
+	@Override
+	public FormDataEncabezadoDto getFormEncabezado(Long id) throws ProductoException, ResourceNotFoundException {
+		FormDataEncabezadoDto form= new FormDataEncabezadoDto();
+	      
+		try {
+    	   Optional<Producto> productoOpt= productoRepository.findById(id);
+    	   
+    	   if(productoOpt.isPresent()) {
+    		   Producto productoEntity= productoOpt.get();
+    		   BeanUtils.copyProperties(productoEntity, form);
+    	   }
+    	   else {
+    		   lanzarExcepcionRecursoNoEncontrado();
+    	   }
+    	   
+       }
+       catch(ResourceNotFoundException e) {
+			throw e;
+		}
+       catch(Exception e) {
+    	   throw new ProductoException(e);
+       }
+		return form;
+	}
+
+	
+	@Transactional
+	@Override
+	public FormDataGeneralDto getFormGeneral(Long id) throws ProductoException, ResourceNotFoundException {
+		
+		FormDataGeneralDto form= new FormDataGeneralDto();
+	      
+		try {
+    	   Optional<Producto> productoOpt= productoRepository.findById(id);
+    	   
+    	   if(productoOpt.isPresent()) {
+    		   Producto productoEntity= productoOpt.get();
+    		   BeanUtils.copyProperties(productoEntity, form);
+    		   
+    		   TipoPromocion tipoPromocion= productoEntity.getTipoPromocion();
+    		   TipoAjuste tipoAjuste= productoEntity.getTipoAjuste();
+    		   TipoRecargo tipoRecargo= productoEntity.getTipoRecargo();
+    		   TipoDescuento tipoDescuento= productoEntity.getTipoDescuento();
+    		   TarifaPor tarifaPor = productoEntity.getTarifaPor();
+    		   TipoTarifa tipoTarifa = productoEntity.getTipoTarifa();
+    		   TipoPeriodo tipoPeriodo= productoEntity.getTipoPeriodo();
+    		   
+    		   form.setTipoPromocion(tipoPromocion!=null?tipoPromocion.getId():null);
+    		   form.setTipoAjuste(tipoAjuste!=null?tipoAjuste.getId():null);
+    		   form.setTipoRecargo(tipoRecargo!=null?tipoRecargo.getId():null);
+    		   form.setTipoDescuento(tipoDescuento!=null?tipoDescuento.getId():null);
+    		   form.setTarifaPor(tarifaPor!=null?tarifaPor.getId():null);
+    		   form.setTipoTarifa(tipoTarifa!=null?tipoTarifa.getId():null);
+    		   form.setTipoPeriodo(tipoPeriodo!=null?tipoPeriodo.getId():null);			
+				
+    	   }
+    	   else {
+    		   lanzarExcepcionRecursoNoEncontrado();
+    	   }
+    	   
+       }
+       catch(ResourceNotFoundException e) {
+			throw e;
+		}
+       catch(Exception e) {
+    	   throw new ProductoException(e);
+       }
+		return form;
+	}
+
+	
+	@Transactional
+	@Override
+	public FormDataTraspasoDto getFormTraspaso(Long id) throws ProductoException, ResourceNotFoundException {
+		
+		FormDataTraspasoDto form= new FormDataTraspasoDto();
+	      
+		try {
+    	   Optional<Producto> productoOpt= productoRepository.findById(id);
+    	   
+    	   if(productoOpt.isPresent()) {
+    		   Producto productoEntity= productoOpt.get();
+    		   BeanUtils.copyProperties(productoEntity, form);
+    		   
+    		   TipoTraspaso tipoTraspaso=productoEntity.getTipoTraspaso();
+    		   ModoTraspaso tipoAcreedor= productoEntity.getTipoAcreedor();
+    		   ModoTraspaso tipoFacturar = productoEntity.getTipoFacturar();
+    		   
+    		   form.setTipoTraspaso(tipoTraspaso!=null?tipoTraspaso.getId():null);
+    		   form.setTipoAcreedor(tipoAcreedor!=null?tipoAcreedor.getId():null);
+    		   form.setTipoFacturar(tipoFacturar!=null?tipoFacturar.getId():null);
+    	   }
+    	   else {
+    		   lanzarExcepcionRecursoNoEncontrado();
+    	   }
+    	   
+       }
+       catch(ResourceNotFoundException e) {
+			throw e;
+		}
+       catch(Exception e) {
+    	   throw new ProductoException(e);
+       }
+		return form;
+	}
+
+	
+	@Transactional
+	@Override
+	public FormDataVidaVehiculoDeclaracionDto getFormVDD(Long id) throws ProductoException, ResourceNotFoundException {
+		
+		FormDataVidaVehiculoDeclaracionDto form= new FormDataVidaVehiculoDeclaracionDto();
+	      
+		try {
+    	   Optional<Producto> productoOpt= productoRepository.findById(id);
+    	   
+    	   if(productoOpt.isPresent()) {
+    		   Producto productoEntity= productoOpt.get();
+    		   BeanUtils.copyProperties(productoEntity, form);
+    	   }
+    	   else {
+    		   lanzarExcepcionRecursoNoEncontrado();
+    	   }
+    	   
+       }
+       catch(ResourceNotFoundException e) {
+			throw e;
+		}
+       catch(Exception e) {
+    	   throw new ProductoException(e);
+       }
+		return form;
+	}
+
+	
+	@Transactional
+	@Override
+	public FormDataDescripcionOperativaDto getFormDescripcionOperativa(Long id)	throws ProductoException, ResourceNotFoundException {
+		
+		FormDataDescripcionOperativaDto form= new FormDataDescripcionOperativaDto();
+	      
+		try {
+    	   Optional<Producto> productoOpt= productoRepository.findById(id);
+    	   
+    	   if(productoOpt.isPresent()) {
+    		   Producto productoEntity= productoOpt.get();
+    		   ProductoDo productoDoEntity=productoEntity.getProductDo();    		 
+    		   
+    		   if(productoDoEntity!=null) {
+    			   BeanUtils.copyProperties(productoDoEntity, form);
+    			   DestinoVenta destinoVenta= productoDoEntity.getDoplAQuienSeVende();
+    			   
+    			   form.setDoplAQuienSeVende(destinoVenta!=null?destinoVenta.getId():null);
+    		   }    		   
+    		 
+    	   }
+    	   else {
+    		   lanzarExcepcionRecursoNoEncontrado();
+    	   }
+    	   
+       }
+       catch(ResourceNotFoundException e) {
+			throw e;
+		}
+       catch(Exception e) {
+    	   throw new ProductoException(e);
+       }
+		return form;
+	}
+
 	
 	
 }

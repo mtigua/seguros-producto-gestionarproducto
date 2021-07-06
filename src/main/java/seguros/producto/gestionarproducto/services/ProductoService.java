@@ -64,6 +64,14 @@ public interface ProductoService {
     public InfoProductoDto saveFormVDD(Long id,FormDataVidaVehiculoDeclaracionDto producto) throws ProductoException,ResourceNotFoundException;
     public InfoProductoDto saveFormDescripcionOperativa(Long id,FormDataDescripcionOperativaDto producto) throws ProductoException,ResourceNotFoundException;
     
+   
+    public FormDataInicioDto getFormInicio(Long id) throws ProductoException,ResourceNotFoundException;
+    public FormDataEncabezadoDto getFormEncabezado(Long id) throws ProductoException,ResourceNotFoundException;
+    public FormDataGeneralDto getFormGeneral(Long id) throws ProductoException,ResourceNotFoundException;
+    public FormDataTraspasoDto getFormTraspaso(Long id) throws ProductoException,ResourceNotFoundException;
+    public FormDataVidaVehiculoDeclaracionDto getFormVDD(Long id) throws ProductoException,ResourceNotFoundException;
+    public FormDataDescripcionOperativaDto getFormDescripcionOperativa(Long id) throws ProductoException,ResourceNotFoundException;
+    
     
     
 }
