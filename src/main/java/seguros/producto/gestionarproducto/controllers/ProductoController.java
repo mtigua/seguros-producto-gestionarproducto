@@ -28,25 +28,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import seguros.producto.gestionarproducto.configuration.PropertiesMsg;
-import seguros.producto.gestionarproducto.dto.CoberturaProductoDto;
-import seguros.producto.gestionarproducto.dto.EstadoProductoDto;
-import seguros.producto.gestionarproducto.dto.InfoProductoDto;
-import seguros.producto.gestionarproducto.dto.PageProductoDto;
-import seguros.producto.gestionarproducto.dto.ProductoDto;
-import seguros.producto.gestionarproducto.dto.TerminoCortoDto;
-import seguros.producto.gestionarproducto.dto.TerminoCortoSaveDto;
-import seguros.producto.gestionarproducto.dto.TramoDto;
-import seguros.producto.gestionarproducto.dto.TramoListDto;
-import seguros.producto.gestionarproducto.dto.RecargoPorAseguradoDto;
-import seguros.producto.gestionarproducto.dto.PlanUpgradeDto;
-import seguros.producto.gestionarproducto.dto.ProdDto;
-import seguros.producto.gestionarproducto.dto.CoberturaDTO;
-import seguros.producto.gestionarproducto.dto.OrdenCoberturaDTO;
-import seguros.producto.gestionarproducto.dto.CoberturaProductoCorrelativoDto;
-import seguros.producto.gestionarproducto.dto.TipoIvaDTO;
-import seguros.producto.gestionarproducto.dto.DeducibleDTO;
-import seguros.producto.gestionarproducto.dto.DetallePromocionDto;
-import seguros.producto.gestionarproducto.dto.DetallePromocionListDto;
+import seguros.producto.gestionarproducto.dto.*;
+import seguros.producto.gestionarproducto.entities.Profesion;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
 import seguros.producto.gestionarproducto.exceptions.ForbiddenException;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
@@ -59,7 +42,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @RefreshScope
 @RequestMapping("/producto")
 @CrossOrigin(origins = "${domains.origin.allowed.gestionarproducto}", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PATCH,RequestMethod.OPTIONS,RequestMethod.PUT,RequestMethod.DELETE})
-@PreAuthorize("hasRole( @generalProps.getROLE_FUNCIONAL() ) OR  hasRole( @generalProps.getROLE_APROBADOR() ) OR hasRole( @generalProps.getROLE_CONTINUIDAD_OPERATIVA() ) ")
+//@PreAuthorize("hasRole( @generalProps.getROLE_FUNCIONAL() ) OR  hasRole( @generalProps.getROLE_APROBADOR() ) OR hasRole( @generalProps.getROLE_CONTINUIDAD_OPERATIVA() ) ")
 public class ProductoController {
 
 
@@ -104,6 +87,11 @@ public class ProductoController {
 	private static final String SWAGGER_SAVE_PLAN_UPGRADE_BY_PRODUCT = "Registrar planes upgrades dado un producto";
 	private static final String SWAGGER_DELETE_PLAN_UPGRADE_BY_PRODUCT = "Eliminar plan upgrade dado un producto";
 	private static final String SWAGGER_UPDATE_PLAN_UPGRADE_BY_PRODUCT = "Actualizar plan upgrade dado un producto";
+	private static final String SWAGGER_GET_PROFESIONES_BY_PRODUCT = "Obtener las profesiones de un producto dado";
+	private static final String SWAGGER_SAVE_PROFESION_BY_PRODUCT = "Registrar el detalle de una promocion dado un producto";
+	private static final String SWAGGER_UPDATE_PROFESION_BY_PRODUCT = "Actualizar el detalle de una promocion dado un producto";
+	private static final String SWAGGER_DELETE_PROFESION_BY_PRODUCT = "Eliminar el detalle de una promocion dado un producto";
+	private static final String SWAGGER_COPY_PROFESION_FROM = "Copiar las profesiones al producto actual desde un producto origen";
 	
 	@Autowired
 	private PropertiesMsg propertiesMsg;	
@@ -1404,6 +1392,172 @@ public class ProductoController {
 		}
 
 		return ResponseEntity.ok(MSG_HTTP200);
+	}
+
+	@ApiOperation(value = SWAGGER_GET_PROFESIONES_BY_PRODUCT, notes = SWAGGER_GET_PROFESIONES_BY_PRODUCT)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/{id}/profesion")
+	public ResponseEntity<List<ProfesionDto>> getProfesionByProduct(@PathVariable("id") Long id) throws ProductoException,ResourceNotFoundException{
+		List<ProfesionDto> lista=null;
+		try {
+			lista = productoService.getProfesionesByProduct(id);
+		}
+		catch(ResourceNotFoundException notFoundProfesionGet) {
+			notFoundProfesionGet.setSubject(propertiesMsg.getLogger_error_executing_get_profesion_by_product());
+			throw notFoundProfesionGet;
+		}
+		catch(ProductoException productProfesionGet) {
+			productProfesionGet.setSubject(propertiesMsg.getLogger_error_executing_get_profesion_by_product());
+			throw productProfesionGet;
+		}
+		catch (Exception exDetalleProfesionGet) {
+			ProductoException ex = new ProductoException(exDetalleProfesionGet);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_profesion_by_product());
+			throw ex;
+		}
+		return ResponseEntity.ok(lista);
+	}
+
+	@ApiOperation(value = SWAGGER_SAVE_PROFESION_BY_PRODUCT, notes = SWAGGER_SAVE_PROFESION_BY_PRODUCT)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@PostMapping("/{id}/profesion")
+	public ResponseEntity<String> saveProfesionByProduct(
+			@PathVariable("id") Long id,
+			@RequestBody @Valid ProfesionDto profesionDto
+	) throws ProductoException,ResourceNotFoundException {
+
+		try {
+			productoService.saveProfesionByProduct(id,profesionDto);
+		}
+		catch(ResourceNotFoundException notFoundProfesionSave) {
+			notFoundProfesionSave.setSubject(propertiesMsg.getLogger_error_executing_save_profesion_by_product());
+			throw notFoundProfesionSave;
+		}
+		catch(ProductoException productProfesionSave) {
+			productProfesionSave.setSubject(propertiesMsg.getLogger_error_executing_save_profesion_by_product());
+			throw productProfesionSave;
+		}
+		catch (Exception exProfesionSave) {
+			ProductoException ex = new ProductoException(exProfesionSave);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_save_profesion_by_product());
+			throw ex;
+		}
+		return ResponseEntity.ok(MSG_HTTP200);
+	}
+
+	@ApiOperation(value = SWAGGER_UPDATE_PROFESION_BY_PRODUCT, notes = SWAGGER_UPDATE_PROFESION_BY_PRODUCT)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@PutMapping("/{id}/profesion/{idProfesion}")
+	public ResponseEntity<String> updateProfesionByProduct(
+			@PathVariable("id") Long idProducto,
+			@PathVariable("idProfesion") Long idProfesion,
+			@RequestBody @Valid ProfesionDto profesionDto
+	) throws ProductoException,ResourceNotFoundException,ForbiddenException {
+
+		try {
+			productoService.updateProfesionByProduct(idProducto, idProfesion, profesionDto);
+		}
+		catch(ResourceNotFoundException notFoundProfesionUpdate) {
+			notFoundProfesionUpdate.setSubject(propertiesMsg.getLogger_error_executing_update_profesion_by_product());
+			throw notFoundProfesionUpdate;
+		}
+		catch(ProductoException productProfesionUpdate) {
+			productProfesionUpdate.setSubject(propertiesMsg.getLogger_error_executing_update_profesion_by_product());
+			throw productProfesionUpdate;
+		}
+		catch (Exception exProfesionUpdate) {
+			ProductoException ex = new ProductoException(exProfesionUpdate);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_update_profesion_by_product());
+			throw ex;
+		}
+		return ResponseEntity.ok(MSG_HTTP200);
+	}
+
+	@ApiOperation(value = SWAGGER_DELETE_PROFESION_BY_PRODUCT, notes = SWAGGER_DELETE_PROFESION_BY_PRODUCT)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@DeleteMapping("/{id}/profesion/{idProfesion}")
+	public ResponseEntity<String> deleteProfesionByProduct(
+			@PathVariable("id") Long idProducto,
+			@PathVariable("idProfesion") Long idProfesion
+	) throws ProductoException,ResourceNotFoundException,ForbiddenException {
+
+		try {
+			productoService.deleteProfesionByProduct(idProducto,idProfesion);
+		}
+		catch(ResourceNotFoundException notFoundProfesionDel) {
+			notFoundProfesionDel.setSubject(propertiesMsg.getLogger_error_executing_delete_profesion_by_product());
+			throw notFoundProfesionDel;
+		}
+		catch(ProductoException productProfesionDel) {
+			productProfesionDel.setSubject(propertiesMsg.getLogger_error_executing_delete_profesion_by_product());
+			throw productProfesionDel;
+		}
+		catch (Exception exProfesionDel) {
+			ProductoException ex = new ProductoException(exProfesionDel);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_delete_profesion_by_product());
+			throw ex;
+		}
+		return ResponseEntity.ok(MSG_HTTP200);
+	}
+
+
+
+	@ApiOperation(value = SWAGGER_COPY_PROFESION_FROM, notes = SWAGGER_COPY_PROFESION_FROM)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@PostMapping("/{id}/copyprofesionfrom/{idProductoOrigen}")
+	public ResponseEntity<String> copyProfesionFromByProduct(
+			@PathVariable("id") Long idProducto,
+			@PathVariable("idProductoOrigen") Long idProductoOrigen
+	) throws ProductoException,ResourceNotFoundException {
+
+		try {
+			productoService.copyProfesionFrom(idProducto,idProductoOrigen);
+		}
+		catch(ResourceNotFoundException notFoundProfesionCopyFrom) {
+			notFoundProfesionCopyFrom.setSubject(propertiesMsg.getLogger_error_executing_copy_profesion_from_by_product());
+			throw notFoundProfesionCopyFrom;
+		}
+		catch(ProductoException productProfesionCopyFrom) {
+			productProfesionCopyFrom.setSubject(propertiesMsg.getLogger_error_executing_copy_profesion_from_by_product());
+			throw productProfesionCopyFrom;
+		}
+		catch (Exception exProfesionCopyFrom) {
+			ProductoException ex = new ProductoException(exProfesionCopyFrom);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_copy_profesion_from_by_product());
+			throw ex;
+		}
+		return ResponseEntity.ok(MSG_HTTP200);
+
 	}
 
 }

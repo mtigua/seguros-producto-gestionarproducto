@@ -602,5 +602,27 @@ public class Producto  {
 				} );
 	}
 
+	@OneToMany( cascade = {CascadeType.PERSIST,CascadeType.MERGE}, orphanRemoval = true)
+	@JoinColumn(name = "id_producto")
+	private Set<Profesion> profesiones;
+	
+	public void addProfesion(Profesion profesion) {
+        this.profesiones.add(profesion);
+    }
 
+	public void removeProfesion(Profesion profesion) {
+			this.profesiones.remove(profesion);
+	}
+
+	public void updateProfesion(Profesion profesion) {
+		 this.profesiones.stream()
+				  .filter(t -> profesion.getId().equals( t.getId() ) )
+				  .findFirst()
+				  .ifPresent(t-> {
+					  t=profesion;
+				  } );
+	}
+
+	
+	
 }
