@@ -50,7 +50,6 @@ public class GrupoOfertaController {
 	@Autowired
 	private ProductoService productoService;
 
-
 	@ApiOperation(value = SWAGGER_SAVE_PLAN_GRUPO_OFERTA_BY_PRODUCT, notes = SWAGGER_SAVE_PLAN_GRUPO_OFERTA_BY_PRODUCT)
 	@ApiResponses({
 			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
