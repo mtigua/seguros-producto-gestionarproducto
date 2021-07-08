@@ -28,6 +28,7 @@ import seguros.producto.gestionarproducto.dto.DeducibleDTO;
 import seguros.producto.gestionarproducto.dto.DetallePromocionDto;
 import seguros.producto.gestionarproducto.dto.DetallePromocionListDto;
 import seguros.producto.gestionarproducto.dto.EstadoProductoDto;
+import seguros.producto.gestionarproducto.dto.GrupoMejorOfertaRequestDto;
 import seguros.producto.gestionarproducto.dto.InfoProductoDto;
 import seguros.producto.gestionarproducto.dto.OrdenCoberturaDTO;
 import seguros.producto.gestionarproducto.dto.PageProductoDto;
@@ -54,6 +55,7 @@ import seguros.producto.gestionarproducto.entities.CoberturaProductoKey;
 import seguros.producto.gestionarproducto.entities.DestinoVenta;
 import seguros.producto.gestionarproducto.entities.DetallePromocion;
 import seguros.producto.gestionarproducto.entities.EstadoIntegracion;
+import seguros.producto.gestionarproducto.entities.GruposMejorOferta;
 import seguros.producto.gestionarproducto.entities.ModoTraspaso;
 import seguros.producto.gestionarproducto.entities.Parentesco;
 import seguros.producto.gestionarproducto.entities.PrimaSobreQue;
@@ -78,12 +80,14 @@ import seguros.producto.gestionarproducto.entities.TipoTramo;
 import seguros.producto.gestionarproducto.entities.TipoTraspaso;
 import seguros.producto.gestionarproducto.entities.Tramo;
 import seguros.producto.gestionarproducto.entities.TramoCobertura;
+import seguros.producto.gestionarproducto.entities.keys.GrupoMejorOfertaKey;
 import seguros.producto.gestionarproducto.exceptions.ForbiddenException;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
 import seguros.producto.gestionarproducto.repositories.CanalRepository;
 import seguros.producto.gestionarproducto.repositories.CoberturaRepository;
 import seguros.producto.gestionarproducto.repositories.DestinoVentaRepository;
 import seguros.producto.gestionarproducto.repositories.DetallePromocionRepository;
+import seguros.producto.gestionarproducto.repositories.GruposMejorOfertaCrudRepository;
 import seguros.producto.gestionarproducto.repositories.ModoTraspasoRepository;
 import seguros.producto.gestionarproducto.repositories.ParentescoRepository;
 import seguros.producto.gestionarproducto.repositories.PrimaSobreQueRepository;
@@ -162,6 +166,8 @@ public class ProductoServiceImpl implements ProductoService {
 	@Autowired
 	private DestinoVentaRepository destinoVentaRepository;
 
+	@Autowired
+	private GruposMejorOfertaCrudRepository gruposMejorOfertaCrudRepository;
 
 	@Autowired
 	private EstadoIntegracionService estadoIntegracionService;
@@ -1736,6 +1742,50 @@ public class ProductoServiceImpl implements ProductoService {
 					productoRepository.save(producto);
 				}
 				else{
+					ForbiddenException fe = new ForbiddenException();
+					fe.setConcreteException(fe);
+					fe.setErrorMessage(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
+					fe.setDetail(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
+					throw fe;
+				}
+			}
+			else {
+				ResourceNotFoundException esave = new ResourceNotFoundException();
+				esave.setConcreteException(esave);
+				esave.setErrorMessage(MSG_NOT_FOUND);
+				esave.setDetail(MSG_NOT_FOUND);
+				throw esave;
+			}
+		}
+		catch(ResourceNotFoundException | ForbiddenException e) {
+			throw e;
+		} catch(Exception e) {
+			throw new ProductoException(e);
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	@Transactional
+	@Override
+	public void saveGrupoAOfrecerByProduct(Long id, List<GrupoMejorOfertaRequestDto> grupoMejorOferta)
+			throws ProductoException, ResourceNotFoundException,ForbiddenException {
+		try {
+			Optional<Producto> productoO= productoRepository.findById(id);
+			if(productoO.isPresent()) {
+				Producto producto=productoO.get();
+				if(producto.getOfreceMejorAlt()){
+
+					gruposMejorOfertaCrudRepository.deleteByProductoId(id);
+
+					grupoMejorOferta.stream().forEach(e->{
+						GruposMejorOferta gruposMejorOferta = new GruposMejorOferta();
+						GrupoMejorOfertaKey grupoMejorOfertaKey = new GrupoMejorOfertaKey(id, e.getId());
+						gruposMejorOferta.setId(grupoMejorOfertaKey);
+						gruposMejorOfertaCrudRepository.save(gruposMejorOferta);
+					});
+
+				} else {
 					ForbiddenException fe = new ForbiddenException();
 					fe.setConcreteException(fe);
 					fe.setErrorMessage(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
