@@ -126,6 +126,7 @@ public class ProductoServiceImpl implements ProductoService {
 	private static final String MSG_FORBIDDEN_TERMINOS_CORTOS_BY_PRODUCT = "No est\u00E1 permitido la administraci\u00F3n de t\u00E9rminos cortos para este producto";
 	private static final String MSG_FORBIDDEN_RECARGO_POR_ASEGURADO_BY_PRODUCT = "No est\u00E1 permitido la administraci\u00F3n de recargo por asegurado para este producto";
 	private static final String MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT = "No est\u00E1 permitido la administraci\u00F3n de upgrade para este producto";
+	private static final String MSG_FORBIDDEN_PLAN_BY_PRODUCT = "No est\u00E1 permitido la administraci\u00F3n para este producto";
 	private static final String MSG_FORBIDDEN_COBERTURA_POR_ASEGURADO_BY_PRODUCT = "No est\u00E1 permitido la creación de una misma cobertura, intente con otro";
 	private static final String MSG_FORBIDDEN_ERROR_REGISTER = "Error en el registro";
 	private static final String MSG_FORBIDDEN_NEMOTECNICO_EN_USO = "El nemot\u00E9cnico ya esta en uso";
@@ -1788,8 +1789,8 @@ public class ProductoServiceImpl implements ProductoService {
 				} else {
 					ForbiddenException fe = new ForbiddenException();
 					fe.setConcreteException(fe);
-					fe.setErrorMessage(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
-					fe.setDetail(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
+					fe.setErrorMessage(MSG_FORBIDDEN_PLAN_BY_PRODUCT);
+					fe.setDetail(MSG_FORBIDDEN_PLAN_BY_PRODUCT);
 					throw fe;
 				}
 			}
