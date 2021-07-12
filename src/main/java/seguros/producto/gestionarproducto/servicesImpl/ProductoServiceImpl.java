@@ -20,11 +20,102 @@ import org.springframework.web.client.RestTemplate;
 
 
 import seguros.producto.gestionarproducto.configuration.Properties;
-import seguros.producto.gestionarproducto.dto.*;
-import seguros.producto.gestionarproducto.entities.*;
+import seguros.producto.gestionarproducto.dto.ActionType;
+import seguros.producto.gestionarproducto.dto.CoberturaDTO;
+import seguros.producto.gestionarproducto.dto.CoberturaProductoCorrelativoDto;
+import seguros.producto.gestionarproducto.dto.CoberturaProductoDto;
+import seguros.producto.gestionarproducto.dto.DeducibleDTO;
+import seguros.producto.gestionarproducto.dto.DetallePromocionDto;
+import seguros.producto.gestionarproducto.dto.DetallePromocionListDto;
+import seguros.producto.gestionarproducto.dto.EstadoProductoDto;
+import seguros.producto.gestionarproducto.dto.GrupoMejorOfertaRequestDto;
+import seguros.producto.gestionarproducto.dto.InfoProductoDto;
+import seguros.producto.gestionarproducto.dto.OrdenCoberturaDTO;
+import seguros.producto.gestionarproducto.dto.PageProductoDto;
+import seguros.producto.gestionarproducto.dto.PrimaSobreQueDto;
+import seguros.producto.gestionarproducto.dto.ProductoDoDto;
+import seguros.producto.gestionarproducto.dto.ProductoDto;
+import seguros.producto.gestionarproducto.dto.ProfesionDto;
+import seguros.producto.gestionarproducto.dto.RecargoPorAseguradoDto;
+import seguros.producto.gestionarproducto.dto.PlanUpgradeDto;
+import seguros.producto.gestionarproducto.dto.ProdDto;
+import seguros.producto.gestionarproducto.dto.State;
+import seguros.producto.gestionarproducto.dto.TarifaEsDto;
+import seguros.producto.gestionarproducto.dto.TerminoCortoDto;
+import seguros.producto.gestionarproducto.dto.TerminoCortoSaveDto;
+import seguros.producto.gestionarproducto.dto.TipoIvaDTO;
+import seguros.producto.gestionarproducto.dto.TipoMultaDto;
+import seguros.producto.gestionarproducto.dto.TipoPromocionDto;
+import seguros.producto.gestionarproducto.dto.TipoTasaDto;
+import seguros.producto.gestionarproducto.dto.TipoTramoDto;
+import seguros.producto.gestionarproducto.dto.TramoDto;
+import seguros.producto.gestionarproducto.dto.TramoListDto;
+import seguros.producto.gestionarproducto.entities.Canal;
+import seguros.producto.gestionarproducto.entities.CoberturaProducto;
+import seguros.producto.gestionarproducto.entities.CoberturaProductoKey;
+import seguros.producto.gestionarproducto.entities.DestinoVenta;
+import seguros.producto.gestionarproducto.entities.DetallePromocion;
+import seguros.producto.gestionarproducto.entities.EstadoIntegracion;
+import seguros.producto.gestionarproducto.entities.GruposMejorOferta;
+import seguros.producto.gestionarproducto.entities.ModoTraspaso;
+import seguros.producto.gestionarproducto.entities.Parentesco;
+import seguros.producto.gestionarproducto.entities.PrimaSobreQue;
+import seguros.producto.gestionarproducto.entities.Producto;
+import seguros.producto.gestionarproducto.entities.ProductoDo;
+import seguros.producto.gestionarproducto.entities.Profesion;
+import seguros.producto.gestionarproducto.entities.ProfesionKey;
+import seguros.producto.gestionarproducto.entities.RecargoPorAsegurado;
+import seguros.producto.gestionarproducto.entities.PlanUpgrade;
+import seguros.producto.gestionarproducto.entities.TarifaEs;
+import seguros.producto.gestionarproducto.entities.TarifaPor;
+import seguros.producto.gestionarproducto.entities.TerminoCorto;
+import seguros.producto.gestionarproducto.entities.TipoAjuste;
+import seguros.producto.gestionarproducto.entities.TipoCobertura;
+import seguros.producto.gestionarproducto.entities.TipoDescuento;
+import seguros.producto.gestionarproducto.entities.TipoMulta;
+import seguros.producto.gestionarproducto.entities.TipoPeriodo;
+import seguros.producto.gestionarproducto.entities.TipoPromocion;
+import seguros.producto.gestionarproducto.entities.TipoRecargo;
+import seguros.producto.gestionarproducto.entities.TipoSeguro;
+import seguros.producto.gestionarproducto.entities.TipoTarifa;
+import seguros.producto.gestionarproducto.entities.TipoTasa;
+import seguros.producto.gestionarproducto.entities.TipoTramo;
+import seguros.producto.gestionarproducto.entities.TipoTraspaso;
+import seguros.producto.gestionarproducto.entities.Tramo;
+import seguros.producto.gestionarproducto.entities.TramoCobertura;
+import seguros.producto.gestionarproducto.entities.keys.GrupoMejorOfertaKey;
 import seguros.producto.gestionarproducto.exceptions.ForbiddenException;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
-import seguros.producto.gestionarproducto.repositories.*;
+import seguros.producto.gestionarproducto.repositories.CanalRepository;
+import seguros.producto.gestionarproducto.repositories.CoberturaRepository;
+import seguros.producto.gestionarproducto.repositories.CriterioRepository;
+import seguros.producto.gestionarproducto.repositories.DestinoVentaRepository;
+import seguros.producto.gestionarproducto.repositories.DetallePromocionRepository;
+import seguros.producto.gestionarproducto.repositories.GruposMejorOfertaCrudRepository;
+import seguros.producto.gestionarproducto.repositories.ModoTraspasoRepository;
+import seguros.producto.gestionarproducto.repositories.ParentescoRepository;
+import seguros.producto.gestionarproducto.repositories.PrimaSobreQueRepository;
+import seguros.producto.gestionarproducto.repositories.ProductoRepository;
+import seguros.producto.gestionarproducto.repositories.ProfesionRepository;
+import seguros.producto.gestionarproducto.repositories.RecargoPorAseguradoRepository;
+import seguros.producto.gestionarproducto.repositories.PlanUpgradeRepository;
+import seguros.producto.gestionarproducto.repositories.TarifaEsRepository;
+import seguros.producto.gestionarproducto.repositories.TarifaPorRepository;
+import seguros.producto.gestionarproducto.repositories.TerminoCortoRepository;
+import seguros.producto.gestionarproducto.repositories.TipoAjusteRepository;
+import seguros.producto.gestionarproducto.repositories.TipoCoberturaRepository;
+import seguros.producto.gestionarproducto.repositories.TipoDescuentoRepository;
+import seguros.producto.gestionarproducto.repositories.TipoMultaRepository;
+import seguros.producto.gestionarproducto.repositories.TipoPeriodoRepository;
+import seguros.producto.gestionarproducto.repositories.TipoPromocionRepository;
+import seguros.producto.gestionarproducto.repositories.TipoRecargoRepository;
+import seguros.producto.gestionarproducto.repositories.TipoSeguroRepository;
+import seguros.producto.gestionarproducto.repositories.TipoTarifaRepository;
+import seguros.producto.gestionarproducto.repositories.TipoTasaRepository;
+import seguros.producto.gestionarproducto.repositories.TipoTramoRepository;
+import seguros.producto.gestionarproducto.repositories.TipoTraspasoRepository;
+import seguros.producto.gestionarproducto.repositories.TramoCoberturaRepository;
+import seguros.producto.gestionarproducto.repositories.TramoRepository;
 import seguros.producto.gestionarproducto.services.EstadoIntegracionService;
 import seguros.producto.gestionarproducto.services.ProductoService;
 
@@ -40,6 +131,7 @@ public class ProductoServiceImpl implements ProductoService {
 	private static final String MSG_FORBIDDEN_TERMINOS_CORTOS_BY_PRODUCT = "No est\u00E1 permitido la administraci\u00F3n de t\u00E9rminos cortos para este producto";
 	private static final String MSG_FORBIDDEN_RECARGO_POR_ASEGURADO_BY_PRODUCT = "No est\u00E1 permitido la administraci\u00F3n de recargo por asegurado para este producto";
 	private static final String MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT = "No est\u00E1 permitido la administraci\u00F3n de upgrade para este producto";
+	private static final String MSG_FORBIDDEN_PLAN_BY_PRODUCT = "No est\u00E1 permitido la administraci\u00F3n para este producto";
 	private static final String MSG_FORBIDDEN_COBERTURA_POR_ASEGURADO_BY_PRODUCT = "No est\u00E1 permitido la creación de una misma cobertura, intente con otro";
 	private static final String MSG_FORBIDDEN_ERROR_REGISTER = "Error en el registro";
 	private static final String MSG_FORBIDDEN_NEMOTECNICO_EN_USO = "El nemot\u00E9cnico ya esta en uso";
@@ -81,6 +173,8 @@ public class ProductoServiceImpl implements ProductoService {
 	@Autowired
 	private DestinoVentaRepository destinoVentaRepository;
 
+	@Autowired
+	private GruposMejorOfertaCrudRepository gruposMejorOfertaCrudRepository;
 
 	@Autowired
 	private EstadoIntegracionService estadoIntegracionService;
@@ -1665,6 +1759,50 @@ public class ProductoServiceImpl implements ProductoService {
 					fe.setConcreteException(fe);
 					fe.setErrorMessage(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
 					fe.setDetail(MSG_FORBIDDEN_PLAN_UPGRADE_BY_PRODUCT);
+					throw fe;
+				}
+			}
+			else {
+				ResourceNotFoundException esave = new ResourceNotFoundException();
+				esave.setConcreteException(esave);
+				esave.setErrorMessage(MSG_NOT_FOUND);
+				esave.setDetail(MSG_NOT_FOUND);
+				throw esave;
+			}
+		}
+		catch(ResourceNotFoundException | ForbiddenException e) {
+			throw e;
+		} catch(Exception e) {
+			throw new ProductoException(e);
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	@Transactional
+	@Override
+	public void saveGrupoAOfrecerByProduct(Long id, List<GrupoMejorOfertaRequestDto> grupoMejorOferta)
+			throws ProductoException, ResourceNotFoundException,ForbiddenException {
+		try {
+			Optional<Producto> productoO= productoRepository.findById(id);
+			if(productoO.isPresent()) {
+				Producto producto=productoO.get();
+				if(producto.getOfreceMejorAlt()){
+
+					gruposMejorOfertaCrudRepository.deleteByProductoId(id);
+
+					grupoMejorOferta.stream().forEach(e->{
+						GruposMejorOferta gruposMejorOferta = new GruposMejorOferta();
+						GrupoMejorOfertaKey grupoMejorOfertaKey = new GrupoMejorOfertaKey(id, e.getId());
+						gruposMejorOferta.setId(grupoMejorOfertaKey);
+						gruposMejorOfertaCrudRepository.save(gruposMejorOferta);
+					});
+
+				} else {
+					ForbiddenException fe = new ForbiddenException();
+					fe.setConcreteException(fe);
+					fe.setErrorMessage(MSG_FORBIDDEN_PLAN_BY_PRODUCT);
+					fe.setDetail(MSG_FORBIDDEN_PLAN_BY_PRODUCT);
 					throw fe;
 				}
 			}

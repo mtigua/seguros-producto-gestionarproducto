@@ -48,6 +48,8 @@ public interface ProductoService {
 	public void updateDetallePromocionByProduct(Long idProducto, Long idDetallePromocion, DetallePromocionDto detallePromocionDto) throws ProductoException, ResourceNotFoundException,ForbiddenException;
 	public void deleteDetallePromocionByProduct(Long idProducto, Long idDetallePromocion) throws ProductoException, ResourceNotFoundException,ForbiddenException;
 
+    public void saveGrupoAOfrecerByProduct(Long id, List<GrupoMejorOfertaRequestDto> grupoMejorOferta) throws ProductoException,ResourceNotFoundException,ForbiddenException;
+
     public List<PlanUpgradeDto> getPlanUpgradeByProduct(Long id) throws ProductoException,ResourceNotFoundException,ForbiddenException;
     public List<ProdDto> getProductByNemo(Long id,String nemo) throws ProductoException,ResourceNotFoundException,ForbiddenException;
     public List<ProdDto> getPlanesExistentesByNemo(Long id,String nemoU, String nemoP) throws ProductoException,ResourceNotFoundException,ForbiddenException;
