@@ -72,4 +72,10 @@ public class PropertiesMsg {
 	private String logger_error_executing_save_plan_grupo_oferta_by_product;
 	private String logger_error_executing_update_plan_upgrade_by_product;
 	private String logger_error_executing_delete_plan_upgrade_by_product;
+
+	private String logger_error_executing_get_profesion_by_product;
+	private String logger_error_executing_save_profesion_by_product;
+	private String logger_error_executing_update_profesion_by_product;
+	private String logger_error_executing_delete_profesion_by_product;
+	private String logger_error_executing_copy_profesion_from_by_product;
 }

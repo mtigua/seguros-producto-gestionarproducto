@@ -57,4 +57,10 @@ public interface ProductoService {
     public void saveUpgradeByProduct(Long id, List<PlanUpgradeDto> upgrades, String nemoP) throws ProductoException,ResourceNotFoundException,ForbiddenException;
     public void deleteUpgradeByProduct(Long idProducto,Long idUpgrade) throws ProductoException,ResourceNotFoundException,ForbiddenException;
     public void updateUpgradeByProduct(Long id, Long idUpgrade, PlanUpgradeDto planUpgradeDto) throws ProductoException,ResourceNotFoundException,ForbiddenException;
+
+    public List<ProfesionDto> getProfesionesByProduct(Long id) throws ProductoException,ResourceNotFoundException;
+    public void saveProfesionByProduct(Long id, ProfesionDto profesionDto) throws ProductoException,ResourceNotFoundException;
+    public void updateProfesionByProduct(Long idProducto, Long idProfesion, ProfesionDto profesionDtoDto) throws ProductoException, ResourceNotFoundException;
+    public void deleteProfesionByProduct(Long idProducto, Long idProfesion) throws ProductoException, ResourceNotFoundException;
+    public void copyProfesionFrom(Long idProducto, Long idProductoOrigen) throws ProductoException,ResourceNotFoundException;
 }

@@ -35,6 +35,7 @@ import seguros.producto.gestionarproducto.dto.PageProductoDto;
 import seguros.producto.gestionarproducto.dto.PrimaSobreQueDto;
 import seguros.producto.gestionarproducto.dto.ProductoDoDto;
 import seguros.producto.gestionarproducto.dto.ProductoDto;
+import seguros.producto.gestionarproducto.dto.ProfesionDto;
 import seguros.producto.gestionarproducto.dto.RecargoPorAseguradoDto;
 import seguros.producto.gestionarproducto.dto.PlanUpgradeDto;
 import seguros.producto.gestionarproducto.dto.ProdDto;
@@ -61,6 +62,8 @@ import seguros.producto.gestionarproducto.entities.Parentesco;
 import seguros.producto.gestionarproducto.entities.PrimaSobreQue;
 import seguros.producto.gestionarproducto.entities.Producto;
 import seguros.producto.gestionarproducto.entities.ProductoDo;
+import seguros.producto.gestionarproducto.entities.Profesion;
+import seguros.producto.gestionarproducto.entities.ProfesionKey;
 import seguros.producto.gestionarproducto.entities.RecargoPorAsegurado;
 import seguros.producto.gestionarproducto.entities.PlanUpgrade;
 import seguros.producto.gestionarproducto.entities.TarifaEs;
@@ -85,6 +88,7 @@ import seguros.producto.gestionarproducto.exceptions.ForbiddenException;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
 import seguros.producto.gestionarproducto.repositories.CanalRepository;
 import seguros.producto.gestionarproducto.repositories.CoberturaRepository;
+import seguros.producto.gestionarproducto.repositories.CriterioRepository;
 import seguros.producto.gestionarproducto.repositories.DestinoVentaRepository;
 import seguros.producto.gestionarproducto.repositories.DetallePromocionRepository;
 import seguros.producto.gestionarproducto.repositories.GruposMejorOfertaCrudRepository;
@@ -92,6 +96,7 @@ import seguros.producto.gestionarproducto.repositories.ModoTraspasoRepository;
 import seguros.producto.gestionarproducto.repositories.ParentescoRepository;
 import seguros.producto.gestionarproducto.repositories.PrimaSobreQueRepository;
 import seguros.producto.gestionarproducto.repositories.ProductoRepository;
+import seguros.producto.gestionarproducto.repositories.ProfesionRepository;
 import seguros.producto.gestionarproducto.repositories.RecargoPorAseguradoRepository;
 import seguros.producto.gestionarproducto.repositories.PlanUpgradeRepository;
 import seguros.producto.gestionarproducto.repositories.TarifaEsRepository;
@@ -130,6 +135,7 @@ public class ProductoServiceImpl implements ProductoService {
 	private static final String MSG_FORBIDDEN_COBERTURA_POR_ASEGURADO_BY_PRODUCT = "No est\u00E1 permitido la creación de una misma cobertura, intente con otro";
 	private static final String MSG_FORBIDDEN_ERROR_REGISTER = "Error en el registro";
 	private static final String MSG_FORBIDDEN_NEMOTECNICO_EN_USO = "El nemot\u00E9cnico ya esta en uso";
+	private static final String MSG_FORBIDDEN_PROFESION_EXISTENTE = "No esta permitida la creacion de una misma profesion, intente con otra";
 
 	@Autowired
 	private ProductoRepository productoRepository;
@@ -223,6 +229,12 @@ public class ProductoServiceImpl implements ProductoService {
 	
 	@Autowired
 	private DetallePromocionRepository detallePromocionRepository;
+
+	@Autowired
+	private ProfesionRepository profesionRepository;
+	
+	@Autowired
+	private CriterioRepository criterioRepository;
 
 	@Autowired
 	private Properties properties;
@@ -2268,6 +2280,144 @@ public class ProductoServiceImpl implements ProductoService {
 		throw e;
 	}
 
+	@Transactional
+	@Override
+	public List<ProfesionDto> getProfesionesByProduct(Long id) throws ProductoException,ResourceNotFoundException{
+		List<ProfesionDto> listProfesionDto = null;
+		try {
+			Optional<Producto> productoOp= productoRepository.findById(id);
+			if(productoOp.isPresent()) {
+				Producto producto=productoOp.get();
+				Set<Profesion> listaProfesiones = producto.getProfesiones();
+				listProfesionDto = listaProfesiones.stream().map(profesion->{
+					ProfesionDto profesionDto= new ProfesionDto();
+					profesionDto.setPorcentaje(profesion.getPorcentaje()); 
+					profesionDto.setIdProducto(profesion.getId().getIdProducto());
+					profesionDto.setIdProfesion(profesion.getId().getIdProfesion());
+					return profesionDto;
+				}).collect(Collectors.toList());
+			}
+			else{
+				lanzarExcepcionRecursoNoEncontrado();
+			}
+		}
+		catch(ResourceNotFoundException es) {
+			throw es;
+		}
+		catch(Exception es) {
+			throw new ProductoException(es);
+		}
+		return listProfesionDto;
+	}
+
+	@Transactional
+	@Override
+	public void saveProfesionByProduct(Long id, ProfesionDto profesionDto) 
+			throws ProductoException,ResourceNotFoundException{
+		try {
+			Optional<Producto> productoOp= productoRepository.findById(id);
+			if(productoOp.isPresent()) {
+				Producto producto=productoOp.get();
+				Optional<Profesion> profesionOp = profesionRepository.findById(new ProfesionKey(id,profesionDto.getIdProfesion()));
+				if (profesionOp.isPresent()) {
+					Profesion profesion = profesionOp.get();
+					profesion.setPorcentaje(profesionDto.getPorcentaje());
+					producto.updateProfesion(profesion);
+						
+				}
+				else {
+					Profesion profesion = new Profesion();
+					profesion.setId(new ProfesionKey(id,profesionDto.getIdProfesion()));
+					profesion.setPorcentaje(profesionDto.getPorcentaje());	
+					producto.addProfesion(profesion);
+				}
+				productoRepository.save(producto);
+				
+			}
+			else{
+				lanzarExcepcionRecursoNoEncontrado();
+			}
+		}
+		catch(ResourceNotFoundException es) {
+			throw es;
+		}
+		catch(Exception es) {
+			throw new ProductoException(es);
+		}
+	}
+
+	@Transactional
+	@Override
+	public void updateProfesionByProduct(Long idProducto, Long idProfesion, ProfesionDto profesionDto) throws ProductoException, ResourceNotFoundException{
+		try {
+			Optional<Producto> productoOp= productoRepository.findById(idProducto);
+			Optional<Profesion> profesionOp = profesionRepository.findById(new ProfesionKey(idProducto,idProfesion));
+			if(productoOp.isPresent() && profesionOp.isPresent()) {
+				Producto producto=productoOp.get();
+				Profesion profesion=profesionOp.get();
+				profesion.setPorcentaje(profesionDto.getPorcentaje());
+				producto.updateProfesion(profesion);
+				productoRepository.save(producto);
+			}
+			else{
+				lanzarExcepcionRecursoNoEncontrado();
+			}
+		}
+		catch(ResourceNotFoundException es) {
+			throw es;
+		}
+		catch(Exception es) {
+			throw new ProductoException(es);
+		}
+	}
+	
+	@Transactional
+	@Override
+	public void deleteProfesionByProduct(Long idProducto, Long idProfesion) throws ProductoException, ResourceNotFoundException{
+		try {
+			Optional<Producto> productoOp= productoRepository.findById(idProducto);
+			Optional<Profesion> profesionOp = profesionRepository.findById(new ProfesionKey(idProducto,idProfesion));
+			if(productoOp.isPresent() && profesionOp.isPresent()) {
+				Profesion profesion=profesionOp.get();
+				Producto producto=productoOp.get(); 
+				producto.removeProfesion(profesion);
+				productoRepository.save(producto);
+			}
+			else{
+				lanzarExcepcionRecursoNoEncontrado();
+			}
+		}
+		catch(ResourceNotFoundException es) {
+			throw es;
+		}
+		catch(Exception es) {
+			throw new ProductoException(es);
+		}
+	}
+
+	@Transactional
+	@Override
+	public void copyProfesionFrom(Long idProducto, Long idProductoOrigen) throws ProductoException,ResourceNotFoundException{
+		try {
+			Optional<Producto> productoOp = productoRepository.findById(idProducto);
+			Optional<Producto> productoOpOrigen = productoRepository.findById(idProductoOrigen);
+			if(productoOp.isPresent() && productoOpOrigen.isPresent() ){
+				Producto productoOrigen = productoOpOrigen.get();
+				Producto producto = productoOp.get();
+				producto.setProfesiones(productoOrigen.getProfesiones());
+				productoRepository.save(producto);
+			}
+			else {
+				lanzarExcepcionRecursoNoEncontrado();
+			}
+		}
+		catch(ResourceNotFoundException | ForbiddenException ec) {
+			throw ec;
+		}
+		catch(Exception ec) {
+			throw new ProductoException(ec);
+		}
+	}
 	
 	
 }
