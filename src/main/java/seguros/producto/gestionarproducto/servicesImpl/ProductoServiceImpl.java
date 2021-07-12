@@ -11,13 +11,14 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureQuery;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 
 import seguros.producto.gestionarproducto.configuration.Properties;
 import seguros.producto.gestionarproducto.dto.ActionType;
@@ -30,6 +31,7 @@ import seguros.producto.gestionarproducto.dto.DetallePromocionListDto;
 import seguros.producto.gestionarproducto.dto.EstadoProductoDto;
 import seguros.producto.gestionarproducto.dto.GrupoMejorOfertaRequestDto;
 import seguros.producto.gestionarproducto.dto.InfoProductoDto;
+import seguros.producto.gestionarproducto.dto.NemotecnicoDto;
 import seguros.producto.gestionarproducto.dto.OrdenCoberturaDTO;
 import seguros.producto.gestionarproducto.dto.PageProductoDto;
 import seguros.producto.gestionarproducto.dto.PrimaSobreQueDto;
@@ -135,6 +137,8 @@ public class ProductoServiceImpl implements ProductoService {
 	private static final String MSG_FORBIDDEN_COBERTURA_POR_ASEGURADO_BY_PRODUCT = "No est\u00E1 permitido la creación de una misma cobertura, intente con otro";
 	private static final String MSG_FORBIDDEN_ERROR_REGISTER = "Error en el registro";
 	private static final String MSG_FORBIDDEN_NEMOTECNICO_EN_USO = "El nemot\u00E9cnico ya esta en uso";
+	private static final String MSG_FORBIDDEN_NEMOTECNICO_UPDATE = "No puede modificarse el nemot\u00E9cnico de un producto que ya existe";
+	private static final Long ID_ESTADO_NEMOTECNICO_CONFIGURADO= 2L;
 
 	@Autowired
 	private ProductoRepository productoRepository;
@@ -2280,43 +2284,90 @@ public class ProductoServiceImpl implements ProductoService {
 		InfoProductoDto result=new InfoProductoDto();
 		
 		try {			
-			String idCompania= String.valueOf(producto.getIdCompania());
-			String idRamo= String.valueOf(producto.getIdRamo());
-			String idNegocio= String.valueOf(producto.getIdNegocio());
-			Integer idCiaNegocioRamo= Integer.valueOf(idCompania+idNegocio+idRamo);
-			
+						
 			if(VALUE_UNDEFINED.equals(id)) {
-				Producto productoEntity = new Producto();
-				BeanUtils.copyProperties(producto, productoEntity);
-			
-				Long[] canales= producto.getCanales();
 				
-				if(canales!=null) {
-					Arrays.asList(producto.getCanales()).stream().forEach((p) ->{
-						Canal canalEntity= canalRepository.getOne(p);
-						if(canalEntity.getId()!=null) {
-							productoEntity.addCanal(canalEntity);
-						}
-					});
+				String requestNemotecnico=producto.getNemot();
+				if(requestNemotecnico == null) {
+					requestNemotecnico= this.generateNemotecnico();
 				}
-			
-				productoEntity.setIdCiaNegocioRamo(idCiaNegocioRamo);
-				productoRepository.save(productoEntity);
-				result.setId(productoEntity.getId());
+				
+				boolean nemotecnicoEnUso= productoRepository.verificarSiExisteNemotecnico(requestNemotecnico);
+				
+				if(!nemotecnicoEnUso) {
+					String idCompania= String.valueOf(producto.getIdCompania());
+					String idRamo= String.valueOf(producto.getIdRamo());
+					String idNegocio= String.valueOf(producto.getIdNegocio());
+					Integer idCiaNegocioRamo= Integer.valueOf(idCompania+idNegocio+idRamo);
+					Producto productoEntity = new Producto();
+					BeanUtils.copyProperties(producto, productoEntity);
+					
+				
+					Long[] canales= producto.getCanales();
+					
+					if(canales!=null) {
+						Arrays.asList(producto.getCanales()).stream().forEach((p) ->{
+							Canal canalEntity= canalRepository.getOne(p);
+							if(canalEntity.getId()!=null) {
+								productoEntity.addCanal(canalEntity);
+							}
+						});
+					}
+				
+					productoEntity.setIdCiaNegocioRamo(idCiaNegocioRamo);
+					productoEntity.setNemot(requestNemotecnico);
+					productoRepository.save(productoEntity);	
+					
+					
+					NemotecnicoDto nemotecnicoSaveDto= new NemotecnicoDto();
+					nemotecnicoSaveDto.setCompania(productoEntity.getIdCompania());
+					nemotecnicoSaveDto.setRamo(productoEntity.getIdRamo());
+					nemotecnicoSaveDto.setNegocio(productoEntity.getIdNegocio());
+					nemotecnicoSaveDto.setNombre(productoEntity.getDescrip());
+					nemotecnicoSaveDto.setDescripcion(productoEntity.getDescripcionPlan());
+					nemotecnicoSaveDto.setNemotecnico(productoEntity.getNemot());
+					nemotecnicoSaveDto.setEstado(ID_ESTADO_NEMOTECNICO_CONFIGURADO);
+					nemotecnicoSaveDto.setId(null);
+					
+					this.saveOrUpdateNemotecnico(nemotecnicoSaveDto);
+					
+					result.setId(productoEntity.getId());
+					result.setNemotecnico(nemotecnicoSaveDto.getNemotecnico());
+				}
+				else {
+					ProductoException ePass = new ProductoException();
+					ePass.setConcreteException(ePass);
+					ePass.setErrorMessage(MSG_FORBIDDEN_NEMOTECNICO_EN_USO);
+					ePass.setDetail(MSG_FORBIDDEN_NEMOTECNICO_EN_USO);
+					throw ePass;
+				}
 			}			
 			else {
 				Optional<Producto> productoOpt= productoRepository.findById(id);
 				if(productoOpt.isPresent()) {
 
 					Producto productoEntity = productoOpt.get();
-					boolean nemotecnicoEnUso= productoRepository.verificarSiExisteNemotecnico(producto.getNemot());
+					String nemotecnicoRequestDto=producto.getNemot();
+					String nemotecnicoEntity= productoEntity.getNemot();
+					Integer idCompania= productoEntity.getIdCompania();
+					Integer idRamo= productoEntity.getIdRamo();
+					Integer idNegocio= productoEntity.getIdNegocio();
+					
+					if(nemotecnicoRequestDto!=null && !productoEntity.getNemot().equalsIgnoreCase(nemotecnicoRequestDto)){
+						ProductoException ePass = new ProductoException();
+						ePass.setConcreteException(ePass);
+						ePass.setErrorMessage(MSG_FORBIDDEN_NEMOTECNICO_UPDATE);
+						ePass.setDetail(MSG_FORBIDDEN_NEMOTECNICO_UPDATE);
+						throw ePass;
+					}
+					else {
 
-					if(!nemotecnicoEnUso) {
 						BeanUtils.copyProperties(producto, productoEntity);
 					
 						Long[] canales= producto.getCanales();
 						
 						if(canales!=null) {
+							productoEntity.getCanales().clear();
 							Arrays.asList(producto.getCanales()).stream().forEach((p) ->{
 								Canal canalEntity= canalRepository.getOne(p);
 								if(canalEntity.getId()!=null) {
@@ -2325,19 +2376,30 @@ public class ProductoServiceImpl implements ProductoService {
 							});
 						}
 					
-						productoEntity.setIdCiaNegocioRamo(idCiaNegocioRamo);
-						productoEntity.setId(id);					
-						productoRepository.save(productoEntity);
+						productoEntity.setId(id);	
+						productoEntity.setNemot(nemotecnicoEntity);
+						productoEntity.setIdCompania(idCompania);
+						productoEntity.setIdNegocio(idNegocio);
+						productoEntity.setIdRamo(idRamo);
+						
+						productoRepository.save(productoEntity);						
+						
+						NemotecnicoDto nemotecnicoSaveDto= new NemotecnicoDto();
+						nemotecnicoSaveDto.setCompania(productoEntity.getIdCompania());
+						nemotecnicoSaveDto.setRamo(productoEntity.getIdRamo());
+						nemotecnicoSaveDto.setNegocio(productoEntity.getIdNegocio());
+						nemotecnicoSaveDto.setNombre(productoEntity.getDescrip());
+						nemotecnicoSaveDto.setDescripcion(productoEntity.getDescripcionPlan());
+						nemotecnicoSaveDto.setNemotecnico(productoEntity.getNemot());
+						nemotecnicoSaveDto.setEstado(ID_ESTADO_NEMOTECNICO_CONFIGURADO);
+						nemotecnicoSaveDto.setId(id);
+						
+						this.saveOrUpdateNemotecnico(nemotecnicoSaveDto);
+						
 						result.setId(id);
-					}					
-					else {
-							ProductoException ePass = new ProductoException();
-							ePass.setConcreteException(ePass);
-							ePass.setErrorMessage(MSG_FORBIDDEN_NEMOTECNICO_EN_USO);
-							ePass.setDetail(MSG_FORBIDDEN_NEMOTECNICO_EN_USO);
-							throw ePass;
-						}
-					
+						result.setNemotecnico(nemotecnicoSaveDto.getNemotecnico());
+					}
+								
 				}
 				else {
 					lanzarExcepcionRecursoNoEncontrado();
@@ -2803,6 +2865,32 @@ public class ProductoServiceImpl implements ProductoService {
     	   throw new ProductoException(e);
        }
 		return form;
+	}
+
+	@Override
+	public String generateNemotecnico() throws ProductoException {
+		String newNemotecnico = null;
+
+        try {
+            newNemotecnico= productoRepository.generateNemotecnico();
+
+        } catch (ProductoException e) {
+            throw e;
+        } 
+
+        return newNemotecnico;
+	}
+
+	@Override
+	public void saveOrUpdateNemotecnico(NemotecnicoDto nemotecnico) throws ProductoException {
+
+		try {
+			productoRepository.saveOrUpdateNemotecnico(nemotecnico);
+		}
+		catch (ProductoException e) {
+            throw e;
+        } 
+		
 	}
 
 	

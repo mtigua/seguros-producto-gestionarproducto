@@ -74,6 +74,7 @@ public interface ProductoService {
     public FormDataVidaVehiculoDeclaracionDto getFormVDD(Long id) throws ProductoException,ResourceNotFoundException;
     public FormDataDescripcionOperativaDto getFormDescripcionOperativa(Long id) throws ProductoException,ResourceNotFoundException;
     
-    
+    public String generateNemotecnico() throws ProductoException;
+    public void saveOrUpdateNemotecnico(NemotecnicoDto nemotecnico) throws ProductoException;
     
 }

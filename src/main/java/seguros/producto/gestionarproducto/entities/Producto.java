@@ -478,6 +478,7 @@ public class Producto  {
 			this.canales.remove(canal);
 	}
     
+	
 	@Column(name = "fecha_creacion", updatable=false)
 	@CreationTimestamp
 	private LocalDateTime fechaCreacion;
