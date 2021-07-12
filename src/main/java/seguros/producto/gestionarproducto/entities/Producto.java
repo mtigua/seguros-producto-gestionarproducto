@@ -603,7 +603,7 @@ public class Producto  {
 	}
 
 	@OneToMany( cascade = {CascadeType.PERSIST,CascadeType.MERGE}, orphanRemoval = true)
-	@JoinColumn(name = "id_producto")
+	@JoinColumn(name = "id_producto", updatable = false, insertable = false)
 	private Set<Profesion> profesiones;
 	
 	public void addProfesion(Profesion profesion) {

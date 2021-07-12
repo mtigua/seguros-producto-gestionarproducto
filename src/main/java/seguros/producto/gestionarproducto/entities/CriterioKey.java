@@ -1,8 +1,12 @@
 package seguros.producto.gestionarproducto.entities;
 
 import javax.persistence.Column;
+
+import lombok.Data;
+
 import java.io.Serializable;
 
+@Data
 public class CriterioKey implements Serializable {
 
 	private static final long serialVersionUID = 1L;

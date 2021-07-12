@@ -16,8 +16,8 @@ public class CoberturaProducto {
 
     @OneToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE}, orphanRemoval = true)
     @JoinColumns({
-            @JoinColumn(name = "id_cobertura", referencedColumnName = "id_cobertura"),
-            @JoinColumn(name = "id_producto", referencedColumnName = "id_producto")
+            @JoinColumn(name = "id_cobertura", referencedColumnName = "id_cobertura",updatable = false),
+            @JoinColumn(name = "id_producto", referencedColumnName = "id_producto", updatable = false)
     })
     private Set<TramoCobertura> tramoCoberturas;
 

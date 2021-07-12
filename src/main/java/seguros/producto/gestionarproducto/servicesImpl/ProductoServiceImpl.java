@@ -43,6 +43,7 @@ public class ProductoServiceImpl implements ProductoService {
 	private static final String MSG_FORBIDDEN_COBERTURA_POR_ASEGURADO_BY_PRODUCT = "No est\u00E1 permitido la creación de una misma cobertura, intente con otro";
 	private static final String MSG_FORBIDDEN_ERROR_REGISTER = "Error en el registro";
 	private static final String MSG_FORBIDDEN_NEMOTECNICO_EN_USO = "El nemot\u00E9cnico ya esta en uso";
+	private static final String MSG_FORBIDDEN_PROFESION_EXISTENTE = "No esta permitida la creacion de una misma profesion, intente con otra";
 
 	@Autowired
 	private ProductoRepository productoRepository;
@@ -137,6 +138,9 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Autowired
 	private ProfesionRepository profesionRepository;
+	
+	@Autowired
+	private CriterioRepository criterioRepository;
 
 	@Autowired
 	private Properties properties;
@@ -2149,7 +2153,9 @@ public class ProductoServiceImpl implements ProductoService {
 				Set<Profesion> listaProfesiones = producto.getProfesiones();
 				listProfesionDto = listaProfesiones.stream().map(profesion->{
 					ProfesionDto profesionDto= new ProfesionDto();
-					BeanUtils.copyProperties(profesion, profesionDto);
+					profesionDto.setPorcentaje(profesion.getPorcentaje()); 
+					profesionDto.setIdProducto(profesion.getId().getIdProducto());
+					profesionDto.setIdProfesion(profesion.getId().getIdProfesion());
 					return profesionDto;
 				}).collect(Collectors.toList());
 			}
@@ -2168,15 +2174,27 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public void saveProfesionByProduct(Long id, ProfesionDto profesionDto) throws ProductoException,ResourceNotFoundException{
+	public void saveProfesionByProduct(Long id, ProfesionDto profesionDto) 
+			throws ProductoException,ResourceNotFoundException{
 		try {
 			Optional<Producto> productoOp= productoRepository.findById(id);
 			if(productoOp.isPresent()) {
 				Producto producto=productoOp.get();
-				Profesion profesion = new Profesion();
-				BeanUtils.copyProperties(profesionDto, profesion);
-				producto.addProfesion(profesion);
+				Optional<Profesion> profesionOp = profesionRepository.findById(new ProfesionKey(id,profesionDto.getIdProfesion()));
+				if (profesionOp.isPresent()) {
+					Profesion profesion = profesionOp.get();
+					profesion.setPorcentaje(profesionDto.getPorcentaje());
+					producto.updateProfesion(profesion);
+						
+				}
+				else {
+					Profesion profesion = new Profesion();
+					profesion.setId(new ProfesionKey(id,profesionDto.getIdProfesion()));
+					profesion.setPorcentaje(profesionDto.getPorcentaje());	
+					producto.addProfesion(profesion);
+				}
 				productoRepository.save(producto);
+				
 			}
 			else{
 				lanzarExcepcionRecursoNoEncontrado();
@@ -2214,13 +2232,16 @@ public class ProductoServiceImpl implements ProductoService {
 			throw new ProductoException(es);
 		}
 	}
+	
+	@Transactional
+	@Override
 	public void deleteProfesionByProduct(Long idProducto, Long idProfesion) throws ProductoException, ResourceNotFoundException{
 		try {
 			Optional<Producto> productoOp= productoRepository.findById(idProducto);
 			Optional<Profesion> profesionOp = profesionRepository.findById(new ProfesionKey(idProducto,idProfesion));
 			if(productoOp.isPresent() && profesionOp.isPresent()) {
-				Producto producto=productoOp.get();
 				Profesion profesion=profesionOp.get();
+				Producto producto=productoOp.get(); 
 				producto.removeProfesion(profesion);
 				productoRepository.save(producto);
 			}

@@ -23,8 +23,8 @@ public class Profesion  {
 	
 	@OneToMany( cascade = {CascadeType.PERSIST,CascadeType.MERGE}, orphanRemoval = true)
     @JoinColumns({
-        @JoinColumn(name = "id_producto", referencedColumnName = "id_producto"),
-        @JoinColumn(name = "id_profesion", referencedColumnName = "id_profesion")
+        @JoinColumn(name = "id_producto", referencedColumnName = "id_producto",updatable = false, insertable = false),
+        @JoinColumn(name = "id_profesion", referencedColumnName = "id_profesion",updatable = false, insertable = false)
     })
 	private Set<Criterio> criterios;
 	

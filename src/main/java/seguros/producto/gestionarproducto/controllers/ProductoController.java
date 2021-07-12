@@ -1436,7 +1436,7 @@ public class ProductoController {
 	public ResponseEntity<String> saveProfesionByProduct(
 			@PathVariable("id") Long id,
 			@RequestBody @Valid ProfesionDto profesionDto
-	) throws ProductoException,ResourceNotFoundException {
+	) throws ProductoException,ResourceNotFoundException,ForbiddenException {
 
 		try {
 			productoService.saveProfesionByProduct(id,profesionDto);
@@ -1448,11 +1448,6 @@ public class ProductoController {
 		catch(ProductoException productProfesionSave) {
 			productProfesionSave.setSubject(propertiesMsg.getLogger_error_executing_save_profesion_by_product());
 			throw productProfesionSave;
-		}
-		catch (Exception exProfesionSave) {
-			ProductoException ex = new ProductoException(exProfesionSave);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_save_profesion_by_product());
-			throw ex;
 		}
 		return ResponseEntity.ok(MSG_HTTP200);
 	}
@@ -1483,11 +1478,6 @@ public class ProductoController {
 			productProfesionUpdate.setSubject(propertiesMsg.getLogger_error_executing_update_profesion_by_product());
 			throw productProfesionUpdate;
 		}
-		catch (Exception exProfesionUpdate) {
-			ProductoException ex = new ProductoException(exProfesionUpdate);
-			ex.setSubject(propertiesMsg.getLogger_error_executing_update_profesion_by_product());
-			throw ex;
-		}
 		return ResponseEntity.ok(MSG_HTTP200);
 	}
 
@@ -1516,7 +1506,7 @@ public class ProductoController {
 			productProfesionDel.setSubject(propertiesMsg.getLogger_error_executing_delete_profesion_by_product());
 			throw productProfesionDel;
 		}
-		catch (Exception exProfesionDel) {
+		catch(Exception exProfesionDel) {
 			ProductoException ex = new ProductoException(exProfesionDel);
 			ex.setSubject(propertiesMsg.getLogger_error_executing_delete_profesion_by_product());
 			throw ex;
@@ -1535,7 +1525,7 @@ public class ProductoController {
 	})
 	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
 	@PostMapping("/{id}/copyprofesionfrom/{idProductoOrigen}")
-	public ResponseEntity<String> copyProfesionFromByProduct(
+	public ResponseEntity<String> copyProfesionFromProduct(
 			@PathVariable("id") Long idProducto,
 			@PathVariable("idProductoOrigen") Long idProductoOrigen
 	) throws ProductoException,ResourceNotFoundException {
