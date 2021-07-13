@@ -314,7 +314,7 @@ public class ProductoDto {
 
 	private int idGrupoMejorOferta;
 
-	private FormDataDescripcionOperativaDto productDo;
+	private FormDataDescripcionOperativaSaveDto productDo;
 
 	@NotBlank(message =  "La contrasena del product manager es requerido")
 	private String palabaraPaseProductManager;

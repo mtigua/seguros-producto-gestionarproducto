@@ -59,20 +59,20 @@ public interface ProductoService {
     public void updateUpgradeByProduct(Long id, Long idUpgrade, PlanUpgradeDto planUpgradeDto) throws ProductoException,ResourceNotFoundException,ForbiddenException;
     
     
-    public InfoProductoDto saveFormInicio(Long id,FormDataInicioDto producto) throws ProductoException,ResourceNotFoundException;
-    public InfoProductoDto saveFormEncabezado(Long id,FormDataEncabezadoDto producto) throws ProductoException,ResourceNotFoundException;
-    public InfoProductoDto saveFormGeneral(Long id,FormDataGeneralDto producto) throws ProductoException,ResourceNotFoundException;
-    public InfoProductoDto saveFormTraspaso(Long id,FormDataTraspasoDto producto) throws ProductoException,ResourceNotFoundException;
-    public InfoProductoDto saveFormVDD(Long id,FormDataVidaVehiculoDeclaracionDto producto) throws ProductoException,ResourceNotFoundException;
-    public InfoProductoDto saveFormDescripcionOperativa(Long id,FormDataDescripcionOperativaDto producto) throws ProductoException,ResourceNotFoundException;
+    public InfoProductoDto saveFormInicio(Long id,FormDataInicioSaveDto producto) throws ProductoException,ResourceNotFoundException;
+    public InfoProductoDto saveFormEncabezado(Long id,FormDataEncabezadoSaveDto producto) throws ProductoException,ResourceNotFoundException;
+    public InfoProductoDto saveFormGeneral(Long id,FormDataGeneralSaveDto producto) throws ProductoException,ResourceNotFoundException;
+    public InfoProductoDto saveFormTraspaso(Long id,FormDataTraspasoSaveDto producto) throws ProductoException,ResourceNotFoundException;
+    public InfoProductoDto saveFormVDD(Long id,FormDataVidaVehiculoDeclaracionSaveDto producto) throws ProductoException,ResourceNotFoundException;
+    public InfoProductoDto saveFormDescripcionOperativa(Long id,FormDataDescripcionOperativaSaveDto producto) throws ProductoException,ResourceNotFoundException;
     
    
-    public FormDataInicioDto getFormInicio(Long id) throws ProductoException,ResourceNotFoundException;
-    public FormDataEncabezadoDto getFormEncabezado(Long id) throws ProductoException,ResourceNotFoundException;
-    public FormDataGeneralDto getFormGeneral(Long id) throws ProductoException,ResourceNotFoundException;
-    public FormDataTraspasoDto getFormTraspaso(Long id) throws ProductoException,ResourceNotFoundException;
-    public FormDataVidaVehiculoDeclaracionDto getFormVDD(Long id) throws ProductoException,ResourceNotFoundException;
-    public FormDataDescripcionOperativaDto getFormDescripcionOperativa(Long id) throws ProductoException,ResourceNotFoundException;
+    public FormDataInicioSaveDto getFormInicio(Long id) throws ProductoException,ResourceNotFoundException;
+    public FormDataEncabezadoSaveDto getFormEncabezado(Long id) throws ProductoException,ResourceNotFoundException;
+    public FormDataGeneralSaveDto getFormGeneral(Long id) throws ProductoException,ResourceNotFoundException;
+    public FormDataTraspasoSaveDto getFormTraspaso(Long id) throws ProductoException,ResourceNotFoundException;
+    public FormDataVidaVehiculoDeclaracionSaveDto getFormVDD(Long id) throws ProductoException,ResourceNotFoundException;
+    public FormDataDescripcionOperativaSaveDto getFormDescripcionOperativa(Long id) throws ProductoException,ResourceNotFoundException;
     
     public String generateNemotecnico() throws ProductoException;
     public void saveOrUpdateNemotecnico(NemotecnicoDto nemotecnico) throws ProductoException;

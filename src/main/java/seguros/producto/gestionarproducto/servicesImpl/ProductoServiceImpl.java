@@ -35,12 +35,12 @@ import seguros.producto.gestionarproducto.dto.NemotecnicoDto;
 import seguros.producto.gestionarproducto.dto.OrdenCoberturaDTO;
 import seguros.producto.gestionarproducto.dto.PageProductoDto;
 import seguros.producto.gestionarproducto.dto.PrimaSobreQueDto;
-import seguros.producto.gestionarproducto.dto.FormDataDescripcionOperativaDto;
-import seguros.producto.gestionarproducto.dto.FormDataEncabezadoDto;
-import seguros.producto.gestionarproducto.dto.FormDataGeneralDto;
-import seguros.producto.gestionarproducto.dto.FormDataInicioDto;
-import seguros.producto.gestionarproducto.dto.FormDataTraspasoDto;
-import seguros.producto.gestionarproducto.dto.FormDataVidaVehiculoDeclaracionDto;
+import seguros.producto.gestionarproducto.dto.FormDataDescripcionOperativaSaveDto;
+import seguros.producto.gestionarproducto.dto.FormDataEncabezadoSaveDto;
+import seguros.producto.gestionarproducto.dto.FormDataGeneralSaveDto;
+import seguros.producto.gestionarproducto.dto.FormDataInicioSaveDto;
+import seguros.producto.gestionarproducto.dto.FormDataTraspasoSaveDto;
+import seguros.producto.gestionarproducto.dto.FormDataVidaVehiculoDeclaracionSaveDto;
 import seguros.producto.gestionarproducto.dto.ProductoDto;
 import seguros.producto.gestionarproducto.dto.RecargoPorAseguradoDto;
 import seguros.producto.gestionarproducto.dto.PlanUpgradeDto;
@@ -139,6 +139,7 @@ public class ProductoServiceImpl implements ProductoService {
 	private static final String MSG_FORBIDDEN_NEMOTECNICO_EN_USO = "El nemot\u00E9cnico ya esta en uso";
 	private static final String MSG_FORBIDDEN_NEMOTECNICO_UPDATE = "No puede modificarse el nemot\u00E9cnico de un producto que ya existe";
 	private static final Long ID_ESTADO_NEMOTECNICO_CONFIGURADO= 2L;
+	private static final Long ID_ESTADO_NEMOTECNICO_WORKFLOW=4L;
 
 	@Autowired
 	private ProductoRepository productoRepository;
@@ -256,7 +257,7 @@ public class ProductoServiceImpl implements ProductoService {
 				newProductoDto.setTipoTraspaso(item.getTipoTraspaso().getId());
 				newProductoDto.setTipoAcreedor(item.getTipoAcreedor().getId());
 				newProductoDto.setTipoFacturar(item.getTipoFacturar().getId());
-				FormDataDescripcionOperativaDto productoDoDto= new FormDataDescripcionOperativaDto();
+				FormDataDescripcionOperativaSaveDto productoDoDto= new FormDataDescripcionOperativaSaveDto();
 				BeanUtils.copyProperties(item.getProductDo(), productoDoDto);
 				productoDoDto.setDoplAQuienSeVende(item.getProductDo().getDoplAQuienSeVende().getId());
 				newProductoDto.setProductDo(productoDoDto);
@@ -2279,7 +2280,7 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public InfoProductoDto saveFormInicio(Long id, FormDataInicioDto producto) throws ProductoException,ResourceNotFoundException {		
+	public InfoProductoDto saveFormInicio(Long id, FormDataInicioSaveDto producto) throws ProductoException,ResourceNotFoundException {		
 		
 		InfoProductoDto result=new InfoProductoDto();
 		
@@ -2421,7 +2422,7 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public InfoProductoDto saveFormEncabezado(Long id, FormDataEncabezadoDto producto) throws ProductoException {
+	public InfoProductoDto saveFormEncabezado(Long id, FormDataEncabezadoSaveDto producto) throws ProductoException {
        InfoProductoDto result=new InfoProductoDto();
 		
 		try {
@@ -2433,6 +2434,10 @@ public class ProductoServiceImpl implements ProductoService {
 				
 				productoEntity.setNemot(nemotecnico);
 				productoEntity.setId(id);
+				productoEntity.setMonedaRetracto(producto.getDomiMoneCod());
+				if(productoEntity.getMonedaRetracto()==null || String.valueOf(VALUE_UNDEFINED).equals(productoEntity.getMonedaRetracto())) {
+					productoEntity.setMonedaRetracto(producto.getDomiMoneCod());
+				}
 				productoRepository.save(productoEntity);
 				result.setId(id);
 				
@@ -2453,7 +2458,7 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public InfoProductoDto saveFormGeneral(Long id, FormDataGeneralDto producto) throws ProductoException {
+	public InfoProductoDto saveFormGeneral(Long id, FormDataGeneralSaveDto producto) throws ProductoException {
       InfoProductoDto result=new InfoProductoDto();
 		
 	  	 try {
@@ -2505,6 +2510,9 @@ public class ProductoServiceImpl implements ProductoService {
 					}
 				}
 				productoEntity.setId(id);
+				if(productoEntity.getDomiMoneCod()==null || String.valueOf(VALUE_UNDEFINED).equals(productoEntity.getDomiMoneCod())) {
+					productoEntity.setDomiMoneCod(producto.getMonedaRetracto());
+				}
 				productoRepository.save(productoEntity);
 				result.setId(id);
 				
@@ -2525,7 +2533,7 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public InfoProductoDto saveFormTraspaso(Long id, FormDataTraspasoDto producto) throws ProductoException {
+	public InfoProductoDto saveFormTraspaso(Long id, FormDataTraspasoSaveDto producto) throws ProductoException {
        InfoProductoDto result=new InfoProductoDto();
 		
 	   	try {
@@ -2574,7 +2582,7 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public InfoProductoDto saveFormVDD(Long id, FormDataVidaVehiculoDeclaracionDto producto) throws ProductoException {
+	public InfoProductoDto saveFormVDD(Long id, FormDataVidaVehiculoDeclaracionSaveDto producto) throws ProductoException {
        InfoProductoDto result=new InfoProductoDto();
 		
 	   	try {
@@ -2604,7 +2612,7 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public InfoProductoDto saveFormDescripcionOperativa(Long id, FormDataDescripcionOperativaDto producto)
+	public InfoProductoDto saveFormDescripcionOperativa(Long id, FormDataDescripcionOperativaSaveDto producto)
 			throws ProductoException {
       InfoProductoDto result=new InfoProductoDto();
 		
@@ -2636,6 +2644,19 @@ public class ProductoServiceImpl implements ProductoService {
 				
 				productoEntity.setId(id);
 				productoRepository.save(productoEntity);
+				if(producto.getSendToWorkflow()!=null && producto.getSendToWorkflow() == Boolean.TRUE ) {
+					NemotecnicoDto nemotecnicoSaveDto= new NemotecnicoDto();
+					nemotecnicoSaveDto.setCompania(productoEntity.getIdCompania());
+					nemotecnicoSaveDto.setRamo(productoEntity.getIdRamo());
+					nemotecnicoSaveDto.setNegocio(productoEntity.getIdNegocio());
+					nemotecnicoSaveDto.setNombre(productoEntity.getDescrip());
+					nemotecnicoSaveDto.setDescripcion(productoEntity.getDescripcionPlan());
+					nemotecnicoSaveDto.setNemotecnico(productoEntity.getNemot());
+					nemotecnicoSaveDto.setEstado(ID_ESTADO_NEMOTECNICO_WORKFLOW);
+					nemotecnicoSaveDto.setId(id);
+					
+					this.saveOrUpdateNemotecnico(nemotecnicoSaveDto);
+				}
 				result.setId(id);
 				
 			}
@@ -2655,9 +2676,9 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public FormDataInicioDto getFormInicio(Long id) throws ProductoException, ResourceNotFoundException {
+	public FormDataInicioSaveDto getFormInicio(Long id) throws ProductoException, ResourceNotFoundException {
  
-		FormDataInicioDto form= new FormDataInicioDto();
+		FormDataInicioSaveDto form= new FormDataInicioSaveDto();
       
 		try {
     	   Optional<Producto> productoOpt= productoRepository.findById(id);
@@ -2679,6 +2700,8 @@ public class ProductoServiceImpl implements ProductoService {
     			   form.setCanales( canalesResult);
     			  
     		   }
+    		   
+    		   InfoProductoDto info= productoRepository.getInfoProducto(id);
     	   }
     	   else {
     		   lanzarExcepcionRecursoNoEncontrado();
@@ -2698,8 +2721,8 @@ public class ProductoServiceImpl implements ProductoService {
 	
 	@Transactional
 	@Override
-	public FormDataEncabezadoDto getFormEncabezado(Long id) throws ProductoException, ResourceNotFoundException {
-		FormDataEncabezadoDto form= new FormDataEncabezadoDto();
+	public FormDataEncabezadoSaveDto getFormEncabezado(Long id) throws ProductoException, ResourceNotFoundException {
+		FormDataEncabezadoSaveDto form= new FormDataEncabezadoSaveDto();
 	      
 		try {
     	   Optional<Producto> productoOpt= productoRepository.findById(id);
@@ -2725,9 +2748,9 @@ public class ProductoServiceImpl implements ProductoService {
 	
 	@Transactional
 	@Override
-	public FormDataGeneralDto getFormGeneral(Long id) throws ProductoException, ResourceNotFoundException {
+	public FormDataGeneralSaveDto getFormGeneral(Long id) throws ProductoException, ResourceNotFoundException {
 		
-		FormDataGeneralDto form= new FormDataGeneralDto();
+		FormDataGeneralSaveDto form= new FormDataGeneralSaveDto();
 	      
 		try {
     	   Optional<Producto> productoOpt= productoRepository.findById(id);
@@ -2744,13 +2767,13 @@ public class ProductoServiceImpl implements ProductoService {
     		   TipoTarifa tipoTarifa = productoEntity.getTipoTarifa();
     		   TipoPeriodo tipoPeriodo= productoEntity.getTipoPeriodo();
     		   
-    		   form.setTipoPromocion(tipoPromocion!=null?tipoPromocion.getId():null);
-    		   form.setTipoAjuste(tipoAjuste!=null?tipoAjuste.getId():null);
-    		   form.setTipoRecargo(tipoRecargo!=null?tipoRecargo.getId():null);
-    		   form.setTipoDescuento(tipoDescuento!=null?tipoDescuento.getId():null);
-    		   form.setTarifaPor(tarifaPor!=null?tarifaPor.getId():null);
-    		   form.setTipoTarifa(tipoTarifa!=null?tipoTarifa.getId():null);
-    		   form.setTipoPeriodo(tipoPeriodo!=null?tipoPeriodo.getId():null);			
+    		   form.setTipoPromocion(tipoPromocion!=null?tipoPromocion.getId():-1L);
+    		   form.setTipoAjuste(tipoAjuste!=null?tipoAjuste.getId():-1L);
+    		   form.setTipoRecargo(tipoRecargo!=null?tipoRecargo.getId():-1L);
+    		   form.setTipoDescuento(tipoDescuento!=null?tipoDescuento.getId():-1L);
+    		   form.setTarifaPor(tarifaPor!=null?tarifaPor.getId():-1L);
+    		   form.setTipoTarifa(tipoTarifa!=null?tipoTarifa.getId():-1L);
+    		   form.setTipoPeriodo(tipoPeriodo!=null?tipoPeriodo.getId():-1L);	
 				
     	   }
     	   else {
@@ -2770,9 +2793,9 @@ public class ProductoServiceImpl implements ProductoService {
 	
 	@Transactional
 	@Override
-	public FormDataTraspasoDto getFormTraspaso(Long id) throws ProductoException, ResourceNotFoundException {
+	public FormDataTraspasoSaveDto getFormTraspaso(Long id) throws ProductoException, ResourceNotFoundException {
 		
-		FormDataTraspasoDto form= new FormDataTraspasoDto();
+		FormDataTraspasoSaveDto form= new FormDataTraspasoSaveDto();
 	      
 		try {
     	   Optional<Producto> productoOpt= productoRepository.findById(id);
@@ -2785,9 +2808,9 @@ public class ProductoServiceImpl implements ProductoService {
     		   ModoTraspaso tipoAcreedor= productoEntity.getTipoAcreedor();
     		   ModoTraspaso tipoFacturar = productoEntity.getTipoFacturar();
     		   
-    		   form.setTipoTraspaso(tipoTraspaso!=null?tipoTraspaso.getId():null);
-    		   form.setTipoAcreedor(tipoAcreedor!=null?tipoAcreedor.getId():null);
-    		   form.setTipoFacturar(tipoFacturar!=null?tipoFacturar.getId():null);
+    		   form.setTipoTraspaso(tipoTraspaso!=null?tipoTraspaso.getId():-1);
+    		   form.setTipoAcreedor(tipoAcreedor!=null?tipoAcreedor.getId():-1);
+    		   form.setTipoFacturar(tipoFacturar!=null?tipoFacturar.getId():-1);
     	   }
     	   else {
     		   lanzarExcepcionRecursoNoEncontrado();
@@ -2806,9 +2829,9 @@ public class ProductoServiceImpl implements ProductoService {
 	
 	@Transactional
 	@Override
-	public FormDataVidaVehiculoDeclaracionDto getFormVDD(Long id) throws ProductoException, ResourceNotFoundException {
+	public FormDataVidaVehiculoDeclaracionSaveDto getFormVDD(Long id) throws ProductoException, ResourceNotFoundException {
 		
-		FormDataVidaVehiculoDeclaracionDto form= new FormDataVidaVehiculoDeclaracionDto();
+		FormDataVidaVehiculoDeclaracionSaveDto form= new FormDataVidaVehiculoDeclaracionSaveDto();
 	      
 		try {
     	   Optional<Producto> productoOpt= productoRepository.findById(id);
@@ -2834,9 +2857,9 @@ public class ProductoServiceImpl implements ProductoService {
 	
 	@Transactional
 	@Override
-	public FormDataDescripcionOperativaDto getFormDescripcionOperativa(Long id)	throws ProductoException, ResourceNotFoundException {
+	public FormDataDescripcionOperativaSaveDto getFormDescripcionOperativa(Long id)	throws ProductoException, ResourceNotFoundException {
 		
-		FormDataDescripcionOperativaDto form= new FormDataDescripcionOperativaDto();
+		FormDataDescripcionOperativaSaveDto form= new FormDataDescripcionOperativaSaveDto();
 	      
 		try {
     	   Optional<Producto> productoOpt= productoRepository.findById(id);
@@ -2849,7 +2872,7 @@ public class ProductoServiceImpl implements ProductoService {
     			   BeanUtils.copyProperties(productoDoEntity, form);
     			   DestinoVenta destinoVenta= productoDoEntity.getDoplAQuienSeVende();
     			   
-    			   form.setDoplAQuienSeVende(destinoVenta!=null?destinoVenta.getId():null);
+    			   form.setDoplAQuienSeVende(destinoVenta!=null?destinoVenta.getId():-1);
     		   }    		   
     		 
     	   }

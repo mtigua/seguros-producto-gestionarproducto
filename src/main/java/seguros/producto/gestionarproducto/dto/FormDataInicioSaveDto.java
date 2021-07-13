@@ -8,7 +8,7 @@ import lombok.Data;
 
 
 @Data
-public class FormDataInicioDto {
+public class FormDataInicioSaveDto {
 
 
 	private Long id;

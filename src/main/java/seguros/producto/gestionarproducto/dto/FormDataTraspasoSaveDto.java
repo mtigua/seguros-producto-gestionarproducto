@@ -5,7 +5,7 @@ import java.sql.Date;
 import lombok.Data;
 
 @Data
-public class FormDataTraspasoDto {
+public class FormDataTraspasoSaveDto {
 
 
 	private Long id;

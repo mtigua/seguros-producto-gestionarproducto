@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import lombok.Data;
 
 @Data
-public class FormDataVidaVehiculoDeclaracionDto {
+public class FormDataVidaVehiculoDeclaracionSaveDto {
 
 
 	private Long id;
