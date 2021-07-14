@@ -291,74 +291,74 @@ public class ProductoServiceImpl implements ProductoService {
 		InfoProductoDto result=new InfoProductoDto();
 
 		try {
-			Producto productoFirstEntity = productoInfoEntity.toEntity();
-			boolean nemotecnicoEnUso= productoRepository.verificarSiExisteNemotecnico(productoFirstEntity.getNemot());
+			Producto productoEntity = productoInfoEntity.toEntity();
+			boolean nemotecnicoEnUso= productoRepository.verificarSiExisteNemotecnico(productoEntity.getNemot());
 
 			if(!nemotecnicoEnUso) {
 					if(productoInfoEntity.getTipoSeguro()!=null && !VALUE_UNDEFINED.equals(productoInfoEntity.getTipoSeguro()) ) {
 						TipoSeguro tipoSeguro = tipoSeguroRepository.getOne(productoInfoEntity.getTipoSeguro());
 						if(tipoSeguro.getId()!=null) {
-						   productoFirstEntity.setTipoSeguro(tipoSeguro);
+						   productoEntity.setTipoSeguro(tipoSeguro);
 						}
 					}
 					if(productoInfoEntity.getTipoAcreedor()!=null && !VALUE_UNDEFINED.equals(productoInfoEntity.getTipoAcreedor())) {
 						ModoTraspaso tipoAcreedor = modoTraspasoRepository.getOne(productoInfoEntity.getTipoAcreedor());
 						if(tipoAcreedor.getId()!=null) {
-							productoFirstEntity.setTipoAcreedor(tipoAcreedor);
+							productoEntity.setTipoAcreedor(tipoAcreedor);
 						}
 					}
 					if(productoInfoEntity.getTipoFacturar()!=null && !VALUE_UNDEFINED.equals(productoInfoEntity.getTipoFacturar())) {
 						ModoTraspaso tipoFacturar = modoTraspasoRepository.getOne(productoInfoEntity.getTipoFacturar());
 						if(tipoFacturar.getId()!=null) {
-							productoFirstEntity.setTipoFacturar(tipoFacturar);
+							productoEntity.setTipoFacturar(tipoFacturar);
 						}
 					}
 					if(productoInfoEntity.getTipoPromocion()!=null && !VALUE_UNDEFINED.equals(productoInfoEntity.getTipoPromocion()) ) {
 						TipoPromocion tipoPromocion = tipoPromocionRepository.getOne(productoInfoEntity.getTipoPromocion());
 						if(tipoPromocion.getId()!=null) {
-							productoFirstEntity.setTipoPromocion(tipoPromocion);
+							productoEntity.setTipoPromocion(tipoPromocion);
 						}
 					}
 					if(productoInfoEntity.getTipoRecargo()!=null && !VALUE_UNDEFINED.equals(productoInfoEntity.getTipoRecargo()) ) {
 						TipoRecargo tipoRecargo = tipoRecargoRepository.getOne(productoInfoEntity.getTipoRecargo());
 						if(tipoRecargo.getId()!=null) {
-						  productoFirstEntity.setTipoRecargo(tipoRecargo);
+						  productoEntity.setTipoRecargo(tipoRecargo);
 						}
 					}
 					if(productoInfoEntity.getTipoAjuste()!=null && !VALUE_UNDEFINED.equals(productoInfoEntity.getTipoAjuste()) ) {
 						TipoAjuste tipoAjuste = tipoAjusteRepository.getOne(productoInfoEntity.getTipoAjuste());
 						if(tipoAjuste.getId()!=null) {
-					     	productoFirstEntity.setTipoAjuste(tipoAjuste);
+					     	productoEntity.setTipoAjuste(tipoAjuste);
 						}
 					}
 					if(productoInfoEntity.getTipoDescuento()!=null && !VALUE_UNDEFINED.equals(productoInfoEntity.getTipoDescuento()) ) {
 						TipoDescuento tipoDescuento = tipoDescuentoRepository.getOne(productoInfoEntity.getTipoDescuento());
 						if(tipoDescuento.getId()!=null) {
-							productoFirstEntity.setTipoDescuento(tipoDescuento);
+							productoEntity.setTipoDescuento(tipoDescuento);
 						}
 					}
 					if(productoInfoEntity.getTarifaPor()!=null && !VALUE_UNDEFINED.equals(productoInfoEntity.getTarifaPor())) {
 						TarifaPor tarifaPor = tarifaPorRepository.getOne(productoInfoEntity.getTarifaPor());
 						if(tarifaPor.getId()!=null) {
-							productoFirstEntity.setTarifaPor(tarifaPor);
+							productoEntity.setTarifaPor(tarifaPor);
 						}
 					}
 					if(productoInfoEntity.getTipoTarifa()!=null && !VALUE_UNDEFINED.equals(productoInfoEntity.getTipoTarifa()) ) {
 						TipoTarifa tipoTarifa = tipoTarifaRepository.getOne(productoInfoEntity.getTipoTarifa());
 						if(tipoTarifa.getId()!=null) {
-						  productoFirstEntity.setTipoTarifa(tipoTarifa);
+						  productoEntity.setTipoTarifa(tipoTarifa);
 						}
 					}
 					if(productoInfoEntity.getTipoPeriodo()!=null && !VALUE_UNDEFINED.equals(productoInfoEntity.getTipoPeriodo()) ) {
 						TipoPeriodo tipoPeriodo = tipoPeriodoRepository.getOne(productoInfoEntity.getTipoPeriodo());
 						if(tipoPeriodo.getId() != null) {
-						  productoFirstEntity.setTipoPeriodo(tipoPeriodo);
+						  productoEntity.setTipoPeriodo(tipoPeriodo);
 						}
 					}
 					if(productoInfoEntity.getTipoTraspaso()!=null && !VALUE_UNDEFINED.equals(productoInfoEntity.getTipoTraspaso()) ) {
 						TipoTraspaso tipoTraspaso = tipoTraspasoRepository.getOne(productoInfoEntity.getTipoTraspaso());
 						if(tipoTraspaso.getId()!=null) {
-						  productoFirstEntity.setTipoTraspaso(tipoTraspaso);
+						  productoEntity.setTipoTraspaso(tipoTraspaso);
 						}
 					}
 		
@@ -370,16 +370,15 @@ public class ProductoServiceImpl implements ProductoService {
 							if(destinoVenta.getId()!=null) {
 								productoDo.setDoplAQuienSeVende(destinoVenta);
 							}
-							productoFirstEntity.setProductDo(productoDo);
+							productoEntity.setProductDo(productoDo);
 						}
 					}
 		
 		
-					String palabraPase= encrypt(productoFirstEntity.getPalabaraPaseProductManager());
-					productoFirstEntity.setPalabaraPaseProductManager(palabraPase);
+					String palabraPase= encrypt(productoEntity.getPalabaraPaseProductManager());
+					productoEntity.setPalabaraPaseProductManager(palabraPase);		
 		
-		
-					productoRepository.save(productoFirstEntity);
+					productoRepository.save(productoEntity);
 		
 					EstadoIntegracion estadoIntegracion = new EstadoIntegracion();
 		
@@ -392,19 +391,32 @@ public class ProductoServiceImpl implements ProductoService {
 					Arrays.asList(productoInfoEntity.getCanales()).stream().forEach((p) ->{
 						Canal canalEntity= canalRepository.getOne(p);
 						if(canalEntity.getId()!=null) {
-							productoFirstEntity.addCanal(canalEntity);
+							productoEntity.addCanal(canalEntity);
 						}
 					});
 		
 		
-					estadoIntegracion.setIdProducto(productoFirstEntity.getId());
+					estadoIntegracion.setIdProducto(productoEntity.getId());
 					estadoIntegracion.setState(State.Pendiente);
 					estadoIntegracion.setTipoAccion(ActionType.Crear);
 		
 					estadoIntegracionService.save(estadoIntegracion);
 		
-					result.setNemotecnico(productoFirstEntity.getNemot());
-					result.setId(productoFirstEntity.getId());
+					result.setNemotecnico(productoEntity.getNemot());
+					result.setId(productoEntity.getId());
+					
+					if(productoInfoEntity.getSendToWorkflow()!=null && productoInfoEntity.getSendToWorkflow() == Boolean.TRUE ) {
+						NemotecnicoDto nemotecnicoSaveDto= new NemotecnicoDto();
+						nemotecnicoSaveDto.setCompania(productoEntity.getIdCompania());
+						nemotecnicoSaveDto.setRamo(productoEntity.getIdRamo());
+						nemotecnicoSaveDto.setNegocio(productoEntity.getIdNegocio());
+						nemotecnicoSaveDto.setNombre(productoEntity.getDescrip());
+						nemotecnicoSaveDto.setDescripcion(productoEntity.getDescripcionPlan());
+						nemotecnicoSaveDto.setNemotecnico(productoEntity.getNemot());
+						nemotecnicoSaveDto.setEstado(ID_ESTADO_NEMOTECNICO_WORKFLOW);
+						nemotecnicoSaveDto.setId(productoEntity.getId());						
+						this.saveOrUpdateNemotecnico(nemotecnicoSaveDto);
+					}
 			}
 			else {
 				ProductoException ePass = new ProductoException();
@@ -2799,19 +2811,6 @@ public class ProductoServiceImpl implements ProductoService {
 				
 				productoEntity.setId(id);
 				productoRepository.save(productoEntity);
-				if(producto.getSendToWorkflow()!=null && producto.getSendToWorkflow() == Boolean.TRUE ) {
-					NemotecnicoDto nemotecnicoSaveDto= new NemotecnicoDto();
-					nemotecnicoSaveDto.setCompania(productoEntity.getIdCompania());
-					nemotecnicoSaveDto.setRamo(productoEntity.getIdRamo());
-					nemotecnicoSaveDto.setNegocio(productoEntity.getIdNegocio());
-					nemotecnicoSaveDto.setNombre(productoEntity.getDescrip());
-					nemotecnicoSaveDto.setDescripcion(productoEntity.getDescripcionPlan());
-					nemotecnicoSaveDto.setNemotecnico(productoEntity.getNemot());
-					nemotecnicoSaveDto.setEstado(ID_ESTADO_NEMOTECNICO_WORKFLOW);
-					nemotecnicoSaveDto.setId(id);
-					
-					this.saveOrUpdateNemotecnico(nemotecnicoSaveDto);
-				}
 				result.setId(id);
 				
 			}

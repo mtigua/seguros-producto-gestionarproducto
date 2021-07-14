@@ -65,7 +65,6 @@ public class FormDataDescripcionOperativaSaveDto  {
 	
 	private String fileNameCondicionadoParticular;
 	
-	private Boolean sendToWorkflow= Boolean.FALSE;
 	
 	@JsonIgnore 
 	public ProductoDo toEntity() {
