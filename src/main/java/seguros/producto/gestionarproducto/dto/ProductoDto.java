@@ -323,7 +323,6 @@ public class ProductoDto {
 
 	private Long habilitado=0L;
 
-	private Set<TerminoCorto> terminosCortos;
 
 	
 	@JsonIgnore

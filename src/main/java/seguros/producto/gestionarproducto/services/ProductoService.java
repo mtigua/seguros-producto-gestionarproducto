@@ -84,6 +84,7 @@ public interface ProductoService {
     
     public String generateNemotecnico() throws ProductoException;
     public void saveOrUpdateNemotecnico(NemotecnicoDto nemotecnico) throws ProductoException;
+    public ProductoDto getProductoById(Long id) throws ProductoException,ResourceNotFoundException;
     
 
 }

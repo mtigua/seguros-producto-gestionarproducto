@@ -2535,6 +2535,9 @@ public class ProductoServiceImpl implements ProductoService {
 						productoEntity.setIdNegocio(idNegocio);
 						productoEntity.setIdRamo(idRamo);
 						
+						Integer idCiaNegocioRamo= Integer.valueOf(String.valueOf(idCompania)+String.valueOf(idNegocio)+String.valueOf(idRamo));
+						productoEntity.setIdCiaNegocioRamo(idCiaNegocioRamo);
+						
 						productoRepository.save(productoEntity);						
 						
 						NemotecnicoDto nemotecnicoSaveDto= new NemotecnicoDto();
@@ -2853,7 +2856,7 @@ public class ProductoServiceImpl implements ProductoService {
     			  
     		   }
     		   
-    		   InfoProductoDto info= productoRepository.getInfoProducto(id);
+    		  // InfoProductoDto info= productoRepository.getInfoProducto(id);
     	   }
     	   else {
     		   lanzarExcepcionRecursoNoEncontrado();
@@ -3066,6 +3069,81 @@ public class ProductoServiceImpl implements ProductoService {
             throw e;
         } 
 		
+	}
+
+	@Transactional
+	@Override
+	public ProductoDto getProductoById(Long id) throws ProductoException,ResourceNotFoundException {
+		ProductoDto productoDto = new ProductoDto();
+		
+		try {
+			Optional<Producto> productoEntityOpt= productoRepository.findById(id);
+			
+			if(productoEntityOpt.isPresent()) {
+				Producto productoEntity= productoEntityOpt.get();
+				
+				BeanUtils.copyProperties(productoEntity, productoDto);
+				
+				//inicio
+				 Set<Canal> canales= productoEntity.getCanales();
+	    		   if(canales!=null) {	    			   
+	    			   List<Long> canalesList =  canales.stream().map(item->{	    				   
+	    				   return item.getId();
+	    			   }).collect(Collectors.toList());	    			   
+	    			   Long[] canalesResult = new Long[canales.size()];   
+	    			   canalesResult = canalesList.toArray(canalesResult);
+	    			   productoDto.setCanales( canalesResult);	    			  
+	    		   }
+	    		   
+	    		   //General
+	    		   TipoPromocion tipoPromocion= productoEntity.getTipoPromocion();
+	    		   TipoAjuste tipoAjuste= productoEntity.getTipoAjuste();
+	    		   TipoRecargo tipoRecargo= productoEntity.getTipoRecargo();
+	    		   TipoDescuento tipoDescuento= productoEntity.getTipoDescuento();
+	    		   TarifaPor tarifaPor = productoEntity.getTarifaPor();
+	    		   TipoTarifa tipoTarifa = productoEntity.getTipoTarifa();
+	    		   TipoPeriodo tipoPeriodo= productoEntity.getTipoPeriodo();
+	    		   
+	    		   productoDto.setTipoPromocion(tipoPromocion!=null?tipoPromocion.getId():-1L);
+	    		   productoDto.setTipoAjuste(tipoAjuste!=null?tipoAjuste.getId():-1L);
+	    		   productoDto.setTipoRecargo(tipoRecargo!=null?tipoRecargo.getId():-1L);
+	    		   productoDto.setTipoDescuento(tipoDescuento!=null?tipoDescuento.getId():-1L);
+	    		   productoDto.setTarifaPor(tarifaPor!=null?tarifaPor.getId():-1L);
+	    		   productoDto.setTipoTarifa(tipoTarifa!=null?tipoTarifa.getId():-1L);
+	    		   productoDto.setTipoPeriodo(tipoPeriodo!=null?tipoPeriodo.getId():-1L);
+	    		   
+	    		   //Traspaso
+	    		   TipoTraspaso tipoTraspaso=productoEntity.getTipoTraspaso();
+	    		   ModoTraspaso tipoAcreedor= productoEntity.getTipoAcreedor();
+	    		   ModoTraspaso tipoFacturar = productoEntity.getTipoFacturar();
+	    		   
+	    		   productoDto.setTipoTraspaso(tipoTraspaso!=null?tipoTraspaso.getId():-1);
+	    		   productoDto.setTipoAcreedor(tipoAcreedor!=null?tipoAcreedor.getId():-1);
+	    		   productoDto.setTipoFacturar(tipoFacturar!=null?tipoFacturar.getId():-1);
+	    		   
+	    		   //DO
+	    		   ProductoDo productoDoEntity=productoEntity.getProductDo();  	    		   
+	    		   FormDataDescripcionOperativaSaveDto productoDoDto= new FormDataDescripcionOperativaSaveDto();    		   
+	    		   if(productoDoEntity!=null) {
+	    			   BeanUtils.copyProperties(productoDoEntity, productoDoDto);
+	    			   DestinoVenta destinoVenta= productoDoEntity.getDoplAQuienSeVende();	    			   
+	    			   productoDoDto.setDoplAQuienSeVende(destinoVenta!=null?destinoVenta.getId():-1);
+	    		   }
+	    		   productoDto.setProductDo(productoDoDto);
+				
+			}
+			else {
+		    	lanzarExcepcionRecursoNoEncontrado();
+			}
+		}
+		catch(ResourceNotFoundException e) {
+			 throw e;
+		}
+		catch(Exception e) {
+			 throw new ProductoException(e);
+		}
+		
+		return productoDto;
 	}
 
 
