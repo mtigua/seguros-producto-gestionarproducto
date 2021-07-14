@@ -130,6 +130,7 @@ public class ProductoController {
 	private static final String SWAGGER_GET_PRODUCT_SECTION_TRASPASO = "Listar datos del apartado traspaso de producto";
 	private static final String SWAGGER_GET_PRODUCT_SECTION_VVD = "Listar datos del apartado vvd de producto";
 	private static final String SWAGGER_GET_PRODUCT_SECTION_DESCRIPCION_OPERATIVA = "Listar datos del apartado descripci\u00f3n operativa de producto";
+	private static final String SWAGGER_GET_PRODUCT_BY_ID = "Obtener producto dado id";
 	
 	
 	
@@ -173,6 +174,44 @@ public class ProductoController {
 
 		return ResponseEntity.ok(result);
 	}
+	
+	@ApiOperation(value = SWAGGER_GET_PRODUCT_BY_ID, notes = SWAGGER_GET_PRODUCT_BY_ID)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = ProductoDto.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/{id}")
+	public ResponseEntity<ProductoDto> getProductoById(
+
+			@PathVariable("id") @Valid Long id
+			) throws ProductoException,ResourceNotFoundException{	
+				
+		ProductoDto result=null;
+		
+		try {	
+			result= productoService.getProductoById(id);
+			   
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_info_producto());
+			throw e;
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_info_producto());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_info_producto());
+			throw ex;
+		}		
+
+		return ResponseEntity.ok(result);
+	}
+	
 
 	@ApiOperation(value = SWAGGER_SAVE_PRODUCT_SECTION_INICIAL, notes = SWAGGER_SAVE_PRODUCT_SECTION_INICIAL)
 	@ApiResponses({ 
