@@ -116,6 +116,7 @@ public class ProductoController {
 	private static final String SWAGGER_UPDATE_PROFESION_BY_PRODUCT = "Actualizar el detalle de una promocion dado un producto";
 	private static final String SWAGGER_DELETE_PROFESION_BY_PRODUCT = "Eliminar el detalle de una promocion dado un producto";
 	private static final String SWAGGER_COPY_PROFESION_FROM = "Copiar las profesiones al producto actual desde un producto origen";
+
 	
 	private static final String SWAGGER_SAVE_PRODUCT_SECTION_INICIAL = "Registrar datos del apartado inicial de producto";
 	private static final String SWAGGER_SAVE_PRODUCT_SECTION_ENCABEZADO = "Registrar datos del apartado encabezado de producto";
@@ -129,7 +130,6 @@ public class ProductoController {
 	private static final String SWAGGER_GET_PRODUCT_SECTION_TRASPASO = "Listar datos del apartado traspaso de producto";
 	private static final String SWAGGER_GET_PRODUCT_SECTION_VVD = "Listar datos del apartado vvd de producto";
 	private static final String SWAGGER_GET_PRODUCT_SECTION_DESCRIPCION_OPERATIVA = "Listar datos del apartado descripci\u00f3n operativa de producto";
-	
 	
 	
 	

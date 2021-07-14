@@ -147,6 +147,7 @@ public class ProductoServiceImpl implements ProductoService {
 	private static final Long ID_ESTADO_NEMOTECNICO_CONFIGURADO= 2L;
 	private static final Long ID_ESTADO_NEMOTECNICO_WORKFLOW=4L;
 
+
 	@Autowired
 	private ProductoRepository productoRepository;
 
@@ -3066,6 +3067,7 @@ public class ProductoServiceImpl implements ProductoService {
         } 
 		
 	}
+
 
 	
 	
