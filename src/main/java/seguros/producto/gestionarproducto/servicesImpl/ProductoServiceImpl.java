@@ -287,14 +287,26 @@ public class ProductoServiceImpl implements ProductoService {
 
 	@Transactional
 	@Override
-	public InfoProductoDto save(ProductoDto productoInfoEntity) throws ProductoException {
+	public InfoProductoDto save(ProductoDto productoInfoEntity) throws ProductoException,ResourceNotFoundException {
 		InfoProductoDto result=new InfoProductoDto();
 
 		try {
-			Producto productoEntity = productoInfoEntity.toEntity();
-			boolean nemotecnicoEnUso= productoRepository.verificarSiExisteNemotecnico(productoEntity.getNemot());
-
-			if(!nemotecnicoEnUso) {
+			
+			
+			Optional<Producto> productoEntityOpt = productoRepository.findById(productoInfoEntity.getId());
+			
+			if(productoEntityOpt.isPresent()) {
+				Producto productoEntity = productoEntityOpt.get();
+				BeanUtils.copyProperties(productoInfoEntity, productoEntity);
+				
+				if(productoInfoEntity.getNemot()!=null && !productoEntity.getNemot().equalsIgnoreCase(productoInfoEntity.getNemot())){
+					ProductoException ePass = new ProductoException();
+					ePass.setConcreteException(ePass);
+					ePass.setErrorMessage(MSG_FORBIDDEN_NEMOTECNICO_UPDATE);
+					ePass.setDetail(MSG_FORBIDDEN_NEMOTECNICO_UPDATE);
+					throw ePass;
+				}
+				else {
 					if(productoInfoEntity.getTipoSeguro()!=null && !VALUE_UNDEFINED.equals(productoInfoEntity.getTipoSeguro()) ) {
 						TipoSeguro tipoSeguro = tipoSeguroRepository.getOne(productoInfoEntity.getTipoSeguro());
 						if(tipoSeguro.getId()!=null) {
@@ -417,14 +429,14 @@ public class ProductoServiceImpl implements ProductoService {
 						nemotecnicoSaveDto.setId(productoEntity.getId());						
 						this.saveOrUpdateNemotecnico(nemotecnicoSaveDto);
 					}
+				}
 			}
 			else {
-				ProductoException ePass = new ProductoException();
-				ePass.setConcreteException(ePass);
-				ePass.setErrorMessage(MSG_FORBIDDEN_NEMOTECNICO_EN_USO);
-				ePass.setDetail(MSG_FORBIDDEN_NEMOTECNICO_EN_USO);
-				throw ePass;
-			}
+				lanzarExcepcionRecursoNoEncontrado();
+			}			
+		}
+		catch(ResourceNotFoundException e) {
+			throw e;
 		}
 		catch(ProductoException e) {
 			throw e;

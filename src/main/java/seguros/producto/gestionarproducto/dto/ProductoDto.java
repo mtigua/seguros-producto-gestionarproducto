@@ -284,7 +284,7 @@ public class ProductoDto {
 
 	private Boolean perCuotas;
 
-	@NotNull(message =  "El campo tipo de seguro es requerido")
+	//@NotNull(message =  "El campo tipo de seguro es requerido")
 	private  Long tipoSeguro;
 
 	private  Long tipoPromocion;
