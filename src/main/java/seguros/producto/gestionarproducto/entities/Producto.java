@@ -66,13 +66,13 @@ public class Producto  {
 	private Date docuFecTerVigencia;
 	
 	@Column( name = "dias_vig_cotizacion")
-	private Integer diasVigCotizacion;
+	private Integer diasVigCotizacion=7;
 	
 	@Column(name = "dias_venc_cuota")
-	private Integer diasVencCuota;
+	private Integer diasVencCuota=30;
 	
 	@Column(name = "nro_max_cuotas")
-	private Integer nroMaxCuotas;
+	private Integer nroMaxCuotas=12;
 		
 	@Column(name = "pers_codigo_agen")
 	private Integer persCodigoAgen;
@@ -318,10 +318,10 @@ public class Producto  {
 	private Integer  maxCantAsegurados;
 	
 	@Column(name = "retracto")
-	private Boolean  retracto;
+	private Boolean  retracto=Boolean.TRUE;
 	
 	@Column(name = "dias_retracto")
-	private Integer  diasRetracto;
+	private Integer  diasRetracto=35;
 
 	@Column(name = "indique_codigo_emision_ws")
 	private Integer  indiqueCodigoEmisionWs;
@@ -333,7 +333,7 @@ public class Producto  {
 	private Integer  vehiculoHasta;
 	
 	@Column(precision =8 , scale=4, name = "valor_retracto")
-	private BigDecimal  valorRetracto;
+	private BigDecimal  valorRetracto=new BigDecimal(0.0);
 	
 	@Column(length = 5, name = "moneda_retracto")
 	private String  monedaRetracto;

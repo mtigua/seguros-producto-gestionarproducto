@@ -2469,9 +2469,9 @@ public class ProductoServiceImpl implements ProductoService {
 					requestNemotecnico= this.generateNemotecnico();
 				}
 				
-				boolean nemotecnicoEnUso= productoRepository.verificarSiExisteNemotecnico(requestNemotecnico);
+				int nemotecnicoEnUso= productoRepository.verificarSiExisteNemotecnico(requestNemotecnico);
 				
-				if(!nemotecnicoEnUso) {
+				if(nemotecnicoEnUso==0 || nemotecnicoEnUso==2) {
 					String idCompania= String.valueOf(producto.getIdCompania());
 					String idRamo= String.valueOf(producto.getIdRamo());
 					String idNegocio= String.valueOf(producto.getIdNegocio());
@@ -2504,7 +2504,13 @@ public class ProductoServiceImpl implements ProductoService {
 					nemotecnicoSaveDto.setDescripcion(productoEntity.getDescripcionPlan());
 					nemotecnicoSaveDto.setNemotecnico(productoEntity.getNemot());
 					nemotecnicoSaveDto.setEstado(ID_ESTADO_NEMOTECNICO_CONFIGURADO);
-					nemotecnicoSaveDto.setId(null);
+					
+					if(nemotecnicoEnUso==2) {
+						nemotecnicoSaveDto.setId( Long.valueOf(nemotecnicoEnUso) );
+					}
+					else {
+						nemotecnicoSaveDto.setId(null);
+					}					
 					
 					this.saveOrUpdateNemotecnico(nemotecnicoSaveDto);
 					

@@ -332,11 +332,11 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 
 
 	@Override
-	public boolean verificarSiExisteNemotecnico(String nemotecnico) throws ProductoException {
+	public Integer verificarSiExisteNemotecnico(String nemotecnico) throws ProductoException {
 
 		String procedureName = propertiesSql.getVerificarNemotecnico();
 		
-		boolean existe=false;
+		Integer existe=0;
 		
 		 try {
 			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);	
@@ -350,21 +350,7 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 			
 			Object result= storedProcedureQuery.getOutputParameterValue("existe");
 			if(result!=null) {
-				int res= (int) storedProcedureQuery.getOutputParameterValue("existe");
-				
-				if(res==0) {
-					existe=false;
-				}
-				else if(res==1) {
-					existe=true;
-				}
-				else {
-					    ProductoException exc = new ProductoException();
-						exc.setErrorMessage(NEMOTECNICO_NO_EXISTE);	        	
-						exc.setDetail(NEMOTECNICO_NO_EXISTE);
-						exc.setConcreteException(exc);
-						throw exc;
-				}
+				existe= (int) storedProcedureQuery.getOutputParameterValue("existe");	
 				
 			}
 		  else {
