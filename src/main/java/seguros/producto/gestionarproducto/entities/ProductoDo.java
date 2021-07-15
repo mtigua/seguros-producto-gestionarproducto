@@ -31,7 +31,7 @@ public class ProductoDo  {
 	@Column(nullable = false, name = "do_responsable")
 	private Integer doResponsable;
 	
-	@Column(nullable = false, name = "dopl_masivo")
+	@Column(name = "dopl_masivo")
 	private Boolean doplMasivo;
 	
 	@Column(name = "dopl_fec_ini_vta")
@@ -96,7 +96,7 @@ public class ProductoDo  {
 	private String fileNameCondicionadoParticular;
 	
 	@ManyToOne
-	@JoinColumn(name = "id_destino", nullable=false)
+	@JoinColumn(name = "id_destino")
 	private  DestinoVenta doplAQuienSeVende;
 	
 	

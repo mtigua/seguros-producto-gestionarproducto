@@ -2804,7 +2804,6 @@ public class ProductoServiceImpl implements ProductoService {
 				
 				if(productoDoEntity==null) {
 					productoDoEntity = producto.toEntity();
-					BeanUtils.copyProperties(producto, productoDoEntity);	
 				}
 				else {
 					Long idProductoDoEntity=productoDoEntity.getId();
@@ -2817,9 +2816,9 @@ public class ProductoServiceImpl implements ProductoService {
 	
 						if(destinoVenta.getId()!=null) {
 							productoDoEntity.setDoplAQuienSeVende(destinoVenta);
-						}
-						productoEntity.setProductDo(productoDoEntity);
-				}				
+						}						
+				}		
+				productoEntity.setProductDo(productoDoEntity);
 				
 				productoEntity.setId(id);
 				productoRepository.save(productoEntity);
