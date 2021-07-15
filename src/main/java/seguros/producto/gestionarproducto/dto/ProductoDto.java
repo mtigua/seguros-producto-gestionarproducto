@@ -12,8 +12,38 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import seguros.producto.gestionarproducto.entities.Producto;
 import seguros.producto.gestionarproducto.entities.ProductoDo;
+import seguros.producto.gestionarproducto.validators.AcreedorConstraint;
+import seguros.producto.gestionarproducto.validators.CumuloConstraint;
+import seguros.producto.gestionarproducto.validators.DpsConstraint;
+import seguros.producto.gestionarproducto.validators.FactoresIndividualesConstraint;
+import seguros.producto.gestionarproducto.validators.GarantiaSatisfaccionConstraint;
+import seguros.producto.gestionarproducto.validators.GeneraValijaConstraint;
+import seguros.producto.gestionarproducto.validators.RenunciaCorteInmediatoConstraint;
+import seguros.producto.gestionarproducto.validators.RetractoConstraint;
+import seguros.producto.gestionarproducto.validators.TarifaConstraint;
+import seguros.producto.gestionarproducto.validators.TerminosCortoConstraint;
+import seguros.producto.gestionarproducto.validators.TipoFacturarConstraint;
+import seguros.producto.gestionarproducto.validators.TraspasoConstraint;
+import seguros.producto.gestionarproducto.validators.VentaPosConstraint;
+import seguros.producto.gestionarproducto.validators.WsConstraint;
+import seguros.producto.gestionarproducto.validators.WsEmisionConstraint;
 
 @Data
+@AcreedorConstraint
+@CumuloConstraint
+@DpsConstraint
+@FactoresIndividualesConstraint
+@GarantiaSatisfaccionConstraint
+@GeneraValijaConstraint
+@RenunciaCorteInmediatoConstraint
+@RetractoConstraint
+@TarifaConstraint
+@TerminosCortoConstraint
+@TipoFacturarConstraint
+@TraspasoConstraint
+@VentaPosConstraint
+@WsConstraint
+@WsEmisionConstraint
 public class ProductoDto {
 
 
