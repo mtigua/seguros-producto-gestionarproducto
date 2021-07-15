@@ -21,7 +21,7 @@ public interface ProductoRepositoryCustom {
 
 	public List<DeducibleDTO> findDeducibles(Long id, Long idCobertura) throws ProductoException;
 	
-	public boolean verificarSiExisteNemotecnico(String nemotecnico)  throws ProductoException;
+	public Integer verificarSiExisteNemotecnico(String nemotecnico)  throws ProductoException;
 	
 	public String generateNemotecnico() throws ProductoException ;
 
