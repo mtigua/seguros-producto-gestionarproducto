@@ -2,7 +2,6 @@ package seguros.producto.gestionarproducto.dto;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.Set;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -13,7 +12,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import seguros.producto.gestionarproducto.entities.Producto;
 import seguros.producto.gestionarproducto.entities.ProductoDo;
-import seguros.producto.gestionarproducto.entities.TerminoCorto;
 
 @Data
 public class ProductoDto {
@@ -286,7 +284,7 @@ public class ProductoDto {
 
 	private Boolean perCuotas;
 
-	@NotNull(message =  "El campo tipo de seguro es requerido")
+	//@NotNull(message =  "El campo tipo de seguro es requerido")
 	private  Long tipoSeguro;
 
 	private  Long tipoPromocion;
@@ -323,6 +321,7 @@ public class ProductoDto {
 
 	private Long habilitado=0L;
 
+	private Boolean sendToWorkflow= Boolean.FALSE;
 
 	
 	@JsonIgnore

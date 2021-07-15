@@ -13,7 +13,7 @@ public interface ProductoService {
     public List<TipoIvaDTO> getTipoIvaByProducto(Long id) throws ProductoException,ResourceNotFoundException;
     public List<DeducibleDTO> getDeducibles(Long id, Long idCobertura) throws ProductoException,ResourceNotFoundException;
 	public List<ProductoDto> findAll() throws ProductoException;
-	public InfoProductoDto save(ProductoDto producto) throws ProductoException;
+	public InfoProductoDto save(ProductoDto producto) throws ProductoException,ResourceNotFoundException;
 	public void saveCoberturaProducto(CoberturaDTO cobertura) throws ProductoException;
 	public void updateOrderCobertura(OrdenCoberturaDTO ordenCobertura) throws ProductoException;
 	public 	PageProductoDto findAllPaginated( int page, int size, Integer idCompania, Integer idNegocio, Integer idRamo, String nemotecnico, String descripcion) throws ProductoException;
