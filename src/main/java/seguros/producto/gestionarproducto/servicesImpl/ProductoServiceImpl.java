@@ -20,69 +20,8 @@ import org.springframework.web.client.RestTemplate;
 
 
 import seguros.producto.gestionarproducto.configuration.Properties;
-import seguros.producto.gestionarproducto.dto.ActionType;
-import seguros.producto.gestionarproducto.dto.CoberturaDTO;
-import seguros.producto.gestionarproducto.dto.CoberturaProductoCorrelativoDto;
-import seguros.producto.gestionarproducto.dto.CoberturaProductoDto;
-import seguros.producto.gestionarproducto.dto.DeducibleDTO;
-import seguros.producto.gestionarproducto.dto.DetallePromocionDto;
-import seguros.producto.gestionarproducto.dto.DetallePromocionListDto;
-import seguros.producto.gestionarproducto.dto.EstadoProductoDto;
-import seguros.producto.gestionarproducto.dto.GrupoMejorOfertaRequestDto;
-import seguros.producto.gestionarproducto.dto.InfoProductoDto;
-import seguros.producto.gestionarproducto.dto.OrdenCoberturaDTO;
-import seguros.producto.gestionarproducto.dto.PageProductoDto;
-import seguros.producto.gestionarproducto.dto.PrimaSobreQueDto;
-import seguros.producto.gestionarproducto.dto.ProductoDoDto;
-import seguros.producto.gestionarproducto.dto.ProductoDto;
-import seguros.producto.gestionarproducto.dto.ProfesionDto;
-import seguros.producto.gestionarproducto.dto.RecargoPorAseguradoDto;
-import seguros.producto.gestionarproducto.dto.PlanUpgradeDto;
-import seguros.producto.gestionarproducto.dto.ProdDto;
-import seguros.producto.gestionarproducto.dto.State;
-import seguros.producto.gestionarproducto.dto.TarifaEsDto;
-import seguros.producto.gestionarproducto.dto.TerminoCortoDto;
-import seguros.producto.gestionarproducto.dto.TerminoCortoSaveDto;
-import seguros.producto.gestionarproducto.dto.TipoIvaDTO;
-import seguros.producto.gestionarproducto.dto.TipoMultaDto;
-import seguros.producto.gestionarproducto.dto.TipoPromocionDto;
-import seguros.producto.gestionarproducto.dto.TipoTasaDto;
-import seguros.producto.gestionarproducto.dto.TipoTramoDto;
-import seguros.producto.gestionarproducto.dto.TramoDto;
-import seguros.producto.gestionarproducto.dto.TramoListDto;
-import seguros.producto.gestionarproducto.entities.Canal;
-import seguros.producto.gestionarproducto.entities.CoberturaProducto;
-import seguros.producto.gestionarproducto.entities.CoberturaProductoKey;
-import seguros.producto.gestionarproducto.entities.DestinoVenta;
-import seguros.producto.gestionarproducto.entities.DetallePromocion;
-import seguros.producto.gestionarproducto.entities.EstadoIntegracion;
-import seguros.producto.gestionarproducto.entities.GruposMejorOferta;
-import seguros.producto.gestionarproducto.entities.ModoTraspaso;
-import seguros.producto.gestionarproducto.entities.Parentesco;
-import seguros.producto.gestionarproducto.entities.PrimaSobreQue;
-import seguros.producto.gestionarproducto.entities.Producto;
-import seguros.producto.gestionarproducto.entities.ProductoDo;
-import seguros.producto.gestionarproducto.entities.Profesion;
-import seguros.producto.gestionarproducto.entities.ProfesionKey;
-import seguros.producto.gestionarproducto.entities.RecargoPorAsegurado;
-import seguros.producto.gestionarproducto.entities.PlanUpgrade;
-import seguros.producto.gestionarproducto.entities.TarifaEs;
-import seguros.producto.gestionarproducto.entities.TarifaPor;
-import seguros.producto.gestionarproducto.entities.TerminoCorto;
-import seguros.producto.gestionarproducto.entities.TipoAjuste;
-import seguros.producto.gestionarproducto.entities.TipoCobertura;
-import seguros.producto.gestionarproducto.entities.TipoDescuento;
-import seguros.producto.gestionarproducto.entities.TipoMulta;
-import seguros.producto.gestionarproducto.entities.TipoPeriodo;
-import seguros.producto.gestionarproducto.entities.TipoPromocion;
-import seguros.producto.gestionarproducto.entities.TipoRecargo;
-import seguros.producto.gestionarproducto.entities.TipoSeguro;
-import seguros.producto.gestionarproducto.entities.TipoTarifa;
-import seguros.producto.gestionarproducto.entities.TipoTasa;
-import seguros.producto.gestionarproducto.entities.TipoTramo;
-import seguros.producto.gestionarproducto.entities.TipoTraspaso;
-import seguros.producto.gestionarproducto.entities.Tramo;
-import seguros.producto.gestionarproducto.entities.TramoCobertura;
+import seguros.producto.gestionarproducto.dto.*;
+import seguros.producto.gestionarproducto.entities.*;
 import seguros.producto.gestionarproducto.entities.keys.GrupoMejorOfertaKey;
 import seguros.producto.gestionarproducto.exceptions.ForbiddenException;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
@@ -2418,6 +2357,59 @@ public class ProductoServiceImpl implements ProductoService {
 			throw new ProductoException(ec);
 		}
 	}
-	
-	
+
+	@Transactional
+	@Override
+	public void saveCriterioByProductProfesion(Long idProducto, Long idProfesion, List<Long> listIdPregunta)
+			throws ProductoException, ResourceNotFoundException {
+		try {
+			Optional<Producto> productoOp= productoRepository.findById(idProducto);
+			Optional<Profesion> profesionOp = profesionRepository.findById(new ProfesionKey(idProducto,idProfesion));
+			if(productoOp.isPresent() && profesionOp.isPresent()) {
+				Profesion profesion = profesionOp.get();
+				profesion.getCriterios().clear();
+				listIdPregunta.stream().forEach(idPregunta->{
+					Criterio criterio = new Criterio();
+					criterio.setId(new CriterioKey(idProducto,idProfesion,idPregunta));
+					profesion.addCriterio(criterio);
+				});
+				profesionRepository.save(profesion);
+			}
+			else{
+				lanzarExcepcionRecursoNoEncontrado();
+			}
+		}
+		catch(ResourceNotFoundException es) {
+			throw es;
+		}
+		catch(Exception es) {
+			throw new ProductoException(es);
+		}
+
+	}
+
+	@Transactional
+	@Override
+	public List<CriterioListDto> getCriteriosDtoByProducto(Long idProducto, Long idProfesion) throws ProductoException, ResourceNotFoundException {
+		List<CriterioListDto>  criteriosDto = null;
+		try {
+			Optional<Producto> productoOp= productoRepository.findById(idProducto);
+			Optional<Profesion> profesionOp = profesionRepository.findById(new ProfesionKey(idProducto,idProfesion));
+			if(productoOp.isPresent() && profesionOp.isPresent()) {
+				criteriosDto = productoRepository.findCriteriosDtoByProductoProfesion(idProducto,idProfesion);
+			}
+			else{
+				lanzarExcepcionRecursoNoEncontrado();
+			}
+		}
+		catch(ResourceNotFoundException es) {
+			throw es;
+		}
+		catch(Exception es) {
+			throw new ProductoException(es);
+		}
+		return criteriosDto;
+	}
+
+
 }

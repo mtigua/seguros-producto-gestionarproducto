@@ -63,4 +63,7 @@ public interface ProductoService {
     public void updateProfesionByProduct(Long idProducto, Long idProfesion, ProfesionDto profesionDtoDto) throws ProductoException, ResourceNotFoundException;
     public void deleteProfesionByProduct(Long idProducto, Long idProfesion) throws ProductoException, ResourceNotFoundException;
     public void copyProfesionFrom(Long idProducto, Long idProductoOrigen) throws ProductoException,ResourceNotFoundException;
+
+    public void saveCriterioByProductProfesion(Long idProducto, Long idProfesion, List<Long> listIdPregunta) throws ProductoException,ResourceNotFoundException;
+    public List<CriterioListDto> getCriteriosDtoByProducto(Long idProducto, Long idProfesion) throws ProductoException,ResourceNotFoundException;
 }

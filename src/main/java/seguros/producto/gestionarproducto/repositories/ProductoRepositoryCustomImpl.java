@@ -388,5 +388,35 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 
 	}
 
+	@Override
+	public List<CriterioListDto> findCriteriosDtoByProductoProfesion(Long idProducto, Long idProfesion) throws ProductoException {
+		String procedureName = propertiesSql.getLISTAR_CRITERIOS_POR_PRODUCTO_PROFESION();
+		List<CriterioListDto> criteriosDto =  new ArrayList<>();
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);
+			storedProcedureQuery.registerStoredProcedureParameter("idProducto", Long.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("idProfesion", Long.class, ParameterMode.IN);
+			storedProcedureQuery.setParameter("idProducto",idProducto );
+			storedProcedureQuery.setParameter("idProfesion",idProfesion );
+			storedProcedureQuery.execute();
+			@SuppressWarnings("unchecked")
+			List<Object[]> rs = storedProcedureQuery.getResultList();
+			if (rs != null) {
+				rs.stream().forEach((record) -> {
+					CriterioListDto criterioDto = new CriterioListDto();
+					criterioDto.setId(Long.valueOf(record[0].toString()));
+					criterioDto.setNombre(record[1]!=null?record[1].toString():"");
+					criterioDto.setSeleccionado(record[2]!=null?true:false);
+					criteriosDto.add(criterioDto);
+				});
+			}
+		}
+		catch (Exception e) {
+			ProductoException exc = new ProductoException(e);
+			throw exc;
+		}
+		return criteriosDto;
+	}
+
 
 }

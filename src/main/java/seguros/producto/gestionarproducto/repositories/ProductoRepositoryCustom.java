@@ -23,4 +23,8 @@ public interface ProductoRepositoryCustom {
 	
 	public boolean verificarSiExisteNemotecnico(String nemotecnico)  throws ProductoException;
 
+	public List<CriterioListDto> findCriteriosDtoByProductoProfesion(Long idProducto,Long idProfesion) throws ProductoException;
+	
+	
+	
 }
