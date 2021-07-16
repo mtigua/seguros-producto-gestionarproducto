@@ -28,7 +28,33 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import seguros.producto.gestionarproducto.configuration.PropertiesMsg;
-import seguros.producto.gestionarproducto.dto.*;
+import seguros.producto.gestionarproducto.dto.CoberturaProductoDto;
+import seguros.producto.gestionarproducto.dto.CriterioListDto;
+import seguros.producto.gestionarproducto.dto.EstadoProductoDto;
+import seguros.producto.gestionarproducto.dto.FormDataDescripcionOperativaSaveDto;
+import seguros.producto.gestionarproducto.dto.FormDataEncabezadoSaveDto;
+import seguros.producto.gestionarproducto.dto.FormDataGeneralSaveDto;
+import seguros.producto.gestionarproducto.dto.FormDataInicioSaveDto;
+import seguros.producto.gestionarproducto.dto.FormDataTraspasoSaveDto;
+import seguros.producto.gestionarproducto.dto.FormDataVidaVehiculoDeclaracionSaveDto;
+import seguros.producto.gestionarproducto.dto.InfoProductoDto;
+import seguros.producto.gestionarproducto.dto.PageProductoDto;
+import seguros.producto.gestionarproducto.dto.ProductoDto;
+import seguros.producto.gestionarproducto.dto.ProfesionDto;
+import seguros.producto.gestionarproducto.dto.TerminoCortoDto;
+import seguros.producto.gestionarproducto.dto.TerminoCortoSaveDto;
+import seguros.producto.gestionarproducto.dto.TramoDto;
+import seguros.producto.gestionarproducto.dto.TramoListDto;
+import seguros.producto.gestionarproducto.dto.RecargoPorAseguradoDto;
+import seguros.producto.gestionarproducto.dto.PlanUpgradeDto;
+import seguros.producto.gestionarproducto.dto.ProdDto;
+import seguros.producto.gestionarproducto.dto.CoberturaDTO;
+import seguros.producto.gestionarproducto.dto.OrdenCoberturaDTO;
+import seguros.producto.gestionarproducto.dto.CoberturaProductoCorrelativoDto;
+import seguros.producto.gestionarproducto.dto.TipoIvaDTO;
+import seguros.producto.gestionarproducto.dto.DeducibleDTO;
+import seguros.producto.gestionarproducto.dto.DetallePromocionDto;
+import seguros.producto.gestionarproducto.dto.DetallePromocionListDto;
 import seguros.producto.gestionarproducto.exceptions.ExceptionResponse;
 import seguros.producto.gestionarproducto.exceptions.ForbiddenException;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
@@ -93,6 +119,23 @@ public class ProductoController {
 	private static final String SWAGGER_COPY_PROFESION_FROM = "Copiar las profesiones al producto actual desde un producto origen";
 	private static final String SWAGGER_SAVE_CRITERIO_BY_PRODUCT_PROFESION = "Registrar criterios dado un producto y una profesion";
 	private static final String SWAGGER_GET_CRITERIOS_BY_PRODUCT_PROFESION = "Obtener los criterios dado un producto y una profesion";
+
+	
+	private static final String SWAGGER_SAVE_PRODUCT_SECTION_INICIAL = "Registrar datos del apartado inicial de producto";
+	private static final String SWAGGER_SAVE_PRODUCT_SECTION_ENCABEZADO = "Registrar datos del apartado encabezado de producto";
+	private static final String SWAGGER_SAVE_PRODUCT_SECTION_GENERAL = "Registrar datos del apartado general de producto";
+	private static final String SWAGGER_SAVE_PRODUCT_SECTION_TRASPASO = "Registrar datos del apartado traspaso de producto";
+	private static final String SWAGGER_SAVE_PRODUCT_SECTION_VVD = "Registrar datos del apartado vvd de producto";
+	private static final String SWAGGER_SAVE_PRODUCT_SECTION_DESCRIPCION_OPERATIVA = "Registrar datos del apartado descripci\u00f3n operativa de producto";
+	private static final String SWAGGER_GET_PRODUCT_SECTION_INICIAL = "Listar datos del apartado inicial de producto";
+	private static final String SWAGGER_GET_PRODUCT_SECTION_ENCABEZADO = "Listar datos del apartado encabezado de producto";
+	private static final String SWAGGER_GET_PRODUCT_SECTION_GENERAL = "Listar datos del apartado general de producto";
+	private static final String SWAGGER_GET_PRODUCT_SECTION_TRASPASO = "Listar datos del apartado traspaso de producto";
+	private static final String SWAGGER_GET_PRODUCT_SECTION_VVD = "Listar datos del apartado vvd de producto";
+	private static final String SWAGGER_GET_PRODUCT_SECTION_DESCRIPCION_OPERATIVA = "Listar datos del apartado descripci\u00f3n operativa de producto";
+	private static final String SWAGGER_GET_PRODUCT_BY_ID = "Obtener producto dado id";
+	
+	
 	
 	@Autowired
 	private PropertiesMsg propertiesMsg;	
@@ -133,7 +176,489 @@ public class ProductoController {
 
 		return ResponseEntity.ok(result);
 	}
+	
+	@ApiOperation(value = SWAGGER_GET_PRODUCT_BY_ID, notes = SWAGGER_GET_PRODUCT_BY_ID)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = ProductoDto.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/{id}")
+	public ResponseEntity<ProductoDto> getProductoById(
 
+			@PathVariable("id") @Valid Long id
+			) throws ProductoException,ResourceNotFoundException{	
+				
+		ProductoDto result=null;
+		
+		try {	
+			result= productoService.getProductoById(id);
+			   
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_info_producto());
+			throw e;
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_info_producto());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_info_producto());
+			throw ex;
+		}		
+
+		return ResponseEntity.ok(result);
+	}
+	
+
+	@ApiOperation(value = SWAGGER_SAVE_PRODUCT_SECTION_INICIAL, notes = SWAGGER_SAVE_PRODUCT_SECTION_INICIAL)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@PostMapping("/{id}/inicial")
+	public ResponseEntity<InfoProductoDto> saveProductoFormInicial(
+
+			@RequestBody(required = true) @Valid FormDataInicioSaveDto producto,
+			@PathVariable(name = "id",required = true) Long id
+			) throws ProductoException{	
+				
+		InfoProductoDto result=null;
+		
+		try {	
+			result= productoService.saveFormInicio(id,producto);
+			   
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_save_producto());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_save_producto());
+			throw ex;
+		}		
+
+		return ResponseEntity.ok(result);
+	}
+	
+	
+	@ApiOperation(value = SWAGGER_SAVE_PRODUCT_SECTION_ENCABEZADO, notes = SWAGGER_SAVE_PRODUCT_SECTION_ENCABEZADO)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@PutMapping("/{id}/encabezado")
+	public ResponseEntity<InfoProductoDto> saveProductoFormEncabezado(
+
+			@RequestBody(required = true) @Valid FormDataEncabezadoSaveDto producto,
+			@PathVariable(name = "id",required = true) Long id
+			) throws ProductoException{	
+				
+		InfoProductoDto result=null;
+		
+		try {	
+			result= productoService.saveFormEncabezado(id,producto);
+			   
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_save_producto());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_save_producto());
+			throw ex;
+		}		
+
+		return ResponseEntity.ok(result);
+	}
+	
+	
+	@ApiOperation(value = SWAGGER_SAVE_PRODUCT_SECTION_GENERAL, notes = SWAGGER_SAVE_PRODUCT_SECTION_GENERAL)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@PutMapping("/{id}/general")
+	public ResponseEntity<InfoProductoDto> saveProductoFormGeneral(
+
+			@RequestBody(required = true) @Valid FormDataGeneralSaveDto producto,
+			@PathVariable(name = "id",required = true) Long id
+			) throws ProductoException{	
+				
+		InfoProductoDto result=null;
+		
+		try {	
+			result= productoService.saveFormGeneral(id,producto);
+			   
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_save_producto());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_save_producto());
+			throw ex;
+		}		
+
+		return ResponseEntity.ok(result);
+	}
+	
+	
+	@ApiOperation(value = SWAGGER_SAVE_PRODUCT_SECTION_TRASPASO, notes = SWAGGER_SAVE_PRODUCT_SECTION_TRASPASO)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@PutMapping("/{id}/traspaso")
+	public ResponseEntity<InfoProductoDto> saveProductoFormTraspaso(
+
+			@RequestBody(required = true) @Valid FormDataTraspasoSaveDto producto,
+			@PathVariable(name = "id",required = true) Long id
+			) throws ProductoException{	
+				
+		InfoProductoDto result=null;
+		
+		try {	
+			result= productoService.saveFormTraspaso(id,producto);
+			   
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_save_producto());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_save_producto());
+			throw ex;
+		}		
+
+		return ResponseEntity.ok(result);
+	}
+	
+	
+	@ApiOperation(value = SWAGGER_SAVE_PRODUCT_SECTION_VVD, notes = SWAGGER_SAVE_PRODUCT_SECTION_VVD)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@PutMapping("/{id}/vdd")
+	public ResponseEntity<InfoProductoDto> saveProductoFormVVD(
+
+			@RequestBody(required = true) @Valid FormDataVidaVehiculoDeclaracionSaveDto producto,
+			@PathVariable(name = "id",required = true) Long id
+			) throws ProductoException{	
+				
+		InfoProductoDto result=null;
+		
+		try {	
+			result= productoService.saveFormVDD(id,producto);
+			   
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_save_producto());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_save_producto());
+			throw ex;
+		}		
+
+		return ResponseEntity.ok(result);
+	}
+	
+	
+	@ApiOperation(value = SWAGGER_SAVE_PRODUCT_SECTION_DESCRIPCION_OPERATIVA, notes = SWAGGER_SAVE_PRODUCT_SECTION_DESCRIPCION_OPERATIVA)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@PutMapping("/{id}/do")
+	public ResponseEntity<InfoProductoDto> saveProductoFormDescripcionOperativa(
+
+			@RequestBody(required = true) @Valid FormDataDescripcionOperativaSaveDto producto,
+			@PathVariable(name = "id",required = true) Long id
+			) throws ProductoException{	
+				
+		InfoProductoDto result=null;
+		
+		try {	
+			result= productoService.saveFormDescripcionOperativa(id,producto);
+			   
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_save_producto());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_save_producto());
+			throw ex;
+		}		
+
+		return ResponseEntity.ok(result);
+	}
+	
+	
+	@ApiOperation(value = SWAGGER_GET_PRODUCT_SECTION_INICIAL, notes = SWAGGER_GET_PRODUCT_SECTION_INICIAL)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = FormDataInicioSaveDto.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/{id}/inicial")
+	public ResponseEntity<FormDataInicioSaveDto> getProductoFormInicial(@PathVariable(name = "id",required = true) Long id) throws ProductoException{	
+				
+		FormDataInicioSaveDto result=null;
+		
+		try {	
+			result= productoService.getFormInicio(id);
+			   
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_info_section_producto());
+			throw e;
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_info_section_producto());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_info_section_producto());
+			throw ex;
+		}		
+
+		return ResponseEntity.ok(result);
+	}
+	
+	
+	@ApiOperation(value = SWAGGER_GET_PRODUCT_SECTION_ENCABEZADO, notes = SWAGGER_GET_PRODUCT_SECTION_ENCABEZADO)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = FormDataEncabezadoSaveDto.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/{id}/encabezado")
+	public ResponseEntity<FormDataEncabezadoSaveDto> getProductoFormEncabezado(@PathVariable(name = "id",required = true) Long id	) throws ProductoException{	
+				
+		FormDataEncabezadoSaveDto result=null;
+		
+		try {	
+			result= productoService.getFormEncabezado(id);
+			   
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_info_section_producto());
+			throw e;
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_info_section_producto());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_info_section_producto());
+			throw ex;
+		}		
+
+		return ResponseEntity.ok(result);
+	}
+	
+	
+	@ApiOperation(value = SWAGGER_GET_PRODUCT_SECTION_GENERAL, notes = SWAGGER_GET_PRODUCT_SECTION_GENERAL)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = FormDataGeneralSaveDto.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/{id}/general")
+	public ResponseEntity<FormDataGeneralSaveDto> getProductoFormGeneral(@PathVariable(name = "id",required = true) Long id	) throws ProductoException{	
+				
+		FormDataGeneralSaveDto result=null;
+		
+		try {	
+			result= productoService.getFormGeneral(id);
+			   
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_info_section_producto());
+			throw e;
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_info_section_producto());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_info_section_producto());
+			throw ex;
+		}		
+
+		return ResponseEntity.ok(result);
+	}
+	
+	
+	@ApiOperation(value = SWAGGER_GET_PRODUCT_SECTION_TRASPASO, notes = SWAGGER_GET_PRODUCT_SECTION_TRASPASO)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = FormDataTraspasoSaveDto.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/{id}/traspaso")
+	public ResponseEntity<FormDataTraspasoSaveDto> getProductoFormTraspaso(	@PathVariable(name = "id",required = true) Long id) throws ProductoException{	
+				
+		FormDataTraspasoSaveDto result=null;
+		
+		try {	
+			result= productoService.getFormTraspaso(id);
+			   
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_info_section_producto());
+			throw e;
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_info_section_producto());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_info_section_producto());
+			throw ex;
+		}		
+
+		return ResponseEntity.ok(result);
+	}
+	
+	
+	@ApiOperation(value = SWAGGER_GET_PRODUCT_SECTION_VVD, notes = SWAGGER_GET_PRODUCT_SECTION_VVD)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = FormDataVidaVehiculoDeclaracionSaveDto.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/{id}/vdd")
+	public ResponseEntity<FormDataVidaVehiculoDeclaracionSaveDto> getProductoFormVVD( @PathVariable(name = "id",required = true) Long id	) throws ProductoException{	
+				
+		FormDataVidaVehiculoDeclaracionSaveDto result=null;
+		
+		try {	
+			result= productoService.getFormVDD(id);
+			   
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_info_section_producto());
+			throw e;
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_info_section_producto());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_info_section_producto());
+			throw ex;
+		}		
+
+		return ResponseEntity.ok(result);
+	}
+	
+	
+	@ApiOperation(value = SWAGGER_GET_PRODUCT_SECTION_DESCRIPCION_OPERATIVA, notes = SWAGGER_GET_PRODUCT_SECTION_DESCRIPCION_OPERATIVA)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = FormDataDescripcionOperativaSaveDto.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/{id}/do")
+	public ResponseEntity<FormDataDescripcionOperativaSaveDto> getProductoFormDescripcionOperativa(	@PathVariable(name = "id",required = true) Long id) throws ProductoException{	
+				
+		FormDataDescripcionOperativaSaveDto result=null;
+		
+		try {	
+			result= productoService.getFormDescripcionOperativa(id);
+			   
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_info_section_producto());
+			throw e;
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_info_section_producto());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_info_section_producto());
+			throw ex;
+		}		
+
+		return ResponseEntity.ok(result);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@ApiOperation(value = SWAGGER_SAVE_ORDEN_COBERTURA, notes = SWAGGER_SAVE_ORDEN_COBERTURA)
 	@ApiResponses({
 			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),

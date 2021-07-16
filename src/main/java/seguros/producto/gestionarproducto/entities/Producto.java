@@ -35,19 +35,19 @@ public class Producto  {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable = false, name = "id_cia_negocio_ramo")
+	@Column( name = "id_cia_negocio_ramo")
 	private Integer idCiaNegocioRamo;
 	
 	@Column(length = 4)
 	private String nemot;
 	
-	@Column(nullable = false, length = 30)
+	@Column(length = 30)
 	private String descrip;
 	
 	@Column(name = "equivalencia_seguros")
 	private Integer equivalenciaSeguros;
 	
-	@Column(nullable = false,length = 4, name = "domi_mone_cod")
+	@Column(length = 4, name = "domi_mone_cod")
 	private String domiMoneCod;
 	
 	@Column( name = "descuento_max")
@@ -65,14 +65,14 @@ public class Producto  {
 	@Column(name = "docu_fec_ter_vigencia")
 	private Date docuFecTerVigencia;
 	
-	@Column(nullable = false, name = "dias_vig_cotizacion")
-	private Integer diasVigCotizacion;
+	@Column( name = "dias_vig_cotizacion")
+	private Integer diasVigCotizacion=7;
 	
-	@Column(nullable = false,name = "dias_venc_cuota")
-	private Integer diasVencCuota;
+	@Column(name = "dias_venc_cuota")
+	private Integer diasVencCuota=30;
 	
-	@Column(nullable = false,name = "nro_max_cuotas")
-	private Integer nroMaxCuotas;
+	@Column(name = "nro_max_cuotas")
+	private Integer nroMaxCuotas=12;
 		
 	@Column(name = "pers_codigo_agen")
 	private Integer persCodigoAgen;
@@ -135,7 +135,7 @@ public class Producto  {
 	@Column(scale = 2, name = "capital_maximo")
 	private BigDecimal  capitalMaximo;
 	
-	@Column(nullable = false, name = "descripcion_plan")
+	@Column( name = "descripcion_plan")
 	private String  descripcionPlan;
 	
 	@Column(name = "requiere_familiar")
@@ -318,10 +318,10 @@ public class Producto  {
 	private Integer  maxCantAsegurados;
 	
 	@Column(name = "retracto")
-	private Boolean  retracto;
+	private Boolean  retracto=Boolean.TRUE;
 	
 	@Column(name = "dias_retracto")
-	private Integer  diasRetracto;
+	private Integer  diasRetracto=35;
 
 	@Column(name = "indique_codigo_emision_ws")
 	private Integer  indiqueCodigoEmisionWs;
@@ -333,7 +333,7 @@ public class Producto  {
 	private Integer  vehiculoHasta;
 	
 	@Column(precision =8 , scale=4, name = "valor_retracto")
-	private BigDecimal  valorRetracto;
+	private BigDecimal  valorRetracto=new BigDecimal(0.0);
 	
 	@Column(length = 5, name = "moneda_retracto")
 	private String  monedaRetracto;
@@ -425,14 +425,14 @@ public class Producto  {
 	@JoinColumn(name = "id_tarifa_es")
 	private  TipoPeriodo tipoPeriodo;
 	
-	@Column(nullable = false,name = "id_ramo")
-	private int idRamo;	
+	@Column(name = "id_ramo")
+	private Integer idRamo;	
 	
-	@Column(nullable = false,name = "id_negocio")
-	private int idNegocio;
+	@Column(name = "id_negocio")
+	private Integer idNegocio;
 	
-	@Column(nullable = false,name = "id_compania")
-	private int idCompania;
+	@Column(name = "id_compania")
+	private Integer idCompania;
 	
 	@Column(name = "id_grupo_mejor_oferta")
 	private int idGrupoMejorOferta;
@@ -457,7 +457,7 @@ public class Producto  {
 	private ProductoDo productDo;
 	
 	@Lob
-	@Column(nullable = false,name = "palabra_pase_product_manager")
+	@Column(name = "palabra_pase_product_manager")
 	private String palabaraPaseProductManager;	
 	
 	@ManyToMany( cascade = {
@@ -478,6 +478,7 @@ public class Producto  {
 			this.canales.remove(canal);
 	}
     
+	
 	@Column(name = "fecha_creacion", updatable=false)
 	@CreationTimestamp
 	private LocalDateTime fechaCreacion;

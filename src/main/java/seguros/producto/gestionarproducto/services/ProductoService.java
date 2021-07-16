@@ -13,7 +13,7 @@ public interface ProductoService {
     public List<TipoIvaDTO> getTipoIvaByProducto(Long id) throws ProductoException,ResourceNotFoundException;
     public List<DeducibleDTO> getDeducibles(Long id, Long idCobertura) throws ProductoException,ResourceNotFoundException;
 	public List<ProductoDto> findAll() throws ProductoException;
-	public InfoProductoDto save(ProductoDto producto) throws ProductoException;
+	public InfoProductoDto save(ProductoDto producto) throws ProductoException,ResourceNotFoundException;
 	public void saveCoberturaProducto(CoberturaDTO cobertura) throws ProductoException;
 	public void updateOrderCobertura(OrdenCoberturaDTO ordenCobertura) throws ProductoException;
 	public 	PageProductoDto findAllPaginated( int page, int size, Integer idCompania, Integer idNegocio, Integer idRamo, String nemotecnico, String descripcion) throws ProductoException;
@@ -58,12 +58,34 @@ public interface ProductoService {
     public void deleteUpgradeByProduct(Long idProducto,Long idUpgrade) throws ProductoException,ResourceNotFoundException,ForbiddenException;
     public void updateUpgradeByProduct(Long id, Long idUpgrade, PlanUpgradeDto planUpgradeDto) throws ProductoException,ResourceNotFoundException,ForbiddenException;
 
+
     public List<ProfesionDto> getProfesionesByProduct(Long id) throws ProductoException,ResourceNotFoundException;
     public void saveProfesionByProduct(Long id, ProfesionDto profesionDto) throws ProductoException,ResourceNotFoundException;
     public void updateProfesionByProduct(Long idProducto, Long idProfesion, ProfesionDto profesionDtoDto) throws ProductoException, ResourceNotFoundException;
     public void deleteProfesionByProduct(Long idProducto, Long idProfesion) throws ProductoException, ResourceNotFoundException;
+    public List<CriterioListDto> getCriteriosDtoByProducto(Long idProducto, Long idProfesion) throws ProductoException,ResourceNotFoundException;
+    public void saveCriterioByProductProfesion(Long idProducto, Long idProfesion, List<Long> listIdPregunta) throws ProductoException,ResourceNotFoundException;
     public void copyProfesionFrom(Long idProducto, Long idProductoOrigen) throws ProductoException,ResourceNotFoundException;
 
-    public void saveCriterioByProductProfesion(Long idProducto, Long idProfesion, List<Long> listIdPregunta) throws ProductoException,ResourceNotFoundException;
-    public List<CriterioListDto> getCriteriosDtoByProducto(Long idProducto, Long idProfesion) throws ProductoException,ResourceNotFoundException;
+    
+    public InfoProductoDto saveFormInicio(Long id,FormDataInicioSaveDto producto) throws ProductoException,ResourceNotFoundException;
+    public InfoProductoDto saveFormEncabezado(Long id,FormDataEncabezadoSaveDto producto) throws ProductoException,ResourceNotFoundException;
+    public InfoProductoDto saveFormGeneral(Long id,FormDataGeneralSaveDto producto) throws ProductoException,ResourceNotFoundException;
+    public InfoProductoDto saveFormTraspaso(Long id,FormDataTraspasoSaveDto producto) throws ProductoException,ResourceNotFoundException;
+    public InfoProductoDto saveFormVDD(Long id,FormDataVidaVehiculoDeclaracionSaveDto producto) throws ProductoException,ResourceNotFoundException;
+    public InfoProductoDto saveFormDescripcionOperativa(Long id,FormDataDescripcionOperativaSaveDto producto) throws ProductoException,ResourceNotFoundException;
+    
+   
+    public FormDataInicioSaveDto getFormInicio(Long id) throws ProductoException,ResourceNotFoundException;
+    public FormDataEncabezadoSaveDto getFormEncabezado(Long id) throws ProductoException,ResourceNotFoundException;
+    public FormDataGeneralSaveDto getFormGeneral(Long id) throws ProductoException,ResourceNotFoundException;
+    public FormDataTraspasoSaveDto getFormTraspaso(Long id) throws ProductoException,ResourceNotFoundException;
+    public FormDataVidaVehiculoDeclaracionSaveDto getFormVDD(Long id) throws ProductoException,ResourceNotFoundException;
+    public FormDataDescripcionOperativaSaveDto getFormDescripcionOperativa(Long id) throws ProductoException,ResourceNotFoundException;
+    
+    public String generateNemotecnico() throws ProductoException;
+    public void saveOrUpdateNemotecnico(NemotecnicoDto nemotecnico) throws ProductoException;
+    public ProductoDto getProductoById(Long id) throws ProductoException,ResourceNotFoundException;
+    
+
 }

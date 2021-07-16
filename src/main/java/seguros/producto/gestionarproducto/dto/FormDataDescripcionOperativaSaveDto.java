@@ -15,7 +15,7 @@ import seguros.producto.gestionarproducto.entities.ProductoDo;
 
 
 @Data
-public class ProductoDoDto  {
+public class FormDataDescripcionOperativaSaveDto  {
 	
 
 	private Long id;
@@ -64,6 +64,7 @@ public class ProductoDoDto  {
 	private  Long doplAQuienSeVende;
 	
 	private String fileNameCondicionadoParticular;
+	
 	
 	@JsonIgnore 
 	public ProductoDo toEntity() {

@@ -2,7 +2,6 @@ package seguros.producto.gestionarproducto.dto;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.Set;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -13,9 +12,38 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import seguros.producto.gestionarproducto.entities.Producto;
 import seguros.producto.gestionarproducto.entities.ProductoDo;
-import seguros.producto.gestionarproducto.entities.TerminoCorto;
+import seguros.producto.gestionarproducto.validators.AcreedorConstraint;
+import seguros.producto.gestionarproducto.validators.CumuloConstraint;
+import seguros.producto.gestionarproducto.validators.DpsConstraint;
+import seguros.producto.gestionarproducto.validators.FactoresIndividualesConstraint;
+import seguros.producto.gestionarproducto.validators.GarantiaSatisfaccionConstraint;
+import seguros.producto.gestionarproducto.validators.GeneraValijaConstraint;
+import seguros.producto.gestionarproducto.validators.RenunciaCorteInmediatoConstraint;
+import seguros.producto.gestionarproducto.validators.RetractoConstraint;
+import seguros.producto.gestionarproducto.validators.TarifaConstraint;
+import seguros.producto.gestionarproducto.validators.TerminosCortoConstraint;
+import seguros.producto.gestionarproducto.validators.TipoFacturarConstraint;
+import seguros.producto.gestionarproducto.validators.TraspasoConstraint;
+import seguros.producto.gestionarproducto.validators.VentaPosConstraint;
+import seguros.producto.gestionarproducto.validators.WsConstraint;
+import seguros.producto.gestionarproducto.validators.WsEmisionConstraint;
 
 @Data
+@AcreedorConstraint
+@CumuloConstraint
+@DpsConstraint
+@FactoresIndividualesConstraint
+@GarantiaSatisfaccionConstraint
+@GeneraValijaConstraint
+@RenunciaCorteInmediatoConstraint
+@RetractoConstraint
+@TarifaConstraint
+@TerminosCortoConstraint
+@TipoFacturarConstraint
+@TraspasoConstraint
+@VentaPosConstraint
+@WsConstraint
+@WsEmisionConstraint
 public class ProductoDto {
 
 
@@ -286,7 +314,7 @@ public class ProductoDto {
 
 	private Boolean perCuotas;
 
-	@NotNull(message =  "El campo tipo de seguro es requerido")
+	//@NotNull(message =  "El campo tipo de seguro es requerido")
 	private  Long tipoSeguro;
 
 	private  Long tipoPromocion;
@@ -314,7 +342,7 @@ public class ProductoDto {
 
 	private int idGrupoMejorOferta;
 
-	private ProductoDoDto productDo;
+	private FormDataDescripcionOperativaSaveDto productDo;
 
 	@NotBlank(message =  "La contrasena del product manager es requerido")
 	private String palabaraPaseProductManager;
@@ -323,7 +351,7 @@ public class ProductoDto {
 
 	private Long habilitado=0L;
 
-	private Set<TerminoCorto> terminosCortos;
+	private Boolean sendToWorkflow= Boolean.FALSE;
 
 	
 	@JsonIgnore

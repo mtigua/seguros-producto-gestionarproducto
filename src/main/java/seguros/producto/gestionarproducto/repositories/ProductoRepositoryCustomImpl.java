@@ -9,7 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
 import javax.persistence.StoredProcedureQuery;
 import javax.transaction.Transactional;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -333,11 +332,11 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 
 
 	@Override
-	public boolean verificarSiExisteNemotecnico(String nemotecnico) throws ProductoException {
+	public Integer verificarSiExisteNemotecnico(String nemotecnico) throws ProductoException {
 
 		String procedureName = propertiesSql.getVerificarNemotecnico();
 		
-		boolean existe=false;
+		Integer existe=0;
 		
 		 try {
 			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);	
@@ -351,21 +350,7 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 			
 			Object result= storedProcedureQuery.getOutputParameterValue("existe");
 			if(result!=null) {
-				int res= (int) storedProcedureQuery.getOutputParameterValue("existe");
-				
-				if(res==0) {
-					existe=false;
-				}
-				else if(res==1) {
-					existe=true;
-				}
-				else {
-					    ProductoException exc = new ProductoException();
-						exc.setErrorMessage(NEMOTECNICO_NO_EXISTE);	        	
-						exc.setDetail(NEMOTECNICO_NO_EXISTE);
-						exc.setConcreteException(exc);
-						throw exc;
-				}
+				existe= (int) storedProcedureQuery.getOutputParameterValue("existe");	
 				
 			}
 		  else {
@@ -416,6 +401,77 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 			throw exc;
 		}
 		return criteriosDto;
+	}
+
+
+	@Transactional
+	@Override
+	public String generateNemotecnico() throws ProductoException {
+		String generateNemotecnico = propertiesSql.getGENERATE_NEMOTECNICO();
+        String newNemotecnico = null;
+
+        try {
+            StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(generateNemotecnico);
+            storedProcedureQuery.registerStoredProcedureParameter(RESULT, String.class, ParameterMode.OUT);
+
+            storedProcedureQuery.execute();
+
+            Object result = storedProcedureQuery.getOutputParameterValue(RESULT);
+            if (result != null) {
+                newNemotecnico = String.valueOf(storedProcedureQuery.getOutputParameterValue(RESULT));
+            } else {
+            	ProductoException executeGenerateNemotecnico = new ProductoException();
+                executeGenerateNemotecnico.setErrorMessage(VALUE_UNDEFINED + EXISTE);
+                executeGenerateNemotecnico.setDetail(VALUE_UNDEFINED + EXISTE);
+                executeGenerateNemotecnico.setConcreteException(executeGenerateNemotecnico);
+                throw executeGenerateNemotecnico;
+            }
+
+        } catch (ProductoException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ProductoException(e);
+        }
+
+        return newNemotecnico;
+	}
+
+
+
+
+
+	@Transactional
+	@Override
+	public void saveOrUpdateNemotecnico(NemotecnicoDto nemotecnico) throws ProductoException {
+		String generateNemotecnico = propertiesSql.getSAVE_OR_UPDATE_NEMOTECNICO();
+		
+		try {
+			  StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(generateNemotecnico);
+			  storedProcedureQuery.registerStoredProcedureParameter("id", Long.class, ParameterMode.IN);
+	          storedProcedureQuery.registerStoredProcedureParameter("nemotecnico", String.class, ParameterMode.IN);
+	          storedProcedureQuery.registerStoredProcedureParameter("compania", Integer.class, ParameterMode.IN);
+	          storedProcedureQuery.registerStoredProcedureParameter("negocio", Integer.class, ParameterMode.IN);
+	          storedProcedureQuery.registerStoredProcedureParameter("ramo", Integer.class, ParameterMode.IN);
+	          storedProcedureQuery.registerStoredProcedureParameter("descripcion", String.class, ParameterMode.IN);
+	          storedProcedureQuery.registerStoredProcedureParameter("nombre", String.class, ParameterMode.IN);
+	          storedProcedureQuery.registerStoredProcedureParameter("estado", Long.class, ParameterMode.IN);
+	          
+	         	storedProcedureQuery.setParameter("id",nemotecnico.getId() );
+		      	storedProcedureQuery.setParameter("nemotecnico",nemotecnico.getNemotecnico() );
+		    	storedProcedureQuery.setParameter("compania",nemotecnico.getCompania() );
+		    	storedProcedureQuery.setParameter("negocio",nemotecnico.getNegocio() );
+		    	storedProcedureQuery.setParameter("ramo",nemotecnico.getRamo() );
+		    	storedProcedureQuery.setParameter("descripcion",nemotecnico.getDescripcion() );
+		    	storedProcedureQuery.setParameter("nombre",nemotecnico.getNombre() );
+		    	storedProcedureQuery.setParameter("estado",nemotecnico.getEstado() );
+		    	
+		    	storedProcedureQuery.execute();
+		
+        }
+		catch (Exception e) {
+	         throw new ProductoException(e);
+	     }
+		
 	}
 
 
