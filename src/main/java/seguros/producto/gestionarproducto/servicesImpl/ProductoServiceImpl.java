@@ -62,7 +62,6 @@ import seguros.producto.gestionarproducto.entities.Canal;
 import seguros.producto.gestionarproducto.entities.CoberturaProducto;
 import seguros.producto.gestionarproducto.entities.CoberturaProductoKey;
 import seguros.producto.gestionarproducto.entities.Criterio;
-import seguros.producto.gestionarproducto.entities.CriterioKey;
 import seguros.producto.gestionarproducto.entities.DestinoVenta;
 import seguros.producto.gestionarproducto.entities.DetallePromocion;
 import seguros.producto.gestionarproducto.entities.EstadoIntegracion;
@@ -73,7 +72,6 @@ import seguros.producto.gestionarproducto.entities.PrimaSobreQue;
 import seguros.producto.gestionarproducto.entities.Producto;
 import seguros.producto.gestionarproducto.entities.ProductoDo;
 import seguros.producto.gestionarproducto.entities.Profesion;
-import seguros.producto.gestionarproducto.entities.ProfesionKey;
 import seguros.producto.gestionarproducto.entities.RecargoPorAsegurado;
 import seguros.producto.gestionarproducto.entities.PlanUpgrade;
 import seguros.producto.gestionarproducto.entities.TarifaEs;
@@ -93,7 +91,9 @@ import seguros.producto.gestionarproducto.entities.TipoTramo;
 import seguros.producto.gestionarproducto.entities.TipoTraspaso;
 import seguros.producto.gestionarproducto.entities.Tramo;
 import seguros.producto.gestionarproducto.entities.TramoCobertura;
+import seguros.producto.gestionarproducto.entities.keys.CriterioKey;
 import seguros.producto.gestionarproducto.entities.keys.GrupoMejorOfertaKey;
+import seguros.producto.gestionarproducto.entities.keys.ProfesionKey;
 import seguros.producto.gestionarproducto.exceptions.ForbiddenException;
 import seguros.producto.gestionarproducto.exceptions.ResourceNotFoundException;
 import seguros.producto.gestionarproducto.repositories.CanalRepository;
@@ -2488,14 +2488,64 @@ public class ProductoServiceImpl implements ProductoService {
 	
 	@Transactional
 	@Override
+	public List<ProdDto> findAllByCompaniaNegocioRamo(Integer idCompania, Integer idNegocio, Integer idRamo)
+			throws ProductoException {
+		List<ProdDto>  productosDto = null;
+		try {
+			productosDto = productoRepository.findAllByCompaniaNegocioRamo(idCompania, idNegocio, idRamo);
+		}
+		catch(Exception es) {
+			throw new ProductoException(es);
+		}
+		return productosDto;
+	}
+
+	@Transactional
+	@Override
+	public void deleteProfesionesByProduct(Long idProducto) throws ProductoException,ResourceNotFoundException{
+		try {
+			Optional<Producto> productoOp = productoRepository.findById(idProducto);
+			if(productoOp.isPresent() ){
+				Producto producto = productoOp.get();
+				
+				List<Profesion> profesionesToDel = producto.getProfesiones().stream().collect(Collectors.toList());
+				profesionesToDel.forEach((profesion) ->{
+					producto.removeProfesion(profesion);
+				});
+				
+				productoRepository.save(producto);
+			}
+			else {
+				lanzarExcepcionRecursoNoEncontrado();
+			}
+		}
+		catch(ResourceNotFoundException | ForbiddenException ec) {
+			throw ec;
+		}
+		catch(Exception ec) {
+			throw new ProductoException(ec);
+		}
+	}
+
+	
+	
+	@Transactional
+	@Override
 	public void copyProfesionFrom(Long idProducto, Long idProductoOrigen) throws ProductoException,ResourceNotFoundException{
 		try {
 			Optional<Producto> productoOp = productoRepository.findById(idProducto);
 			Optional<Producto> productoOpOrigen = productoRepository.findById(idProductoOrigen);
 			if(productoOp.isPresent() && productoOpOrigen.isPresent() ){
-				Producto productoOrigen = productoOpOrigen.get();
 				Producto producto = productoOp.get();
-				producto.setProfesiones(productoOrigen.getProfesiones());
+				Producto productoOrigen = productoOpOrigen.get();
+
+				productoOrigen.getProfesiones().stream().forEach((pro) -> {
+					Profesion profesion = new Profesion();
+					profesion.setId(new ProfesionKey(idProducto,pro.getId().getIdProfesion()));
+					profesion.setPorcentaje(pro.getPorcentaje());	
+					producto.addProfesion(profesion);
+				} );
+
 				productoRepository.save(producto);
 			}
 			else {
@@ -3216,7 +3266,5 @@ public class ProductoServiceImpl implements ProductoService {
 		return productoDto;
 	}
 
-
-	
 	
 }

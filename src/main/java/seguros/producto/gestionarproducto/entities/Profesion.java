@@ -2,11 +2,13 @@ package seguros.producto.gestionarproducto.entities;
 
 
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import javax.persistence.*;
 
 import lombok.Data;
+import seguros.producto.gestionarproducto.entities.keys.ProfesionKey;
 
 
 @Entity(name = "profesion")
@@ -17,8 +19,8 @@ public class Profesion  {
 	private ProfesionKey id;
 
 	
-	@Column(name = "porcentaje")
-	private Float porcentaje;
+	@Column(name = "porcentaje",scale=2)
+	private BigDecimal porcentaje;
 	
 	
 	@OneToMany( cascade = {CascadeType.PERSIST,CascadeType.MERGE}, orphanRemoval = true)

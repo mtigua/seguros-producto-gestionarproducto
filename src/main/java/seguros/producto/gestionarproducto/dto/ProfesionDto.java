@@ -3,6 +3,8 @@ package seguros.producto.gestionarproducto.dto;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -13,5 +15,5 @@ public class ProfesionDto {
 	@NotNull(message = "El campo idProfesion es requerido")
 	private Long idProfesion;
 	@NotNull(message = "El campo porcentaje es requerido")
-	private Float porcentaje;
+	private BigDecimal porcentaje;
 }

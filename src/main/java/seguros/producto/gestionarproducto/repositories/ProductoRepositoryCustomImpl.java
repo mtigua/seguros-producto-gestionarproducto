@@ -403,6 +403,41 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 		return criteriosDto;
 	}
 
+	@Override
+	public List<ProdDto> findAllByCompaniaNegocioRamo(Integer idCompania, Integer idNegocio, Integer idRamo) {
+		String procedureName = propertiesSql.getLISTAR_PRODUCTOS_POR_COMPANIA_NEGOCIO_RAMO();
+		List<ProdDto> productosDto =  new ArrayList<>();
+		
+		try {
+			StoredProcedureQuery storedProcedureQuery = entityManager.createStoredProcedureQuery(procedureName);
+			storedProcedureQuery.registerStoredProcedureParameter("idCompania", Integer.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("idNegocio", Integer.class, ParameterMode.IN);
+			storedProcedureQuery.registerStoredProcedureParameter("idRamo", Integer.class, ParameterMode.IN);
+			storedProcedureQuery.setParameter("idCompania",idCompania );
+			storedProcedureQuery.setParameter("idNegocio",idNegocio );
+			storedProcedureQuery.setParameter("idRamo",idRamo );
+			storedProcedureQuery.execute();
+			
+			@SuppressWarnings("unchecked")
+			List<Object[]> rs = storedProcedureQuery.getResultList();
+			if (rs != null) {
+				rs.stream().forEach((record) -> {
+					ProdDto prodDto = new ProdDto();
+					prodDto.setId(Long.valueOf(record[0].toString()));
+					prodDto.setNombre(record[1]!=null?record[1].toString():"");
+					prodDto.setNemo(record[2]!=null?record[2].toString():"");
+					productosDto.add(prodDto);
+				});
+			}
+			
+		}
+		catch (Exception e) {
+			ProductoException exc = new ProductoException(e);
+			throw exc;
+		}
+		return productosDto;
+	}
+
 
 	@Transactional
 	@Override
@@ -473,6 +508,7 @@ public class ProductoRepositoryCustomImpl implements ProductoRepositoryCustom{
 	     }
 		
 	}
+
 
 
 }

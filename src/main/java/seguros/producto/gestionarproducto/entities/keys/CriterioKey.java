@@ -1,4 +1,4 @@
-package seguros.producto.gestionarproducto.entities;
+package seguros.producto.gestionarproducto.entities.keys;
 
 import javax.persistence.Column;
 
@@ -29,4 +29,16 @@ public class CriterioKey implements Serializable {
     public CriterioKey() {
     	
     }
+    
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (!(obj instanceof CriterioKey)) return false;
+        CriterioKey pk = (CriterioKey) obj;
+        return pk.idProducto == idProducto && pk.idProfesion == idProfesion && pk.idPregunta == idPregunta;
+    }
+    
+    public int hashCode() {
+        return (int) (idProducto+idProfesion+idPregunta);
+    }
+    
 }

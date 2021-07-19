@@ -1,4 +1,4 @@
-package seguros.producto.gestionarproducto.entities;
+package seguros.producto.gestionarproducto.entities.keys;
 
 import javax.persistence.Column;
 
@@ -30,7 +30,7 @@ public class ProfesionKey implements Serializable {
         if (obj == this) return true;
         if (!(obj instanceof ProfesionKey)) return false;
         ProfesionKey pk = (ProfesionKey) obj;
-        return pk.idProducto == idProducto && pk.idProfesion.equals(idProfesion);
+        return pk.idProducto == idProducto && pk.idProfesion == idProfesion;
     }
     
     public int hashCode() {
