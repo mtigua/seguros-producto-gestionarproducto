@@ -2560,6 +2560,8 @@ public class ProductoServiceImpl implements ProductoService {
 		}
 	}
 
+	@Transactional
+	@Override
 	public InfoProductoDto saveFormInicio(Long id, FormDataInicioSaveDto producto) throws ProductoException,ResourceNotFoundException {		
 		
 		InfoProductoDto result=new InfoProductoDto();
@@ -2837,7 +2839,8 @@ public class ProductoServiceImpl implements ProductoService {
 	}
 
 
-
+	@Override
+	@Transactional
 	public InfoProductoDto saveFormTraspaso(Long id, FormDataTraspasoSaveDto producto) throws ProductoException {
        InfoProductoDto result=new InfoProductoDto();
 		
