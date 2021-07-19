@@ -35,6 +35,8 @@ public class FormDataInicioSaveDto {
 	
 	@Size(max=4)
 	private String nemot;
+	
+	private  Long tipoSeguro;
 
 
 
