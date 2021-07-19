@@ -3,17 +3,15 @@ package seguros.producto.gestionarproducto.dto;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 import javax.validation.constraints.NotNull;
 
 @Data
-public class ProfesionDto {
+public class CriterioDto {
 
 	@NotNull(message = "El campo idProducto es requerido")
 	private Long idProducto;
 	@NotNull(message = "El campo idProfesion es requerido")
 	private Long idProfesion;
-	@NotNull(message = "El campo porcentaje es requerido")
-	private BigDecimal porcentaje;
+	@NotNull(message = "El campo idProfesion es requerido")
+	private Long idPregunta;
 }

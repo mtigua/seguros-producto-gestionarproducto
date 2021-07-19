@@ -25,5 +25,8 @@ public interface ProductoRepositoryCustom {
 	
 	public String generateNemotecnico() throws ProductoException ;
 
+	public List<CriterioListDto> findCriteriosDtoByProductoProfesion(Long idProducto,Long idProfesion) throws ProductoException;
+	public List<ProdDto> findAllByCompaniaNegocioRamo(Integer idCompania, Integer idNegocio, Integer idRamo);
+	
 	public void saveOrUpdateNemotecnico(NemotecnicoDto nemotecnico) throws ProductoException ;
 }

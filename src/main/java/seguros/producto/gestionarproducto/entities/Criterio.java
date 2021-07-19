@@ -6,6 +6,7 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
 import lombok.Data;
+import seguros.producto.gestionarproducto.entities.keys.CriterioKey;
 
 
 @Entity(name = "criterio")

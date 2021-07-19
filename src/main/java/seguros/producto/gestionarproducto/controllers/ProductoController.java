@@ -29,6 +29,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import seguros.producto.gestionarproducto.configuration.PropertiesMsg;
 import seguros.producto.gestionarproducto.dto.CoberturaProductoDto;
+import seguros.producto.gestionarproducto.dto.CriterioListDto;
 import seguros.producto.gestionarproducto.dto.EstadoProductoDto;
 import seguros.producto.gestionarproducto.dto.FormDataDescripcionOperativaSaveDto;
 import seguros.producto.gestionarproducto.dto.FormDataEncabezadoSaveDto;
@@ -115,8 +116,11 @@ public class ProductoController {
 	private static final String SWAGGER_SAVE_PROFESION_BY_PRODUCT = "Registrar el detalle de una promocion dado un producto";
 	private static final String SWAGGER_UPDATE_PROFESION_BY_PRODUCT = "Actualizar el detalle de una promocion dado un producto";
 	private static final String SWAGGER_DELETE_PROFESION_BY_PRODUCT = "Eliminar el detalle de una promocion dado un producto";
+	private static final String SWAGGER_GET_CRITERIOS_BY_PRODUCT_PROFESION = "Obtener los criterios dado un producto y una profesion";
+	private static final String SWAGGER_SAVE_CRITERIO_BY_PRODUCT_PROFESION = "Registrar criterios dado un producto y una profesion";
+	private static final String SWAGGER_GET_PRODUCTO_BY_COMPANIA_NEGOCIO_RAMO = "Obtener los productos dado una compania, un negocio y un ramo";
 	private static final String SWAGGER_COPY_PROFESION_FROM = "Copiar las profesiones al producto actual desde un producto origen";
-
+	
 	
 	private static final String SWAGGER_SAVE_PRODUCT_SECTION_INICIAL = "Registrar datos del apartado inicial de producto";
 	private static final String SWAGGER_SAVE_PRODUCT_SECTION_ENCABEZADO = "Registrar datos del apartado encabezado de producto";
@@ -131,7 +135,6 @@ public class ProductoController {
 	private static final String SWAGGER_GET_PRODUCT_SECTION_VVD = "Listar datos del apartado vvd de producto";
 	private static final String SWAGGER_GET_PRODUCT_SECTION_DESCRIPCION_OPERATIVA = "Listar datos del apartado descripci\u00f3n operativa de producto";
 	private static final String SWAGGER_GET_PRODUCT_BY_ID = "Obtener producto dado id";
-	
 	
 	
 	
@@ -2039,7 +2042,104 @@ public class ProductoController {
 	}
 
 
+	@ApiOperation(value = SWAGGER_GET_CRITERIOS_BY_PRODUCT_PROFESION, notes = SWAGGER_GET_CRITERIOS_BY_PRODUCT_PROFESION)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/{id}/profesion/{idProfesion}/criterio")
+	public ResponseEntity<List<CriterioListDto>> getCriteriosByProductProfesion(
+			@PathVariable("id") Long idProducto,
+			@PathVariable("idProfesion") Long idProfesion
+		) throws ProductoException,ResourceNotFoundException{
+		List<CriterioListDto> criteriosDto=null;
+		try {
+			criteriosDto= productoService.getCriteriosDtoByProducto(idProducto,idProfesion);
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_criterios_by_product_profesion());
+			throw e;
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_criterios_by_product_profesion());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_get_criterios_by_product_profesion());
+			throw ex;
+		}
+		return ResponseEntity.ok(criteriosDto);
+	}
+	
+	
+	@ApiOperation(value = SWAGGER_SAVE_CRITERIO_BY_PRODUCT_PROFESION, notes = SWAGGER_SAVE_CRITERIO_BY_PRODUCT_PROFESION)
+	@ApiResponses({
+			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+			@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+			@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+			@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class)
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@PostMapping("/{id}/profesion/{idProfesion}/criterio")
+	public ResponseEntity<String> saveCriterioByProductProfesion(
+			@PathVariable("id") Long idProducto,
+			@PathVariable("idProfesion") Long idProfesion,
+			@RequestBody List<Long> listIdPregunta
+	) throws ProductoException,ResourceNotFoundException, ForbiddenException {
+		try {
+			productoService.saveCriterioByProductProfesion(idProducto,idProfesion,listIdPregunta);
+		}
+		catch(ResourceNotFoundException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_save_criterio_by_product_profesion());
+			throw e;
+		}
+		catch(ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_save_criterio_by_product_profesion());
+			throw e;
+		}
+		catch (Exception e) {
+			ProductoException ex = new ProductoException(e);
+			ex.setSubject(propertiesMsg.getLogger_error_executing_save_criterio_by_product_profesion());
+			throw ex;
+		}
+		return ResponseEntity.ok(MSG_HTTP200);
+	}
 
+	@ApiOperation(value = SWAGGER_GET_PRODUCTO_BY_COMPANIA_NEGOCIO_RAMO, notes = SWAGGER_GET_PRODUCTO_BY_COMPANIA_NEGOCIO_RAMO)
+	@ApiResponses({ 
+		@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
+		@ApiResponse(code = 401, message = MSG_HTTP400, response = ExceptionResponse.class),
+		@ApiResponse(code = 400, message = MSG_HTTP401, response = ExceptionResponse.class),
+		@ApiResponse(code = 500, message = MSG_HTTP500, response = ExceptionResponse.class) 
+	})
+	@ApiImplicitParams({@ApiImplicitParam(name = "Authorization", value = "Authorization token",required = true, dataType = "string", paramType = "header") })
+	@GetMapping("/findAllByCompaniaNegocioRamo")
+	public ResponseEntity<List<ProdDto>> getProductosByCompaniaNegocioRamo(
+			@RequestParam(required = true) Integer idCompania, 
+			@RequestParam(required = true) Integer idNegocio,
+			@RequestParam(required = true) Integer idRamo
+
+	) throws ProductoException {
+
+		List<ProdDto> productosDto=null;
+
+		try {
+			productosDto = productoService.findAllByCompaniaNegocioRamo(idCompania, idNegocio, idRamo);
+
+		} catch (ProductoException e) {
+			e.setSubject(propertiesMsg.getLogger_error_executing_get_productos());
+			throw e;
+		}
+
+		return ResponseEntity.ok(productosDto);
+	}
+	
+	
+	
 	@ApiOperation(value = SWAGGER_COPY_PROFESION_FROM, notes = SWAGGER_COPY_PROFESION_FROM)
 	@ApiResponses({
 			@ApiResponse(code = 200, message = MSG_HTTP200, response = String.class),
@@ -2055,6 +2155,7 @@ public class ProductoController {
 	) throws ProductoException,ResourceNotFoundException {
 
 		try {
+			productoService.deleteProfesionesByProduct(idProducto);
 			productoService.copyProfesionFrom(idProducto,idProductoOrigen);
 		}
 		catch(ResourceNotFoundException notFoundProfesionCopyFrom) {
@@ -2072,6 +2173,8 @@ public class ProductoController {
 		}
 		return ResponseEntity.ok(MSG_HTTP200);
 
-	}
+	}	
+
+
 
 }

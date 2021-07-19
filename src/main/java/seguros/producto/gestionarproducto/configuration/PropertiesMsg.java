@@ -77,6 +77,7 @@ public class PropertiesMsg {
 	private String logger_error_executing_update_profesion_by_product;
 	private String logger_error_executing_delete_profesion_by_product;
 	private String logger_error_executing_copy_profesion_from_by_product;
-	
+	private String logger_error_executing_save_criterio_by_product_profesion;
+	private String logger_error_executing_get_criterios_by_product_profesion;
 	private String logger_error_executing_get_info_section_producto;
 }
