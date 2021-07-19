@@ -2594,6 +2594,14 @@ public class ProductoServiceImpl implements ProductoService {
 							}
 						});
 					}
+					
+					Long idTipoSeguro= producto.getTipoSeguro();
+					if(idTipoSeguro!=null && !VALUE_UNDEFINED.equals(idTipoSeguro)) {
+						TipoSeguro tipoSeguro= tipoSeguroRepository.getOne(idTipoSeguro);
+						if(tipoSeguro.getId()!=null) {
+							productoEntity.setTipoSeguro(tipoSeguro);
+						}
+					}
 				
 					productoEntity.setIdCiaNegocioRamo(idCiaNegocioRamo);
 					productoEntity.setNemot(requestNemotecnico);
@@ -2661,6 +2669,14 @@ public class ProductoServiceImpl implements ProductoService {
 									productoEntity.addCanal(canalEntity);
 								}
 							});
+						}
+						
+						Long idTipoSeguro= producto.getTipoSeguro();
+						if(idTipoSeguro!=null) {
+							TipoSeguro tipoSeguro= tipoSeguroRepository.getOne(idTipoSeguro);
+							if(tipoSeguro.getId()!=null) {
+								productoEntity.setTipoSeguro(tipoSeguro);
+							}
 						}
 					
 						productoEntity.setId(id);	
@@ -2976,6 +2992,10 @@ public class ProductoServiceImpl implements ProductoService {
     			  
     		   }
     		   
+    		   TipoSeguro tipoSeguro =    productoEntity.getTipoSeguro();
+    		   if(tipoSeguro!=null) {
+    			   form.setTipoSeguro(tipoSeguro.getId());
+    		   }
     		  // InfoProductoDto info= productoRepository.getInfoProducto(id);
     	   }
     	   else {
