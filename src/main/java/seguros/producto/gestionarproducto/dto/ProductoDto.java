@@ -29,21 +29,21 @@ import seguros.producto.gestionarproducto.validators.WsConstraint;
 import seguros.producto.gestionarproducto.validators.WsEmisionConstraint;
 
 @Data
-@AcreedorConstraint
-@CumuloConstraint
-@DpsConstraint
-@FactoresIndividualesConstraint
-@GarantiaSatisfaccionConstraint
-@GeneraValijaConstraint
-@RenunciaCorteInmediatoConstraint
-@RetractoConstraint
-@TarifaConstraint
-@TerminosCortoConstraint
-@TipoFacturarConstraint
-@TraspasoConstraint
-@VentaPosConstraint
-@WsConstraint
-@WsEmisionConstraint
+//@AcreedorConstraint
+//@CumuloConstraint
+//@DpsConstraint
+//@FactoresIndividualesConstraint
+//@GarantiaSatisfaccionConstraint
+//@GeneraValijaConstraint
+//@RenunciaCorteInmediatoConstraint
+//@RetractoConstraint
+//@TarifaConstraint
+//@TerminosCortoConstraint
+//@TipoFacturarConstraint
+//@TraspasoConstraint
+//@VentaPosConstraint
+//@WsConstraint
+//@WsEmisionConstraint
 public class ProductoDto {
 
 
